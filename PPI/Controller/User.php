@@ -8,7 +8,7 @@
  * @package   Controller
  */
 namespace PPI\Controller;
-class User extends APP_Controller_Application {
+class User extends \App\Controller\Application {
 
 	/**
 	 * The constructor
@@ -47,8 +47,8 @@ class User extends APP_Controller_Application {
 		}
 
 		// Init
-		$oUser = new APP_Model_User();
-		$oForm = new PPI_Model_Form();
+		$oUser = new \App\Model\User();
+		$oForm = new \PPI\Model\Form();
 		$oForm->init('user_login', '', 'post');
 		$oForm->setFormStructure($oUser->getLoginFormStructure());
 
@@ -81,7 +81,7 @@ class User extends APP_Controller_Application {
 		// Ship out an email to the user's email address with the activationcode
 
 		$oUser = new UserModel();
-		$oForm = new PPI_Model_Form();
+		$oForm = new \PPI\Model\Form();
 		$sTemplate = 'user/recover_step1';
 		$sFormName = 'user_recover_step1';
 
@@ -180,8 +180,8 @@ class User extends APP_Controller_Application {
 			$this->postLoginRedirect();
 		}
 		// Init
-		$oForm = new PPI_Model_Form();
-		$oUser = new APP_Model_User();
+		$oForm = new \PPI\Model\Form();
+		$oUser = new \App\Model\User();
 		$oForm->init('user_register', '', 'post');
 		$oForm->setFormStructure($oUser->_registerFormStructure);
 
@@ -203,7 +203,5 @@ class User extends APP_Controller_Application {
 		$this->load('user/register', array('formBuilder' => $oForm->getRenderInformation()));
 
 	}
-
-
 
 }

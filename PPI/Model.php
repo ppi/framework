@@ -7,8 +7,9 @@
  * @package   Model
  * @link      www.ppiframework.com
  */
-namespace PPI\Model;
-use PPI\Model\ModelException;
+namespace PPI;
+use PPI\Model\ModelException,
+	PPI\Core;
 abstract class Model {
 
 	/**
@@ -66,7 +67,7 @@ abstract class Model {
 	 *
 	 * @var int
 	 */
-	protected $sFetchMode = PDO::FETCH_ASSOC;
+	protected $sFetchMode = \PDO::FETCH_ASSOC;
 	/**
 	 * Attributes storing the users meta data if you use __get(),__set() stuff
 	 *
@@ -145,20 +146,20 @@ abstract class Model {
 			$connectParams = array();
 
 			// Persistent
-			$connectParams[PDO::ATTR_PERSISTENT] = isset($dbInfo['persistent']) && $dbInfo['persistent'] == true;
+			$connectParams[\PDO::ATTR_PERSISTENT] = isset($dbInfo['persistent']) && $dbInfo['persistent'] == true;
 
 			// Charset setting
 			$bIsCharsetOverride = isset($dbInfo['charset']) && $dbInfo['charset'] != '';
 			$this->charset = strtolower($bIsCharsetOverride ? $oConfig->db->charset : 'utf8');
 			if(version_compare(PHP_VERSION, '5.3.6', '<')) {
-				$connectParams[PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->charset;
+				$connectParams[\PDO::MYSQL_ATTR_INIT_COMMAND] = 'SET NAMES ' . $this->charset;
 			}
 
 			// Connect
-			$this->rHandler = new PDO($this->makeDSN(), $this->sUserName, $this->sPassword, $connectParams);
+			$this->rHandler = new \PDO($this->makeDSN(), $this->sUserName, $this->sPassword, $connectParams);
 
 			// Set exception mode
-			$this->rHandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			$this->rHandler->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 		} catch (PDOException $e) {
 			throw new ModelException('Database Connection Error: ' . $e->getMessage());
@@ -221,8 +222,8 @@ abstract class Model {
 			}
 			$ret = $this->rHandler->prepare($p_sQuery);
 			$ret->execute();
-			return new PPI_Model_Resultset($ret);
-		} catch (PDOException $e) {
+			return new \PPI\Model\Resultset($ret);
+		} catch (\PDOException $e) {
 			throw new ModelException($e->getMessage());
 		}
 	}
@@ -891,7 +892,7 @@ abstract class Model {
 	 * @return object
 	 */
 	public function getConfig() {
-		return PPI_Helper::getConfig();
+		return Core::getConfig();
 	}
 
 	/**
@@ -900,7 +901,7 @@ abstract class Model {
 	 * @return object
 	 */
 	public function getRegistry() {
-		return PPI_Helper::getRegistry();
+		return Core::getRegistry();
 	}
 
 	/**
@@ -909,7 +910,7 @@ abstract class Model {
 	 * @return object
 	 */
 	public function getSession() {
-		return PPI_Helper::getSession();
+		return Core::getSession();
 	}
 
 	/**

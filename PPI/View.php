@@ -11,6 +11,7 @@ use PPI\View\ViewException,
 	PPI\File,
 	PPI\Core,
 	PPI\Registry,
+	PPI\Cache\CacheInterface,
 	PPI\View\Renderers\RendererInterface,
 	PPI\View\Renderers\Twig as RendererTwig,
 	PPI\View\Renderers\Smarty as RendererSmarty,
@@ -207,7 +208,7 @@ class View {
 		if(isset($options['cache'], $options['cacheHandler']) && $options['cache']) {
 
 			if(!$options['cacheHandler'] instanceof CacheInterface) {
-				throw new ViewException('Unable to use cache handler, it does not implement PPI_Cache_Interface');
+				throw new ViewException('Unable to use cache handler, it does not implement PPI\Cache\Interface');
 			}
 
 			// If our template exists in the cache

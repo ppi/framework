@@ -9,6 +9,7 @@
  *
  */
 namespace PPI;
+use PPI\Core;
 class Security {
 
 	/**
@@ -35,7 +36,7 @@ class Security {
 	 * @param string $token
 	 */
 	public static function setCSRF($token) {
-		PPI_Helper::getSession()->set('PPI_Security::csrfToken', $token);
+		Core::getSession()->set('PPI_Security::csrfToken', $token);
 	}
 
 	/**
@@ -43,6 +44,6 @@ class Security {
 	 * @return string
 	 */
 	public static function getCSRF() {
-		return PPI_Helper::getSession()->get('PPI_Security::csrfToken');
+		return Core::getSession()->get('PPI_Security::csrfToken');
 	}
 }

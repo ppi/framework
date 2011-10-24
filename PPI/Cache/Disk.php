@@ -7,7 +7,7 @@
  * @package   Cache
  */
 namespace PPI\Cache;
-class Disk implements CacheInterface {
+class Disk implements \PPI\Cache\CacheInterface {
 
 	/**
 	 * The folder where the cache contents will be placed

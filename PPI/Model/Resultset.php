@@ -1,13 +1,13 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Model
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
-class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
+namespace PPI\Model;
+use PPI\Core;
+class Resultset implements \Iterator, \ArrayAccess, \Countable {
 
 	/**
 	* The instance of PDOStatement
@@ -17,7 +17,7 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	/**
 	* The default fetch mode
 	*/
-	private $_fetchMode  = PDO::FETCH_ASSOC;
+	private $_fetchMode  = \PDO::FETCH_ASSOC;
 
 	/**
 	 * The number of rows returned from this query.
@@ -30,18 +30,18 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 	* List of the acceptable fetch modes
 	*/
 	private $_fetchModes = array(
-		'assoc'   => PDO::FETCH_ASSOC,
-		'numeric' => PDO::FETCH_NUM,
-		'object'  => PDO::FETCH_OBJ,
-		'both'    => PDO::FETCH_BOTH
+		'assoc'   => \PDO::FETCH_ASSOC,
+		'numeric' => \PDO::FETCH_NUM,
+		'object'  => \PDO::FETCH_OBJ,
+		'both'    => \PDO::FETCH_BOTH
 	);
 
 	private $_dataPointer = 0;
 	private $_rows = array();
 
-	function __construct(PDOStatement $statement) {
+	function __construct(\PDOStatement $statement) {
 		// Config override for fetchmode. If it's a valid fetchmode then we override
-		$oConfig = PPI_Helper::getConfig();
+		$oConfig = Core::getConfig();
 		if(isset($oConfig->db->fetchmode) && $oConfig->db->fetchmode != '' && array_key_exists($oConfig->db->fetchmode, $this->_fetchModes)) {
 			$this->_fetchMode = $oConfig->db->fetchmode;
 		}
@@ -59,7 +59,6 @@ class PPI_Model_Resultset implements Iterator, ArrayAccess, Countable {
 		// If a custom fetchmode was passed and it's a valid fetch mode then we use it otherwise defaulting to  $this->_fetchMode
 		$sFetchMode = ($p_sFetchMode !== null && in_array($p_sFetchMode, $this->_fetchModes)) ? $p_sFetchMode : $this->_fetchMode;
 		$row = $this->_statement->fetch($sFetchMode);
-		$this->_rows[$this->_dataPointer] = $row;
 		$this->_dataPointer++;
 		return $row;
 	}

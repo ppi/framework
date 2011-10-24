@@ -7,7 +7,9 @@
  * @package   Model
  * @link      www.ppiframework.com
  */
-class PPI_Model_User extends APP_Model_Application {
+namespace PPI\Model;
+use PPI\Core;
+class User extends \App\Model\Application {
 	public $_encryptionAlgorithm = 'sha1';
 	// @todo - Make sure this is default but config overridden
 	private $_usernameField	=	'email';
@@ -17,7 +19,7 @@ class PPI_Model_User extends APP_Model_Application {
 	private $_iTableIndex;
 
 	function __construct($p_iTableName = "", $p_iTableIndex = "", $p_sBdbInfo = "", $p_iUserID = 0) {
-		global $oConfig;
+		$oConfig = Core::getConfig();
 		$this->_iTableName 	= $p_iTableName;
 		$this->_iTableIndex = $p_iTableIndex;
 
@@ -30,7 +32,7 @@ class PPI_Model_User extends APP_Model_Application {
 
 	// ----------------------- User Register ---------------------
 	function putRecord(array $aData) {
-		$oConfig = PPI_Helper::getConfig();
+		$oConfig = Core::getConfig();
 		// If its an insert
 		if(!array_key_exists($this->_iTableIndex, $aData)) {
 			$plainPass = $aData['password'];

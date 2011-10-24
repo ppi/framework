@@ -341,7 +341,7 @@ class Controller {
 	 * @return PPI_Form
 	 */
 	protected function getForm() {
-		return new PPI\Form();
+		return new Form();
 	}
 
 	/**

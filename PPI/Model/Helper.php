@@ -1,18 +1,18 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Model
  * @link      www.ppiframework.com
  */
-class PPI_Model_Helper {
+namespace PPI\Model;
+use PPI\Core;
+class Helper {
 
     /**
      * The singleton instance variable
      *
-     * @var null|PPI_Model_Helper
+     * @var null|\PPI\Model\Helper
      */
     protected static $_instance = null;
 
@@ -28,19 +28,19 @@ class PPI_Model_Helper {
      * @return void
      */
     protected static function init() {
-        self::setInstance(new PPI_Model_Helper());
+        self::setInstance(new \PPI\Model\Helper());
     }
 
     /**
      * The function used to initially set the instance
      *
-     * @param PPI_Model_Helper $instance
+     * @param \PPI\Model\Helper $instance
      * @throws PPI_Exception
      * @return void
      */
-    static function setInstance(PPI_Model_Helper $instance) {
+    static function setInstance(\PPI\Model\Helper $instance) {
         if (self::$_instance !== null) {
-            throw new PPI_Exception('PPI_Model_Helper is already initialised');
+            throw new PPI_Exception('\PPI\Model\Helper is already initialised');
         }
         self::$_instance = $instance;
     }
@@ -48,7 +48,7 @@ class PPI_Model_Helper {
     /**
      * Obtain the instance if it exists, if not create it
      *
-     * @return PPI_Model_Helper
+     * @return \PPI\Model\Helper
      */
     static function getInstance() {
         if (self::$_instance === null) {
@@ -63,7 +63,7 @@ class PPI_Model_Helper {
 	 * @return string
 	 */
 	static function getRoleType() {
-		$aUserInfo = PPI_Model_Helper::getInstance()->getAuthData();
+		$aUserInfo = \PPI\Model\Helper::getInstance()->getAuthData();
 		return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_name'] : 'guest';
 	}
 
@@ -75,7 +75,7 @@ class PPI_Model_Helper {
 	 * @return integer
 	 */
 	static function getRoleID() {
-	       $aUserInfo = PPI_Model_Helper::getInstance()->getAuthData();
+	       $aUserInfo = \PPI\Model\Helper::getInstance()->getAuthData();
 	       return ($aUserInfo !== false && count($aUserInfo) > 0) ? $aUserInfo['role_id'] : 1;
 	}
 
@@ -88,7 +88,7 @@ class PPI_Model_Helper {
      * @return string
      */
 	static function getRoleNameFromID($p_iRoleID) {
-		$oConfig = PPI_Helper::getConfig();
+		$oConfig = Core::getConfig();
 		$aRoles = array_flip(getRoles());
 		if(array_key_exists($p_iRoleID, $aRoles)) {
 			return $aRoles[$p_iRoleID];
@@ -106,7 +106,7 @@ class PPI_Model_Helper {
      * @return integer
      */
 	static function getRoleIDFromName($p_sRoleName) {
-		$oConfig = PPI_Helper::getConfig();
+		$oConfig = Core::getConfig();
 		$aRoles = $oConfig->system->roleMapping->toArray();
 		if(array_key_exists($p_sRoleName, $aRoles)) {
 			return $aRoles[$p_sRoleName];
