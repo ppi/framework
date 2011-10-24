@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="PPI Framework" tests="131" assertions="235" failures="0" errors="0" time="0.478291">
+    <testsuite name="PPI\Test\CacheTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Cache/CacheTest.php" namespace="PPI\Test" fullPackage="Cache" package="Cache" tests="2" assertions="4" failures="0" errors="0" time="0.084207">
+      <testcase name="testSet" class="PPI\Test\CacheTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Cache/CacheTest.php" line="24" assertions="2" time="0.082815"/>
+      <testcase name="testExists" class="PPI\Test\CacheTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Cache/CacheTest.php" line="30" assertions="2" time="0.001392"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.064309">
+      <testcase name="testCreate" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="15" assertions="1" time="0.061721"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="20" assertions="1" time="0.000388"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="25" assertions="1" time="0.000355"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="35" assertions="1" time="0.000327"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="45" assertions="2" time="0.000288"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="55" assertions="1" time="0.000319"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="64" assertions="1" time="0.000290"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="72" assertions="2" time="0.000325"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\CheckboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/CheckboxTagTest.php" line="80" assertions="1" time="0.000297"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.028751">
+      <testcase name="testCreateFormSetsActionAttribute" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="6" assertions="1" time="0.026494"/>
+      <testcase name="testCreatingFormWithNoParametersCreatesFormWithEmptyAction" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="11" assertions="1" time="0.000356"/>
+      <testcase name="testCreateFormWithTwoParametersSetsMethod" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="16" assertions="2" time="0.000311"/>
+      <testcase name="testRenderShouldRenderFormTagWithAttributes" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="22" assertions="1" time="0.000298"/>
+      <testcase name="testToStringCallsRender" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="27" assertions="2" time="0.000335"/>
+      <testcase name="testSetAttributesAreRendered" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="34" assertions="1" time="0.000339"/>
+      <testcase name="testEmptyAttributesShouldBeRendered" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="41" assertions="1" time="0.000249"/>
+      <testcase name="testEmptyAttributesShouldBeRendered__toString" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="48" assertions="1" time="0.000187"/>
+      <testcase name="testRenderedAttributesAreProperlyEscaped" class="PPI\Test\Form\HtmlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/FormTest.php" line="55" assertions="1" time="0.000182"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.025821">
+      <testcase name="testCreate" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="15" assertions="1" time="0.023874"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="20" assertions="1" time="0.000220"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="25" assertions="1" time="0.000196"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="36" assertions="1" time="0.000191"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="46" assertions="2" time="0.000255"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="56" assertions="1" time="0.000298"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="65" assertions="1" time="0.000191"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="75" assertions="2" time="0.000315"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\HiddenTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/HiddenTagTest.php" line="83" assertions="1" time="0.000281"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\MaxLengthRuleTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/MaxlengthRuleTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="6" assertions="6" failures="0" errors="0" time="0.045246">
+      <testsuite name="PPI\Test\Form\MaxLengthRuleTest::testValidatesTrue" tests="4" assertions="4" failures="0" errors="0" time="0.044620">
+        <testcase name="testValidatesTrue with data set #0" assertions="1" time="0.043629"/>
+        <testcase name="testValidatesTrue with data set #1" assertions="1" time="0.000333"/>
+        <testcase name="testValidatesTrue with data set #2" assertions="1" time="0.000344"/>
+        <testcase name="testValidatesTrue with data set #3" assertions="1" time="0.000314"/>
+      </testsuite>
+      <testsuite name="PPI\Test\Form\MaxLengthRuleTest::testValidatesFalse" tests="2" assertions="2" failures="0" errors="0" time="0.000626">
+        <testcase name="testValidatesFalse with data set #0" assertions="1" time="0.000308"/>
+        <testcase name="testValidatesFalse with data set #1" assertions="1" time="0.000318"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.015161">
+      <testcase name="testCreate" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="14" assertions="1" time="0.012543"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="19" assertions="1" time="0.000671"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="24" assertions="1" time="0.000489"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="34" assertions="1" time="0.000400"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="44" assertions="2" time="0.000180"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="54" assertions="1" time="0.000293"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="63" assertions="1" time="0.000237"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="71" assertions="2" time="0.000179"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\PasswordTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/PasswordTagTest.php" line="79" assertions="1" time="0.000169"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.002239">
+      <testcase name="testCreate" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="14" assertions="1" time="0.000673"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="19" assertions="1" time="0.000217"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="24" assertions="1" time="0.000190"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="34" assertions="1" time="0.000188"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="44" assertions="2" time="0.000183"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="54" assertions="1" time="0.000255"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="63" assertions="1" time="0.000183"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="71" assertions="2" time="0.000176"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\RadioboxTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RadioTagTest.php" line="79" assertions="1" time="0.000174"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\RequiredRuleTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/RequiredRuleTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="5" assertions="5" failures="0" errors="0" time="0.013340">
+      <testsuite name="PPI\Test\Form\RequiredRuleTest::testValidatesTrue" tests="3" assertions="3" failures="0" errors="0" time="0.012998">
+        <testcase name="testValidatesTrue with data set #0" assertions="1" time="0.012561"/>
+        <testcase name="testValidatesTrue with data set #1" assertions="1" time="0.000262"/>
+        <testcase name="testValidatesTrue with data set #2" assertions="1" time="0.000175"/>
+      </testsuite>
+      <testsuite name="PPI\Test\Form\RequiredRuleTest::testValidatesFalse" tests="2" assertions="2" failures="0" errors="0" time="0.000342">
+        <testcase name="testValidatesFalse with data set #0" assertions="1" time="0.000172"/>
+        <testcase name="testValidatesFalse with data set #1" assertions="1" time="0.000170"/>
+      </testsuite>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.013681">
+      <testcase name="testCreate" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="14" assertions="1" time="0.012035"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="19" assertions="1" time="0.000223"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="24" assertions="1" time="0.000195"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="35" assertions="1" time="0.000193"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="45" assertions="2" time="0.000177"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="55" assertions="1" time="0.000186"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="64" assertions="1" time="0.000181"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="74" assertions="2" time="0.000314"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\SubmitTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/SubmitTagTest.php" line="82" assertions="1" time="0.000177"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="10" failures="0" errors="0" time="0.010701">
+      <testcase name="testCreate" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="14" assertions="1" time="0.008840"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="19" assertions="1" time="0.000261"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="24" assertions="1" time="0.000222"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="34" assertions="1" time="0.000239"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="44" assertions="2" time="0.000197"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="54" assertions="1" time="0.000180"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="63" assertions="1" time="0.000250"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="71" assertions="1" time="0.000301"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\TextareaTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextareaTagTest.php" line="78" assertions="1" time="0.000211"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" namespace="PPI\Test\Form" fullPackage="PPI.Test.Form" tests="9" assertions="11" failures="0" errors="0" time="0.006931">
+      <testcase name="testCreate" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="14" assertions="1" time="0.005019"/>
+      <testcase name="testCreateWithAttrs" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="19" assertions="1" time="0.000295"/>
+      <testcase name="testDirectClass" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="24" assertions="1" time="0.000267"/>
+      <testcase name="testDirectClass__toString" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="34" assertions="1" time="0.000298"/>
+      <testcase name="testHasAttr" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="44" assertions="2" time="0.000214"/>
+      <testcase name="testGetAttr" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="54" assertions="1" time="0.000206"/>
+      <testcase name="testSetAttr" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="63" assertions="1" time="0.000184"/>
+      <testcase name="testGetValues" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="71" assertions="2" time="0.000199"/>
+      <testcase name="testSetValue" class="PPI\Test\Form\TextTagTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Form/TextTagTest.php" line="79" assertions="1" time="0.000249"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Registry\RegistryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Registry/RegistryTest.php" namespace="PPI\Test\Registry" fullPackage="Core" package="Core" tests="3" assertions="4" failures="0" errors="0" time="0.006491">
+      <testcase name="testRemove" class="PPI\Test\Registry\RegistryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Registry/RegistryTest.php" line="20" assertions="1" time="0.006101"/>
+      <testcase name="testSet" class="PPI\Test\Registry\RegistryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Registry/RegistryTest.php" line="26" assertions="1" time="0.000196"/>
+      <testcase name="testIsset" class="PPI\Test\Registry\RegistryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Registry/RegistryTest.php" line="32" assertions="2" time="0.000194"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="6" assertions="28" failures="0" errors="0" time="0.001281">
+      <testcase name="testSetAndGetOffset" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="21" assertions="6" time="0.000236"/>
+      <testcase name="testShouldCallSet" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="35" assertions="6" time="0.000224"/>
+      <testcase name="testIterator" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="49" assertions="7" time="0.000247"/>
+      <testcase name="testGetAll" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="65" assertions="4" time="0.000203"/>
+      <testcase name="testCountable" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="80" assertions="4" time="0.000202"/>
+      <testcase name="testGetIsCollected" class="PPI\Test\Request\AbstractTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/AbstractTest.php" line="94" assertions="1" time="0.000169"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\CookieTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/CookieTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="2" assertions="7" failures="0" errors="0" time="0.018791">
+      <testcase name="testIsCollected" class="PPI\Test\Request\CookieTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/CookieTest.php" line="19" assertions="3" time="0.018543"/>
+      <testcase name="testCustomGet" class="PPI\Test\Request\CookieTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/CookieTest.php" line="31" assertions="4" time="0.000248"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\GetQueryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/GetQueryTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="4" assertions="14" failures="0" errors="0" time="0.031797">
+      <testcase name="testIsCollected" class="PPI\Test\Request\GetQueryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/GetQueryTest.php" line="21" assertions="3" time="0.031167"/>
+      <testcase name="testCollectGet" class="PPI\Test\Request\GetQueryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/GetQueryTest.php" line="33" assertions="4" time="0.000227"/>
+      <testcase name="testCustomGet" class="PPI\Test\Request\GetQueryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/GetQueryTest.php" line="42" assertions="4" time="0.000203"/>
+      <testcase name="testGetString" class="PPI\Test\Request\GetQueryTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/GetQueryTest.php" line="50" assertions="3" time="0.000200"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/PostTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="3" assertions="11" failures="0" errors="0" time="0.017707">
+      <testcase name="testIsCollected" class="PPI\Test\Request\PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/PostTest.php" line="21" assertions="3" time="0.017245"/>
+      <testcase name="testCollectPost" class="PPI\Test\Request\PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/PostTest.php" line="32" assertions="4" time="0.000262"/>
+      <testcase name="testCustomPost" class="PPI\Test\Request\PostTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/PostTest.php" line="40" assertions="4" time="0.000200"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/ServerTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="3" assertions="11" failures="0" errors="0" time="0.019965">
+      <testcase name="testIsCollected" class="PPI\Test\Request\ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/ServerTest.php" line="21" assertions="3" time="0.019546"/>
+      <testcase name="testCollectServer" class="PPI\Test\Request\ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/ServerTest.php" line="32" assertions="4" time="0.000218"/>
+      <testcase name="testCustomServer" class="PPI\Test\Request\ServerTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/ServerTest.php" line="40" assertions="4" time="0.000201"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="7" assertions="21" failures="0" errors="0" time="0.021788">
+      <testcase name="testIsCollected" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="21" assertions="3" time="0.006831"/>
+      <testcase name="testCollectSession" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="32" assertions="4" time="0.000217"/>
+      <testcase name="testCustomSession" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="40" assertions="4" time="0.000200"/>
+      <testcase name="testAddSession" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="48" assertions="4" time="0.000199"/>
+      <testcase name="testchangeSession" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="58" assertions="2" time="0.000183"/>
+      <testcase name="testRemoveSession" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="66" assertions="2" time="0.013908"/>
+      <testcase name="testRemoveSessionBySettingNull" class="PPI\Test\Request\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/SessionTest.php" line="74" assertions="2" time="0.000250"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Request\UrlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/UrlTest.php" namespace="PPI\Test\Request" fullPackage="Core" package="Core" tests="4" assertions="14" failures="0" errors="0" time="0.015722">
+      <testcase name="testIsCollected" class="PPI\Test\Request\UrlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/UrlTest.php" line="21" assertions="3" time="0.014409"/>
+      <testcase name="testCollectGetQuery" class="PPI\Test\Request\UrlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/UrlTest.php" line="33" assertions="4" time="0.000525"/>
+      <testcase name="testCustomGetQuery" class="PPI\Test\Request\UrlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/UrlTest.php" line="42" assertions="4" time="0.000476"/>
+      <testcase name="testUrlString" class="PPI\Test\Request\UrlTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Request/UrlTest.php" line="50" assertions="3" time="0.000312"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" namespace="PPI\Test\Response" fullPackage="Core" package="Core" tests="9" assertions="17" failures="0" errors="0" time="0.026938">
+      <testcase name="testSetCSS" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="29" assertions="3" time="0.025269"/>
+      <testcase name="testClearCSS" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="39" assertions="1" time="0.000345"/>
+      <testcase name="testSetJS" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="47" assertions="3" time="0.000213"/>
+      <testcase name="testClearJS" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="57" assertions="1" time="0.000211"/>
+      <testcase name="testCharsetGet" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="65" assertions="1" time="0.000178"/>
+      <testcase name="testCharsetSet" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="69" assertions="1" time="0.000180"/>
+      <testcase name="testFlashGet" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="75" assertions="3" time="0.000185"/>
+      <testcase name="testFlashSet" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="83" assertions="3" time="0.000187"/>
+      <testcase name="testFlashClear" class="PPI\Test\Response\ResponseTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Response/ResponseTest.php" line="92" assertions="1" time="0.000170"/>
+    </testsuite>
+    <testsuite name="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" namespace="PPI\Test\Session" fullPackage="Core" package="Core" tests="5" assertions="6" failures="0" errors="0" time="0.007425">
+      <testcase name="testSessionGet" class="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" line="24" assertions="1" time="0.006647"/>
+      <testcase name="testSessionSet" class="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" line="28" assertions="1" time="0.000202"/>
+      <testcase name="testSessionExists" class="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" line="34" assertions="2" time="0.000197"/>
+      <testcase name="testSessionRemove" class="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" line="40" assertions="1" time="0.000197"/>
+      <testcase name="testSessionRemoveAll" class="PPI\Test\Session\SessionTest" file="/Applications/XAMPP/xamppfiles/htdocs/ppi-framework-namespaces/PPI/Test/Session/SessionTest.php" line="46" assertions="1" time="0.000182"/>
+    </testsuite>
+  </testsuite>
+</testsuites>
