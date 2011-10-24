@@ -1,0 +1,3 @@
+Makes wiki-like API documentation files for a Vendor class series.
+
+Usage: %*solar make-docs <Vendor>%n

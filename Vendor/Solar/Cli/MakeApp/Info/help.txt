@@ -1,0 +1,3 @@
+Makes an application class and all of its support directories.
+
+Usage: %*solar make-app <Vendor_App_Name>%n

@@ -1,0 +1,10 @@
+{:php}
+/**
+ * 
+ * Base model class.
+ * 
+ */
+abstract class {:vendor}_Sql_Model extends Solar_Sql_Model
+{
+    
+}

@@ -1,0 +1,59 @@
+{:php}
+/**
+ * 
+ * Generic list display.
+ * 
+ * @var $list Solar_Sql_Model_Collection
+ * 
+ */
+// the name of the model this collection came from
+$model_name = $list->getModel()->model_name;
+
+// the CSS class to use for the <ul> tag
+$css_class = $this->escape($model_name) . '-list';
+
+// the table cols to show
+if ($this->list_cols) {
+    $cols = $this->list_cols;
+} else {
+    $cols = array_keys($this->list->getModel()->table_cols);
+}
+?>
+    <ul class="<?php echo $css_class ?>">
+    <?php foreach ($list as $item): ?>
+        <li><ul>
+        <?php
+            foreach ($cols as $col) {
+                
+                // skip missing cols
+                if (! isset($item->$col)) {
+                    continue;
+                }
+                
+                // localized label
+                $locale_key = strtoupper("LABEL_$col");
+                $label = $this->escape($item->locale($locale_key));
+                
+                // value
+                $val = $item->$col;
+                if (is_scalar($val)) {
+                    $text = $this->escape($val);
+                } elseif (is_object($val)) {
+                    $text = "<em>" . get_class($val) . "</em>";
+                } else {
+                    $text = "<em>" . strtolower(gettype($val)) . "</em>";
+                }
+                
+                echo "<li>$label: $text</li>\n";
+                
+            }
+            
+            $id = $item->getPrimaryVal();
+            
+            echo "<li>"
+               . $this->action("{$this->controller}/read/$id", 'ACTION_READ')
+               . "</li>\n";
+        ?>
+        </ul></li>
+    <?php endforeach; ?>
+    </ul>

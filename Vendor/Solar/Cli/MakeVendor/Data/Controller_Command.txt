@@ -1,0 +1,10 @@
+{:php}
+/**
+ * 
+ * Command class.
+ * 
+ */
+class {:vendor}_Controller_Command extends Solar_Controller_Command
+{
+    
+}

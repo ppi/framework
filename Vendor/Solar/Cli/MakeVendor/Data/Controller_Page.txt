@@ -1,0 +1,10 @@
+{:php}
+/**
+ * 
+ * Base page-controller class.
+ * 
+ */
+abstract class {:vendor}_Controller_Page extends Solar_Controller_Page
+{
+    
+}

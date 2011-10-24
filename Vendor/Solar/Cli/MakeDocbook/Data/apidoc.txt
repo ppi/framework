@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<!DOCTYPE set
+    PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+    "../docbook-5.0/dtd/docbook.dtd"
+    [
+        <!ENTITY % xinclude SYSTEM "xinclude.mod"> %xinclude;
+    ]
+>
+<set
+    version="5.0"
+    xml:lang="en"
+    xml:id="apidoc"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+    
+<info>
+    <title>{:vendor} Package and Class Documentation</title>
+    <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
+</info>
+
+<xi:include href="apidoc/package.xml" />
+<xi:include href="apidoc/class.xml" />
+    
+</set>

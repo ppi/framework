@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section
+    xml:id="class.{:class}.Methods"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+
+<title>Methods</title>
+
+<para>All methods in the <literal>{:class}</literal> class.</para>
+
+{:info}
+    
+</section>

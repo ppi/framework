@@ -1,0 +1,9 @@
+Creates symbolic links source/vendor to the appropriate places in the 
+project system, including:
+
+- include/Vendor
+- include/Test/Vendor
+- include/Mock/Vendor
+- docroot/public/Vendor
+
+Usage: %*solar link-vendor <Vendor>%n

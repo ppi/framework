@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter
+    PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+    "../../../docbook-5.0/dtd/docbook.dtd"
+    [
+        <!ENTITY % xinclude SYSTEM "../../xinclude.mod"> %xinclude;
+    ]
+>
+<chapter
+    xml:id="class.index"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+
+<title>Index of Classes</title>
+
+{:classes}
+    
+</chapter>

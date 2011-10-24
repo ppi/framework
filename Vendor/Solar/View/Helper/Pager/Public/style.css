@@ -1,0 +1,48 @@
+.pager ul, .pager ol {
+    padding: 1em;
+    margin: 1em 0;
+    clear: left;
+    font-size: 85%;
+    list-style: none;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pager li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: inline;
+    color: #666;
+}
+
+.pager a, .pager li {
+    display: block;
+    float: left;
+    padding: 0.1em 0.3em;
+    margin-right: 0.1em;
+    border: 1px solid #fff;
+    background: #fff;
+}
+
+.pager a.curr {
+    border: 1px solid #2E6AB1;
+    font-weight: bold;
+    background: #2E6AB1;
+    color: #fff;
+}
+
+.pager a {
+    border: 1px solid #9AAFE5;
+    text-decoration: none;
+    color: #2E6AB1;
+}
+
+
+.pager a:hover {
+    border-color: #2E6AB1;
+}
+
+.pager a.next, .pager a.prev {
+    font-weight: bold;
+}

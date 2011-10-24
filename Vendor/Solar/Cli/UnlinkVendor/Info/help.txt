@@ -1,0 +1,4 @@
+Removes the symbolic links leading to source/vendor from the remainder of the 
+project system.
+
+Usage: %*solar link-vendor <Vendor>%n

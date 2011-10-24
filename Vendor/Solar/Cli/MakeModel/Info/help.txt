@@ -1,0 +1,3 @@
+Makes a model class and all of its support directories.
+
+Usage: %*solar make-model <Vendor_Model_Names>%n

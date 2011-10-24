@@ -1,0 +1,3 @@
+Makes all the basic classes and files for a new vendor name.
+
+Usage: %*solar make-vendor <Vendor>%n

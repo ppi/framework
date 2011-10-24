@@ -1,0 +1,5 @@
+Solar command-line tool.
+
+Usage: %*solar <command> <options> <params>%n
+
+Try 'solar help <command>' for help on a specific command.

@@ -1,0 +1,4 @@
+Makes test classes and stub test methods for a given class and its
+subdirectories.
+
+Usage: %*solar make-tests <Vendor_Class_Name>%n

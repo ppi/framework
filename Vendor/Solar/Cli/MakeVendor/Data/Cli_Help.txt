@@ -1,0 +1,10 @@
+{:php}
+/**
+ * 
+ * CLI help class.
+ * 
+ */
+class {:vendor}_Cli_Help extends Solar_Cli_Help
+{
+    
+}

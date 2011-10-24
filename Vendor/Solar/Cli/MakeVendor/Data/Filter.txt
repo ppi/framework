@@ -1,0 +1,10 @@
+{:php}
+/**
+ * 
+ * Filter class.
+ * 
+ */
+class {:vendor}_Filter extends Solar_Filter
+{
+    
+}

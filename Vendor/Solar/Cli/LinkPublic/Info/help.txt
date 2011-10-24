@@ -1,0 +1,4 @@
+Creates symbolic links from all Vendor class "Public" subdirectores to the
+docroot/public directory.
+
+Usage: %*solar link-public <Vendor>%n

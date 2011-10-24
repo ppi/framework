@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book
+    PUBLIC "-//OASIS//DTD DocBook V5.0//EN"
+    "../../docbook-5.0/dtd/docbook.dtd"
+    [
+        <!ENTITY % xinclude SYSTEM "../xinclude.mod">
+        %xinclude;
+    ]
+>
+<book
+    xml:id="class"
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+
+<title>Classes</title>
+
+    <xi:include href="class/index.xml" />
+{:xinc}
+    
+</book>

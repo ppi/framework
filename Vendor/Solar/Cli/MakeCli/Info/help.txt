@@ -1,0 +1,3 @@
+Makes a command-line class and all of its support directories.
+
+Usage: %*solar make-cli <Vendor_Cli_Name>%n

@@ -1,0 +1,57 @@
+{:php}
+/**
+ * 
+ * Generic item display.
+ * 
+ * @var $item Solar_Sql_Model_Record
+ * 
+ */
+
+// the name of the model this record came from
+$model_name = $item->getModel()->model_name;
+
+// the CSS class to use for the <dl> tag
+$css_class = $this->escape($model_name) . '-item';
+
+// the CSS id to use for the <dl> tag
+$css_id = $this->escape(
+    $model_name . "-item-" . $item->getPrimaryVal()
+);
+
+// the table cols to show
+if ($this->item_cols) {
+    $cols = $this->item_cols;
+} else {
+    $cols = array_keys($item->getModel()->table_cols);
+}
+?>
+<dl id="<?php echo $css_id ?>" class="<?php echo $css_class ?>"><?php
+
+    // output each table column and value as a dt/dd pair
+    foreach ($cols as $col) {
+        
+        // skip missing cols
+        if (! isset($item->$col)) {
+            continue;
+        }
+        
+        // localized label
+        $locale_key = strtoupper("LABEL_$col");
+        echo "\n    <dt>"
+           . $this->escape($item->locale($locale_key))
+           . "</dt>\n";
+        
+        // value
+        $val = $item->$col;
+        if (is_scalar($val)) {
+            $text = $this->escape($val);
+        } elseif (is_object($val)) {
+            $text = "<em>" . get_class($val) . "</em>";
+        } else {
+            $text = "<em>" . strtolower(gettype($val)) . "</em>";
+        }
+        
+        echo "    <dd>$text</dd>\n";
+    }
+    
+?></dl>
