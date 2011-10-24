@@ -7,6 +7,7 @@
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @link      http://www.ppiframework.com
  */
+namespace PPI;
 class Autoload {
 
 	/**

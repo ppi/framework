@@ -115,7 +115,7 @@ class App {
 	 * @param PPI_Dispatch_Interface $p_oDispatch The dispatch object
 	 * @return void
 	 */
-	function setDispatcher(Dispatch\DispatchInterface $p_oDispatch) {
+	function setDispatcher(\PPI\Dispatch\DispatchInterface $p_oDispatch) {
 		$this->_envOptions['dispatcher'] = $p_oDispatch;
 	}
 
@@ -204,28 +204,27 @@ class App {
 				switch(strtolower(trim($sLib))) {
 					case 'zf':
 						Autoload::add('Zend', array(
-							'path'   => SYSTEMPATH . 'Vendor/Zend/'
+							'path'   => VENDORPATH . 'Zend/'
 						));
 						break;
 
 					case 'github':
-						$githubAutoloader = SYSTEMPATH . 'Vendor/Github/Autoloader.php';
+						$githubAutoloader = VENDORPATH . 'Github/Autoloader.php';
 						if(!file_exists($githubAutoloader)) {
 							throw new CoreException('Unable to autoload github, the github autoloader was no found.');
 						}
-						include_once(SYSTEMPATH . 'Vendor/Github/Autoloader.php');
+						include_once(VENDORPATH . 'Github/Autoloader.php');
 						Github_Autoloader::register();
 						break;
 
-					// @todo - test this.
 					case 'swift':
-						include_once(SYSTEMPATH . 'Vendor/Swift/swift_required.php');
+						include_once(VENDORPATH . 'Swift/swift_required.php');
 						break;
 
 					case 'solar':
-						include_once(SYSTEMPATH . 'Vendor/Solar.php');
+						include_once(VENDORPATH . 'Solar.php');
 						Autoload::add('Solar', array(
-							'path'   => SYSTEMPATH . 'Vendor/Solar/',
+							'path'   => VENDORPATH . 'Solar/',
 							'prefix' => 'Solar_'
 						));
 						break;
