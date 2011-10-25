@@ -7,7 +7,9 @@
  * @package   Model
  * @link      www.ppiframework.com
  */
-class PPI_Model_Select {
+namespace PPI\Model;
+use PPI\Core\CoreException;
+class Select {
 
     /**
      * The inner join
@@ -430,13 +432,13 @@ class PPI_Model_Select {
 	/**
 	 * Log the error in the database
      *
-     * @throws PPI_Exception
+     * @throws CoreException
      * @return void
 	 */
 	protected function logError() {
 		// check if we need to email
 		// product debugging information
-		throw new PPI_Exception("SQL Error: " . mysql_error($this->_connection), $this->_queries);
+		throw new CoreException("SQL Error: " . mysql_error($this->_connection), $this->_queries);
 	}
 
 	/**
