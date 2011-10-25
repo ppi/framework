@@ -120,7 +120,7 @@ class Form  {
 	 * Setup the hooker object
 	 */
 	function __construct() {
-		$this->oHooker = new App\Formbuilder\Hooker();
+		$this->oHooker = new \App\Formbuilder\Hooker();
 	}
 	/**
 	 * Initialise the form with name,action and method.
@@ -288,7 +288,7 @@ class Form  {
 		$submitFields = $this->oHooker->preRetreival($submitFields);
 
 		// Clean the inputs
-		$helper = new PPI\Helper();
+		$helper = new \PPI\Helper();
 		$submitFields = $helper->arrayTrim($submitFields);
 		return $submitFields;
 	}
