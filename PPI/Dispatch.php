@@ -79,15 +79,15 @@ class Dispatch {
 
 	function init() {
 
-		$urls                = $this->getURISegments();
-		$controllerName      = ucfirst($urls[0]);
+		$uris                = $this->getURISegments();
+		$controllerName      = ucfirst($uris[0]);
 		$className           = 'App\\Controller\\' . $controllerName; // eg: App\Controller\User
 
 		$this->setControllerName(strtolower($controllerName));
 		$this->setControllerClassName($className);
 
 		// Setup the method we wish to call.
-		$method = isset($urls[1]) ? $urls[1] : $this->_methodName;
+		$method = isset($uris[1]) ? $uris[1] : $this->_methodName;
 		$this->setMethodName($method);
 	}
 
