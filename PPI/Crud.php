@@ -28,13 +28,34 @@ class Crud {
 			// use spyc
 			$structure = \Spyc::YAMLLoad($path);
 			$fields = array();
+			
 			if(!empty($structure['fields'])) {
+				
 				foreach($structure['fields'] as $fieldName => $field) {
 					
 					$fieldType = $field['type'];
 					$fieldLabel = $field['label'];
 					unset($field['type'], $field['label']);
-					$fields[$fieldName] = $form->$fieldType($fieldName, $field);
+					
+					if($fieldType === 'dropdown' || $fieldType === 'select') {
+						
+						$fieldValues = array();
+						if(isset($field['values'])) {
+							$fieldValues = $field['values'];
+							unset($field['value']);
+						}
+						if(isset($field['value'])) {
+							$fieldValue = $field['value'];
+							unset($field['value']);
+						}
+						$fields[$fieldName] = $form->$fieldType($fieldName, $fieldValues, $field);						
+						if(isset($fieldValue)) {
+							$fields[$fieldName]->setValue($fieldValue);
+						}
+						
+					} else {
+						$fields[$fieldName] = $form->$fieldType($fieldName, $field);
+					}
 				}
 				
 				foreach($structure['rules'] as $fieldName => $rule) {
