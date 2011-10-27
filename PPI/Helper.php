@@ -6,7 +6,7 @@
  * @link      www.ppiframework.com
  */
 namespace PPI;
-class PPI\Helper {
+class Helper {
 
 	/**
 	 * Function to recursively trim strings

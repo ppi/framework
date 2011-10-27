@@ -7,6 +7,7 @@
  * @package   Cache
  */
 namespace PPI\Cache;
+use PPI\Core\CoreException;
 class Disk implements \PPI\Cache\CacheInterface {
 
 	/**
@@ -104,15 +105,15 @@ class Disk implements \PPI\Cache\CacheInterface {
 		if(!is_dir($cacheDir)) {
 			try {
 			   mkdir($cacheDir);
-			} catch(PPI_Exception $e) {
-				throw new PPI_Exception('Unable to create directory:<br>(' . $cacheDir . ')');
+			} catch(CoreException $e) {
+				throw new CoreException('Unable to create directory:<br>(' . $cacheDir . ')');
 			}
 		}
 		if(false === is_writeable($cacheDir)) {
 			$fileInfo = pathinfo(dirname($path));
-			chmod($cacheDir, 775);
+			@chmod($cacheDir, 775);
 			if(false === is_writable($cacheDir)) {
-				throw new PPI_Exception('Unable to create cache file: ' . $key. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
+				throw new CoreException('Unable to create cache file: ' . $key. '. Cache directory not writeable.<br>(' . $this->_cacheDir . ')<br>Current permissions: ');
 			}
 		}
 
