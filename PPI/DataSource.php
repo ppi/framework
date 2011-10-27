@@ -89,7 +89,7 @@ class DataSource {
 		
 		// Check that we asked for a valid key
 		if(!isset($this->_config[$key])) {
-			throw new DataSourceException('Invalid DataSource Key: ' . $key);
+			throw new \PPI\DataSource\DataSourceException('Invalid DataSource Key: ' . $key);
 		}
 		
 		$conn = $this->factory($this->_config[$key]);
