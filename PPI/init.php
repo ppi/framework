@@ -27,7 +27,7 @@ defined('PPI_VERSION')			|| define('PPI_VERSION', '1.1');
 // Autoload registration
 require 'Autoload.php';
 PPI\Autoload::add('PPI', array('path' => dirname(SYSTEMPATH)));
-PPI\Autoload::add('App', array('path' => APPFOLDER));
+PPI\Autoload::add('App', array('path' => dirname(APPFOLDER)));
 PPI\Autoload::register();
 
 // General stuff
