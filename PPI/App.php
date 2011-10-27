@@ -257,8 +257,14 @@ class App {
 		$uri = $router->getMatchedRoute();
 		
 		
-		// Dispatcher
-		$this->_envOptions['dispatcher']->setUri($uri);
+		// If we've no URI, dispatch the default route.
+		if($uri === '') {
+			$this->_envOptions['dispatcher']->setUri($router->getDefaultRoute());
+		} else {
+			$this->_envOptions['dispatcher']->setUri($uri);
+		}
+		
+		// Lets do our controller check, if it's bogus then attempt the 404 route.
 		if(!$this->_envOptions['dispatcher']->check()) {
 			$this->_envOptions['dispatcher']->setUri($router->get404Route());
 			// If the 404 route we set doesn't exist, lets bomb out we can't go any further.
