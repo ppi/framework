@@ -34,14 +34,24 @@ class Select extends Tag {
 	 * @param array $options
 	 */
 	function __construct(array $options = array()) {
+
+		if(isset($options['values'])) {
+			$this->setValues($options['values']);
+			unset($options['values']);
+		}
+		if(isset($options['value'])) {
+			$this->setValue($options['value']);
+			unset($options['value']);
+		}
+
 		$this->_attributes = $options;
 	}
 
 
 	/**
-	 * Set the value of this field
+	 * Set the values of this field
 	 *
-	 * @param string $value
+	 * @param array $options
 	 * @return void
 	 */
 	function setValues(array $options) {
