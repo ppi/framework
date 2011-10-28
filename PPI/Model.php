@@ -9,7 +9,8 @@
  */
 namespace PPI;
 use PPI\Model\ModelException,
-	PPI\Core;
+	PPI\Core,
+	PPI\Core\CoreException;
 abstract class Model {
 
 	/**
@@ -466,6 +467,8 @@ abstract class Model {
 		$aWhere = array();
 		if ($p_mWhere !== null) {
 			$aWhere = is_string($p_mWhere) ? array($p_mWhere) : $p_mWhere;
+		} else {
+			throw new CoreException('Error updating table contents without a where clause. Use TRUNCATE instead.');
 		}
 
 		$sData = implode(' = ?, ', $this->parse_reserved_keys(array_keys($p_aRecord))) . ' = ?'; // Setup the field = ? template
