@@ -213,8 +213,8 @@ class App {
 						if(!file_exists($githubAutoloader)) {
 							throw new CoreException('Unable to autoload github, the github autoloader was no found.');
 						}
-						include_once(VENDORPATH . 'Github/Autoloader.php');
-						Github_Autoloader::register();
+						include_once($githubAutoloader);
+						\Github_Autoloader::register();
 						break;
 
 					case 'swift':
