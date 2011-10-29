@@ -1,15 +1,13 @@
 <?php
 /**
- * @version   1.0
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @copyright Digiflex Development
  * @package   Config
  *
  */
 namespace PPI\Config;
-class Ini extends Generic
-{
+use PPI\Core\CoreException;
+class Ini extends Generic {
     /**
      * String that separates nesting levels of configuration data
      *
@@ -23,11 +21,11 @@ class Ini extends Generic
      *
      * @param  string        $filename
      * @param  string|null   $section
-     * @throws PPI_Exception
+     * @throws CoreException
      */
     public function __construct($iniArray, $section) {
      	if (!isset($iniArray[$section])) {
-     		throw new PPI_Exception('Unable to find section ' . $section . ' in ini config');
+     		throw new CoreException('Unable to find section ' . $section . ' in ini config');
      	}
 
     	// Lets actually setup and parse the config into respective arrays
@@ -48,7 +46,7 @@ class Ini extends Generic
      * @param  array  $config
      * @param  string $key
      * @param  string $value
-     * @throws PPI_Exception
+     * @throws CoreException
      * @return array
      */
     protected function _processKey($config, $key, $value)
@@ -62,7 +60,7 @@ class Ini extends Generic
 
                 } elseif (!is_array($config[$firstPiece])) {
                     /**
-                     * @see PPI_Exception
+                     * @see CoreException
                      */
                     die("Cannot create sub-key for '{$pieces[0]}' as key already exists");
                 }
