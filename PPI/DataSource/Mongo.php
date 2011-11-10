@@ -3,9 +3,11 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
 namespace PPI\DataSource;
+use Doctrine\MongoDB\Connection;
+
 class Mongo {
 	
     protected $conn = array();
@@ -14,31 +16,40 @@ class Mongo {
 
 	}
 
+	/**
+	 * Get the doctrine mongodb driver.
+	 * 
+	 * @throws DataSourceException
+	 * @param array $config
+	 * @return \Doctrine\MongoDB\Connection
+	 */
 	function getDriver(array $config) {
 		
-		if (!class_exists('Mongo')) {
-			throw new PPI_Exception('Mongo extension is missing');
-		}
-
-		if(!isset($config['username'], $config['password'], $config['hostname'])) {
-			throw new PPI_Exception('Missing connection properties. Make sure you enter a username, password and hostname');
+		if (!extension_loaded('mongo')) {
+			throw new DataSourceException('Mongo extension is missing');
 		}
 		
-		$dsn = 'mongodb://' . "{$config['username']}:{$config['password']}@{$config['hostname']}";
+		$dsn = 'mongodb://';
+		
+		if(isset($config['username'], $config['password'])) {
+			$dsn .= $config['username'] . ':' . $config['password'] . '@';
+		}
+
+		$dsn .= $config['hostname'];
 		
 		if(isset($config['port'])) {
 			$dsn .= ":{$config['port']}";
-		}
-		
-		if(isset($config['database'])) {
-			$dsn .= "/{$config['database']}";
 		}
 		
 		if(!isset($config['options'])) {
 			$config['options'] = array();
 		}
 
-        return new \Mongo($dsn, $config['options']);
-    }
+		$conn = new Connection($dsn, $config['options']);
+		if(isset($config['database'])) {
+			return $conn->selectDatabase($config['database']);
+		}
+		return $conn;
+	}
 
 }
