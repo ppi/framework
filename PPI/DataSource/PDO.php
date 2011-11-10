@@ -1,13 +1,15 @@
 <?php
 namespace PPI\DataSource;
 
-use Doctrine\Common\ClassLoader;
-
+use Doctrine\Common\ClassLoader,
+	Doctrine\DBAL\DriverManager,
+	Doctrine\DBAL\Configuration,
+	PPI\Autoload;
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
 class PDO {
 
@@ -17,10 +19,7 @@ class PDO {
 
 	function getDriver(array $config) {
 
-		require VENDORPATH . 'Doctrine/Doctrine/Common/ClassLoader.php';
-		$classLoader = new ClassLoader('Doctrine', VENDORPATH . 'Doctrine');
-		$classLoader->register();
-		$connObject = new \Doctrine\DBAL\Configuration();
+		$connObject = new Configuration();
 
 		// We map our config options to Doctrine's naming of them
 		$connParamsMap = array(
@@ -40,7 +39,7 @@ class PDO {
 		$config['driver'] = $config['type'];
 		unset($config['type']);
 
-		return \Doctrine\DBAL\DriverManager::getConnection($config, $connObject);
+		return DriverManager::getConnection($config, $connObject);
 
 	}
 
