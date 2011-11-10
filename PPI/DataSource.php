@@ -3,9 +3,10 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
 namespace PPI;
+use PPI\Autoload;
 class DataSource {
 
 	/**
@@ -90,6 +91,10 @@ class DataSource {
 		// Check that we asked for a valid key
 		if(!isset($this->_config[$key])) {
 			throw new \PPI\DataSource\DataSourceException('Invalid DataSource Key: ' . $key);
+		}
+		
+		if(!Autoload::exists('Doctrine')) {
+			Autoload::add('Doctrine', array('path' => VENDORPATH . 'Doctrine'));
 		}
 		
 		$conn = $this->factory($this->_config[$key]);
