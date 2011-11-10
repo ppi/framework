@@ -37,12 +37,12 @@ class Cookie extends RequestAbstract {
 		}
 
 		// Handle cookie parameters - TODO
-		list($name, $content, $expire, $path, $domain, $secure, $httponly) = $value;
+		list($content, $expire, $path, $domain, $secure, $httponly) = $value;
 
 		$this->_array[$offset] = $content;
 
 		if ($this->_isCollected) {
-			setcookie($name, $content, $expire, $path, $domain, $secure, $httponly);
+			setcookie($offset, $content, $expire, $path, $domain, $secure, $httponly);
 		}
 	}
 
