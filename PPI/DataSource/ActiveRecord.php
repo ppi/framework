@@ -3,58 +3,36 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
 namespace PPI\DataSource;
-class ActiveRecord {
+class ActiveRecord extends ActiveQuery {
 	
-	/**
-	 * The table name
-	 * 
-	 * @var null
-	 */
-	protected $_table = null;
-	
-	/**
-	 * The primary key
-	 * 
-	 * @var null
-	 */
-	protected $_primary = null;
-	
-	/**
-	 * The datasource connection
-	 * 
-	 * @var null
-	 */
-	protected $_conn = null;
-	
-	/**
-	 * Find a single record by value
-	 * 
-	 * @param integer $val
-	 * @return void
-	 */
-	function find($val) {
+	protected $_identifier = null;
 
-		if($this->_table === null || $this->_primary) {
-			throw new PPI_Exception('You need to specify a table name and primary key');
+	protected $_data = array();
+
+	function __construct($id = null, array $options = array()) {
+
+		parent::__construct($options);
+		if($id !== null) {
+			$this->_data       = $this->find($id);
+			$this->_identifier = $id;
 		}
-		$stmt = $this->_conn->prepare("SELECT * FROM {$this->_table} WHERE {$this->_primary} = :val");
-		$stmt->execute(array('val' => $val));
-		$row = $stmt->fetch();
-		$stmt->closeCursor();
-		$this->_conn->close();
-		return $row;
 	}
-	
-	/**
-	 * Fetch rows from the current table based on some conditions
-	 * 
-	 * @param $identifier
-	 * @return void
-	 */
-	function fetchAll($identifier) {
+
+	function save() {
+		return $this->update($this->_data, array($this->_primary => $this->_identifier));
+	}
+
+	function __set($key, $val) {
+		if(isset($this->_data[$key])) {
+			$this->_data[$key] = $val;
+		}
+	}
+
+	function __get($key) {
+		return isset($this->_data[$key]) ? $this->_data[$key] : null;
 	}
 
 }
