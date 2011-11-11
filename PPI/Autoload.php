@@ -111,7 +111,6 @@ class Autoload {
 		unset(self::$_libraries[$p_sKey]);
 	}
 
-
 	/**
 	 * Checks if a library has been added
 	 *
@@ -120,16 +119,5 @@ class Autoload {
 	 */
 	static function exists($p_sKey) {
 		return isset(self::$_libraries[$p_sKey]);
-	}
-
-	/**
-	 * Converts the class name to a file path, currently only PEAR naming convention is supported
-	 * EG: PPI_Cache_Disk => PPI/Cache/Disk.php
-	 *
-	 * @param string $p_sClassName The class name
-	 * @return string
-	 */
-	static function convertClassName($p_sClassName, $ret = false) {
-		return strtr($p_sClassName, '_', DS) . '.php';
 	}
 }
