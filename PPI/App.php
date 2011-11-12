@@ -149,6 +149,7 @@ class App {
 
 		error_reporting($this->_envOptions['errorLevel']);
 		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
+		set_exception_handler(array('\PPI\Core\ExceptionHandler', 'handle'));
 
 		// Fire up the default config handler
 		if($this->_envOptions['config'] === null) {
