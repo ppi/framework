@@ -5,7 +5,7 @@
  * @package   DataSource
  * @link      www.ppiframework.com
  */
-namespace PPI\DataSource;
+namespace PPI\DataSource\Mongo;
 class ActiveQuery {
 	
 	/**

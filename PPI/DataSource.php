@@ -104,5 +104,16 @@ class DataSource {
 
 		return $conn;
 	}
+	
+	/**
+	 * Get the connection configuration options for the specified key
+	 * 
+	 * @param string $key
+	 * @todo maybe throw an exception if $key doesn't exist.
+	 * @return array
+	 */
+	function getConnectionConfig($key) {
+		return isset($this->_config[$key]) ? $this->_config[$key] : array();
+	}
 
 }
