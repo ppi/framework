@@ -13,21 +13,7 @@ class ActiveQuery {
 	 * 
 	 * @var null
 	 */
-	protected $_table = null;
-	
-	/**
-	 * The primary key
-	 * 
-	 * @var null
-	 */
-	protected $_primary = null;
-	
-	/**
-	 * The datasource connection
-	 * 
-	 * @var null
-	 */
-	protected $_conn = null;
+	protected $_handler = null;
 
 	/**
 	 * The meta data for this instantiation
@@ -51,6 +37,15 @@ class ActiveQuery {
 
 		// Setup our connection from the key passed to meta['conn']
 		if(isset($this->_meta['conn'])) {
+			
+			$dsConfig = \PPI\Core::getDataSource()->getConnectionConfig($this->_meta['conn']);
+			$connType = $dsConfig['type']; 
+			if($connType === 'mongo') {
+				$this->_handler = new \PPI\DataSource\Mongo\ActiveQuery();
+			} elseif(substr($connType, 0, 3) === 'pdo') {
+				$this->_handler = new \PPI\DataSource\PDO\ActiveQuery();
+			}
+			
 			$this->_conn = \PPI\Core::getDataSourceConnection($this->_meta['conn']);
 		}
 
@@ -58,29 +53,27 @@ class ActiveQuery {
 	}
 	
 	function fetchAll() {
-		return $this->_conn->query("SELECT * FROM {$this->_meta['table']}")->fetchAll(\PDO::FETCH_ASSOC);
+		return $this->_handler->fetchAll();
 	}
 
 	function find($id) {
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
+		return $this->_handler->find($id);
 	}
 
 	function fetch(array $where, array $params = array()) {
-		die("SELECT * FROM {$this->_meta['table']} WHERE $where");
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
+		return $this->_handler->fetch($where, $params);
 	}
 
 	function insert($data) {
-		$this->_conn->insert($this->_table, $data);
-		return $this->_conn->lastInsertId();
+		return $this->_handler->insert($data);
 	}
 
 	function delete($where) {
-		return $this->_conn->delete($this->_table, $where);
+		return $this->_handler->delete($this->_meta['table'], $where);
 	}
 	
 	function update($data, $where) {
-		return $this->_conn->update($this->_table, $data, $where);
+		return $this->_handler->update($this->_meta['table'], $data, $where);
 	}
 
 }

@@ -12,6 +12,12 @@ class ActiveRecord extends ActiveQuery {
 
 	protected $_data = array();
 
+	/**
+	 * 
+	 * @todo maybe throw an exception if $id is passed but the record is blank
+	 * @param null|integer $id
+	 * @param array $options
+	 */
 	function __construct($id = null, array $options = array()) {
 
 		parent::__construct($options);
@@ -21,14 +27,21 @@ class ActiveRecord extends ActiveQuery {
 		}
 	}
 
+	/**
+	 * Save the users record. If there is an identifier set, then it's update mode, else back to insert mode.
+	 * 
+	 * @return integer (If insert, the new insert ID, If update, the num of rows affected (should be 1));
+	 */
 	function save() {
-		return $this->update($this->_data, array($this->_primary => $this->_identifier));
+		if($this->_identifier !== null) {
+			return $this->update($this->_data, array($this->_primary => $this->_identifier));
+		}
+		return $this->insert($this->_data);
+		
 	}
 
 	function __set($key, $val) {
-		if(isset($this->_data[$key])) {
-			$this->_data[$key] = $val;
-		}
+		$this->_data[$key] = $val;
 	}
 
 	function __get($key) {
