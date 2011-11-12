@@ -43,8 +43,10 @@
 	<div><strong>File:</strong> <?= $e->getFile() ?></div>
 	<div><strong>Line:</strong> <?= $e->getLine() ?></div>
 	<div><strong>Message:</strong> <?= $e->getMessage() ?></div>
+	<?php if($e->getCode() !== 0): ?>
 	<div class="border"><strong>Code:</strong> <?= $e->getCode() ?></div>
-	<?php if(isset($trace)): ?>
+	<?php endif; ?>
+	<?php if(isset($trace) && !empty($trace)): ?>
 		<h2>Stack Trace</h2>
 		<table>
 		<tr>
