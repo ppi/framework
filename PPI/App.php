@@ -24,7 +24,7 @@ class App {
 		'cacheConfig'       => false, // Config object caching
 		'errorLevel'        => E_ALL, // The error level to throw via error_reporting()
 		'showErrors'        => 'On', // Whether to display errors or not. This gets fired into ini_set('display_errors')
-		'exceptionHandler'  => array('\PPI\Core\ExceptionHandler', 'handle'), // This must be a callback accepted by set_exception_handler()
+		'exceptionHandler'  => array('PPI\Core\ExceptionHandler', 'handle'), // Callback accepted by set_exception_handler()
 		'router'            => null,
 		'session'           => null,
 		'config'            => null,
@@ -34,12 +34,14 @@ class App {
 
 
 	/**
-	 * @param array $p_aParams
+	 * The constructor.
+	 * 
+	 * @param array $options
 	 */
 
-	function __construct($p_aParams = array()) {
-		if(!empty($p_aParams)) {
-			foreach ($p_aParams as $key => $value) {
+	function __construct(array $options = array()) {
+		if(!empty($options)) {
+			foreach ($options as $key => $value) {
 				if (method_exists($this, ($sMethod = 'set' . ucfirst($key)))) {
 					$this->$sMethod($value);
 				}
@@ -53,17 +55,17 @@ class App {
 	 * @param array $p_aOptions The options
 	 * @return void
 	 */
-	function setEnv(array $p_aOptions) {
+	function setEnv(array $options) {
 
 		// If we pass in a bad sitemode, lets just default to 'development' gracefully.
-		if(isset($p_aOptions['siteMode'])) {
-			if(!in_array($p_aOptions['siteMode'], array('development', 'production'))) {
-				unset($p_aOptions['siteMode']);
+		if(isset($options['siteMode'])) {
+			if(!in_array($options['siteMode'], array('development', 'production'))) {
+				unset($options['siteMode']);
 			}
 		}
 
 		// Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
-		foreach($p_aOptions as $optionName => $option) {
+		foreach($options as $optionName => $option) {
 			$this->_envOptions[$optionName] = $option;
 		}
 	}
@@ -103,41 +105,41 @@ class App {
 	/**
 	 * Set the router object for the app bootup
 	 *
-	 * @param PPI_Router_Interface $p_oRouter The router object
+	 * @param PPI_Router_Interface $router The router object
 	 * @return void
 	 */
-	function setRouter(Router\RouterInterface $p_oRouter) {
-		$this->_envOptions['router'] = $p_oRouter;
+	function setRouter(Router\RouterInterface $router) {
+		$this->_envOptions['router'] = $router;
 	}
 
 	/**
 	 * Set the dispatch object for the app bootup
 	 *
-	 * @param PPI_Dispatch_Interface $p_oDispatch The dispatch object
+	 * @param PPI_Dispatch_Interface $dispatch The dispatch object
 	 * @return void
 	 */
-	function setDispatcher(\PPI\Dispatch\DispatchInterface $p_oDispatch) {
-		$this->_envOptions['dispatcher'] = $p_oDispatch;
+	function setDispatcher(\PPI\Dispatch\DispatchInterface $dispatch) {
+		$this->_envOptions['dispatcher'] = $dispatch;
 	}
 
 		/**
 	 * Set the request object for the app bootup
 	 *
-	 * @param object $p_oRequest
+	 * @param object $request
 	 * @return void
 	 */
-	function setRequest($p_oRequest) {
-		$this->_envOptions['request'] = $p_oRequest;
+	function setRequest($request) {
+		$this->_envOptions['request'] = $request;
 	}
 
 	/**
 	 * Set the session object for the app bootup
 	 *
-	 * @param PPI_Session_Interface $p_oSession The session object
+	 * @param PPI_Session_Interface $session The session object
 	 * @return void
 	 */
-	function setSession(PPI_Session_Interface $p_oSession) {
-		$this->_envOptions['session'] = $p_oSession;
+	function setSession(PPI_Session_Interface $session) {
+		$this->_envOptions['session'] = $session;
 	}
 
 	/**
