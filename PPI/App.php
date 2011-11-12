@@ -24,6 +24,7 @@ class App {
 		'cacheConfig'       => false, // Config object caching
 		'errorLevel'        => E_ALL, // The error level to throw via error_reporting()
 		'showErrors'        => 'On', // Whether to display errors or not. This gets fired into ini_set('display_errors')
+		'exceptionHandler'  => array('\PPI\Core\ExceptionHandler', 'handle'), // This must be a callback accepted by set_exception_handler()
 		'router'            => null,
 		'session'           => null,
 		'config'            => null,
@@ -149,6 +150,7 @@ class App {
 
 		error_reporting($this->_envOptions['errorLevel']);
 		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
+		set_exception_handler($this->_envOptions['exceptionHandler']);
 
 		// Fire up the default config handler
 		if($this->_envOptions['config'] === null) {
