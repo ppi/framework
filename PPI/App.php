@@ -161,7 +161,7 @@ class App {
 			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
 		}
 		set_exception_handler($this->_envOptions['exceptionHandler']);
-		throw new \Exception('Test');
+		
 		// Fire up the default config handler
 		if($this->_envOptions['config'] === null) {
 
