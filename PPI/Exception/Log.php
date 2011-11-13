@@ -9,12 +9,19 @@ namespace PPI\Exception;
 class Log implements ExceptionInterface {
 	
 	/**
-	 * Error log
+	 * Error log file
 	 *
 	 * @var null|string
 	 */
-	protected $_log = null;
+	protected $_logFile = null;
 	
+	/**
+	 * Date format
+	 * 
+	 * @var string
+	 */
+	protected $_dateFormat = 'D M d H:i:s Y';
+		
 	/**
 	 * Write the Exception to a log file
 	 * 
@@ -22,10 +29,11 @@ class Log implements ExceptionInterface {
 	 */
 	public function handle(\Exception $e) {
 		
-		if(($logFile = ini_get('error_log')) !== null && is_writable($logFile)) {
-			$date = '['. date('D M d H:i:s Y') .'] ';
+		$this->_logFile = ini_get('error_log');
+		if($this->_logFile !== null && is_writable($this->_logFile)) {
+			$date = '['. date($this->_dateFormat) .'] ';
 			$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
-			return file_put_contents($logFile, $date . $message , FILE_APPEND|LOCK_EX) > 0;
+			return file_put_contents($this->_logFile, $date . $message , FILE_APPEND|LOCK_EX) > 0;
 		} else {
 			// We can stop execution here if required, for now just return false
 			return false;
