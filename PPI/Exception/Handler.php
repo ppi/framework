@@ -33,7 +33,7 @@ class Handler implements ExceptionInterface {
 			
 			require(SYSTEMPATH  . 'View' . DS . 'Exception.php');
 
-		} catch(Exception $e){
+		} catch(\Exception $e){
 			require(SYSTEMPATH  . 'View' . DS . 'Exception.php');
 		}
 		exit;

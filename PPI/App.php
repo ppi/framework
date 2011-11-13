@@ -154,8 +154,14 @@ class App {
 		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
 		
 		// Set the Exception handler
-		set_exception_handler($this->getEnv('exceptionHandler', array(new \PPI\Exception\Handler(), 'handle')));
-
+		if($this->_envOptions['exceptionHandler'] === null){
+			$exceptionHandler = new \PPI\Exception\Handler();
+			// Add Log listener
+			$exceptionHandler->addListener(new \PPI\Exception\Log());
+			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
+		}
+		set_exception_handler($this->_envOptions['exceptionHandler']);
+		throw new \Exception('Test');
 		// Fire up the default config handler
 		if($this->_envOptions['config'] === null) {
 
