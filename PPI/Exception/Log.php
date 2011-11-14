@@ -33,10 +33,10 @@ class Log implements ExceptionInterface {
 		if($this->_logFile !== null && is_writable($this->_logFile)) {
 			$date = '['. date($this->_dateFormat) .'] ';
 			$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
-			return file_put_contents($this->_logFile, $date . $message , FILE_APPEND|LOCK_EX) > 0;
-		} else {
-			// We can stop execution here if required, for now just return false
-			return false;
+			if(file_put_contents($this->_logFile, $date . $message , FILE_APPEND|LOCK_EX) > 0) {
+				return array('status' => true, 'message' => 'Logged to ' . $this->_logFile);
+			}
 		}
+		return array('status' => false, 'message' => 'Unable to write to ' . $this->_logFile);
 	}
 }
