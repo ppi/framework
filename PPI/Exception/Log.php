@@ -23,12 +23,27 @@ class Log implements ExceptionInterface {
 	protected $_dateFormat = 'D M d H:i:s Y';
 	
 	/**
+	 * Set the log listener options
+	 * 
+	 * @param array $options
+	 */
+	public function __construct(array $options = array()) {
+		
+		if(isset($options['logFile'])) {
+			$this->_logFile = $options['logFile'];
+		}
+	}
+	
+	/**
 	* Set the log file
 	* 
 	* @param string $logFile
 	*/
 	public function setLogFile($logFile) {
-		$this->_logFile = $logFile;
+		
+		if(is_string($logFile)) {
+			$this->_logFile = $logFile;
+		}
 	}
 	
 	/**
@@ -56,6 +71,6 @@ class Log implements ExceptionInterface {
 				return array('status' => true, 'message' => 'Written to log file ' . $logFile);
 			}
 		}
-		return array('status' => false, 'message' => 'Unable to write to log file ' . $this->logFile);
+		return array('status' => false, 'message' => 'Unable to write to log file ' . $logFile);
 	}
 }
