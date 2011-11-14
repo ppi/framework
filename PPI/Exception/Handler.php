@@ -16,6 +16,13 @@ class Handler implements ExceptionInterface {
 	protected $_listeners = array();
 	
 	/**
+	 * Listener status
+	 * 
+	 * @var array
+	 */
+	protected $_listenerStatus = array();
+	
+	/**
 	 * PPI Exception handler
 	 * The try/catch block will prevent a fatal error if an exception is thrown within the handler itself
 	 * 
@@ -24,11 +31,12 @@ class Handler implements ExceptionInterface {
 	public function handle(\Exception $e) {
 		
 		try {			
-			$trace = $e->getTrace();
-			
 			// Execute each callback
 			foreach($this->_listeners as $listener){
-				$listener->handle($e);
+				$this->_listenerStatus[] = array(
+					'object'   => get_class($listener),
+					'response' => $listener->handle($e)
+				);
 			}
 			
 			require(SYSTEMPATH  . 'View' . DS . 'Exception.php');
@@ -45,7 +53,6 @@ class Handler implements ExceptionInterface {
 	 * @param \PPI\Exception\Interface 
 	 */
 	public function addListener(\PPI\Exception\ExceptionInterface $listener) {
-		
 		$this->_listeners[] = $listener;
 	}
 }
