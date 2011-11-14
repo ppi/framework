@@ -1,3 +1,4 @@
+<?php $trace = $e->getTrace(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,6 +46,23 @@
 	<div><strong>Message:</strong> <?= $e->getMessage() ?></div>
 	<?php if($e->getCode() !== 0): ?>
 	<div class="border"><strong>Code:</strong> <?= $e->getCode() ?></div>
+	<?php endif; ?>
+	<?php if(!empty($this->_listenerStatus)):?>
+		<h2>Listeners</h2>
+		<table>
+		<tr>
+		<th>Listener Object</th>
+		<th>Status</th>
+		<th>Message</th>
+		</tr>
+		<?php foreach($this->_listenerStatus as $listener): ?>
+		<tr>
+			<td><?= $listener['object'] ?></td>
+			<td><?= ($listener['response']['status']) ? 'Success' : 'Fail' ?></td>
+			<td><?= $listener['response']['message']?></td>
+		</tr>
+		<?php endforeach; ?>
+		</table>
 	<?php endif; ?>
 	<?php if(isset($trace) && !empty($trace)): ?>
 		<h2>Stack Trace</h2>
