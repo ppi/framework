@@ -21,6 +21,25 @@ class Log implements ExceptionInterface {
 	 * @var string
 	 */
 	protected $_dateFormat = 'D M d H:i:s Y';
+	
+	/**
+	* Set the log file
+	* 
+	* @param string $logFile
+	*/
+	public function setLogFile($logFile) {
+		$this->_logFile = $logFile;
+	}
+	
+	/**
+	 * Get the log file path
+	 * 
+	 * @return mixed
+	 */
+	private function _getLogFile() {
+		return (isset($this->_logFile)) ? $this->_logFile : ini_get('error_log');
+	}
+	
 		
 	/**
 	 * Write the Exception to a log file
@@ -29,14 +48,14 @@ class Log implements ExceptionInterface {
 	 */
 	public function handle(\Exception $e) {
 		
-		$this->_logFile = ini_get('error_log');
-		if($this->_logFile !== null && is_writable($this->_logFile)) {
-			$date = '['. date($this->_dateFormat) .'] ';
-			$message = $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
-			if(file_put_contents($this->_logFile, $date . $message , FILE_APPEND|LOCK_EX) > 0) {
-				return array('status' => true, 'message' => 'Logged to ' . $this->_logFile);
+		$logFile = $this->_getLogFile();
+		if(is_writable($logFile)){
+			$logEntry  = '[' . date($this->_dateFormat) . '] ' . $e->getMessage();
+			$logEntry .= ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
+			if(file_put_contents($logFile, $logEntry , FILE_APPEND|LOCK_EX) > 0){
+				return array('status' => true, 'message' => 'Written to log file ' . $logFile);
 			}
 		}
-		return array('status' => false, 'message' => 'Unable to write to ' . $this->_logFile);
+		return array('status' => false, 'message' => 'Unable to write to log file ' . $this->logFile);
 	}
 }
