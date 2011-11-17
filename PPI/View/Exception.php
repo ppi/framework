@@ -47,19 +47,19 @@
 	<?php if($e->getCode() !== 0): ?>
 	<div class="border"><strong>Code:</strong> <?= $e->getCode() ?></div>
 	<?php endif; ?>
-	<?php if(!empty($this->_listenerStatus)):?>
-		<h2>Listeners</h2>
+	<?php if(!empty($this->_handlerStatus)):?>
+		<h2>Handlers</h2>
 		<table>
 		<tr>
-		<th>Listener Object</th>
+		<th>Handler Object</th>
 		<th>Status</th>
 		<th>Message</th>
 		</tr>
-		<?php foreach($this->_listenerStatus as $listener): ?>
+		<?php foreach($this->_handlerStatus as $handler): ?>
 		<tr>
-			<td><?= $listener['object'] ?></td>
-			<td><?= ($listener['response']['status']) ? 'Success' : 'Fail' ?></td>
-			<td><?= $listener['response']['message']?></td>
+			<td><?= $handler['object'] ?></td>
+			<td><?= ($handler['response']['status']) ? 'Success' : 'Fail' ?></td>
+			<td><?= $handler['response']['message']?></td>
 		</tr>
 		<?php endforeach; ?>
 		</table>

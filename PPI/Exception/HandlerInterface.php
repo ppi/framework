@@ -8,7 +8,7 @@
  * @link	  http://www.ppiframework.com
  */
 namespace PPI\Exception;
-interface ExceptionInterface {
+interface HandlerInterface {
 
 	public function handle(\Exception $e);
 }
