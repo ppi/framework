@@ -156,8 +156,8 @@ class App {
 		// Set the Exception handler
 		if($this->_envOptions['exceptionHandler'] === null){
 			$exceptionHandler = new \PPI\Exception\Handler();
-			// Add Log listener
-			$exceptionHandler->addListener(new \PPI\Exception\Log());
+			// Add Log Handler
+			$exceptionHandler->addHandler(new \PPI\Exception\Log());
 			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
 		}
 		set_exception_handler($this->_envOptions['exceptionHandler']);
@@ -267,6 +267,7 @@ class App {
 		$router->setUri(strpos($url, $baseUrl) !== false ? str_replace($baseUrl, '', $url) : $url);
 		$router->init();
 		$uri = $router->getMatchedRoute();
+		
 		
 		
 		// If we've no URI, dispatch the default route.
