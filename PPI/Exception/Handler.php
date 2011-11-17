@@ -6,21 +6,21 @@
  * @link      wwww.ppi.io
  */
 namespace PPI\Exception;
-class Handler implements ExceptionInterface {
+class Handler {
 	
 	/**
-	 * The event listeners
+	 * The exception handlers 
 	 * 
 	 * @var array
 	 */
-	protected $_listeners = array();
+	protected $_handlers = array();
 	
 	/**
-	 * Listener status
+	 * Handler statuses
 	 * 
 	 * @var array
 	 */
-	protected $_listenerStatus = array();
+	protected $_handlerStatus = array();
 	
 	/**
 	 * PPI Exception handler
@@ -32,10 +32,10 @@ class Handler implements ExceptionInterface {
 		
 		try {			
 			// Execute each callback
-			foreach($this->_listeners as $listener){
-				$this->_listenerStatus[] = array(
-					'object'   => get_class($listener),
-					'response' => $listener->handle($e)
+			foreach($this->_handlers as $handler) {
+				$this->_handlerStatus[] = array(
+					'object'   => get_class($handler),
+					'response' => $handler->handle($e)
 				);
 			}
 			
@@ -50,9 +50,9 @@ class Handler implements ExceptionInterface {
 	/**
 	 * Add an Exception callback
 	 * 
-	 * @param \PPI\Exception\Interface 
+	 * @param \PPI\Exception\HandlerInterface 
 	 */
-	public function addListener(\PPI\Exception\ExceptionInterface $listener) {
-		$this->_listeners[] = $listener;
+	public function addHandler(\PPI\Exception\HandlerInterface $handler) {
+		$this->_handlers[] = $handler;
 	}
 }

@@ -6,7 +6,7 @@
  * @link      wwww.ppi.io
  */
 namespace PPI\Exception;
-class Log implements ExceptionInterface {
+class Log implements HandlerInterface {
 	
 	/**
 	 * Error log file
