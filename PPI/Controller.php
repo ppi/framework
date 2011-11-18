@@ -178,7 +178,6 @@ class Controller {
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
      *
-	 * @todo have this lookup the template engines default extension and remove the smarty param
 	 * @param string $p_sNewTemplateFile New Template Filename
      * @return void
 	 */
@@ -491,6 +490,7 @@ class Controller {
 			case 'browser':
 			case 'browserAndVersion':
 			case 'browserVersion':
+			case 'referrer':
 			case 'userAgent':
 				return $this->_request->getRemote($var);
 				break;
