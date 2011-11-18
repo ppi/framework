@@ -136,7 +136,6 @@ class Request {
 	 * @param array $env Change environment variables
 	 */
 	function __construct(array $env = array()) {
-
 		if (isset($env['session']) && (is_array($env['session']) || $env['session'] instanceof PPI\Request\Session)) {
 			$this->_session = $env['session'];
 		} else {
@@ -364,7 +363,7 @@ class Request {
 
 			case 'domain':
 				$url = parse_url($this->getUrl());
-				return ifset($uri['host'], '');
+				return isset($url['host']) ? $url['host'] : '';
 				break;
 
 			case 'subdomain':
