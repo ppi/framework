@@ -226,6 +226,18 @@ class Criteria {
 		return $this;
 	}
 	
+	/**
+	 * Do a left join
+	 * 
+	 * @param array $joinData
+	 * @return void
+	 */
+	function rightJoin(array $joinData = array()) {
+		$joinData['type'] = 'right';
+		$this->_joins[] = $joinData;
+		return $this;
+	}
+	
 	
 	/**
 	 * Do an outer join
