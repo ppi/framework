@@ -1,16 +1,16 @@
 <?php
-namespace PPI\DataSource;
-
-use Doctrine\Common\ClassLoader,
-	Doctrine\DBAL\DriverManager,
-	Doctrine\DBAL\Configuration,
-	PPI\Autoload;
 /**
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
  * @link      www.ppi.io
  */
+namespace PPI\DataSource;
+
+use Doctrine\Common\ClassLoader,
+	Doctrine\DBAL\DriverManager,
+	Doctrine\DBAL\Configuration,
+	PPI\Autoload;
 class PDO {
 
 	function __construct() {

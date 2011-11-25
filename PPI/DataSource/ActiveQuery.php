@@ -39,21 +39,25 @@ class ActiveQuery {
 		if(isset($this->_meta['conn'])) {
 			
 			$dsConfig = \PPI\Core::getDataSource()->getConnectionConfig($this->_meta['conn']);
-			$connType = $dsConfig['type']; 
+			$connType = $dsConfig['type'];
 			if($connType === 'mongo') {
-				$this->_handler = new \PPI\DataSource\Mongo\ActiveQuery();
+				$this->_handler = new \PPI\DataSource\Mongo\ActiveQuery(array(
+					'meta' => $this->_meta
+				));
 			} elseif(substr($connType, 0, 3) === 'pdo') {
-				$this->_handler = new \PPI\DataSource\PDO\ActiveQuery();
+				$this->_handler = new \PPI\DataSource\PDO\ActiveQuery(array(
+					'meta' => $this->_meta
+				));
 			}
-			
 			$this->_conn = \PPI\Core::getDataSourceConnection($this->_meta['conn']);
+			$this->_handler->setConn($this->_conn);
 		}
 
 		$this->_options = $options;
 	}
 	
-	function fetchAll() {
-		return $this->_handler->fetchAll();
+	function fetchAll($criteria = null) {
+		return $this->_handler->fetchAll($criteria);
 	}
 
 	function find($id) {
