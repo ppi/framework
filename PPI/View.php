@@ -87,8 +87,6 @@ class View {
 	/**
 	 * Load function called from controllers
 	 *
-	 * @todo Make this alias to $this->render()
-	 * @todo look into making this dynamic name rather than 'smarty', 'twig', 'php'
 	 * @param string $p_tplFile The template filename
 	 * @param array $p_tplParams Optional user defined params
 	 * @return void
@@ -148,7 +146,11 @@ class View {
 	protected function getViewTheme() {
 
 		if (null === $this->_viewTheme) {
-			$this->_viewTheme = $this->_config->layout->view_theme;
+			if(isset($this->_config->view->theme)) {
+				$this->_viewTheme = $this->_config->view->theme;
+			} elseif(isset($this->_config->layout->view_theme)) {
+				$this->_viewTheme = $this->_config->layout->view_theme;
+			}
 		}
 		return $this->_viewTheme;
 	}
@@ -158,7 +160,8 @@ class View {
 	 *
 	 * @param PPI_Interface_Template $oTpl Templating renderer. Instance of PPI_Interface_Template
 	 * @param string $p_tplFile The template file to render
-	 * @param array $p_tplParams Optional user defined parameres
+	 * @param array $params Optional user defined parameres
+	 * @param array $options Optional user defined parameres
 	 * @return mixed
 	 */
 	public function setupRenderer(RendererInterface $oTpl, $p_tplFile, array $params = array(), array $options = array()) {
@@ -231,14 +234,7 @@ class View {
 
 		}
 
-		if(isset($options['partial']) && $options['partial']) {
-			ob_start();
-			$oTpl->render($template); // Lets render baby !!
-			$content = ob_get_contents();
-			ob_end_clean();
-			return $content;
-		}
-		
+		// Lets render baby !!
 		$oTpl->render($template);
 	}
 
@@ -254,7 +250,6 @@ class View {
 	/**
 	 * Obtain the list of default view variables
 	 *
-	 * @todo review making var names not HNC prefixed.
 	 * @param array $options
 	 * @return array
 	 */
