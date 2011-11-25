@@ -233,6 +233,14 @@ class View {
 			return $content;
 
 		}
+		
+		if(isset($options['partial']) && $options['partial']) {
+			ob_start();
+			$oTpl->render($template);
+			$content = ob_get_contents();
+			ob_end_clean();
+			return $content;
+		}
 
 		// Lets render baby !!
 		$oTpl->render($template);
