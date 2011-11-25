@@ -178,6 +178,7 @@ class Controller {
 	/**
 	 * Override the default template file, with optional include for the .php or .tpl extension
      *
+	 * @todo have this lookup the template engines default extension and remove the smarty param
 	 * @param string $p_sNewTemplateFile New Template Filename
      * @return void
 	 */
@@ -490,7 +491,6 @@ class Controller {
 			case 'browser':
 			case 'browserAndVersion':
 			case 'browserVersion':
-			case 'referrer':
 			case 'userAgent':
 				return $this->_request->getRemote($var);
 				break;
@@ -502,6 +502,7 @@ class Controller {
 	 * The main render function that pull in data from all framework components to render this page.
 	 *
 	 * @param string $template
+	 * @param array $params
 	 * @param array $options
 	 * @return mixed
 	 */
@@ -538,7 +539,7 @@ class Controller {
 	 * @param array $options
 	 * @return string
 	 */
-	public function createCachedRenderKey($template, array $options = array()) {
+	protected  function createCachedRenderKey($template, array $options = array()) {
 		return $this->_view->createCachedRenderKey($template, $options);
 	}
 
@@ -549,8 +550,19 @@ class Controller {
 	 * @param array $options
 	 * @return boolean
 	 */
-	public function cachedRenderExists($template, array $options = array()) {
+	protected function cachedRenderExists($template, array $options = array()) {
 		return $this->_view->cachedRenderExists($template, $options);
+	}
+	
+	/**
+	 * Check if a view has been cached before.
+	 * 
+	 * @param $template
+	 * @param array $options
+	 * @return bool
+	 */
+	protected function isViewCached($template, array $options = array()) {
+		return $this->cachedRenderExists($template, $options);
 	}
 
 	/**
@@ -560,8 +572,11 @@ class Controller {
 	 * @param array $options
 	 * @return string
 	 */
-	public function getCachedRender($template, array $options = array()) {
+	protected function getCachedRender($template, array $options = array()) {
 		return $this->_view->getCachedRender($template, $options);
 	}
-
+	
+	protected function getCachedView($template, array $options = array()) {
+		return $this->_view->getCachedRender($template, $options);
+	}
 }
