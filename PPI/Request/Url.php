@@ -26,13 +26,13 @@ class Url extends RequestAbstract {
 	 * @return array
 	 */
 	protected function processUriParams($uri) {
+
 		$params    = array();
 		$uriParams = explode('/', trim($uri, '/'));
 		$count     = count($uriParams);
-
 		for($i = 0; $i < $count; $i++) {
 			$val = isset($uriParams[($i + 1)]) ? $uriParams[($i + 1)] : null;
-			$params[$uriParams[$i]] = urldecode(is_numeric($val) ? (int) $val : $val);
+			$params[$uriParams[$i]] = urldecode(is_numeric($val) ? $val : $val);
 		}
 
 		return $params;
