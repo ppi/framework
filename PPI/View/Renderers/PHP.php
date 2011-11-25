@@ -6,7 +6,7 @@
  * @package   www.ppiframework.com
  */
 namespace PPI\View\Renderers;
-use PPI\File, PPI\Core;
+use PPI\File, PPI\Core, PPI\Core\CoreException;
 class PHP implements RendererInterface {
 
 	/**
@@ -76,13 +76,13 @@ class PHP implements RendererInterface {
 	/**
 	 * Check if a template exists. If it does not, throw an exception
 	 *
-	 * @throws PPI_Exception
+	 * @throws CoreException
 	 * @param string $templateName The Template Name
 	 * @return void
 	 */
 	protected function checkTemplateExists($templateName) {
 		if(!$this->templateExists($templateName)) {
-			throw new PPI_Exception('Unable to load template: ' . $templateName . ' file does not exist');
+			throw new CoreException('Unable to load template: ' . $templateName . ' file does not exist');
 		}
 	}
 
