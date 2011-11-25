@@ -50,11 +50,15 @@ class ActiveQuery {
 	function __construct(array $options = array()) {
 
 		// Setup our connection from the key passed to meta['conn']
-		if(isset($this->_meta['conn'])) {
+		if(isset($options['meta'])) {
 			$this->_conn = \PPI\Core::getDataSourceConnection($this->_meta['conn']);
 		}
 
 		$this->_options = $options;
+	}
+	
+	function setConn($conn) {
+		$this->_conn = $conn;
 	}
 	
 	function fetchAll() {
