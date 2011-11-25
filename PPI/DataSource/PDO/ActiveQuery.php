@@ -73,7 +73,6 @@ class ActiveQuery {
 			$limit   = $criteria->hasLimit()   ? ' LIMIT ' . $criteria->getLimit()           : '';
 		}
 		$query = "SELECT $columns FROM {$this->_meta['table']} $joins $clauses $group $order $limit";
-		die($query);
 		return $this->_conn->query($query)->fetchAll(\PDO::FETCH_ASSOC);
 	}
 	
