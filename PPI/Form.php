@@ -217,7 +217,7 @@ class Form {
 				break;
 
 			default:
-				throw new PPI_Exception('Invalid Field Type: ' . $fieldType);
+				throw new CoreException('Invalid Field Type: ' . $fieldType);
 		}
 
 		// If we have bind data against the current element. Lets apply it.
