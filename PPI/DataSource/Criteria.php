@@ -77,6 +77,7 @@ class Criteria {
 	 */
 	function columns($columns) {
 		$this->_columns = $columns;
+		return $this;
 	}
 	
 	/**
@@ -84,7 +85,7 @@ class Criteria {
 	 * 
 	 * @return bool
 	 */
-	function hasClause() {
+	function hasWhere() {
 		return $this->_clause !== null;
 	}
 	
@@ -93,7 +94,7 @@ class Criteria {
 	 * 
 	 * @return null|string
 	 */
-	function getClause() {
+	function getWhere() {
 		return $this->_clause;
 	}
 	
@@ -105,6 +106,7 @@ class Criteria {
 	 */
 	function where($where) {
 		$this->_clause = $where;
+		return $this;
 	}
 	
 	/**
@@ -133,6 +135,7 @@ class Criteria {
 	 */
 	function order($order) {
 		$this->_order = $order;
+		return $this;
 	}
 	
 	/**
@@ -161,6 +164,7 @@ class Criteria {
 	 */
 	function group($group) {
 		$this->_group = $group;
+		return $this;
 	}
 	
 	/**
@@ -189,6 +193,7 @@ class Criteria {
 	 */
 	function limit($limit) {
 		$this->_limit = $limit;
+		return $this;
 	}
 	
 	/**
@@ -218,6 +223,7 @@ class Criteria {
 	function leftJoin(array $joinData = array()) {
 		$joinData['type'] = 'left';
 		$this->_joins[] = $joinData;
+		return $this;
 	}
 	
 	
@@ -230,6 +236,7 @@ class Criteria {
 	function outerJoin(array $joinData = array()) {
 		$joinData['type'] = 'outer';
 		$this->_joins[] = $joinData;
+		return $this;
 	}
 	
 	/**
@@ -240,17 +247,19 @@ class Criteria {
 	 */
 	function innerJoin(array $joinData = array()) {
 		$this->join($joinData);
+		return $this;
 	}
 
 	/**
 	 * Do an inner join
 	 * 
 	 * @param array $joinData
-	 * @return void
+	 * @return $this
 	 */
 	function join(array $joinData = array()) {
 		$joinData['type'] = 'inner';
 		$this->_joins[] = $joinData;
+		return $this;
 	}
 	
 }
