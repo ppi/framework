@@ -10,9 +10,14 @@
 namespace PPI\Cache;
 class Redis implements CacheInterface {
 
+	/**
+	 * Class defaults
+	 * 
+	 * @var array
+	 */
 	protected $_defaults = array(
 		'server' => '127.0.0.1:6379',
-		'expiry' => 0 // Never
+		'expiry' => 0
 	);
 
 	/**
@@ -84,17 +89,17 @@ class Redis implements CacheInterface {
 	 * Increment a numerical value
 	 *
 	 * @param string $key The Key
-	 * @param numeric $inc The incremental value
-	 * @return numeric
+	 * @param integer $inc The incremental value
+	 * @return integer
 	 */
 	function increment($key, $inc = 1) { return $this->_handler->incr($key, $inc); }
 
 	/**
-	 * Enter description here...
+	 * Decrement a numerical value
 	 *
 	 * @param string $key The Key
-	 * @param numeric $dec The decremental value
-	 * @return numeric
+	 * @param integer $dec The decremental value
+	 * @return integer
 	 */
 	function decrement($key, $dec = 1) { return $this->_handler->decr($key, $dec); }
 
