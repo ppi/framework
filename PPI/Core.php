@@ -59,15 +59,19 @@ class Core {
 	 * @param null $options
 	 * @return Cache
 	 */
-	static function getCache($options = null) {
-
-		if (!is_array($options)) {
-			$config  = Registry::get('PPI_Config');
-			$options = isset($config->cache) ? $config->cache->toArray() : array();
-			if (is_string($options) && $options !== '') {
-				$options['handler'] = $options;
+	static function getCache(array $options = array()) {
+	
+		if(!isset($options['handler'])) {
+			$config = Registry::get('PPI_Config');
+			$cacheOptions = isset($config->cache) ? $config->cache->toArray() : array();
+			if(isset($cacheOptions['options'])) {
+				$cacheOptions = ($cacheOptions + $cacheOptions['options']->toArray());
+				unset($cacheOptions['options']);
 			}
-			$options = $options;
+			$options = ($options + $cacheOptions);
+		}
+		if(!isset($options['handler'])) {
+			$options['handler'] = 'disk';
 		}
 		return new Cache($options);
 	}
