@@ -5,7 +5,7 @@
 * @package   Cache
 * @author    Paul Dragoonis <dragoonis@php.net>
 * @license   http://opensource.org/licenses/mit-license.php MIT
-* @link      http://www.ppiframework.com
+* @link      http://www.ppi.io
 */
 namespace PPI;
 class Cache {
@@ -41,7 +41,7 @@ class Cache {
 
         if(isset($options['handler'])) {
             // If it's a pre instantiated cache handler then use that
-            if(!is_string($options['handler']) && $options['handler'] instanceof PPI_Cache_Interface) {
+            if(!is_string($options['handler']) && $options['handler'] instanceof \PPI\Cache\CacheInterface) {
                 $this->_handler = $options['handler'];
                 unset($options['handler']);
             }
@@ -60,14 +60,14 @@ class Cache {
      *
 	 * @param string $handler The handler name
 	 * @return void
-	 * @throws PPI_Exception
+	 * @throws \PPI\Core\CoreException
 	 */
 	function setupHandler($handler) {
 		$handler = strtolower($handler);
         $handler = 'PPI\\Cache\\' . ucfirst($handler);
 		$this->_handler = new $handler($this->_defaults);
         if($this->_handler->enabled() === false) {
-            throw new PPI_Exception('The cache driver ' . $handler . ' is currently disabled.');
+            throw new \PPI\Core\CoreException('The cache driver ' . $handler . ' is currently disabled.');
         }
 		$this->_handler->init();
 	}
@@ -126,14 +126,14 @@ class Cache {
 	/**
 	 * Set the current handler, we check enabled() and exec init() on the handler too to make sure it's ready to go.
 	 *
-	 * @throws PPI_Exception
+	 * @throws \PPI\Core\CoreException
 	 * @param PPI_Cache_Interface $handler
 	 * @return void
 	 */
 	function setHandler(PPI_Cache_Interface $handler) {
 		$this->_handler = $handler;
         if($this->_handler->enabled() === false) {
-            throw new PPI_Exception('The cache driver ' . get_class($handler) . ' is currently disabled.');
+            throw new \PPI\Core\CoreException('The cache driver ' . get_class($handler) . ' is currently disabled.');
         }
 		$this->_handler->init();
 	}
