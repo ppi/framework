@@ -326,13 +326,13 @@ class Controller {
 	}
 
 	/**
-	 * Get the cache object from PPI_Helper
+	 * Get the cache object from Core
 	 *
-	 * @param mixed $p_mOptions
+	 * @param array $options
 	 * @return object
 	 */
-	protected function getCache($p_mOptions = null) {
-		return Core::getCache($p_mOptions);
+	protected function getCache(array $options = array()) {
+		return Core::getCache($options);
 	}
 
 	/**
