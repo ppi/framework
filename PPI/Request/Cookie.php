@@ -39,11 +39,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	function resetSettings() {
-		$this->_expiration = $this->expiration;
-		$this->_path       = $this->path;
-		$this->_domain     = $this->domain;
-		$this->_secure     = $this->secure;
-		$this->_httponly   = $this->httponly;
+		$this->_expiration = self::$expiration;
+		$this->_path       = self::$path;
+		$this->_domain     = self::$domain;
+		$this->_secure     = self::$secure;
+		$this->_httponly   = self::$httponly;
 	}
 
 	/**
