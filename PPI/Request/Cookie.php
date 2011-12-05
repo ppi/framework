@@ -42,7 +42,7 @@ class Cookie extends RequestAbstract {
 		$this->_array[$offset] = $content;
 
 		if ($this->_isCollected) {
-			setcookie($offset, $content, $expire, $path, $domain, $secure, $httponly);
+			$this->_setcookie($offset, $content, $expire, $path, $domain, $secure, $httponly);
 		}
 	}
 
@@ -61,6 +61,10 @@ class Cookie extends RequestAbstract {
 		if ($this->_isCollected) {
 			setcookie($offset, null, time() - 3600);
 		}
+	}
+
+	private function _setcookie($name, $content, $expire, $path, $domain, $secure, $httponly) {
+		setcookie($name, $content, $expire, $path, $domain, $secure, $httponly);
 	}
 
 }
