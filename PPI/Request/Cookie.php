@@ -47,6 +47,35 @@ class Cookie extends RequestAbstract {
 	}
 
 	/**
+	 * Changes object settings
+	 *
+	 * @param string $option Option to update
+	 * @param mixed  $value  Value to set option
+	 *
+	 * @return void
+	 */
+	function setSetting($option, $value) {
+		switch ($option) {
+			case 'expiration':
+				$this->_expiration = $value;
+				break;
+			case 'path':
+				$this->_path = $value;
+				break;
+			case 'domain':
+				$this->_domain = $value;
+				break;
+			case 'secure':
+				$this->_secure = $value;
+				break;
+			case 'httponly':
+				$this->_httponly = $value;
+				break;
+			default:
+		}
+	}
+
+	/**
 	 * Set an offset
 	 *
 	 * Required by ArrayAccess interface
