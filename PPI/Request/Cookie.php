@@ -1,6 +1,18 @@
 <?php
 namespace PPI\Request;
 class Cookie extends RequestAbstract {
+	static public $expiration = null;
+	static public $path       = null;
+	static public $domain     = null;
+	static public $secure     = null;
+	static public $httponly   = null;
+
+	protected $_expiration = null;
+	protected $_path       = null;
+	protected $_domain     = null;
+	protected $_secure     = null;
+	protected $_httponly   = null;
+
 	/**
 	 * Constructor
 	 *
@@ -17,6 +29,13 @@ class Cookie extends RequestAbstract {
 		} else {
 			$this->_array = $_COOKIE;
 		}
+
+		// Copy settings
+		$this->_expiration = $this->expiration;
+		$this->_path       = $this->path;
+		$this->_domain     = $this->domain;
+		$this->_secure     = $this->secure;
+		$this->_httponly   = $this->httponly;
 	}
 
 	/**
