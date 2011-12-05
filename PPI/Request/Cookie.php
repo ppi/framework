@@ -1,6 +1,18 @@
 <?php
 namespace PPI\Request;
 class Cookie extends RequestAbstract {
+	static public $expire   = null;
+	static public $path     = null;
+	static public $domain   = null;
+	static public $secure   = null;
+	static public $httponly = null;
+
+	protected $_expire   = null;
+	protected $_path     = null;
+	protected $_domain   = null;
+	protected $_secure   = null;
+	protected $_httponly = null;
+
 	/**
 	 * Constructor
 	 *
@@ -17,14 +29,56 @@ class Cookie extends RequestAbstract {
 		} else {
 			$this->_array = $_COOKIE;
 		}
+
+		$this->resetSettings();
+	}
+
+	/*
+	 * Sync local settings with global settings
+	 *
+	 * @return void
+	 */
+	function resetSettings() {
+		$this->_expire   = self::$expire;
+		$this->_path     = self::$path;
+		$this->_domain   = self::$domain;
+		$this->_secure   = self::$secure;
+		$this->_httponly = self::$httponly;
+	}
+
+	/**
+	 * Changes object settings
+	 *
+	 * @param string $option Option to update
+	 * @param mixed  $value  Value to set option
+	 *
+	 * @return void
+	 */
+	function setSetting($option, $value) {
+		switch ($option) {
+			case 'expire':
+				$this->_expire = $value;
+				break;
+			case 'path':
+				$this->_path = $value;
+				break;
+			case 'domain':
+				$this->_domain = $value;
+				break;
+			case 'secure':
+				$this->_secure = $value;
+				break;
+			case 'httponly':
+				$this->_httponly = $value;
+				break;
+			default:
+		}
 	}
 
 	/**
 	 * Set an offset
 	 *
 	 * Required by ArrayAccess interface
-	 *
-	 * Note: PPI_Request should be smart enough to set an array
 	 *
 	 * @param string $offset
 	 * @param string $value
@@ -36,13 +90,10 @@ class Cookie extends RequestAbstract {
 			return $this->offsetUnset($offset);
 		}
 
-		// Handle cookie parameters - TODO
-		list($content, $expire, $path, $domain, $secure, $httponly) = $value;
-
-		$this->_array[$offset] = $content;
+		$this->_array[$offset] = $value;
 
 		if ($this->_isCollected) {
-			setcookie($offset, $content, $expire, $path, $domain, $secure, $httponly);
+			$this->_setcookie($offset, $value, $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
 		}
 	}
 
@@ -61,6 +112,10 @@ class Cookie extends RequestAbstract {
 		if ($this->_isCollected) {
 			setcookie($offset, null, time() - 3600);
 		}
+	}
+
+	protected function _setcookie($name, $content, $expire, $path, $domain, $secure, $httponly) {
+		setcookie($name, $content, $expire, $path, $domain, $secure, $httponly);
 	}
 
 }
