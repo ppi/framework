@@ -90,10 +90,10 @@ class Cookie extends RequestAbstract {
 			return $this->offsetUnset($offset);
 		}
 
-		$this->_array[$offset] = $content;
+		$this->_array[$offset] = $value;
 
 		if ($this->_isCollected) {
-			$this->_setcookie($offset, $content, $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
+			$this->_setcookie($offset, $value, $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
 		}
 	}
 
