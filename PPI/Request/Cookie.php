@@ -1,17 +1,17 @@
 <?php
 namespace PPI\Request;
 class Cookie extends RequestAbstract {
-	static public $expiration = null;
-	static public $path       = null;
-	static public $domain     = null;
-	static public $secure     = null;
-	static public $httponly   = null;
+	static public $expire   = null;
+	static public $path     = null;
+	static public $domain   = null;
+	static public $secure   = null;
+	static public $httponly = null;
 
-	protected $_expiration = null;
-	protected $_path       = null;
-	protected $_domain     = null;
-	protected $_secure     = null;
-	protected $_httponly   = null;
+	protected $_expire   = null;
+	protected $_path     = null;
+	protected $_domain   = null;
+	protected $_secure   = null;
+	protected $_httponly = null;
 
 	/**
 	 * Constructor
@@ -39,11 +39,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	function resetSettings() {
-		$this->_expiration = self::$expiration;
-		$this->_path       = self::$path;
-		$this->_domain     = self::$domain;
-		$this->_secure     = self::$secure;
-		$this->_httponly   = self::$httponly;
+		$this->_expire   = self::$expire;
+		$this->_path     = self::$path;
+		$this->_domain   = self::$domain;
+		$this->_secure   = self::$secure;
+		$this->_httponly = self::$httponly;
 	}
 
 	/**
@@ -56,8 +56,8 @@ class Cookie extends RequestAbstract {
 	 */
 	function setSetting($option, $value) {
 		switch ($option) {
-			case 'expiration':
-				$this->_expiration = $value;
+			case 'expire':
+				$this->_expire = $value;
 				break;
 			case 'path':
 				$this->_path = $value;
