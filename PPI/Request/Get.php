@@ -15,11 +15,9 @@ class Get extends RequestAbstract {
 			$this->_isCollected = false;
 
 		} elseif (is_array($data)) {
-			if (is_array($data)) {
-				$this->_array = $data;
-			}
-
+			$this->_array = $data;
 			$this->_isCollected = false;
+
 		} else {
 			$this->_array = $_GET;
 		}
