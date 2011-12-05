@@ -114,7 +114,7 @@ class Cookie extends RequestAbstract {
 		}
 	}
 
-	private function _setcookie($name, $content, $expire, $path, $domain, $secure, $httponly) {
+	protected function _setcookie($name, $content, $expire, $path, $domain, $secure, $httponly) {
 		setcookie($name, $content, $expire, $path, $domain, $secure, $httponly);
 	}
 
