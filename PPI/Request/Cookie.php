@@ -30,7 +30,15 @@ class Cookie extends RequestAbstract {
 			$this->_array = $_COOKIE;
 		}
 
-		// Copy settings
+		$this->resetSettings();
+	}
+
+	/*
+	 * Sync local settings with global settings
+	 *
+	 * @return void
+	 */
+	function resetSettings() {
 		$this->_expiration = $this->expiration;
 		$this->_path       = $this->path;
 		$this->_domain     = $this->domain;
