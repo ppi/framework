@@ -43,8 +43,6 @@ class Cookie extends RequestAbstract {
 	 *
 	 * Required by ArrayAccess interface
 	 *
-	 * Note: PPI_Request should be smart enough to set an array
-	 *
 	 * @param string $offset
 	 * @param string $value
 	 *
@@ -55,13 +53,10 @@ class Cookie extends RequestAbstract {
 			return $this->offsetUnset($offset);
 		}
 
-		// Handle cookie parameters - TODO
-		list($content, $expire, $path, $domain, $secure, $httponly) = $value;
-
 		$this->_array[$offset] = $content;
 
 		if ($this->_isCollected) {
-			$this->_setcookie($offset, $content, $expire, $path, $domain, $secure, $httponly);
+			$this->_setcookie($offset, $content, $this->_expire, $this->_path, $this->_domain, $this->_secure, $this->_httponly);
 		}
 	}
 
