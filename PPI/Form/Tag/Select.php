@@ -80,7 +80,7 @@ class Select extends Tag {
 			if($this->_selected !== null && $this->_selected == $val) {
 				$selected = 'selected="selected" ';
 			}
-			$html .= sprintf(self::optionsFormat, $selected, $val, $key);
+			$html .= sprintf(self::optionsFormat, $selected, $key, $val);
 		}
 		return $html;
 	}
