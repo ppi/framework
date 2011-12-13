@@ -62,8 +62,8 @@ class ActiveQuery {
 	}
 	
 	function fetchAll($criteria = null) {
-		
-		$columns = $joins = $clauses = $order = $group = $order = $limit = ''; 
+		$columns = '*';
+		$joins = $clauses = $order = $group = $order = $limit = ''; 
 		if($criteria !== null && $criteria instanceof \PPI\DataSource\Criteria) {
 			$columns = $criteria->hasColumns() ? $criteria->getColumns()                     : '*';
 			$joins   = $criteria->hasJoins()   ? $this->generateJoins($criteria->getJoins()) : '';
@@ -99,18 +99,24 @@ class ActiveQuery {
 	 * Find a row by primary key
 	 * 
 	 * @param string $id
-	 * @return 
+	 * @return array|false
 	 */
 	function find($id) {
 		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
 	}
 
 	function fetch(array $where, array $params = array()) {
-		die("SELECT * FROM {$this->_meta['table']} WHERE $where");
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
+
+		$clause = '';
+		foreach($where as $field => $val) {
+			$clause .= ' ' . $field . ' = ?,';
+		}
+		$clause = str_replace(',', ' AND ', rtrim($clause, ','));
+		$query = "SELECT * FROM {$this->_meta['table']} WHERE $clause";
+		return $this->_conn->fetchAssoc($query, $params);
 	}
 
-	function insert($data) {
+	function insert(array $data) {
 		$this->_conn->insert($this->_meta['table'], $data);
 		return $this->_conn->lastInsertId();
 	}
@@ -119,7 +125,7 @@ class ActiveQuery {
 		return $this->_conn->delete($this->_meta['table'], $where);
 	}
 	
-	function update($data, $where) {
+	function update(array $data, $where) {
 		return $this->_conn->update($this->_meta['table'], $data, $where);
 	}
 
