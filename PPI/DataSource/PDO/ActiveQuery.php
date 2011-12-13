@@ -106,7 +106,6 @@ class ActiveQuery {
 	}
 
 	function fetch(array $where, array $params = array()) {
-		die("SELECT * FROM {$this->_meta['table']} WHERE $where");
 		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
 	}
 
