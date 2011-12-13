@@ -115,7 +115,7 @@ class ActiveQuery {
 	 * @return mixed
 	 */
 	function update($data, $where) {
-		return $this->_handler->update($this->_meta['table'], $data, $where);
+		return $this->_handler->update($data, $where);
 	}
 
 }
