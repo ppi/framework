@@ -3,7 +3,7 @@
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @package   DataSource
- * @link      www.ppiframework.com
+ * @link      www.ppi.io
  */
 namespace PPI\DataSource;
 class ActiveQuery {
@@ -56,26 +56,64 @@ class ActiveQuery {
 		$this->_options = $options;
 	}
 	
+	/**
+	 * Fetch all rows based on the $criteria
+	 * 
+	 * @param null|object $criteria
+	 * @return mixed
+	 */
 	function fetchAll($criteria = null) {
 		return $this->_handler->fetchAll($criteria);
 	}
 
+	/**
+	 * Find a row by its primary key
+	 * 
+	 * @param string $id
+	 * @return mixed
+	 */
 	function find($id) {
 		return $this->_handler->find($id);
 	}
 
+	/**
+	 * Fetch records from the datasource by a $where clause
+	 * 
+	 * @param array $where
+	 * @param array $params
+	 * @return mixed
+	 */
 	function fetch(array $where, array $params = array()) {
 		return $this->_handler->fetch($where, $params);
 	}
 
+	/**
+	 * Insert data into the table
+	 * 
+	 * @param $data
+	 * @return mixed
+	 */
 	function insert($data) {
 		return $this->_handler->insert($data);
 	}
 
+	/**
+	 * Delete a record by a where clause
+	 * 
+	 * @param array $where
+	 * @return mixed
+	 */
 	function delete($where) {
-		return $this->_handler->delete($this->_meta['table'], $where);
+		return $this->_handler->delete($where);
 	}
 	
+	/**
+	 * Update a record by where clause
+	 * 
+	 * @param array $data The fields and values
+	 * @param array $where The clause
+	 * @return mixed
+	 */
 	function update($data, $where) {
 		return $this->_handler->update($this->_meta['table'], $data, $where);
 	}
