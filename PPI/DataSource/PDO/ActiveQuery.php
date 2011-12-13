@@ -106,6 +106,7 @@ class ActiveQuery {
 	}
 
 	function fetch(array $where, array $params = array()) {
+<<<<<<< HEAD
 
 		$clause = '';
 		foreach($where as $field => $val) {
@@ -114,6 +115,9 @@ class ActiveQuery {
 		$clause = str_replace(',', ' AND ', rtrim($clause, ','));
 		$query = "SELECT * FROM {$this->_meta['table']} WHERE $clause";
 		return $this->_conn->fetchAssoc($query, $params);
+=======
+		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
+>>>>>>> c88e1f02c04aa73424e4e66661ba0db66c4a6887
 	}
 
 	function insert(array $data) {
