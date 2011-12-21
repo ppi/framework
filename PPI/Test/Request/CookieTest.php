@@ -131,4 +131,32 @@ class CookieTest extends \PHPUnit_Framework_TestCase {
 			'httponly' => false,
 		));
 	}
+
+	/**
+	 * No coverage for setcookie, so use a dummy instead
+	 */
+	public function testWriteCookieWithArraySettings() {
+		$cookie = new CookieDummy();
+		$this->assertEmpty($cookie->setCookies);
+
+		$cookie->setSetting(array(
+			'expire'   => 10,
+			'path'     => '/',
+			'domain'   => '.example.com',
+			'secure'   => true,
+			'httponly' => true,
+		));
+
+		$cookie['foo'] = 'blah';
+		$this->assertEquals($cookie->setCookies[0], array(
+			'name'     => 'foo',
+			'content'  => 'blah',
+			'expire'   => 10,
+			'path'     => '/',
+			'domain'   => '.example.com',
+			'secure'   => true,
+			'httponly' => true,
+		));
+	}
+
 }

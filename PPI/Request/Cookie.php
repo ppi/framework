@@ -52,6 +52,12 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	public function setSetting($option, $value) {
+		if (is_array($option)) {
+			foreach ($option as $key => $value) {
+				$this->setSetting($key, $value);
+			}
+		}
+
 		if(array_key_exists($option, $this->_defaults)) {
 			$this->_defaults[$option] = $value;
 		}
