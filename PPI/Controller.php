@@ -492,6 +492,8 @@ class Controller {
 			case 'browserAndVersion':
 			case 'browserVersion':
 			case 'userAgent':
+			case 'referer':
+			case 'referrer':
 				return $this->_request->getRemote($var);
 				break;
 		}
