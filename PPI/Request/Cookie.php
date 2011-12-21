@@ -1,17 +1,19 @@
 <?php
 namespace PPI\Request;
 class Cookie extends RequestAbstract {
-	static public $expire   = null;
+	
+	
+	static public $expire   = 0;
 	static public $path     = null;
 	static public $domain   = null;
-	static public $secure   = null;
-	static public $httponly = null;
+	static public $secure   = false;
+	static public $httponly = false;
 
-	protected $_expire   = null;
+	protected $_expire   = 0;
 	protected $_path     = null;
 	protected $_domain   = null;
-	protected $_secure   = null;
-	protected $_httponly = null;
+	protected $_secure   = false	;
+	protected $_httponly = false;
 
 	/**
 	 * Constructor
@@ -22,8 +24,9 @@ class Cookie extends RequestAbstract {
 	 *
 	 * @param array $cookies
 	 */
-	function __construct(array $cookies = null) {
-		if($cookies !== null) {
+	function __construct(array $cookies = array()) {
+		
+		if(!empty($cookies)) {
 			$this->_array       = $cookies;
 			$this->_isCollected = false;
 		} else {
@@ -55,24 +58,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	function setSetting($option, $value) {
-		switch ($option) {
-			case 'expire':
-				$this->_expire = $value;
-				break;
-			case 'path':
-				$this->_path = $value;
-				break;
-			case 'domain':
-				$this->_domain = $value;
-				break;
-			case 'secure':
-				$this->_secure = $value;
-				break;
-			case 'httponly':
-				$this->_httponly = $value;
-				break;
-			default:
+		
+		if(property_exists($this, '_' . $option)) {
+			$this->{'_' . $option} = $value;
 		}
+		
 	}
 
 	/**
@@ -87,7 +77,7 @@ class Cookie extends RequestAbstract {
 	 */
 	function offsetSet($offset, $value) {
 		if ($value === null) {
-			return $this->offsetUnset($offset);
+			$this->offsetUnset($offset);
 		}
 
 		$this->_array[$offset] = $value;
@@ -107,6 +97,7 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	function offsetUnset($offset) {
+		
 		$this->_array[$offset] = null;
 
 		if ($this->_isCollected) {
@@ -114,8 +105,30 @@ class Cookie extends RequestAbstract {
 		}
 	}
 
+	/**
+	 * Set the cookie, this is an alias to php.net/setcookie()
+	 * 
+	 * @param string $name
+	 * @param string $content
+	 * @param integer $expire
+	 * @param string $path
+	 * @param string $domain
+	 * @param boolean $secure
+	 * @param boolean $httponly
+	 * @return void
+	 */
 	protected function _setcookie($name, $content, $expire, $path, $domain, $secure, $httponly) {
 		setcookie($name, $content, $expire, $path, $domain, $secure, $httponly);
+	}
+	
+	/**
+	 * Function to return all the current set cookie data.
+	 * Useful for debugging and testing. Could potentially be removed later.
+	 * 
+	 * @return array
+	 */
+	public function getAll() {
+		return $this->_array;
 	}
 
 }
