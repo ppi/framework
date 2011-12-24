@@ -297,8 +297,29 @@ class Request {
 	 *
 	 * @return void
 	 */
-	function emptyPost() {
+	public function emptyPost() {
 		$_POST = array();
+	}
+
+	/**
+	 * The main getter/setter function for cookies
+	 *
+	 * @return boolean
+	 */
+	public function cookie($key = null, array $options = array()) {
+
+		// All
+		if($key === null) {
+			return $this->_cookie->all();
+		}
+
+		// Getter
+		if(empty($options)) {
+			return $this->_cookie[$key];
+		}
+
+		// Setter
+		return $this->_cookie->setCookie($key, $options);
 	}
 
 	/**
@@ -307,7 +328,7 @@ class Request {
 	 * @param string $var
 	 * @return bool
 	 */
-	function is($var) {
+	public function is($var) {
 
 		$var = strtolower($var);
 		switch ($var) {
@@ -473,7 +494,7 @@ class Request {
 		return $this->_isVars;
 	}
 	
-/**
+	/**
 	 * Get the current full url
 	 *
 	 * @todo match this with $this->getCurrUrl()
