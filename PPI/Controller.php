@@ -35,6 +35,7 @@ class Controller {
 	 * The base init function that the framework uses to initialise the controller
 	 *
 	 * @param string $app
+	 * @todo make this some kind of DI container instead
 	 * @return void
 	 */
 	function systemInit($app) {
@@ -409,6 +410,33 @@ class Controller {
 	}
 
 	/**
+	 * Get server values
+	 *
+	 * @param string|null $key
+	 * @return string $default
+	 */
+	protected function server($key = null, $default = null) {
+		return $this->_request->server($key, $default);
+
+	}
+
+	/**
+	 * The cookie getter/setter
+	 *
+	 * @param string|null $key
+	 * @param array|string $options
+	 * @return string|boolean
+	 */
+	protected function cookie($key = null, $options = array()) {
+
+		if(is_string($options)) {
+			$options = array('content' => $options);
+		}
+
+		return $this->_request->cookie($key, $options);	
+	}
+
+	/**
 	 * Does a particular post variable exist
 	 *
 	 * @param string $p_sKey The post variable
@@ -483,7 +511,7 @@ class Controller {
 	 * Get a remote variable from the request object
 	 *
 	 * @param string $var
-	 * @return null
+	 * @return string|null
 	 */
 	protected function getRemote($var) {
 		switch($var) {
