@@ -50,10 +50,38 @@ class CookieTest extends \PHPUnit_Framework_TestCase {
 	 * No coverage for setcookie, so use a dummy instead
 	 */
 	public function testWriteCookie() {
-
+		$cookie = new CookieDummy();
 		$cookie['foo'] = 'blah';
-		
 		$this->assertEquals('blah', $cookie['foo']);
+		$this->assertEquals($cookie->setCookies[0], array(
+			'name'     => 'foo',
+			'content'  => 'blah',
+			'expire'   => 0,
+			'path'     => null,
+			'domain'   => null,
+			'secure'   => null,
+			'httponly' => null,
+		));
+	}
+
+	/**
+	 * No coverage for setcookie, so use a dummy instead
+	 */
+	public function testRemoveCookie() {
+		$cookie = new CookieDummy();
+		$this->assertEmpty($cookie->setCookies);
+
+		$cookie['foo'] = null;
+		$this->assertEquals(null, $cookie['foo']);
+		$this->assertEquals(array(
+			'name'     => 'foo',
+			'content'  => null,
+			'expire'   => time() - 3600, // @TODO may fail on slow tests
+			'path'     => null,
+			'domain'   => null,
+			'secure'   => null,
+			'httponly' => null,
+		), $cookie->setCookies[0]);
 	}
 
 	/**
@@ -159,4 +187,28 @@ class CookieTest extends \PHPUnit_Framework_TestCase {
 		));
 	}
 
+}
+
+class CookieDummy extends Cookie {
+	public $setCookies = array();
+
+	public function setCookie($key, array $options = array()) {
+		$options = array_merge($this->_defaults, $options);
+
+		$this->_array[$key] = $options['content'];
+
+		if (!$this->_isCollected) {
+			return true;
+		}
+
+		$this->setCookies[] = array(
+			'name'     => $key,
+			'content'  => $options['content'],
+			'expire'   => $options['expire'],
+			'path'     => $options['path'],
+			'domain'   => $options['domain'],
+			'secure'   => $options['secure'],
+			'httponly' => $options['httponly'],
+		);
+	}
 }

@@ -51,11 +51,12 @@ class Cookie extends RequestAbstract {
 	 *
 	 * @return void
 	 */
-	public function setSetting($option, $value) {
+	public function setSetting($option, $value = null) {
 		if (is_array($option)) {
 			foreach ($option as $key => $value) {
 				$this->setSetting($key, $value);
 			}
+			return;
 		}
 
 		if(array_key_exists($option, $this->_defaults)) {
@@ -74,19 +75,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	public function offsetSet($offset, $value) {
-
 		if ($value === null) {
-			$this->offsetUnset($offset);
+			return $this->offsetUnset($offset);
 		}
 
-		$this->_array[$offset] = $value;
-
-		if ($this->_isCollected) {
-			setcookie($offset, 
-				$value, $this->_defaults['expire'], $this->_defaults['path'], 
-				$this->_defaults['domain'], $this->_defaults['secure'], $this->_defaults['httponly']
-			);
-		}
+		$this->setCookie($offset, array('content' => $value));
 	}
 
 	/**
@@ -98,12 +91,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	public function offsetUnset($offset) {
-		
-		unset($this->_array[$offset]);
-
-		if ($this->_isCollected) {
-			setcookie($offset, null, time() - 3600);
-		}
+		$this->setcookie($offset, array(
+			'content' => null,
+			'expire'  => time() - 3600,
+		));
+		unset($this->_array[$offset]); // FIXME I think setCookie is currently too 'smart'
 	}
 
 	/**
