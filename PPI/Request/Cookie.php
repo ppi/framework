@@ -30,19 +30,6 @@ class Cookie extends RequestAbstract {
 
 	}
 
-	/*
-	 * Sync local settings with global settings
-	 *
-	 * @return void
-	 */
-	protected function resetSettings() {
-		$this->_expire   = self::$expire;
-		$this->_path     = self::$path;
-		$this->_domain   = self::$domain;
-		$this->_secure   = self::$secure;
-		$this->_httponly = self::$httponly;
-	}
-
 	/**
 	 * Changes object settings
 	 *
