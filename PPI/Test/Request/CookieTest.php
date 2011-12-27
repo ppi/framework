@@ -50,10 +50,38 @@ class CookieTest extends \PHPUnit_Framework_TestCase {
 	 * No coverage for setcookie, so use a dummy instead
 	 */
 	public function testWriteCookie() {
-
+		$cookie = new CookieDummy();
 		$cookie['foo'] = 'blah';
-		
 		$this->assertEquals('blah', $cookie['foo']);
+		$this->assertEquals($cookie->setCookies[0], array(
+			'name'     => 'foo',
+			'content'  => 'blah',
+			'expire'   => 0,
+			'path'     => null,
+			'domain'   => null,
+			'secure'   => null,
+			'httponly' => null,
+		));
+	}
+
+	/**
+	 * No coverage for setcookie, so use a dummy instead
+	 */
+	public function testRemoveCookie() {
+		$cookie = new CookieDummy();
+		$this->assertEmpty($cookie->setCookies);
+
+		$cookie['foo'] = null;
+		$this->assertEquals(null, $cookie['foo']);
+		$this->assertEquals(array(
+			'name'     => 'foo',
+			'content'  => null,
+			'expire'   => time() - 3600, // @TODO may fail on slow tests
+			'path'     => null,
+			'domain'   => null,
+			'secure'   => null,
+			'httponly' => null,
+		), $cookie->setCookies[0]);
 	}
 
 	/**
@@ -85,50 +113,52 @@ class CookieTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * No coverage for setcookie, so use a dummy instead
 	 */
-	public function testWriteCookieWithGlobalSettings() {
+	public function testWriteCookieWithArraySettings() {
+		$cookie = new CookieDummy();
+		$this->assertEmpty($cookie->setCookies);
 
-		$cookie = new Cookie(array('foo' => 'foo_temp'));
-		$cookie->setSetting('expire',   20);
-		$cookie->setSetting('path',     '/test');
-		$cookie->setSetting('domain',   '.ppi.io');
-		$cookie->setSetting('secure',   false);
-		$cookie->setSetting('httponly', false);
-
-		$cookie['foo'] = 'blah';
-		$this->assertEquals($cookie->getCookie('foo'), array(
-			'name'     => 'foo',
-			'content'  => 'blah',
-			'expire'   => 20,
-			'path'     => '/test',
-			'domain'   => '.ppi.io',
-			'secure'   => false,
-			'httponly' => false,
+		$cookie->setSetting(array(
+			'expire'   => 10,
+			'path'     => '/',
+			'domain'   => '.example.com',
+			'secure'   => true,
+			'httponly' => true,
 		));
-	}
 
-	/**
-	 * No coverage for setcookie, so use a dummy instead
-	 */
-	public function testWriteCookieWithGlobalAndChangedSettings() {
-
-		$cookie = new Cookie(array('foo' => 'bar'));
-
-		$cookie->setSetting('expire',   10);
-		$cookie->setSetting('path',     '/test');
-		$cookie->setSetting('domain',   '.ppi.io');
-		$cookie->setSetting('secure',   true);
-		$cookie->setSetting('httponly', false);
-
-		// intentional missing httponly param
 		$cookie['foo'] = 'blah';
-		$this->assertEquals($cookie->getCookie('foo'), array(
+		$this->assertEquals($cookie->setCookies[0], array(
 			'name'     => 'foo',
 			'content'  => 'blah',
 			'expire'   => 10,
-			'path'     => '/test',
-			'domain'   => '.ppi.io',
+			'path'     => '/',
+			'domain'   => '.example.com',
 			'secure'   => true,
-			'httponly' => false,
+			'httponly' => true,
 		));
+	}
+
+}
+
+class CookieDummy extends Cookie {
+	public $setCookies = array();
+
+	public function setCookie($key, array $options = array()) {
+		$options = array_merge($this->_defaults, $options);
+
+		$this->_array[$key] = $options['content'];
+
+		if (!$this->_isCollected) {
+			return true;
+		}
+
+		$this->setCookies[] = array(
+			'name'     => $key,
+			'content'  => $options['content'],
+			'expire'   => $options['expire'],
+			'path'     => $options['path'],
+			'domain'   => $options['domain'],
+			'secure'   => $options['secure'],
+			'httponly' => $options['httponly'],
+		);
 	}
 }
