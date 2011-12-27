@@ -1,11 +1,12 @@
 <?php
 /**
- * This is the PPI Appliations Configuration class which is used in the Bootstrap
+ * The PPI App bootstrap class. 
+ * This class sets various app settings, and allows you to override clases used in the bootup process.
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
  * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppiframework.com
+ * @link      http://www.ppi.io
  */
 namespace PPI;
 use PPI\Core\CoreException;
