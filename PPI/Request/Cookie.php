@@ -63,7 +63,8 @@ class Cookie extends RequestAbstract {
 	 */
 	public function offsetSet($offset, $value) {
 		if ($value === null) {
-			return $this->offsetUnset($offset);
+			$this->offsetUnset($offset);
+			return;
 		}
 
 		$this->setCookie($offset, array('content' => $value));
