@@ -306,13 +306,14 @@ class MsSqlPlatform extends AbstractPlatform
      */
     public function getListTablesSQL()
     {
-        return "SELECT name FROM sysobjects WHERE type = 'U' ORDER BY name";
+        // "sysdiagrams" table must be ignored as it's internal SQL Server table for Database Diagrams
+        return "SELECT name FROM sysobjects WHERE type = 'U' AND name != 'sysdiagrams' ORDER BY name";
     }
 
     /**
      * @override
      */
-    public function getListTableColumnsSQL($table)
+    public function getListTableColumnsSQL($table, $database = null)
     {
         return 'exec sp_columns @table_name = ' . $table;
     }
@@ -607,14 +608,12 @@ class MsSqlPlatform extends AbstractPlatform
 
                 // Remove ORDER BY clause from $query
                 $query = preg_replace('/\s+ORDER BY(.*)/', '', $query);
-
-                // Add ORDER BY clause as an argument for ROW_NUMBER()
-                $query = "SELECT ROW_NUMBER() OVER ($over) AS \"doctrine_rownum\", * FROM ($query) AS inner_tbl";
+                $query = preg_replace('/^SELECT\s/', '', $query);
 
                 $start = $offset + 1;
                 $end = $offset + $count;
 
-                $query = "WITH outer_tbl AS ($query) SELECT * FROM outer_tbl WHERE \"doctrine_rownum\" BETWEEN $start AND $end";
+                $query = "SELECT * FROM (SELECT ROW_NUMBER() OVER ($over) AS \"doctrine_rownum\", $query) AS doctrine_tbl WHERE \"doctrine_rownum\" BETWEEN $start AND $end";
             }
         }
 
@@ -629,12 +628,12 @@ class MsSqlPlatform extends AbstractPlatform
         if (is_array($item)) {
             foreach ($item as $key => $value) {
                 if (is_bool($value) || is_numeric($item)) {
-                    $item[$key] = ($value) ? 'TRUE' : 'FALSE';
+                    $item[$key] = ($value) ? 1 : 0;
                 }
             }
         } else {
             if (is_bool($item) || is_numeric($item)) {
-                $item = ($item) ? 'TRUE' : 'FALSE';
+                $item = ($item) ? 1 : 0;
             }
         }
         return $item;
@@ -775,6 +774,11 @@ class MsSqlPlatform extends AbstractPlatform
         return ' ';
     }
 
+    protected function getReservedKeywordsClass()
+    {
+        return 'Doctrine\DBAL\Platforms\Keywords\MsSQLKeywords';
+    }
+
     /**
      * Quotes a string so that it can be safely used as a table or column name,
      * even if it is a reserved word of the platform.
@@ -788,6 +792,6 @@ class MsSqlPlatform extends AbstractPlatform
      */
     public function quoteIdentifier($str)
     {
-        return "[" . $str . "]";
+        return "[" . str_replace("]", "][", $str) . "]";
     }
 }

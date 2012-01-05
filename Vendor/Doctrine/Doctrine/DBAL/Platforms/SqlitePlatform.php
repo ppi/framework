@@ -125,6 +125,31 @@ class SqlitePlatform extends AbstractPlatform
         }
     }
 
+    public function getDateDiffExpression($date1, $date2)
+    {
+        return 'ROUND(JULIANDAY('.$date1 . ')-JULIANDAY('.$date2.'))';
+    }
+
+    public function getDateAddDaysExpression($date, $days)
+    {
+        return "DATE(" . $date . ",'+". $days . " day')";
+    }
+
+    public function getDateSubDaysExpression($date, $days)
+    {
+        return "DATE(" . $date . ",'-". $days . " day')";
+    }
+
+    public function getDateAddMonthExpression($date, $months)
+    {
+        return "DATE(" . $date . ",'+". $months . " month')";
+    }
+
+    public function getDateSubMonthExpression($date, $months)
+    {
+        return "DATE(" . $date . ",'-". $months . " month')";
+    }
+
     protected function _getTransactionIsolationLevelSQL($level)
     {
         switch ($level) {
@@ -430,35 +455,41 @@ class SqlitePlatform extends AbstractPlatform
     protected function initializeDoctrineTypeMappings()
     {
         $this->doctrineTypeMapping = array(
-            'boolean'       => 'boolean',
-            'tinyint'       => 'boolean',
-            'smallint'      => 'smallint',
-            'mediumint'     => 'integer',
-            'int'           => 'integer',
-            'integer'       => 'integer',
-            'serial'        => 'integer',
-            'bigint'        => 'bigint',
-            'bigserial'     => 'bigint',
-            'clob'          => 'text',
-            'tinytext'      => 'text',
-            'mediumtext'    => 'text',
-            'longtext'      => 'text',
-            'text'          => 'text',
-            'varchar'       => 'string',
-            'varchar2'      => 'string',
-            'nvarchar'      => 'string',
-            'image'         => 'string',
-            'ntext'         => 'string',
-            'char'          => 'string',
-            'date'          => 'date',
-            'datetime'      => 'datetime',
-            'timestamp'     => 'datetime',
-            'time'          => 'time',
-            'float'         => 'float',
-            'double'        => 'float',
-            'real'          => 'float',
-            'decimal'       => 'decimal',
-            'numeric'       => 'decimal',
+            'boolean'          => 'boolean',
+            'tinyint'          => 'boolean',
+            'smallint'         => 'smallint',
+            'mediumint'        => 'integer',
+            'int'              => 'integer',
+            'integer'          => 'integer',
+            'serial'           => 'integer',
+            'bigint'           => 'bigint',
+            'bigserial'        => 'bigint',
+            'clob'             => 'text',
+            'tinytext'         => 'text',
+            'mediumtext'       => 'text',
+            'longtext'         => 'text',
+            'text'             => 'text',
+            'varchar'          => 'string',
+            'varchar2'         => 'string',
+            'nvarchar'         => 'string',
+            'image'            => 'string',
+            'ntext'            => 'string',
+            'char'             => 'string',
+            'date'             => 'date',
+            'datetime'         => 'datetime',
+            'timestamp'        => 'datetime',
+            'time'             => 'time',
+            'float'            => 'float',
+            'double'           => 'float',
+            'double precision' => 'float',
+            'real'             => 'float',
+            'decimal'          => 'decimal',
+            'numeric'          => 'decimal',
         );
+    }
+    
+    protected function getReservedKeywordsClass()
+    {
+        return 'Doctrine\DBAL\Platforms\Keywords\SQLiteKeywords';
     }
 }

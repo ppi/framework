@@ -99,7 +99,7 @@ class Comparator
                 $diff->newSequences[] = $sequence;
             } else {
                 if ($this->diffSequence($sequence, $fromSchema->getSequence($sequenceName))) {
-                    $diff->changedSequences[] = $fromSchema->getSequence($sequenceName);
+                    $diff->changedSequences[] = $toSchema->getSequence($sequenceName);
                 }
             }
         }
@@ -325,7 +325,10 @@ class Comparator
         }
 
         if ($column1->getType() instanceof \Doctrine\DBAL\Types\StringType) {
-            if ($column1->getLength() != $column2->getLength()) {
+            // check if value of length is set at all, default value assumed otherwise.
+            $length1 = $column1->getLength() ?: 255;
+            $length2 = $column2->getLength() ?: 255;
+            if ($length1 != $length2) {
                 $changedProperties[] = 'length';
             }
 
@@ -345,6 +348,11 @@ class Comparator
 
         if ($column1->getAutoincrement() != $column2->getAutoincrement()) {
             $changedProperties[] = 'autoincrement';
+        }
+
+        // only allow to delete comment if its set to '' not to null.
+        if ($column1->getComment() !== null && $column1->getComment() != $column2->getComment()) {
+            $changedProperties[] = 'comment';
         }
 
         return $changedProperties;
