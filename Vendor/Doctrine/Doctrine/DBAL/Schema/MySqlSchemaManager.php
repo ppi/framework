@@ -61,7 +61,7 @@ class MySqlSchemaManager extends AbstractSchemaManager
             }
             $tableIndexes[$k] = $v;
         }
-        
+
         return parent::_getPortableTableIndexesList($tableIndexes, $tableName);
     }
 
@@ -74,12 +74,12 @@ class MySqlSchemaManager extends AbstractSchemaManager
     {
         return $database['Database'];
     }
-    
+
     /**
      * Gets a portable column definition.
-     * 
+     *
      * The database type is mapped to a corresponding Doctrine mapping type.
-     * 
+     *
      * @param $tableColumn
      * @return array
      */
@@ -102,11 +102,14 @@ class MySqlSchemaManager extends AbstractSchemaManager
         if ( ! isset($tableColumn['name'])) {
             $tableColumn['name'] = '';
         }
-        
+
         $scale = null;
         $precision = null;
-        
+
         $type = $this->_platform->getDoctrineTypeMapping($dbType);
+        $type = $this->extractDoctrineTypeFromComment($tableColumn['comment'], $type);
+        $tableColumn['comment'] = $this->removeDoctrineTypeFromComment($tableColumn['comment'], $type);
+
         switch ($dbType) {
             case 'char':
                 $fixed = true;
@@ -151,11 +154,12 @@ class MySqlSchemaManager extends AbstractSchemaManager
             'length'        => $length,
             'unsigned'      => (bool)$unsigned,
             'fixed'         => (bool)$fixed,
-            'default'       => $tableColumn['default'],
+            'default'       => isset($tableColumn['default']) ? $tableColumn['default'] : null,
             'notnull'       => (bool) ($tableColumn['null'] != 'YES'),
             'scale'         => null,
             'precision'     => null,
             'autoincrement' => (bool) (strpos($tableColumn['extra'], 'auto_increment') !== false),
+            'comment'       => (isset($tableColumn['comment'])) ? $tableColumn['comment'] : null
         );
 
         if ($scale !== null && $precision !== null) {
@@ -176,7 +180,7 @@ class MySqlSchemaManager extends AbstractSchemaManager
         if (!isset($tableForeignKey['update_rule']) || $tableForeignKey['update_rule'] == "RESTRICT") {
             $tableForeignKey['update_rule'] = null;
         }
-        
+
         return new ForeignKeyConstraint(
             (array)$tableForeignKey['column_name'],
             $tableForeignKey['referenced_table_name'],

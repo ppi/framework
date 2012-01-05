@@ -17,43 +17,47 @@
  * <http://www.doctrine-project.org>.
  */
 
-namespace Doctrine\DBAL\Types;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform;
+namespace Doctrine\DBAL\Platforms\Keywords;
 
 /**
- * Type that maps an SQL DATE to a PHP Date object.
+ * Abstract interface for a SQL reserved keyword dictionary.
  *
- * @since 2.0
+ * @license     http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @link        www.doctrine-project.com
+ * @since       2.0
+ * @author      Benjamin Eberlei <kontakt@beberlei.de>
  */
-class DateType extends Type
+abstract class KeywordList
 {
-    public function getName()
+    private $keywords = null;
+    
+    /**
+     * Check if the given word is a keyword of this dialect/vendor platform.
+     * 
+     * @param  string $word
+     * @return bool 
+     */
+    public function isKeyword($word)
     {
-        return Type::DATE;
-    }
-
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
-        return $platform->getDateTypeDeclarationSQL($fieldDeclaration);
-    }
-
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
-        return ($value !== null) 
-            ? $value->format($platform->getDateFormatString()) : null;
+        if ($this->keywords === null) {
+            $this->initializeKeywords();
+        }
+        
+        return isset($this->keywords[strtoupper($word)]);
     }
     
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    protected function initializeKeywords()
     {
-        if ($value === null) {
-            return null;
-        }
-
-        $val = \DateTime::createFromFormat('!'.$platform->getDateFormatString(), $value);
-        if (!$val) {
-            throw ConversionException::conversionFailedFormat($value, $this->getName(), $platform->getDateFormatString());
-        }
-        return $val;
+        $this->keywords = array_flip(array_map('strtoupper', $this->getKeywords()));
     }
+    
+    abstract protected function getKeywords();
+    
+    /**
+     * Name of this keyword list.
+     * 
+     * @return string
+     */
+    abstract public function getName();
 }
