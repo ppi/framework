@@ -30,19 +30,6 @@ class Cookie extends RequestAbstract {
 
 	}
 
-	/*
-	 * Sync local settings with global settings
-	 *
-	 * @return void
-	 */
-	protected function resetSettings() {
-		$this->_expire   = self::$expire;
-		$this->_path     = self::$path;
-		$this->_domain   = self::$domain;
-		$this->_secure   = self::$secure;
-		$this->_httponly = self::$httponly;
-	}
-
 	/**
 	 * Changes object settings
 	 *
@@ -51,7 +38,14 @@ class Cookie extends RequestAbstract {
 	 *
 	 * @return void
 	 */
-	public function setSetting($option, $value) {
+	public function setSetting($option, $value = null) {
+		if (is_array($option)) {
+			foreach ($option as $key => $value) {
+				$this->setSetting($key, $value);
+			}
+			return;
+		}
+
 		if(array_key_exists($option, $this->_defaults)) {
 			$this->_defaults[$option] = $value;
 		}
@@ -68,19 +62,12 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	public function offsetSet($offset, $value) {
-
 		if ($value === null) {
 			$this->offsetUnset($offset);
+			return;
 		}
 
-		$this->_array[$offset] = $value;
-
-		if ($this->_isCollected) {
-			setcookie($offset, 
-				$value, $this->_defaults['expire'], $this->_defaults['path'], 
-				$this->_defaults['domain'], $this->_defaults['secure'], $this->_defaults['httponly']
-			);
-		}
+		$this->setCookie($offset, array('content' => $value));
 	}
 
 	/**
@@ -92,12 +79,11 @@ class Cookie extends RequestAbstract {
 	 * @return void
 	 */
 	public function offsetUnset($offset) {
-		
-		unset($this->_array[$offset]);
-
-		if ($this->_isCollected) {
-			setcookie($offset, null, time() - 3600);
-		}
+		$this->setcookie($offset, array(
+			'content' => null,
+			'expire'  => time() - 3600,
+		));
+		unset($this->_array[$offset]); // FIXME I think setCookie is currently too 'smart'
 	}
 
 	/**
