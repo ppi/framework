@@ -245,7 +245,7 @@ class Controller {
      * @return string
      */
 	protected function getCurrUrl() {
-		throw new PPI_Exception('Deprecated function - use getUri() instead');
+		throw new \Exception('Deprecated function - use getUri() instead');
 	}
 
 	/**
