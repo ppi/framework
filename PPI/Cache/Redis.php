@@ -36,7 +36,7 @@ class Redis implements CacheInterface {
 
 	function init() {
 		list($ip, $port) = explode(':', $this->_defaults['server']);
-		$this->_handler = new Redis();
+		$this->_handler = new \Redis();
 		$this->_handler->connect($ip, $port);
 //		$this->_handler->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
 	}
