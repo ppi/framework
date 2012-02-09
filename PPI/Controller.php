@@ -77,7 +77,7 @@ class Controller {
 			header("Location: $sUrl");
 			exit;
 		} else {
-			throw new PPI_Exception('Unable to redirect to '.$sUrl.'. Headers already sent');
+			throw new \Exception('Unable to redirect to '.$sUrl.'. Headers already sent');
 		}
 	}
 
@@ -245,7 +245,7 @@ class Controller {
      * @return string
      */
 	protected function getCurrUrl() {
-		throw new PPI_Exception('Deprecated function - use getUri() instead');
+		throw new \Exception('Deprecated function - use getUri() instead');
 	}
 
 	/**
