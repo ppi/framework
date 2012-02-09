@@ -1,7 +1,7 @@
 <?php
 namespace PPI\Test\Form;
-use PPI\Form\Rule\MaxLength;
-class MaxLengthRuleTest extends \PHPUnit_Framework_TestCase {
+use PPI\Form\Rule\Maxlength;
+class MaxlengthRuleTest extends \PHPUnit_Framework_TestCase {
 
 	function setUp() {
 		$this->_rule = new Maxlength();
