@@ -35,9 +35,15 @@ class Redis implements CacheInterface {
 	}
 
 	function init() {
+		
 		list($ip, $port) = explode(':', $this->_defaults['server']);
 		$this->_handler = new Redis();
 		$this->_handler->connect($ip, $port);
+		
+		// Sometimes we wish to pass in an 'auth key'. Here's the functionality for that.
+		if(isset($this->_defaults['auth']) && !empty($this->_defaults['auth'])) {
+			$this->_handler->auth($this->_defaults['auth']);
+		}
 //		$this->_handler->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
 	}
 
