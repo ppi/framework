@@ -16,8 +16,9 @@ class Redis implements CacheInterface {
 	 * @var array
 	 */
 	protected $_defaults = array(
-		'server' => '127.0.0.1:6379',
-		'expiry' => 0
+		'server'     => '127.0.0.1:6379',
+		'expiry'     => 0,
+		'serializer' => 'php'
 	);
 
 	/**
@@ -39,12 +40,23 @@ class Redis implements CacheInterface {
 		list($ip, $port) = explode(':', $this->_defaults['server']);
 		$this->_handler = new \Redis();
 		$this->_handler->connect($ip, $port);
-		
+
+
 		// Sometimes we wish to pass in an 'auth key'. Here's the functionality for that.
 		if(isset($this->_defaults['auth']) && !empty($this->_defaults['auth'])) {
 			$this->_handler->auth($this->_defaults['auth']);
 		}
-//		$this->_handler->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
+
+		// Setting the serializer mods
+		switch($this->_defaults['serializer']) {
+			case 'php':
+				$this->_handler->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+				break;
+			
+			case 'igbinary':
+				$this->_handler->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_IGBINARY);
+				break;
+		}
 	}
 
 	/**
