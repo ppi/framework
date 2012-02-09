@@ -243,12 +243,12 @@ class Request {
 	 * @param string $sPrefix The prefix to get values with
 	 * @return array
 	 */
-	function stripPost($p_sPrefix = '') {
+	function stripPost($prefix = '') {
 
 		$aValues = array();
-		if ($p_sPrefix !== '' && $this->is('post')) {
+		if ($prefix !== '' && $this->is('post')) {
 			$aPost = $this->post();
-			$aPrefixKeys = preg_grep("/{$p_sPrefix}/", array_keys($aPost));
+			$aPrefixKeys = preg_grep("/{$prefix}/", array_keys($aPost));
 			foreach ($aPrefixKeys as $prefixKey) {
 				$aValues[$prefixKey] = $aPost[$prefixKey];
 			}
@@ -259,23 +259,23 @@ class Request {
 	/**
 	 * Check whether a value has been submitted via post
 	 *
-	 * @param string $p_sKey The $_POST key
+	 * @param string $key The $_POST key
 	 * @return boolean
 	 */
-	function hasPost($p_sKey) {
-		return array_key_exists($p_sKey, $this->_post);
+	function hasPost($key) {
+		return array_key_exists($key, $this->_post);
 	}
 
 	/**
 	 * Remove a value from the $_POST superglobal.
 	 *
-	 * @param string $p_sKey The key to remove
+	 * @param string $key The key to remove
 	 * @return boolean True if the value existed, false if not.
 	 */
-	function removePost($p_sKey) {
+	function removePost($key) {
 
-		if (isset($this->_post[$p_sKey])) {
-			unset($this->_post[$p_sKey]);
+		if (isset($this->_post[$key])) {
+			unset($this->_post[$key]);
 			return true;
 		}
 		return false;
@@ -284,12 +284,29 @@ class Request {
 	/**
 	 * Add a value to the $_POST superglobal
 	 *
-	 * @param string $p_sKey The key
-	 * @param mixed $p_mValue The value to set the key with
+	 * @param string $key The key
+	 * @param mixed $val The value to set the key with
 	 * @return void
 	 */
-	function addPost($p_sKey, $p_mValue) {
-		$this->_post[$p_sKey] = $p_mValue;
+	function addPost($key, $val) {
+		$this->_post[$key] = $val;
+	}
+
+	/**
+	 * Edit a value in the $_POST superglobal
+	 *
+	 * @param $key  The Key
+	 * @param $val The Value to set the key with
+	 * @return bool
+	 */
+	function editPost($key, $val) {
+
+		if (isset($this->_post[$key])) {
+			$this->_post[$key] = $val;
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
