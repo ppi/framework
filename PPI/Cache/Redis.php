@@ -57,6 +57,10 @@ class Redis implements CacheInterface {
 				$this->_handler->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_IGBINARY);
 				break;
 		}
+		
+		if(isset($this->_defaults['prefix'])) {
+			$this->_handler->setOption(\Redis::OPT_PREFIX, $this->_defaults['prefix']);
+		}
 	}
 
 	/**
