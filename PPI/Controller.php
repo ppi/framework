@@ -410,6 +410,28 @@ class Controller {
 	}
 
 	/**
+	 * Add a value to the $_POST superglobal
+	 *
+	 * @param string $key The key
+	 * @param mixed $val The value to set the key with
+	 * @return void
+	 */
+	function addPost($key, $val) {
+		$this->_request->addPost($key, $val);
+	}
+
+	/**
+	 * Edit a value in the $_POST superglobal
+	 *
+	 * @param $key  The Key
+	 * @param $val The Value to set the key with
+	 * @return bool
+	 */
+	function editPost($key, $val) {
+		return $this->_request->editPost($key, $val);
+	}
+
+	/**
 	 * Get server values
 	 *
 	 * @param string|null $key
