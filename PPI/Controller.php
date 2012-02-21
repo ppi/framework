@@ -390,11 +390,11 @@ class Controller {
 	/**
 	 * Get a parametere from the query string aka $_GET
 	 *
-	 * @param string $key The Key
-	 * @param null $default The default value is $key doesn't exist
+	 * @param null|string $key The Key
+	 * @param mixed $default The default value if $key doesn't exist
 	 * @return mixed
 	 */
-	protected function getQuery($key, $default = null) {
+	protected function getQuery($key = null, $default = null) {
 		return $this->_request->getQuery($key, $default);
 	}
 
