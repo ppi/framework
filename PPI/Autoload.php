@@ -8,116 +8,65 @@
  * @link      http://www.ppiframework.com
  */
 namespace PPI;
+
+/**
+ * 
+ * It is able to load classes that use either:
+ *
+ *  * The technical interoperability standards for PHP 5.3 namespaces and
+ *    class names (https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md);
+ *
+ *  * The PEAR naming convention for classes (http://pear.php.net/).
+ * 
+ *  Example usage:
+ * 
+ *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . 'Symfony')
+ *  PPI\Autoload::register();
+ * 
+ */
+
 class Autoload {
 
 	/**
-	 * The cache list of classes
+	 * The ClassLoader object
 	 * 
-	 * @var array
+	 * @var null|object
 	 */
-	protected static $_classes = array();
-	
+	static protected $_loader = null;
+
 	/**
-	 * The separator characters for namespacing
+	 * Add a namespace to the autoloader path
 	 * 
-	 * @var string
+	 * @static
+	 * @param string $key
+	 * @param string $path
 	 */
-	protected static $_namespaceSeparator = '\\';
-
-	/**
-	 * The base list of libraries to check in the autoloader, these are the base two ones required
-	 * for the framework and the skeleton app classes to be autoloaded
-	 *
-	 * @var array
-	 */
-	static protected $_libraries = array();
-
-
-	function __construct() {}
-
-	/**
-	 * Register The PPI Autoload Function
-	 *
-	 * @return void
-	 */
-	static function register() {
-		spl_autoload_register(array('self', 'loadClass'));
+	static function add($key, $path) {
+		self::$_loader === null && self::initLoader();
+		self::$_loader->registerNamespace($key, $path);
 	}
 	
 	/**
-	 * The actual autoloading function
-	 *
-	 * @param string $className The Class Name To Be Autoloaded
-	 * @return boolean
+	 * Register the autoloader namespaces or prefixes thus far.
+	 * 
+	 * @static
+	 * 
 	 */
-	static function loadClass($className) {
-		
-		foreach(self::$_libraries as $options) {
-			if ($options['namespace'] === null || 
-				$options['namespace'] . self::$_namespaceSeparator === substr($className, 0, strlen($options['namespace'] . self::$_namespaceSeparator))) {
-
-				$fileName = $namespace = '';
-				if (false !== ($lastNsPos = strripos($className, self::$_namespaceSeparator))) {
-					$namespace = substr($className, 0, $lastNsPos);
-					$className = substr($className, $lastNsPos + 1);
-					$fileName  = str_replace(self::$_namespaceSeparator, DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-					
-				}
-				$fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-				$path = (isset($options['path']) ? $options['path'] . DIRECTORY_SEPARATOR : '') . $fileName;
-				if(file_exists($path)) {
-					require $path;
-					return true;
-				}
-			}
-		}
-		return false;
+	public static function register() {
+		self::$_loader === null && self::initLoader();
+		self::$_loader->register();
 	}
-
+	
 	/**
-	 * Unregister The PPI Autoload Function
-	 *
-	 * @return void
+	 * Initialize the ClassLoader class responsible for doing the actual autoloading
+	 * 
+	 * @static
+	 * 
 	 */
-	static function unregister() {
-		spl_autoload_unregister(array('self', 'autoload'));
+	public static function initLoader() {
+		$path = PPI_VENDOR_PATH . 'Symfony' . DS . 'Component' . DS . 'ClassLoader' . DS . 'UniversalClassLoader.php';
+		require_once($path);
+		self::$_loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
 	}
 
-	/**
-	 * Add a library to the autoloader
-	 *
-	 * @example
-	 * PPI_Autoload::add('Zend', array(
-	 *     'path' => SYSTEMPATH . 'Vendor/',
-	 * ));
-	 *
-	 * @param string $key The Key, This is used for exists() and remove()
-	 * @param array $options
-	 */
-	static function add($key, array $options) {
-		
-		$options['namespace'] = $key;
-		$options['path'] = isset($options['path']) ? $options['path'] : null;
-		self::$_libraries[$key] = $options;
-	}
-
-	/**
-	 * Remove a library from the autoloader
-	 *
-	 * @param string $p_sKey The key
-	 * @return void
-	 */
-	static function remove($p_sKey) {
-		unset(self::$_libraries[$p_sKey]);
-	}
-
-	/**
-	 * Checks if a library has been added
-	 *
-	 * @param string $p_sKey The key
-	 * @return boolean
-	 */
-	static function exists($p_sKey) {
-		return isset(self::$_libraries[$p_sKey]);
-	}
 }
