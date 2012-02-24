@@ -13,8 +13,8 @@ defined('PPI_VENDOR_PATH') || define('PPI_VENDOR_PATH', dirname(PPI_PATH) . DS .
 
 // Autoload registration
 require 'Autoload.php';
-PPI\Autoload::add('PPI', array('path' => dirname(PPI_PATH)));
-PPI\Autoload::add('Symfony', array('path' => dirname(PPI_VENDOR_PATH . 'Symfony')));
+PPI\Autoload::add('PPI', dirname(PPI_PATH));
+PPI\Autoload::add('Symfony', dirname(PPI_VENDOR_PATH . 'Symfony'));
 PPI\Autoload::register();
 
 
