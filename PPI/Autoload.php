@@ -34,6 +34,18 @@ class Autoload {
 	 */
 	static protected $_loader = null;
 
+	static protected $_options = array();
+	
+	/**
+	 * Add some items to the class config
+	 * 
+	 * @static
+	 * @param array $config
+	 */
+	public static function config(array $config) {
+		self::$_options = array_merge($config, self::$_options);
+	}
+	
 	/**
 	 * Add a namespace to the autoloader path
 	 * 
@@ -64,9 +76,8 @@ class Autoload {
 	 * 
 	 */
 	public static function initLoader() {
-		$path = PPI_VENDOR_PATH . 'Symfony/Component/ClassLoader/UniversalClassLoader.php';
-		require_once($path);
-		self::$_loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
+		require_once(self::$_options['loaderClassPath']);
+		self::$_loader = new self::$_options['loaderClass']();
 	}
 
 }

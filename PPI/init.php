@@ -8,15 +8,20 @@
  */
 defined('PPI_VERSION') || define('PPI_VERSION', '2.0');
 defined('DS') || define('DS', DIRECTORY_SEPARATOR);
-defined('PPI_PATH') || define('PPI_PATH', realpath(__DIR__));
-defined('PPI_VENDOR_PATH') || define('PPI_VENDOR_PATH', dirname(PPI_PATH) . DS . 'Vendor' . DS);
-
+defined('PPI_PATH') || define('PPI_PATH', realpath(__DIR__) . '/');
+defined('PPI_VENDOR_PATH') || define('PPI_VENDOR_PATH', dirname(PPI_PATH) . '/Vendor/');
 // Autoload registration
 require 'Autoload.php';
-PPI\Autoload::add('PPI', dirname(PPI_PATH));
-PPI\Autoload::add('Symfony', dirname(PPI_VENDOR_PATH . 'Symfony'));
-PPI\Autoload::add('Zend', dirname(PPI_VENDOR_PATH . 'Zend'));
-PPI\Autoload::register();
+use PPI\Autoload;
+
+Autoload::config(array(
+	'loaderClassPath' => PPI_VENDOR_PATH . 'Symfony/Component/ClassLoader/UniversalClassLoader.php',
+	'loaderClass'     => '\Symfony\Component\ClassLoader\UniversalClassLoader'
+));
+Autoload::add('PPI', dirname(PPI_PATH));
+Autoload::add('Symfony', dirname(PPI_VENDOR_PATH . 'Symfony'));
+Autoload::add('Zend', dirname(PPI_VENDOR_PATH . 'Zend'));
+Autoload::register();
 
 
 // General stuff
