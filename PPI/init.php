@@ -6,29 +6,17 @@
  * @package   PPI
  * @link      www.ppi.io
  */
-// ---- site wide -----
-defined('DS')					|| define('DS', DIRECTORY_SEPARATOR);
-defined('ROOTPATH')				|| define('ROOTPATH', getcwd() . DS);
-defined('SYSTEMPATH')			|| define('SYSTEMPATH', dirname(__FILE__) . DS);
-defined('BASEPATH')				|| define('BASEPATH', dirname(__FILE__) . DS);
-defined('TESTPATH')             || define('TESTPATH', SYSTEMPATH . 'Test' . DS);
-defined('APPFOLDER')			|| define('APPFOLDER', ROOTPATH . 'App' . DS);
-defined('VENDORPATH')           || define('VENDORPATH', dirname(SYSTEMPATH) . '/Vendor' . DS);
-
-// ---- app paths ------
-defined('MODELPATH')			|| define('MODELPATH', APPFOLDER . 'Model' . DS);
-defined('VIEWPATH')				|| define('VIEWPATH', APPFOLDER . 'View' . DS);
-defined('CONTROLLERPATH')		|| define('CONTROLLERPATH', APPFOLDER . 'Controller' . DS);
-defined('CONFIGPATH')			|| define('CONFIGPATH', APPFOLDER . 'Config' . DS);
-
-// ------- system constants -------
-defined('PPI_VERSION')			|| define('PPI_VERSION', '1.1');
+defined('PPI_VERSION') || define('PPI_VERSION', '2.0');
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
+defined('PPI_PATH') || define('PPI_PATH', realpath(__DIR__));
+defined('PPI_VENDOR_PATH') || define('PPI_VENDOR_PATH', dirname(PPI_PATH) . DS . 'Vendor' . DS);
 
 // Autoload registration
 require 'Autoload.php';
-PPI\Autoload::add('PPI', array('path' => dirname(SYSTEMPATH)));
-PPI\Autoload::add('App', array('path' => dirname(APPFOLDER)));
+PPI\Autoload::add('PPI', array('path' => dirname(PPI_PATH)));
+PPI\Autoload::add('Symfony', array('path' => dirname(PPI_VENDOR_PATH . 'Symfony')));
 PPI\Autoload::register();
+
 
 // General stuff
 //require 'common.php';
