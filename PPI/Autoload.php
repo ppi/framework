@@ -64,7 +64,7 @@ class Autoload {
 	 * 
 	 */
 	public static function initLoader() {
-		$path = PPI_VENDOR_PATH . 'Symfony' . DS . 'Component' . DS . 'ClassLoader' . DS . 'UniversalClassLoader.php';
+		$path = PPI_VENDOR_PATH . 'Symfony/Component/ClassLoader/UniversalClassLoader.php';
 		require_once($path);
 		self::$_loader = new \Symfony\Component\ClassLoader\UniversalClassLoader();
 	}
