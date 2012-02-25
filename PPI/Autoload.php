@@ -54,8 +54,7 @@ class Autoload {
 	 * @param string $path
 	 */
 	static function add($key, $path) {
-		self::$_loader === null && self::initLoader();
-		self::$_loader->registerNamespace($key, $path);
+		self::$_options['loader']->registerNamespace($key, $path);
 	}
 	
 	/**
@@ -65,19 +64,7 @@ class Autoload {
 	 * 
 	 */
 	public static function register() {
-		self::$_loader === null && self::initLoader();
-		self::$_loader->register();
+		self::$_options['loader']->register();
 	}
 	
-	/**
-	 * Initialize the ClassLoader class responsible for doing the actual autoloading
-	 * 
-	 * @static
-	 * 
-	 */
-	public static function initLoader() {
-		require_once(self::$_options['loaderClassPath']);
-		self::$_loader = new self::$_options['loaderClass']();
-	}
-
 }
