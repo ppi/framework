@@ -10,7 +10,10 @@
  */
 namespace PPI;
 use PPI\Core\CoreException,
-	Zend\Module\Manager as ModuleManager;
+	Zend\Module\Manager as ModuleManager,
+	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
+	Symfony\Component\HttpFoundation\Request as HttpRequest,
+	Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class App {
 
@@ -166,15 +169,26 @@ class App {
 //		}
 //		set_exception_handler($this->_envOptions['exceptionHandler']);
 		
-		if(!empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
-			
-			$listenerOptions  = new \Zend\Module\Listener\ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
-			$defaultListeners = new \Zend\Module\Listener\DefaultListenerAggregate($listenerOptions);
-			
-			$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
-			$moduleManager->events()->attachAggregate($defaultListeners);
-			$moduleManager->loadModules();
+		if(empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
+			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
+			
+		// Module Listeners
+		$listenerOptions  = new \Zend\Module\Listener\ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
+		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
+		
+		// Loading our Modules
+		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
+		$moduleManager->events()->attachAggregate($defaultListeners);
+		$moduleManager->loadModules();
+		
+		// Routing
+		$routes = $defaultListeners->getRoutes();
+		
+//		$this->_request  = HttpRequest::createFromGlobals();
+//		$this->_response = new HttpResponse();
+		
+//		$uri = $this->_request->getPathInfo();
 		
 		return $this; // Fluent Interface
 	}
