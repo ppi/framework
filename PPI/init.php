@@ -24,7 +24,7 @@ Autoload::config(array(
 	'loader'    => new \Symfony\Component\ClassLoader\UniversalClassLoader(),
 	'mapLoader' => $mapLoader
 ));
-Autoload::add('PPI', PPI_PATH);
+Autoload::add('PPI', dirname(PPI_PATH));
 Autoload::add('Symfony', PPI_VENDOR_PATH);
 Autoload::add('Zend', PPI_VENDOR_PATH);
 Autoload::register();
