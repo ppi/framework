@@ -9,7 +9,9 @@
  * @link      http://www.ppi.io
  */
 namespace PPI;
-use PPI\Core\CoreException;
+use PPI\Core\CoreException,
+	Zend\Module\Manager as ModuleManager;
+
 class App {
 
 	/**
@@ -30,7 +32,8 @@ class App {
 		'session'           => null,
 		'config'            => null,
 		'dispatcher'        => null,
-		'request'           => null
+		'request'           => null,
+		'modules'           => array()
 	);
 
 
@@ -151,165 +154,31 @@ class App {
 	 */
 	function boot() {
 
-		error_reporting($this->_envOptions['errorLevel']);
-		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
+//		error_reporting($this->_envOptions['errorLevel']);
+//		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
 		
 		// Set the Exception handler
-		if($this->_envOptions['exceptionHandler'] === null){
-			$exceptionHandler = new \PPI\Exception\Handler();
+//		if($this->_envOptions['exceptionHandler'] === null){
+//			$exceptionHandler = new \PPI\Exception\Handler();
 			// Add Log Handler
-			$exceptionHandler->addHandler(new \PPI\Exception\Log());
-			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
-		}
-		set_exception_handler($this->_envOptions['exceptionHandler']);
+//			$exceptionHandler->addHandler(new \PPI\Exception\Log());
+//			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
+//		}
+//		set_exception_handler($this->_envOptions['exceptionHandler']);
 		
-		// Fire up the default config handler
-		if($this->_envOptions['config'] === null) {
-
-			$this->_config = new Config(array(
-				'configBlock'     => $this->_envOptions['configBlock'],
-				'configFile'      => $this->_envOptions['configFile'],
-				'cacheConfig'     => $this->_envOptions['cacheConfig'],
-				'configCachePath' => $this->_envOptions['configCachePath']
-			));
+		if(!empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
+			
+			$listenerOptions  = new \Zend\Module\Listener\ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
+			$defaultListeners = new \Zend\Module\Listener\DefaultListenerAggregate($listenerOptions);
+			
+			$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
+			$moduleManager->events()->attachAggregate($defaultListeners);
+			$moduleManager->loadModules();
 		}
 		
-		// Apply the config
-		$this->_config = $this->_config->getConfig();
-
-		// So are we auto-loading datasource
-		if(isset($this->_envOptions['ds']) && $this->_envOptions['ds']) {
-			$ds = DataSource::create($this->loadDSConnections());
-			Registry::set('DataSource', $ds);
-		}
-
-		// Set the config into the registry for quick read/write
-		Registry::set('PPI_Config', $this->_config);
-
-		// Initialise the session
-		if(!headers_sent()) {
-
-			// Fire up the default session handler
-			if($this->_envOptions['session'] === null) {
-				$this->_envOptions['session'] = new Session();
-			}
-			Registry::set('PPI_Session', $this->_envOptions['session']);
-		}
-
-		// By default we always load up PPI_Router as it contains default routes now such as __404__
-		if($this->_envOptions['router'] === null) {
-			$this->_envOptions['router'] = new Router();
-		}
-
-		// -- Fire up the default dispatcher --
-		if($this->_envOptions['dispatcher'] === null) {
-			$this->_envOptions['dispatcher'] = new Dispatch();
-		}
-
-		// -- Set the PPI_Request object --
-		if($this->_envOptions['request'] === null) {
-			$this->_envOptions['request'] = new Request();
-		}
-
-		// -------------- Library Autoloading Process --------------
-		if(!empty($this->_config->system->autoloadLibs)) {
-			foreach(explode(',', $this->_config->system->autoloadLibs) as $sLib) {
-				switch(strtolower(trim($sLib))) {
-					case 'zf':
-						Autoload::add('Zend', array(
-							'path'   => VENDORPATH . 'Zend/'
-						));
-						break;
-
-					case 'github':
-						$githubAutoloader = VENDORPATH . 'Github/Autoloader.php';
-						if(!file_exists($githubAutoloader)) {
-							throw new CoreException('Unable to autoload github, the github autoloader was no found.');
-						}
-						include_once($githubAutoloader);
-						\Github_Autoloader::register();
-						break;
-
-					case 'swift':
-						include_once(VENDORPATH . 'Swift/swift_required.php');
-						break;
-
-					case 'solar':
-						include_once(VENDORPATH . 'Solar.php');
-						Autoload::add('Solar', array(
-							'path'   => VENDORPATH . 'Solar/',
-							'prefix' => 'Solar_'
-						));
-						break;
-
-				}
-
-			}
-		}
-
-		Registry::set('PPI_App', $this);
-
 		return $this; // Fluent Interface
 	}
 
-	/**
-	 * Call the dispatch process. Running the dispatcher and dispatching
-	 *
-	 * @return $this Fluent interface
-	 */
-	function dispatch() {
-
-		// Urls and Uris
-		$baseUrl = $this->getConfig()->system->base_url;
-		$url = $this->_envOptions['request']->getUrl();
-
-		// Router
-		$router = $this->_envOptions['router'];
-		$router->setUri(strpos($url, $baseUrl) !== false ? str_replace($baseUrl, '', $url) : $url);
-		$router->init();
-		$uri = $router->getMatchedRoute();
-		
-		
-		
-		// If we've no URI, dispatch the default route.
-		if($uri === '') {
-			$this->_envOptions['dispatcher']->setUri($router->getDefaultRoute());
-		} else {
-			$this->_envOptions['dispatcher']->setUri($uri);
-		}
-		
-		// Lets do our controller check, if it's bogus then attempt the 404 route.
-		if(!$this->_envOptions['dispatcher']->check()) {
-			$this->_envOptions['dispatcher']->setUri($router->get404Route());
-			// If the 404 route we set doesn't exist, lets bomb out we can't go any further.
-			if(!$this->_envOptions['dispatcher']->check()) {
-				throw new CoreException('Unable to apply the 404 route of: ' . $router->get404Route() . '. Route does not exist');
-			}
-		}
-
-		// Get the instantiated controller class
-		$controller = $this->_envOptions['dispatcher']->getController();
-
-		// Update the URI for the request object so things like $this->get() work
-		$this->_envOptions['request'] = new Request(array(
-			'uri' => $uri
-		));
-
-		Registry::set('PPI_Request', $this->_envOptions['request']);
-		Registry::set('PPI_Dispatch', $this->_envOptions['dispatcher']);
-
-		$this->_envOptions['view']     = new View();
-		$this->_envOptions['response'] = new Response();
-
-		if($controller !== null) {
-			$controller->systemInit($this);
-			$this->_envOptions['dispatcher']->setController($controller);
-		}
-		
-		$this->_envOptions['dispatcher']->dispatch();
-		
-	}
-	
 	/**
 	 * Load the connections from $path
 	 * 
