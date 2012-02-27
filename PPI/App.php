@@ -16,7 +16,8 @@ use PPI\Core\CoreException,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
-	Symfony\Component\Routing\Exception\ResourceNotFoundException;
+	Symfony\Component\Routing\Exception\ResourceNotFoundException,
+	Zend\Module\Listener\ListenerOptions;
 
 class App {
 
@@ -47,6 +48,34 @@ class App {
 	 * 
 	 */
 	protected $_matchedRoute = null;
+	
+	/**
+	 * The module manager
+	 * 
+	 * @var null
+	 */
+	protected $_moduleManager = null;
+	
+	/**
+	 * The request object
+	 * 
+	 * @var null
+	 */
+	protected $_request = null;
+	
+	/**
+	 * The response object
+	 * 
+	 * @var null
+	 */
+	protected $_response = null;
+	
+	/**
+	 * The matched module from the matched route.
+	 * 
+	 * @var null
+	 */
+	protected $_matchedModule = null;
 
 
 	/**
@@ -119,46 +148,6 @@ class App {
 	}
 
 	/**
-	 * Set the router object for the app bootup
-	 *
-	 * @param PPI_Router_Interface $router The router object
-	 * @return void
-	 */
-	function setRouter(Router\RouterInterface $router) {
-		$this->_envOptions['router'] = $router;
-	}
-
-	/**
-	 * Set the dispatch object for the app bootup
-	 *
-	 * @param PPI_Dispatch_Interface $dispatch The dispatch object
-	 * @return void
-	 */
-	function setDispatcher(\PPI\Dispatch\DispatchInterface $dispatch) {
-		$this->_envOptions['dispatcher'] = $dispatch;
-	}
-
-		/**
-	 * Set the request object for the app bootup
-	 *
-	 * @param object $request
-	 * @return void
-	 */
-	function setRequest($request) {
-		$this->_envOptions['request'] = $request;
-	}
-
-	/**
-	 * Set the session object for the app bootup
-	 *
-	 * @param PPI_Session_Interface $session The session object
-	 * @return void
-	 */
-	function setSession(PPI_Session_Interface $session) {
-		$this->_envOptions['session'] = $session;
-	}
-
-	/**
 	 * Run the boot process, boot up our app. Call the relevant classes such as:
 	 * config, registry, session, dispatch, router.
 	 *
@@ -166,34 +155,23 @@ class App {
 	 */
 	function boot() {
 
-//		error_reporting($this->_envOptions['errorLevel']);
-//		ini_set('display_errors', $this->getEnv('showErrors', 'On'));
-		
-		// Set the Exception handler
-//		if($this->_envOptions['exceptionHandler'] === null){
-//			$exceptionHandler = new \PPI\Exception\Handler();
-			// Add Log Handler
-//			$exceptionHandler->addHandler(new \PPI\Exception\Log());
-//			$this->_envOptions['exceptionHandler'] = array($exceptionHandler, 'handle');
-//		}
-//		set_exception_handler($this->_envOptions['exceptionHandler']);
-		
 		if(empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
 		
 		// Core Objects
-		$this->_response = new HttpResponse();
 		$this->_request  = HttpRequest::createFromGlobals();
+		$this->_response = new HttpResponse();
 
 		// Module Listeners
-		$listenerOptions  = new \Zend\Module\Listener\ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
+		$listenerOptions  = new ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
 		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
 		
 		// Loading our Modules
 		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
+		$this->_moduleManager = $moduleManager;
 		$allRoutes = $defaultListeners->getRoutes();
 		
 		// Routing preparation
@@ -204,8 +182,13 @@ class App {
 		// Check the routes from our modules
 		foreach($allRoutes as $moduleName => $moduleRoutes) {
 			try {
+				
 				$matcher = new UrlMatcher($moduleRoutes, $requestContext);
 				$matchedRoute = $matcher->match($this->_request->getPathInfo());
+				
+				$this->_matchedModule = $this->_moduleManager->getModule($moduleName);
+				$this->_matchedModule->setModuleName($moduleName);
+				
 			} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
 		}
 		
@@ -214,53 +197,36 @@ class App {
 			die('404');
 		}
 		
+		// Set our valid route
 		$this->_matchedRoute = $matchedRoute;
 		
 		// Fluent Interface
 		return $this;
 	}
 	
+	/**
+	 * Lets dispatch our module's controller action
+	 */
 	function dispatch() {
 		
-		// Lets dispatch our controller 
-		list($module, $controller, $action) = explode(':', $this->_matchedRoute['_controller'], 3);
+		list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
+		$actionName = $actionName . 'Action';
 		
-		$className = "\\$module\\Controller\\$controller";
-		$class = new \User\Controller\Manage();
+		$this->_matchedModule->setControllerName($controllerName);
+		$this->_matchedModule->setActionName($actionName);
+
+		$className   = "\\{$this->_matchedModule->getModuleName()}\\Controller\\$controllerName";
+		$controller  = new $className();
+		$controller->setRequest($this->_request)->setResponse($this->_response);
+
+		$result      = $this->_matchedModule->setController($controller)->dispatch();
+		$controller  = $this->_matchedModule->getController();
 		
-		var_dump($class); exit;
-		var_dump($module, $controller, $action);
+		$this->_request   = $controller->getRequest();
+		$this->_response  = $controller->getResponse();
+		$this->_response->setContent($result);
+		$this->_response->send();
 		
-	}
-
-	/**
-	 * Load the connections from $path
-	 * 
-	 * @return array
-	 */
-	function loadDSConnections() {
-
-		$path = $this->getEnv('dsConnectionsPath', CONFIGPATH . 'connections.php');
-		include_once($path);
-		return isset($connections) ? $connections : array();
-	}
-
-	/**
-	 * Get the current site mode set, such as 'development' or 'production'
-	 *
-	 * @return string
-	 */
-	function getSiteMode() {
-		return $this->_envOptions['siteMode'];
-	}
-
-	/**
-	 * Get the config
-	 *
-	 * @return void
-	 */
-	function getConfig() {
-		return $this->_config;
 	}
 
 }
