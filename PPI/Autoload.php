@@ -53,7 +53,7 @@ class Autoload {
 	 * @param string $key
 	 * @param string $path
 	 */
-	static function add($key, $path) {
+	public static function add($key, $path) {
 		self::$_options['loader']->registerNamespace($key, $path);
 	}
 	
