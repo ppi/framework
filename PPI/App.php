@@ -13,7 +13,10 @@ use PPI\Core\CoreException,
 	Zend\Module\Manager as ModuleManager,
 	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
-	Symfony\Component\HttpFoundation\Response as HttpResponse;
+	Symfony\Component\HttpFoundation\Response as HttpResponse,
+	Symfony\Component\Routing\RequestContext,
+	Symfony\Component\Routing\Matcher\UrlMatcher,
+	Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class App {
 
@@ -38,6 +41,12 @@ class App {
 		'request'           => null,
 		'modules'           => array()
 	);
+	
+	/**
+	 * @var null|array
+	 * 
+	 */
+	protected $_matchedRoute = null;
 
 
 	/**
@@ -172,7 +181,11 @@ class App {
 		if(empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
-			
+		
+		// Core Objects
+		$this->_response = new HttpResponse();
+		$this->_request  = HttpRequest::createFromGlobals();
+
 		// Module Listeners
 		$listenerOptions  = new \Zend\Module\Listener\ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
 		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
@@ -181,16 +194,43 @@ class App {
 		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
+		$allRoutes = $defaultListeners->getRoutes();
 		
-		// Routing
-		$routes = $defaultListeners->getRoutes();
+		// Routing preparation
+		$matchedRoute    = false;
+		$requestContext  = new RequestContext();
+		$requestContext->fromRequest($this->_request);
+
+		// Check the routes from our modules
+		foreach($allRoutes as $moduleName => $moduleRoutes) {
+			try {
+				$matcher = new UrlMatcher($moduleRoutes, $requestContext);
+				$matchedRoute = $matcher->match($this->_request->getPathInfo());
+			} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
+		}
 		
-//		$this->_request  = HttpRequest::createFromGlobals();
-//		$this->_response = new HttpResponse();
+		// Handle 404 here gracefully using $response object
+		if($matchedRoute === false) {
+			die('404');
+		}
 		
-//		$uri = $this->_request->getPathInfo();
+		$this->_matchedRoute = $matchedRoute;
 		
-		return $this; // Fluent Interface
+		// Fluent Interface
+		return $this;
+	}
+	
+	function dispatch() {
+		
+		// Lets dispatch our controller 
+		list($module, $controller, $action) = explode(':', $this->_matchedRoute['_controller'], 3);
+		
+		$className = "\\$module\\Controller\\$controller";
+		$class = new \User\Controller\Manage();
+		
+		var_dump($class); exit;
+		var_dump($module, $controller, $action);
+		
 	}
 
 	/**
