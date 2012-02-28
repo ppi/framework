@@ -34,14 +34,11 @@ class Disk implements \PPI\Cache\CacheInterface {
 	/**
 	 * Remove a key from the cache
 	 * @param string $key The Key
-	 * @param bool $exists flag if we know of the existence
 	 * @return boolean
 	 */
-	public function remove($key, $exists = false) {
-
+	public function remove($key) {
 		$path = $this->getKeyCachePath($key);
-
-		if ($exists || $this->exists($path)) {
+		if ($this->exists($path)) {
 			unlink($path);
 			unlink($this->getKeyMetaCachePath($key));
 			return true;
