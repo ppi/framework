@@ -73,7 +73,6 @@ class Disk implements \PPI\Cache\CacheInterface {
 	 */
 	public function exists($key) {
 		$path = $this->getKeyCachePath($key);
-		var_dump(__FUNCTION__, file_exists($path), $path); exit;
 		if(false === file_exists($path)) {
 			return false;
 		}
