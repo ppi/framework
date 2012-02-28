@@ -37,13 +37,10 @@ class Disk implements \PPI\Cache\CacheInterface {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		if ($this->exists($key)) {
-			$path = $this->getKeyCachePath($key);
+		if(file_exists( ($path = $this->getKeyCachePath($key)) )) {
 			unlink($path);
 			unlink($this->getKeyMetaCachePath($key));
-			return true;
 		}
-		return false;
 	}
 
 	/**
@@ -52,7 +49,6 @@ class Disk implements \PPI\Cache\CacheInterface {
 	 * @return string
 	 */
 	protected function getKeyCachePath($key) {
-		// @TODO robert: add leveled key paths to avoid slow disk seeks
 		return $this->_cacheDir . 'default--' . $key;
 	}
 
