@@ -37,8 +37,8 @@ class Disk implements \PPI\Cache\CacheInterface {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		$path = $this->getKeyCachePath($key);
-		if ($this->exists($path)) {
+		if ($this->exists($key)) {
+			$path = $this->getKeyCachePath($key);
 			unlink($path);
 			unlink($this->getKeyMetaCachePath($key));
 			return true;
@@ -73,6 +73,7 @@ class Disk implements \PPI\Cache\CacheInterface {
 	 */
 	public function exists($key) {
 		$path = $this->getKeyCachePath($key);
+		var_dump(__FUNCTION__, file_exists($path), $path); exit;
 		if(false === file_exists($path)) {
 			return false;
 		}
