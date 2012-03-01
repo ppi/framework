@@ -269,8 +269,6 @@ class App {
 		$router->init();
 		$uri = $router->getMatchedRoute();
 		
-		var_dump($_GET); exit;
-		
 		// If we've no URI, dispatch the default route.
 		if($uri === '') {
 			$this->_envOptions['dispatcher']->setUri($router->getDefaultRoute());
