@@ -3,26 +3,61 @@ namespace PPI\Module;
 
 class Controller {
 	
+	/**
+	 * The controller's request object
+	 * 
+	 * @var null
+	 */
 	protected $_request = null;
 	
+	/**
+	 * The controllers' response object
+	 * 
+	 * @var null
+	 */
 	protected $_response = null;
 	
-	function setRequest($request) {
-		$this->_request = $request;
-		return $this;
-	}
+	/**
+	 * Service Locator
+	 * 
+	 * @var null|object
+	 */
+	protected $_serviceLocator = null;
 	
-	function setResponse($response) {
-		$this->_response = $response;
-		return $this;
-	}
-	
+	/**
+	 * Get the request object
+	 * 
+	 * @return null
+	 */
 	function getRequest() {
-		return $this->_request;
+		return $this->_serviceLocator->get('request');
 	}
 	
+	/**
+	 * Get thre response object
+	 * 
+	 * @return null
+	 */
 	function getResponse() {
-		return $this->_response;
+		return $this->_serviceLocator->get('response');
+	}
+	
+	/**
+	 * Set the service locator
+	 * 
+	 * @param object $locator
+	 */
+	function setServiceLocator($locator) {
+		$this->_serviceLocator = $locator;
+	}
+	
+	/**
+	 * Get service locator
+	 * 
+	 * @return object
+	 */
+	function getServiceLocator() {
+		return $this->_serviceLocator;
 	}
 	
 }
