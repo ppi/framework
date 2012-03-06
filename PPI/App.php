@@ -17,7 +17,10 @@ use PPI\Core\CoreException,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
 	Symfony\Component\Routing\Exception\ResourceNotFoundException,
-	Zend\Module\Listener\ListenerOptions;
+	Zend\Module\Listener\ListenerOptions,
+	Symfony\Component\Templating\TemplateNameParser,
+	Symfony\Component\Templating\Loader\FilesystemLoader,
+	PPI\Module\ServiceLocator;
 
 class App {
 
@@ -76,7 +79,20 @@ class App {
 	 * @var null
 	 */
 	protected $_matchedModule = null;
+	
+	/**
+	 * Service Locator
+	 * 
+	 * @var null|\PPI\Module\ServiceLocator
+	 */
+	protected $_serviceLocator = null;
 
+	/**
+	 * Options for the app
+	 * 
+	 * @var array
+	 */
+	protected $_options = array();
 
 	/**
 	 * The constructor.
@@ -85,10 +101,12 @@ class App {
 	 */
 
 	function __construct(array $options = array()) {
+		
 		if(!empty($options)) {
 			foreach ($options as $key => $value) {
-				if (method_exists($this, ($sMethod = 'set' . ucfirst($key)))) {
-					$this->$sMethod($value);
+				$prop = '_' . $key;
+				if (property_exists($this, $prop)) {
+					$this->$prop = $value;
 				}
 			}
 		}
@@ -148,8 +166,8 @@ class App {
 	}
 
 	/**
-	 * Run the boot process, boot up our app. Call the relevant classes such as:
-	 * config, registry, session, dispatch, router.
+	 * Run the boot process, boot up our modules and their dependencies. 
+	 * Decide on a route for $this->dispatch() to use.
 	 *
 	 * @return $this Fluent interface
 	 */
@@ -159,9 +177,17 @@ class App {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
 		
+		
+		
 		// Core Objects
 		$this->_request  = HttpRequest::createFromGlobals();
 		$this->_response = new HttpResponse();
+
+		$defaultServices = array(
+			'request'           => $this->_request,
+			'response'          => $this->_response,
+			'templating.engine' => $this->getTemplatingEngine()
+		);
 
 		// Module Listeners
 		$listenerOptions  = new ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
@@ -171,10 +197,12 @@ class App {
 		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
-		$this->_moduleManager = $moduleManager;
-		$allRoutes = $defaultListeners->getRoutes();
 		
+		// Services
+		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListeners->getServices()));
+
 		// Routing preparation
+		$allRoutes       = $defaultListeners->getRoutes();
 		$matchedRoute    = false;
 		$requestContext  = new RequestContext();
 		$requestContext->fromRequest($this->_request);
@@ -182,23 +210,25 @@ class App {
 		// Check the routes from our modules
 		foreach($allRoutes as $moduleName => $moduleRoutes) {
 			try {
-				
+
 				$matcher = new UrlMatcher($moduleRoutes, $requestContext);
 				$matchedRoute = $matcher->match($this->_request->getPathInfo());
-				
-				$this->_matchedModule = $this->_moduleManager->getModule($moduleName);
+
+				$this->_matchedModule = $moduleManager->getModule($moduleName);
 				$this->_matchedModule->setModuleName($moduleName);
-				
+
 			} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
 		}
-		
-		// Handle 404 here gracefully using $response object
+
+		// @todo Handle 404 here gracefully using $response object
 		if($matchedRoute === false) {
 			die('404');
 		}
-		
+
 		// Set our valid route
 		$this->_matchedRoute = $matchedRoute;
+		
+		$moduleManager = $moduleManager;
 		
 		// Fluent Interface
 		return $this;
@@ -209,24 +239,75 @@ class App {
 	 */
 	function dispatch() {
 		
+		// Lets disect our route
 		list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
 		$actionName = $actionName . 'Action';
-		
-		$this->_matchedModule->setControllerName($controllerName);
-		$this->_matchedModule->setActionName($actionName);
 
-		$className   = "\\{$this->_matchedModule->getModuleName()}\\Controller\\$controllerName";
-		$controller  = new $className();
-		$controller->setRequest($this->_request)->setResponse($this->_response);
-
-		$result      = $this->_matchedModule->setController($controller)->dispatch();
-		$controller  = $this->_matchedModule->getController();
+		// Instantiate our chosen controller
+		$className  = "\\{$this->_matchedModule->getModuleName()}\\Controller\\$controllerName";
+		$controller = new $className();
 		
-		$this->_request   = $controller->getRequest();
-		$this->_response  = $controller->getResponse();
+		// Set Dependencies for our controller
+		$controller->setServiceLocator($this->_serviceLocator);
+		
+		// Prep our module for dispatch
+		$this->_matchedModule
+			->setControllerName($controllerName)
+			->setActionName($actionName)
+			->setController($controller);
+		
+		// Dispatch our action, return the content from the action called.
+		$result = $this->_matchedModule->dispatch();
+
+		$serviceLocator = $controller->getServiceLocator();
+		
+		// The controller manipulates the state of the Request and Response so after dispatch has occurred
+		// Then we obtain these back for further uses.
+		$controller      = $this->_matchedModule->getController();
+		$this->_request  = $serviceLocator->get('request');
+		$this->_response = $serviceLocator->get('response');
+		
+		// Send our content to the browser
 		$this->_response->setContent($result);
 		$this->_response->send();
 		
+	}
+	
+	function getTemplatingEngine() {
+		
+		$engineName = $this->getOption('templating.engine', 'php');
+		switch($engineName) {
+			case 'php':
+				$engineClass = 'Symfony\Component\Templating\PhpEngine';
+				break;
+			
+			default: // We expect the full class name here
+				$engineClass = $engineName;
+		}
+//		$engine = new \Symfony\Component\Templating\PhpEngine(new TemplateNameParser(), new FilesystemLoader(
+//			
+//		));
+	}
+	
+	/**
+	 * Get an option
+	 * 
+	 * @param $key
+	 * @param null $default
+	 * @return null
+	 */
+	function getOption($key, $default = null) {
+		return isset($this->_options[$key]) ? $this->_options[$key] : $default; 
+	}
+	
+	/**
+	 * Set the option
+	 * 
+	 * @param $key
+	 * @param $val
+	 */
+	function setOption($key, $val) {
+		$this->_options[$key] = $val;
 	}
 
 }

@@ -2,7 +2,7 @@
 namespace PPI\Module;
 use Symfony\Component\Routing\Loader\YamlFileLoader,
 	Symfony\Component\Config\FileLocator,
-	Symfony\Component\Yaml\Parser as YamlParser;
+	Symfony\Component\Yaml\Yaml as YamlParser;
 
 class Module {
 
@@ -71,9 +71,11 @@ class Module {
 	 * @return array
 	 */
 	function loadYamlConfig($path) {
+		
 		if($this->_config === null) {
 			$parser = new YamlParser();
-			$this->_config = $parser->parse($path);
+			$this->_config = $parser::parse($path);
+			
 		}
 		return $this->_config;
 	}
@@ -139,16 +141,17 @@ class Module {
 	
 	function setControllerName($controllerName) {
 		$this->_controllerName = $controllerName;
+		return $this;
 	}
 	
 	function setActionName($actionName) {
 		$this->_actionName = $actionName;
+		return $this;
 	}
 	
 	/**
 	 * Dispatch process
 	 * 
-	 * @param $action
 	 * @return mixed
 	 * @throws \Exception
 	 */
@@ -178,10 +181,11 @@ class Module {
 	 * Set the module name
 	 * 
 	 * @param string $moduleName
-	 * @return mixed
+	 * @return $this
 	 */
 	function setModuleName($moduleName) {
-		return $this->_moduleName = $moduleName;
+		$this->_moduleName = $moduleName;
+		return $this;
 	}
 	
 	/**
