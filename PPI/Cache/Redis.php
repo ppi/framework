@@ -80,9 +80,6 @@ class Redis implements CacheInterface {
 	 * @return boolean True on succes, False on failure.
 	 */
 	function set($key, $data, $ttl = null) {
-		if(null !== $ttl && is_string($data)) {
-			$ttl = strtotime($ttl);
-		}
 		return $this->_handler->set($key, $data, $ttl !== null ? $ttl : $this->_defaults['expiry']);
 	}
 
