@@ -255,7 +255,7 @@ class App {
 			->setControllerName($controllerName)
 			->setActionName($actionName)
 			->setController($controller);
-		
+
 		// Dispatch our action, return the content from the action called.
 		$result = $this->_matchedModule->dispatch();
 
