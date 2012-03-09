@@ -558,7 +558,7 @@ class Controller {
 	 * @param array $options
 	 * @return mixed
 	 */
-	public function render($template, array $params = array(), $options = array()) {
+	public function render($template, array $params = array(), array $options = array()) {
 
 		$core = array();
 
