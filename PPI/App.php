@@ -10,17 +10,26 @@
  */
 namespace PPI;
 use PPI\Core\CoreException,
+	
+	// Modules
 	Zend\Module\Manager as ModuleManager,
+	Zend\Module\Listener\ListenerOptions,
 	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
+	PPI\Module\ServiceLocator,
+	
+	// HTTP Stuff and routing
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
 	Symfony\Component\Routing\Exception\ResourceNotFoundException,
-	Zend\Module\Listener\ListenerOptions,
-	Symfony\Component\Templating\TemplateNameParser,
-	Symfony\Component\Templating\Loader\FilesystemLoader,
-	PPI\Module\ServiceLocator;
+	
+	// Templating
+	PPI\Module\Templating\FileSystemLoader,
+	PPI\Module\Templating\TemplateLocator,
+	PPI\Module\Templating\FileLocator,
+	PPI\Module\Templating\TemplateNameParser;
+	
 
 class App {
 
@@ -177,17 +186,11 @@ class App {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
 		
-		
-		
 		// Core Objects
 		$this->_request  = HttpRequest::createFromGlobals();
 		$this->_response = new HttpResponse();
 
-		$defaultServices = array(
-			'request'           => $this->_request,
-			'response'          => $this->_response,
-			'templating.engine' => $this->getTemplatingEngine()
-		);
+
 
 		// Module Listeners
 		$listenerOptions  = new ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
@@ -197,9 +200,6 @@ class App {
 		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
-		
-		// Services
-		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListeners->getServices()));
 
 		// Routing preparation
 		$allRoutes       = $defaultListeners->getRoutes();
@@ -228,7 +228,16 @@ class App {
 		// Set our valid route
 		$this->_matchedRoute = $matchedRoute;
 		
-		$moduleManager = $moduleManager;
+		$this->_moduleManager = $moduleManager;
+		
+		$defaultServices = array(
+			'request'        => $this->_request,
+			'response'       => $this->_response,
+			'templating'     => $this->getTemplatingEngine()
+		);
+		
+		// Services
+		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListeners->getServices()));
 		
 		// Fluent Interface
 		return $this;
@@ -274,19 +283,16 @@ class App {
 	}
 	
 	function getTemplatingEngine() {
-		
-		$engineName = $this->getOption('templating.engine', 'php');
-		switch($engineName) {
-			case 'php':
-				$engineClass = 'Symfony\Component\Templating\PhpEngine';
-				break;
-			
-			default: // We expect the full class name here
-				$engineClass = $engineName;
-		}
-//		$engine = new \Symfony\Component\Templating\PhpEngine(new TemplateNameParser(), new FilesystemLoader(
-//			
-//		));
+		return new \Symfony\Component\Templating\PhpEngine(
+			new TemplateNameParser(), new FileSystemLoader(
+				new TemplateLocator(
+					new FileLocator(array(
+						'modules'     => $this->_moduleManager->getModules(),
+						'modulesPath' => realpath($this->_envOptions['moduleConfig']['listenerOptions']['module_paths'][0])
+					))
+				)
+			)
+		);
 	}
 	
 	/**
