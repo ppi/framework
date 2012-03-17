@@ -60,4 +60,8 @@ class Controller {
 		return $this->_serviceLocator;
 	}
 	
+	protected function render($template, array $params = array(), array $options = array()) {
+		return $this->_serviceLocator->get('templating')->render($template, $params);
+	}
+	
 }
