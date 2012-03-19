@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PPI\Module\Templating;
 
 use Symfony\Component\Templating\Storage\FileStorage;
@@ -36,8 +35,7 @@ class FileSystemLoader implements LoaderInterface
     public function load(TemplateReferenceInterface $template)
     {
         try {
-            $file = $this->locator->locate($template);
-			
+			$file = $this->locator->locate($template);
         } catch (\InvalidArgumentException $e) {
             return false;
         }
