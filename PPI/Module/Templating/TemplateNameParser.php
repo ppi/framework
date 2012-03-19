@@ -55,17 +55,8 @@ class TemplateNameParser extends BaseTemplateNameParser {
         $engine = array_pop($elements);
         $format = array_pop($elements);
 		$module = $parts[0];
-
-        $template = new TemplateReference($module, $parts[1], implode('.', $elements), $format, $engine);
-
-		// @todo - check if a template name is valid
-//        if ($template->get('module')) {
-//            try {
-//                $this->kernel->getBundle($template->get('module'));
-//            } catch (\Exception $e) {
-//                throw new \InvalidArgumentException(sprintf('Template name "%s" is not valid.', $name), 0, $e);
-//            }
-//        }
+		$controller = $parts[1];
+        $template = new TemplateReference($module, $controller, implode('.', $elements), $format, $engine);
 
         return $this->cache[$name] = $template;
     }
