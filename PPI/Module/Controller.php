@@ -61,7 +61,17 @@ class Controller {
 	}
 	
 	protected function render($template, array $params = array(), array $options = array()) {
-		return $this->_serviceLocator->get('templating')->render($template, $params);
+		$renderer = $this->_serviceLocator->get('templating');
+		
+		// Helpers
+		if(isset($options['helpers'])) {
+			foreach($options['helpers'] as $helper) {
+				$renderer->addHelper($helper);
+			}
+		}
+		
+		$params['view'] = $renderer;
+		return $renderer->render($template, $params);
 	}
 	
 }

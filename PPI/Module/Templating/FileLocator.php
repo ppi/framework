@@ -23,10 +23,11 @@ class FileLocator extends BaseFileLocator
      */
     public function __construct(array $options = array(), $path = null, array $paths = array())
     {
-		$this->modules = $options['modules'];
+		$this->modules        = $options['modules'];
 		$this->baseModulePath = $options['modulesPath'];
-        $this->path = $path;
-        $paths[] = $path;
+		$this->appPath        = $options['appPath'];
+        $this->path           = $path;
+        $paths[]              = $path;
 
         parent::__construct($paths);
     }
@@ -47,19 +48,27 @@ class FileLocator extends BaseFileLocator
 
 			foreach($this->modules as $module) {
 				$modulePath = $this->baseModulePath.'/'.$module.'/';
-				if(file_exists($modulePath . $templatePath)) {
-					
+				$path = $modulePath . $templatePath;
+				if(file_exists($path)) {
 					if ($first) {
-						return $modulePath . $templatePath;
+						return $path;
 					}
-					$files[] = $modulePath . $templatePath;
+					$files[] = $path;
 				}
 			}
 			
-			throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
 			
-        }
+			
+        } else {
+			
+			$path = $this->appPath . '/' . $file;
+			if(file_exists($path)) {
+				return $path;
+			}
+			
+			throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
+		}
 
-        return parent::locate($file, $currentPath, $first);
+//        return parent::locate($file, $currentPath, $first);
     }
 }

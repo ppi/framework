@@ -29,7 +29,6 @@ use PPI\Core\CoreException,
 	PPI\Module\Templating\TemplateLocator,
 	PPI\Module\Templating\FileLocator,
 	PPI\Module\Templating\TemplateNameParser;
-	
 
 class App {
 
@@ -284,14 +283,19 @@ class App {
 	
 	function getTemplatingEngine() {
 		return new \Symfony\Component\Templating\PhpEngine(
-			new TemplateNameParser(), new FileSystemLoader(
+			new TemplateNameParser(), 
+			new FileSystemLoader(
 				new TemplateLocator(
 					new FileLocator(array(
 						'modules'     => $this->_moduleManager->getModules(),
-						'modulesPath' => realpath($this->_envOptions['moduleConfig']['listenerOptions']['module_paths'][0])
+						'modulesPath' => realpath($this->_envOptions['moduleConfig']['listenerOptions']['module_paths'][0]),
+						'appPath'     => getcwd() . '/app'
 					))
 				)
+			), array(
+				new \Symfony\Component\Templating\Helper\SlotsHelper()
 			)
+			
 		);
 	}
 	
