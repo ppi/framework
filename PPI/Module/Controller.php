@@ -13,6 +13,13 @@ class Controller {
 	protected $_serviceLocator = null;
 	
 	/**
+	 * Caching the results of results from $this->is() lookups.
+	 * 
+	 * @var array
+	 */
+	protected $_isCache = array();
+	
+	/**
 	 * Get the request object
 	 * 
 	 * @return object
@@ -71,9 +78,42 @@ class Controller {
 	/**
 	 * Check if a condition 'is' true.
 	 * 
-	 * @param $key
+	 * @param string $key
+	 * @return boolean
+	 * @throws InvalidArgumentException
 	 */
 	function is($key) {
+
+		switch($key = strtolower($key)) {
+			
+			case 'ajax':
+				if(!isset($this->_isCache['ajax'])) {
+					return $this->_isCache['ajax'] = $this->getService('request')->isXmlHttpRequest();
+				}
+				return $this->_isCache['ajax'];
+			
+			case 'put':
+			case 'delete':
+			case 'post':
+			case 'patch':
+				if(!isset($this->_isCache['requestMethod'][$key])) {
+					$this->_isCache['requestMethod'][$key] = $this->getService('request')->getMethod() === strtoupper($key);
+				}
+				return $this->_isCache['requestMethod'][$key];
+			
+			case 'ssl':
+			case 'https':
+			case 'secure':
+				if(!isset($this->_isCache['secure'])) {
+					$this->_isCache['secure'] = $this->getService('request')->isSecure();
+				}
+				return $this->_isCache['secure'];
+				
+			
+			default:
+				throw new \InvalidArgumentException("Invalid 'is' key supplied: {$key}");
+			
+		}
 		
 	}
 	
@@ -146,6 +186,10 @@ class Controller {
 	 */
 	protected function redirect($url, $statusCode = 302) {
 		$this->getServiceLocator()->set('response', new RedirectResponse($url, $statusCode));
+	}
+	
+	protected function getSession() {
+		return $this->getService('session');
 	}
 	
 	/**
