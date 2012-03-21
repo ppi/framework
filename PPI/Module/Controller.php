@@ -234,6 +234,12 @@ class Controller {
 		return $this->_serviceLocator;
 	}
 	
+	/**
+	 * Get a registered service
+	 * 
+	 * @param string $service
+	 * @return mixed
+	 */
 	function getService($service) {
 		return $this->getServiceLocator()->get($service);
 	}
@@ -282,6 +288,11 @@ class Controller {
 		$this->getServiceLocator()->set('response', new RedirectResponse($url, $statusCode));
 	}
 	
+	/**
+	 * Get the session object
+	 * 
+	 * @return mixed
+	 */
 	protected function getSession() {
 		return $this->getService('session');
 	}
