@@ -38,31 +38,63 @@ class Controller {
 	}
 	
 	/**
-	 * Get a query string value
-	 * 
-	 * @param string $key
+	 * Returns a server parameter by name.
+	 *
+	 * @param string  $key      The key
+	 * @param mixed   $default  The default value if the parameter key does not exist
+	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
+	 * @return string
 	 */
-	function queryString($key) {
-		
+	function server($key, $default = null, $deep = false) {
+		return $this->getServer()->get($key, $default, $deep);
 	}
 	
 	/**
-	 * Get a post value
-	 * 
-	 * @param string $key
+	 * Returns a post parameter by name.
+	 *
+	 * @param string  $key      The key
+	 * @param mixed   $default  The default value if the parameter key does not exist
+	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
+	 * @return string
 	 */
-	function post($key) {
-		
+	function post($key, $default = null, $deep = false) {
+		return $this->getPost()->get($key, $default, $deep);
 	}
 	
 	/**
-	 * Get a server value
-	 * 
-	 * @param string $key
-	 * @return void
+	 * Returns a files parameter by name.
+	 *
+	 * @param string  $key      The key
+	 * @param mixed   $default  The default value if the parameter key does not exist
+	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
+	 * @return string
 	 */
-	function server($key) {
-		
+	function files($key, $default = null, $deep = false) {
+		return $this->getFiles()->get($key, $default, $deep);
+	}
+	
+	/**
+	 * Returns a query string parameter by name.
+	 *
+	 * @param string  $key      The key
+	 * @param mixed   $default  The default value if the parameter key does not exist
+	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
+	 * @return string
+	 */
+	function queryString($key, $default = null, $deep = false) {
+		return $this->getQueryString()->get($key, $default, $deep);
+	}
+	
+	/**
+	 * Returns a server parameter by name.
+	 *
+	 * @param string  $key      The key
+	 * @param mixed   $default  The default value if the parameter key does not exist
+	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
+	 * @return string
+	 */
+	function cookie($key, $default = null, $deep = false) {
+		return $this->getCookie()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -70,11 +102,57 @@ class Controller {
 	 * 
 	 * @param string $key
 	 * @param null|mixed $val If this is not null, it enters setter mode
+	 * @todo TBC, this doesn't work yet.
 	 */
 	function session($key, $val = null) {
 		$session = $this->_serviceLocator->get('request')->getSession();
 	}
 	
+	/**
+	 * Shortcut for getting the server object
+	 * 
+	 * @return object
+	 */
+	function getServer() {
+		return $this->getService('request')->server;
+	}
+	
+	/**
+	 * Shortcut for getting the files object
+	 * 
+	 * @return object
+	 */
+	function getFiles() {
+		return $this->getService('request')->files;
+	}
+	
+	/**
+	 * Shortcut for getting the cookie object
+	 * 
+	 * @return object
+	 */
+	function getCookie() {
+		return $this->getService('request')->cookies;
+	}
+	
+	/**
+	 * Shortcut for getting the query string object
+	 * 
+	 * @return object
+	 */
+	function getQueryString() {
+		return $this->getService('request')->query;
+	}
+	
+	/**
+	 * Shortcut for getting the post object
+	 * 
+	 * @return object
+	 */
+	function getPost() {
+		return $this->getService('request')->request;
+	}
+		
 	/**
 	 * Check if a condition 'is' true.
 	 * 
