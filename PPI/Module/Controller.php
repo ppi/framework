@@ -101,11 +101,11 @@ class Controller {
 	 * Get/Set a session value
 	 * 
 	 * @param string $key
-	 * @param null|mixed $val If this is not null, it enters setter mode
+	 * @param null|mixed $default If this is not null, it enters setter mode
 	 * @todo TBC, this doesn't work yet.
 	 */
-	function session($key, $val = null) {
-		$session = $this->_serviceLocator->get('request')->getSession();
+	function session($key, $default = null) {
+		return $this->getSession()->get($key, $default);
 	}
 	
 	/**
@@ -151,6 +151,15 @@ class Controller {
 	 */
 	function getPost() {
 		return $this->getService('request')->request;
+	}
+	
+	/**
+	 * Shortcut for getting the session object
+	 * 
+	 * @return mixed
+	 */
+	protected function getSession() {
+		return $this->getService('session');
 	}
 		
 	/**
@@ -248,8 +257,8 @@ class Controller {
 	 * Render a template
 	 * 
 	 * @param string $template The template to render
-	 * @param array $params The params to pass to the renderer
-	 * @param array $options Extra options
+	 * @param array $params    The params to pass to the renderer
+	 * @param array $options   Extra options
 	 * @return string
 	 */
 	protected function render($template, array $params = array(), array $options = array()) {
@@ -270,8 +279,8 @@ class Controller {
 	/**
 	 * Set Flash Message
 	 * 
-	 * @param string $flashType
-	 * @param string $message
+	 * @param string $flashType The flash type
+	 * @param string $message The flash message
 	 */
 	protected function setFlash($flashType, $message) {
 		$this->getSession()->setFlash($flashType, $message);
@@ -286,15 +295,6 @@ class Controller {
 	 */
 	protected function redirect($url, $statusCode = 302) {
 		$this->getServiceLocator()->set('response', new RedirectResponse($url, $statusCode));
-	}
-	
-	/**
-	 * Get the session object
-	 * 
-	 * @return mixed
-	 */
-	protected function getSession() {
-		return $this->getService('session');
 	}
 	
 	/**
