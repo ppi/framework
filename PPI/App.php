@@ -22,6 +22,8 @@ use PPI\Core\CoreException,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
+	Symfony\Component\Routing\Generator\UrlGenerator,
+	Symfony\Component\Routing\RouteCollection,
 	Symfony\Component\Routing\Exception\ResourceNotFoundException,
 	
 	// Templating
@@ -142,38 +144,6 @@ class App {
 	}
 
 	/**
-	 * Magic setter function, this is an alias of setEnv()
-	 *
-	 * @param string $option The Option
-	 * @param string $value The Value
-	 * @return void
-	 */
-	function __set($option, $value) {
-		$this->setEnv(array($option => $value));
-	}
-
-	/**
-	 * Obtain the value of an environment option
-	 *
-	 * @param string $key The Environment Option
-	 * @param mixed $default The default value to return if the key is not found
-	 * @return mixed If your key is not found, then NULL is returned
-	 */
-	function getEnv($key, $default = null) {
-		return isset($this->_envOptions[$key]) ? $this->_envOptions[$key] : $default;
-	}
-
-	/**
-	 * Magic getter function, this is an alias of getEnv()
-	 *
-	 * @param string $option The Option
-	 * @return mixed
-	 */
-	function __get($option) {
-		return $this->getEnv($option);
-	}
-
-	/**
 	 * Run the boot process, boot up our modules and their dependencies. 
 	 * Decide on a route for $this->dispatch() to use.
 	 *
@@ -189,8 +159,6 @@ class App {
 		$this->_request  = HttpRequest::createFromGlobals();
 		$this->_response = new HttpResponse();
 
-
-
 		// Module Listeners
 		$listenerOptions  = new ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
 		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
@@ -201,23 +169,27 @@ class App {
 		$moduleManager->loadModules();
 
 		// Routing preparation
-		$allRoutes       = $defaultListeners->getRoutes();
-		$matchedRoute    = false;
-		$requestContext  = new RequestContext();
+		$allRoutes         = $defaultListeners->getRoutes();
+		$matchedRoute      = false;
+		$requestContext    = new RequestContext();
+		$pathInfo          = $this->_request->getPathInfo();
+		$globalRoutes      = new RouteCollection();
+		$router            = 
 		$requestContext->fromRequest($this->_request);
-
-		// Check the routes from our modules
-		foreach($allRoutes as $moduleName => $moduleRoutes) {
-			try {
-
-				$matcher = new UrlMatcher($moduleRoutes, $requestContext);
-				$matchedRoute = $matcher->match($this->_request->getPathInfo());
-
-				$this->_matchedModule = $moduleManager->getModule($moduleName);
-				$this->_matchedModule->setModuleName($moduleName);
-
-			} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
+		
+		// Make a route collection, merging all the other route collections from the modules
+		foreach($allRoutes as $routes) {
+			$globalRoutes->addCollection($routes);
 		}
+		
+		try {
+			$matcher              = new UrlMatcher($globalRoutes, $requestContext);
+			$matchedRoute         = $matcher->match($pathInfo);
+			$moduleName           = $matchedRoute['_module'];
+			$this->_matchedModule = $moduleManager->getModule($moduleName);
+			$this->_matchedModule->setModuleName($moduleName);
+
+		} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
 
 		// @todo Handle 404 here gracefully using $response object
 		if($matchedRoute === false) {
@@ -226,13 +198,13 @@ class App {
 
 		// Set our valid route
 		$this->_matchedRoute = $matchedRoute;
-		
 		$this->_moduleManager = $moduleManager;
 		
 		$defaultServices = array(
-			'request'        => $this->_request,
-			'response'       => $this->_response,
-			'templating'     => $this->getTemplatingEngine()
+			'request'       => $this->_request,
+			'response'      => $this->_response,
+			'templating'    => $this->getTemplatingEngine(),
+			'url.generator' => new UrlGenerator($globalRoutes, $requestContext) 
 		);
 		
 		// Services
@@ -318,6 +290,38 @@ class App {
 	 */
 	function setOption($key, $val) {
 		$this->_options[$key] = $val;
+	}
+
+	/**
+	 * Magic setter function, this is an alias of setEnv()
+	 *
+	 * @param string $option The Option
+	 * @param string $value The Value
+	 * @return void
+	 */
+	function __set($option, $value) {
+		$this->setEnv(array($option => $value));
+	}
+	
+	/**
+	 * Obtain the value of an environment option
+	 *
+	 * @param string $key The Environment Option
+	 * @param mixed $default The default value to return if the key is not found
+	 * @return mixed If your key is not found, then NULL is returned
+	 */
+	function getEnv($key, $default = null) {
+		return isset($this->_envOptions[$key]) ? $this->_envOptions[$key] : $default;
+	}
+	
+	/**
+	 * Magic getter function, this is an alias of getEnv()
+	 *
+	 * @param string $option The Option
+	 * @return mixed
+	 */
+	function __get($option) {
+		return $this->getEnv($option);
 	}
 
 }

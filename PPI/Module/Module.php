@@ -1,6 +1,7 @@
 <?php
 namespace PPI\Module;
-use Symfony\Component\Routing\Loader\YamlFileLoader,
+
+use PPI\Module\Routing\Loader\YamlFileLoader,
 	Symfony\Component\Config\FileLocator,
 	Symfony\Component\Yaml\Yaml as YamlParser;
 
@@ -57,8 +58,10 @@ class Module {
 		
 		if($this->_routes === null) {
 			$loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
+			$loader->setDefaults(array('_module' => $this->getModuleName()));
+			
 			$routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
-			return $routesCollection;
+			$this->_routes = $routesCollection;
 		}
 		return $this->_routes;
 
