@@ -195,8 +195,24 @@ class Controller {
 		
 	}
 	
-	function getRemote($key) {
-		
+	/**
+	 * Get the remote users ip address
+	 * 
+	 * @param mixed $default
+	 * @return string
+	 */
+	function getIP($default = null) {
+		return $this->server('REMOTE_ADDR');
+	}
+	
+	/**
+	 * Get the remote users user agent
+	 * 
+	 * @param mixed $default
+	 * @return string
+	 */
+	function getUserAgent($default = null) {
+		return $this->server('HTTP_USER_AGENT');
 	}
 	
 	/**
