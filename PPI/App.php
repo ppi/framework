@@ -17,20 +17,22 @@ use PPI\Core\CoreException,
 	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 	PPI\Module\ServiceLocator,
 	
+	// Templating
+	PPI\Module\Templating\FileSystemLoader,
+	PPI\Module\Templating\TemplateLocator,
+	PPI\Module\Templating\FileLocator,
+	PPI\Module\Templating\TemplateNameParser,
+	
 	// HTTP Stuff and routing
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
-	Symfony\Component\Routing\Generator\UrlGenerator,
 	Symfony\Component\Routing\RouteCollection,
-	Symfony\Component\Routing\Exception\ResourceNotFoundException,
-	
-	// Templating
-	PPI\Module\Templating\FileSystemLoader,
-	PPI\Module\Templating\TemplateLocator,
-	PPI\Module\Templating\FileLocator,
-	PPI\Module\Templating\TemplateNameParser;
+	Symfony\Component\Routing\Generator\UrlGenerator,
+	Symfony\Component\HttpFoundation\Session\Session,
+	Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage,
+	Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class App {
 
@@ -174,7 +176,6 @@ class App {
 		$requestContext    = new RequestContext();
 		$pathInfo          = $this->_request->getPathInfo();
 		$globalRoutes      = new RouteCollection();
-		$router            = 
 		$requestContext->fromRequest($this->_request);
 		
 		// Make a route collection, merging all the other route collections from the modules
@@ -204,7 +205,8 @@ class App {
 			'request'       => $this->_request,
 			'response'      => $this->_response,
 			'templating'    => $this->getTemplatingEngine(),
-			'url.generator' => new UrlGenerator($globalRoutes, $requestContext) 
+			'url.generator' => new UrlGenerator($globalRoutes, $requestContext),
+			'session'       => $this->getSession()
 		);
 		
 		// Services
@@ -253,7 +255,7 @@ class App {
 		
 	}
 	
-	function getTemplatingEngine() {
+	protected function getTemplatingEngine() {
 		return new \Symfony\Component\Templating\PhpEngine(
 			new TemplateNameParser(), 
 			new FileSystemLoader(
@@ -269,6 +271,17 @@ class App {
 			)
 			
 		);
+	}
+	
+	/**
+	 * Get the session class
+	 * 
+	 * @return \Symfony\Component\HttpFoundation\Session\Session
+	 */
+	protected function getSession() {
+		$session = new Session(new NativeFileSessionStorage());
+		$session->start();
+		return $session;
 	}
 	
 	/**
