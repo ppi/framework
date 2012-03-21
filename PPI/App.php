@@ -30,8 +30,6 @@ use PPI\Core\CoreException,
 	Symfony\Component\Routing\Matcher\UrlMatcher,
 	Symfony\Component\Routing\RouteCollection,
 	Symfony\Component\Routing\Generator\UrlGenerator,
-	Symfony\Component\HttpFoundation\Session\Session,
-	Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage,
 	Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class App {
@@ -57,6 +55,23 @@ class App {
 		'request'           => null,
 		'modules'           => array()
 	);
+	
+	/**
+	 * Options for the app
+	 * 
+	 * @var array
+	 */
+	protected $_options = array(
+		'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
+		'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage'
+	);
+	
+	/**
+	 * The session object
+	 * 
+	 * @var null
+	 */
+	public  $session = null;
 	
 	/**
 	 * @var null|array
@@ -100,13 +115,6 @@ class App {
 	protected $_serviceLocator = null;
 
 	/**
-	 * Options for the app
-	 * 
-	 * @var array
-	 */
-	protected $_options = array();
-
-	/**
 	 * The constructor.
 	 * 
 	 * @param array $options
@@ -127,7 +135,7 @@ class App {
 	/**
 	 * Setter for the environment, passing in options determining how the app will behave
 	 *
-	 * @param array $p_aOptions The options
+	 * @param array $options The options
 	 * @return void
 	 */
 	function setEnv(array $options) {
@@ -153,7 +161,7 @@ class App {
 	 */
 	function boot() {
 
-		if(empty($this->_envOptions['moduleConfig']['listenerOptions'])) {
+		if(empty($this->_options['moduleConfig']['listenerOptions'])) {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
 		
@@ -162,11 +170,11 @@ class App {
 		$this->_response = new HttpResponse();
 
 		// Module Listeners
-		$listenerOptions  = new ListenerOptions($this->_envOptions['moduleConfig']['listenerOptions']);
+		$listenerOptions  = new ListenerOptions($this->_options['moduleConfig']['listenerOptions']);
 		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
 		
 		// Loading our Modules
-		$moduleManager = new ModuleManager($this->_envOptions['moduleConfig']['activeModules']);
+		$moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
 
@@ -178,7 +186,7 @@ class App {
 		$globalRoutes      = new RouteCollection();
 		$requestContext->fromRequest($this->_request);
 		
-		// Make a route collection, merging all the other route collections from the modules
+		// Make a route collection, merging all the other route collections together from the modules
 		foreach($allRoutes as $routes) {
 			$globalRoutes->addCollection($routes);
 		}
@@ -198,7 +206,7 @@ class App {
 		}
 
 		// Set our valid route
-		$this->_matchedRoute = $matchedRoute;
+		$this->_matchedRoute  = $matchedRoute;
 		$this->_moduleManager = $moduleManager;
 		
 		$defaultServices = array(
@@ -262,7 +270,7 @@ class App {
 				new TemplateLocator(
 					new FileLocator(array(
 						'modules'     => $this->_moduleManager->getModules(),
-						'modulesPath' => realpath($this->_envOptions['moduleConfig']['listenerOptions']['module_paths'][0]),
+						'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
 						'appPath'     => getcwd() . '/app'
 					))
 				)
@@ -279,8 +287,12 @@ class App {
 	 * @return \Symfony\Component\HttpFoundation\Session\Session
 	 */
 	protected function getSession() {
-		$session = new Session(new NativeFileSessionStorage());
-		$session->start();
+		
+		if($this->session === null) {
+			$session = new $this->_options['sessionclass'](new $this->_options['sessionstorageclass']());
+			$session->start();
+			$this->session = $session;
+		}
 		return $session;
 	}
 	
@@ -313,7 +325,7 @@ class App {
 	 * @return void
 	 */
 	function __set($option, $value) {
-		$this->setEnv(array($option => $value));
+		$this->_options[$option] = $value;
 	}
 	
 	/**
@@ -334,7 +346,7 @@ class App {
 	 * @return mixed
 	 */
 	function __get($option) {
-		return $this->getEnv($option);
+		return isset($this->_options[$option]) ? $this->_options[$option] : null;
 	}
 
 }
