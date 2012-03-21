@@ -78,7 +78,6 @@ class Module {
 		if($this->_config === null) {
 			$parser = new YamlParser();
 			$this->_config = $parser::parse($path);
-			
 		}
 		return $this->_config;
 	}
