@@ -5,6 +5,11 @@ namespace PPI\Templating;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
+
+/**
+ * 
+ * @author Fabien Potencier <fabien@symfony.com>
+ */
 class TemplateLocator implements FileLocatorInterface
 {
     protected $locator;

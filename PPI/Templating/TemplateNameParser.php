@@ -16,7 +16,10 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
  * TemplateNameParser converts template names from the short notation
  * "module:template.format.engine" to TemplateReferenceInterface instances.
  *
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author Paul Dragoonis <paul@ppi.io>
  */
+
 class TemplateNameParser extends BaseTemplateNameParser {
 
 	protected $_cache = array();
