@@ -58,6 +58,17 @@ class Autoload {
 	}
 	
 	/**
+	 * Add a library prefix to the autoloader, eg: 'Twig_', or 'Swift_'
+	 * 
+	 * @static
+	 * @param $prefix
+	 * @param $path
+	 */
+	public static function addPrefix($prefix, $path) {
+		self::$_options['loader']->registerPrefix($prefix, $path);
+	}
+	
+	/**
 	 * Register the autoloader namespaces or prefixes thus far.
 	 * 
 	 * @static
