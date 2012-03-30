@@ -268,6 +268,14 @@ class App {
 	
 	protected function getTemplatingEngine() {
 		
+		$fileLocator = new FileLocator(array(
+			'modules'     => $this->_moduleManager->getModules(),
+			'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
+			'appPath'     => getcwd() . '/app'
+		));
+		
+		$templateLocator = new TemplateLocator($fileLocator);
+		
 		switch($this->getOption('templatingEngine')) {
 			
 			case 'twig':
@@ -277,48 +285,23 @@ class App {
 				return new \PPI\Templating\Twig\TwigEngine(
 					new \Twig_Environment(
 						new TwigFileSystemLoader(
-							new TemplateLocator(
-								new FileLocator(array(
-									'modules'     => $this->_moduleManager->getModules(),
-									'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-									'appPath'     => getcwd() . '/app'
-								))
-							),
+							$templateLocator,
 							new TemplateNameParser()
 						)
 					),
 					new TemplateNameParser(),
-					new TemplateLocator(
-						new FileLocator(array(
-							'modules'     => $this->_moduleManager->getModules(),
-							'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-							'appPath'     => getcwd() . '/app'
-						))
-					)
+					$templateLocator
 				);
 				
-				break;
-			
 			case 'php':
 			default:
 			
 				return new \Symfony\Component\Templating\PhpEngine(
 					new TemplateNameParser(), 
-					new FileSystemLoader(
-						new TemplateLocator(
-							new FileLocator(array(
-								'modules'     => $this->_moduleManager->getModules(),
-								'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-								'appPath'     => getcwd() . '/app'
-							))
-						)
-					), array(
+					new FileSystemLoader($templateLocator), array(
 						new \Symfony\Component\Templating\Helper\SlotsHelper()
 					)
-					
 				);
-			
-				break;
 			
 		}
 		
