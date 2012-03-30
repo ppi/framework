@@ -6,7 +6,9 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
 
 /**
  * FileLocator uses the KernelInterface to locate resources in bundles.
- *
+ * 
+ * @author Fabien Potencier <fabien@symfony.com>
+ * @author Paul Dragoonis <paul@ppi.io>
  */
 class FileLocator extends BaseFileLocator
 {
