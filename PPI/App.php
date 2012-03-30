@@ -9,7 +9,7 @@
  * @link      http://www.ppi.io
  */
 namespace PPI;
-use PPI\Core\CoreException,
+use
 	
 	// Modules
 	Zend\Module\Manager as ModuleManager,
@@ -18,10 +18,12 @@ use PPI\Core\CoreException,
 	PPI\Module\ServiceLocator,
 	
 	// Templating
-	PPI\Module\Templating\FileSystemLoader,
-	PPI\Module\Templating\TemplateLocator,
-	PPI\Module\Templating\FileLocator,
-	PPI\Module\Templating\TemplateNameParser,
+	PPI\Templating\Php\FileSystemLoader,
+	PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
+	
+	PPI\Templating\TemplateLocator,
+	PPI\Templating\FileLocator,
+	PPI\Templating\TemplateNameParser,
 	
 	// HTTP Stuff and routing
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
@@ -62,6 +64,7 @@ class App {
 	 * @var array
 	 */
 	protected $_options = array(
+		'templatingEngine'    => 'php',
 		'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
 		'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage'
 	);
@@ -264,21 +267,62 @@ class App {
 	}
 	
 	protected function getTemplatingEngine() {
-		return new \Symfony\Component\Templating\PhpEngine(
-			new TemplateNameParser(), 
-			new FileSystemLoader(
-				new TemplateLocator(
-					new FileLocator(array(
-						'modules'     => $this->_moduleManager->getModules(),
-						'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-						'appPath'     => getcwd() . '/app'
-					))
-				)
-			), array(
-				new \Symfony\Component\Templating\Helper\SlotsHelper()
-			)
+		
+		switch($this->getOption('templatingEngine')) {
 			
-		);
+			case 'twig':
+				
+				Autoload::addPrefix('Twig_', PPI_VENDOR_PATH);
+				
+				return new \PPI\Templating\Twig\TwigEngine(
+					new \Twig_Environment(
+						new TwigFileSystemLoader(
+							new TemplateLocator(
+								new FileLocator(array(
+									'modules'     => $this->_moduleManager->getModules(),
+									'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
+									'appPath'     => getcwd() . '/app'
+								))
+							),
+							new TemplateNameParser()
+						)
+					),
+					new TemplateNameParser(),
+					new TemplateLocator(
+						new FileLocator(array(
+							'modules'     => $this->_moduleManager->getModules(),
+							'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
+							'appPath'     => getcwd() . '/app'
+						))
+					)
+				);
+				
+				break;
+			
+			case 'php':
+			default:
+			
+				return new \Symfony\Component\Templating\PhpEngine(
+					new TemplateNameParser(), 
+					new FileSystemLoader(
+						new TemplateLocator(
+							new FileLocator(array(
+								'modules'     => $this->_moduleManager->getModules(),
+								'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
+								'appPath'     => getcwd() . '/app'
+							))
+						)
+					), array(
+						new \Symfony\Component\Templating\Helper\SlotsHelper()
+					)
+					
+				);
+			
+				break;
+			
+		}
+		
+
 	}
 	
 	/**
@@ -287,7 +331,6 @@ class App {
 	 * @return \Symfony\Component\HttpFoundation\Session\Session
 	 */
 	protected function getSession() {
-		
 		if($this->session === null) {
 			$session = new $this->_options['sessionclass'](new $this->_options['sessionstorageclass']());
 			$session->start();

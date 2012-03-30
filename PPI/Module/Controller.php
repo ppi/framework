@@ -24,7 +24,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getRequest() {
+	protected function getRequest() {
 		return $this->_serviceLocator->get('request');
 	}
 	
@@ -33,7 +33,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getResponse() {
+	protected function getResponse() {
 		return $this->_serviceLocator->get('response');
 	}
 	
@@ -45,7 +45,7 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	function server($key, $default = null, $deep = false) {
+	protected function server($key, $default = null, $deep = false) {
 		return $this->getServer()->get($key, $default, $deep);
 	}
 	
@@ -57,7 +57,7 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	function post($key, $default = null, $deep = false) {
+	protected function post($key, $default = null, $deep = false) {
 		return $this->getPost()->get($key, $default, $deep);
 	}
 	
@@ -69,7 +69,7 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	function files($key, $default = null, $deep = false) {
+	protected function files($key, $default = null, $deep = false) {
 		return $this->getFiles()->get($key, $default, $deep);
 	}
 	
@@ -81,7 +81,7 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	function queryString($key, $default = null, $deep = false) {
+	protected function queryString($key, $default = null, $deep = false) {
 		return $this->getQueryString()->get($key, $default, $deep);
 	}
 	
@@ -93,7 +93,7 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	function cookie($key, $default = null, $deep = false) {
+	protected function cookie($key, $default = null, $deep = false) {
 		return $this->getCookie()->get($key, $default, $deep);
 	}
 	
@@ -104,7 +104,7 @@ class Controller {
 	 * @param null|mixed $default If this is not null, it enters setter mode
 	 * @todo TBC, this doesn't work yet.
 	 */
-	function session($key, $default = null) {
+	protected function session($key, $default = null) {
 		return $this->getSession()->get($key, $default);
 	}
 	
@@ -113,7 +113,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getServer() {
+	protected function getServer() {
 		return $this->getService('request')->server;
 	}
 	
@@ -122,7 +122,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getFiles() {
+	protected function getFiles() {
 		return $this->getService('request')->files;
 	}
 	
@@ -131,7 +131,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getCookie() {
+	protected function getCookie() {
 		return $this->getService('request')->cookies;
 	}
 	
@@ -140,7 +140,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getQueryString() {
+	protected function getQueryString() {
 		return $this->getService('request')->query;
 	}
 	
@@ -149,7 +149,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getPost() {
+	protected function getPost() {
 		return $this->getService('request')->request;
 	}
 	
@@ -169,7 +169,7 @@ class Controller {
 	 * @return boolean
 	 * @throws InvalidArgumentException
 	 */
-	function is($key) {
+	protected function is($key) {
 
 		switch($key = strtolower($key)) {
 			
@@ -210,7 +210,7 @@ class Controller {
 	 * @param mixed $default
 	 * @return string
 	 */
-	function getIP($default = null) {
+	protected function getIP($default = null) {
 		return $this->server('REMOTE_ADDR');
 	}
 	
@@ -220,7 +220,7 @@ class Controller {
 	 * @param mixed $default
 	 * @return string
 	 */
-	function getUserAgent($default = null) {
+	protected function getUserAgent($default = null) {
 		return $this->server('HTTP_USER_AGENT');
 	}
 	
@@ -230,7 +230,7 @@ class Controller {
 	 * @param object $locator
 	 * @return void
 	 */
-	function setServiceLocator($locator) {
+	public function setServiceLocator($locator) {
 		$this->_serviceLocator = $locator;
 	}
 	
@@ -239,7 +239,7 @@ class Controller {
 	 * 
 	 * @return object
 	 */
-	function getServiceLocator() {
+	public function getServiceLocator() {
 		return $this->_serviceLocator;
 	}
 	
@@ -249,7 +249,7 @@ class Controller {
 	 * @param string $service
 	 * @return mixed
 	 */
-	function getService($service) {
+	protected function getService($service) {
 		return $this->getServiceLocator()->get($service);
 	}
 	
@@ -295,6 +295,17 @@ class Controller {
 	 */
 	protected function redirect($url, $statusCode = 302) {
 		$this->getServiceLocator()->set('response', new RedirectResponse($url, $statusCode));
+	}
+	
+	/**
+	 * Shortcut function for redirecting to a route without manually calling $this->generateUrl()
+	 * You just specify a route name and it goes there.
+	 * 
+	 * @param string $route
+	 * @return void
+	 */
+	protected function redirectToRoute($route) {
+		$this->redirect($this->getService('url.generator')->generate($route));
 	}
 	
 	/**
