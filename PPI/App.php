@@ -12,51 +12,31 @@ namespace PPI;
 use
 	
 	// Modules
-	Zend\Module\Manager as ModuleManager,
-	Zend\Module\Listener\ListenerOptions,
-	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 	PPI\Module\ServiceLocator,
+	Zend\Module\Listener\ListenerOptions,
+	Zend\Module\Manager as ModuleManager,
+	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 	
 	// Templating
+	PPI\Templating\FileLocator,
+	PPI\Templating\Twig\TwigEngine,
+	PPI\Templating\TemplateLocator,
+	PPI\Templating\TemplateNameParser,
+	PPI\Templating\Smarty\SmartyEngine,
 	PPI\Templating\Php\FileSystemLoader,
+	Symfony\Component\Templating\PhpEngine,
 	PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
 	
-	PPI\Templating\TemplateLocator,
-	PPI\Templating\FileLocator,
-	PPI\Templating\TemplateNameParser,
-	
 	// HTTP Stuff and routing
+	Symfony\Component\Routing\RequestContext,
+	Symfony\Component\Routing\RouteCollection,
+	Symfony\Component\Routing\Matcher\UrlMatcher,
+	Symfony\Component\Routing\Generator\UrlGenerator,
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
-	Symfony\Component\Routing\RequestContext,
-	Symfony\Component\Routing\Matcher\UrlMatcher,
-	Symfony\Component\Routing\RouteCollection,
-	Symfony\Component\Routing\Generator\UrlGenerator,
 	Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class App {
-
-	/**
-	 * The Environment Options for the PPI Application
-	 *
-	 * @var array
-	 */
-	protected $_envOptions = array(
-		'siteMode'          => 'development', // This determines how PPI handles things like exceptions
-		'configBlock'       => 'development', // The block in the config file to get the config data from
-		'configFile'        => 'general.ini', // The default filename for the config file
-		'configCachePath'   => '', // The path to the config cache
-		'cacheConfig'       => false, // Config object caching
-		'errorLevel'        => E_ALL, // The error level to throw via error_reporting()
-		'showErrors'        => 'On', // Whether to display errors or not. This gets fired into ini_set('display_errors')
-		'exceptionHandler'  => null, // Callback accepted by set_exception_handler()
-		'router'            => null,
-		'session'           => null,
-		'config'            => null,
-		'dispatcher'        => null,
-		'request'           => null,
-		'modules'           => array()
-	);
 	
 	/**
 	 * Options for the app
@@ -282,7 +262,7 @@ class App {
 				
 				Autoload::addPrefix('Twig_', PPI_VENDOR_PATH);
 				
-				return new \PPI\Templating\Twig\TwigEngine(
+				return new TwigEngine(
 					new \Twig_Environment(
 						new TwigFileSystemLoader(
 							$templateLocator,
@@ -292,11 +272,23 @@ class App {
 					new TemplateNameParser(),
 					$templateLocator
 				);
+			
+			case 'smarty':
+				
+				defined('SMARTY_DIR') || define('SMARTY_DIR', PPI_VENDOR_PATH . 'Smarty/');
+				$smartyDriver = new \PPI\Templating\Smarty\Smarty();
+				$engine = new SmartyEngine(
+					$smartyDriver,
+					new TemplateNameParser(),
+					new FileSystemLoader($templateLocator)
+				);
+				var_dump($engine); exit;
+				return $engine;
 				
 			case 'php':
 			default:
 			
-				return new \Symfony\Component\Templating\PhpEngine(
+				return new PhpEngine(
 					new TemplateNameParser(), 
 					new FileSystemLoader($templateLocator), array(
 						new \Symfony\Component\Templating\Helper\SlotsHelper()
@@ -344,7 +336,7 @@ class App {
 	}
 
 	/**
-	 * Magic setter function, this is an alias of setEnv()
+	 * Magic setter function, this is an alias of setOption
 	 *
 	 * @param string $option The Option
 	 * @param string $value The Value
