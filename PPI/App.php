@@ -223,6 +223,9 @@ class App {
 		// Set Dependencies for our controller
 		$controller->setServiceLocator($this->_serviceLocator);
 		
+		// Lets do setter injection on our controller
+		$controller->injectServices();
+		
 		// Prep our module for dispatch
 		$this->_matchedModule
 			->setControllerName($controllerName)
