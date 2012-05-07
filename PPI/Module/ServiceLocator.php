@@ -93,4 +93,13 @@ class ServiceLocator {
 		return isset($this->_services[$key]);
 	}
 	
+	/**
+	 * 	
+	 * 
+	 * @return array
+	 */
+	public function getKeys() {
+		return array_keys($this->_services);
+	}
+	
 }
