@@ -54,7 +54,7 @@ class App {
 	 * 
 	 * @var null
 	 */
-	public  $session = null;
+	public $session = null;
 	
 	/**
 	 * @var null|array
@@ -282,7 +282,6 @@ class App {
 					new TemplateNameParser(),
 					new FileSystemLoader($templateLocator)
 				);
-				var_dump($engine); exit;
 				return $engine;
 				
 			case 'php':
