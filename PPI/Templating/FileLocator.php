@@ -5,7 +5,7 @@ namespace PPI\Templating;
 use Symfony\Component\Config\FileLocator as BaseFileLocator;
 
 /**
- * FileLocator uses the KernelInterface to locate resources in bundles.
+ * FileLocator is used to locate template resources
  * 
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Paul Dragoonis <paul@ppi.io>
@@ -19,7 +19,7 @@ class FileLocator extends BaseFileLocator
     /**
      * Constructor.
      *
-     * @param KernelInterface $kernel A KernelInterface instance
+     * @param array           $options
      * @param string          $path   The path the global resource directory
      * @param string|array    $paths A path or an array of paths where to look for resources
      */
@@ -42,24 +42,13 @@ class FileLocator extends BaseFileLocator
 			   throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $file));
 		   }
 
-			$moduleName = substr($file, 1);
-			if (false !== strpos($moduleName, '/')) {
-				$path = '';
-			   list($moduleName, $templatePath) = explode('/', $moduleName, 2);
-		   }
-
-			foreach($this->modules as $module) {
-				$modulePath = $this->baseModulePath.'/'.$module.'/';
-				$path = $modulePath . $templatePath;
-				if(file_exists($path)) {
-					if ($first) {
-						return $path;
-					}
-					$files[] = $path;
+			$path = $this->baseModulePath . '/' . substr($file, 1);
+			if(file_exists($path)) {
+				if ($first) {
+					return $path;
 				}
+				$files[] = $path;
 			}
-			
-			
 			
         } else {
 			
@@ -71,6 +60,5 @@ class FileLocator extends BaseFileLocator
 			throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
 		}
 
-//        return parent::locate($file, $currentPath, $first);
     }
 }
