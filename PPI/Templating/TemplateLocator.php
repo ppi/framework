@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * The PPI Template Locator 
+ * 
+ *
+ * @package   Core
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @link      http://www.ppi.io
+ */
 namespace PPI\Templating;
 
 use Symfony\Component\Config\FileLocatorInterface;
@@ -56,6 +65,7 @@ class TemplateLocator implements FileLocatorInterface
      */
     public function locate($template, $currentPath = null, $first = true)
     {
+		
         if (!$template instanceof TemplateReferenceInterface) {
             throw new \InvalidArgumentException("The template must be an instance of TemplateReferenceInterface.");
         }
@@ -65,6 +75,7 @@ class TemplateLocator implements FileLocatorInterface
         if (isset($this->cache[$key])) {
             return $this->cache[$key];
         }
+
         try {
             return $this->cache[$key] = $this->locator->locate($template->getPath(), $currentPath);
         } catch (\InvalidArgumentException $e) {
