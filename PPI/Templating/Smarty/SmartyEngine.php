@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
+ * SmartyEngine
  * EngineInterface is the interface each engine must implement.
  *
  * @author Paul Dragoonis <paul@ppi.io>
@@ -35,6 +36,12 @@ class SmartyEngine implements EngineInterface {
 								TemplateNameParserInterface $parser, 
 								LoaderInterface $loader, 
 								array $options = array()) {
+		
+		
+		$this->smarty = $smarty;
+		$this->parser = $parser;
+		$this->loader = $loader;
+		
 		// @todo
 		// $this->smarty->addTemplateDir($bundlesTemplateDir);
 	}
@@ -56,9 +63,7 @@ class SmartyEngine implements EngineInterface {
 		if ($name instanceof \Smarty_Internal_Template) {
 			return $name;
 		}
-		
 		$template = $this->parser->parse($name);
-		
 		$template = $this->loader->load($template);
 		if (false === $template) {
 			throw new \InvalidArgumentException(sprintf('The template "%s" does not exist.', $name));
