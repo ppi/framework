@@ -38,7 +38,7 @@ class TemplateReference extends BaseTemplateReference
 
         $path = (empty($controller) ? '' : $controller.'/').$this->get('name').'.'.$this->get('format').'.'.$this->get('engine');
 
-        return empty($this->parameters['module']) ? 'views/'.$path : '@'.$this->get('module').'/views/'.$path;
+        return empty($this->parameters['module']) ? 'views/'.$path : '@'.$this->get('module').'/resources/views/'.$path;
     }
 
     /**
