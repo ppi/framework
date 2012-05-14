@@ -320,4 +320,30 @@ class Controller {
 		return $this->getService('url.generator')->generate($route, $parameters, $absolute);
 	}
 	
+	/**
+	 * Inject services into our controller using setters matching against service names
+	 * 
+	 * @return void
+	 */
+	public function injectServices() {
+		
+		if($this->_serviceLocator === null) {
+			return;
+		}
+
+		// A bunch of public methods that should be omitted.
+		$blackList = array('setServiceLocator', 'getServiceLocator', 'injectServices');
+		$r = new \ReflectionClass($this);
+		
+		foreach($r->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+			if(!in_array($method->name, $blackList) 
+				&& substr($method->name, 0, 3) === 'set'
+				&& $this->_serviceLocator->has(($service = substr($method->name, 3)))
+			) {
+				$this->{$method->name}($this->_serviceLocator->get($service));
+			}
+		}
+
+	}
+	
 }
