@@ -5,9 +5,11 @@
  * @package   DataSource
  * @link      www.ppi.io
  */
-namespace PPI;
+namespace PPI\DataSource;
+
 use PPI\Autoload;
-class DataSource {
+
+class DataSource implements DataSourceInterface {
 
 	/**
 	 * List of configuration sets
@@ -39,7 +41,7 @@ class DataSource {
 	 * @param array $options
 	 * @return PPI_DataSource
 	 */
-	static function create(array $options = array()) {
+	public static function create(array $options = array()) {
 		return new self($options);
 	}
 
@@ -75,6 +77,35 @@ class DataSource {
 	}
 	
 	/**
+	 * Create an active query driver connection
+	 * 
+	 * @param string $type The type of driver to use for the active query factory
+	 * @param array $options Options to be passed to the active query driver
+	 * @return PDO\ActiveQuery
+	 * @throws \InvalidArgumentException
+	 */
+	public function activeQueryFactory($type, array $options) {
+		
+		switch($type) {
+			
+			case 'mongodb':
+				throw new \InvalidArgumentException('Invalid activeQueryFactory type. MongoDB not yet implemented');
+				break;
+			
+			case 'couchdb':
+				throw new \InvalidArgumentException('Invalid activeQueryFactory type. CouchDB not yet implemented');
+				break;
+			
+			case 'pdo':
+			default:
+				return new \PPI\DataSource\PDO\ActiveQuery($options);
+
+		}
+		
+		
+	} 
+	
+	/**
 	 * Return the connection from the factory
 	 * 
 	 * @throws DataSourceException
@@ -93,10 +124,6 @@ class DataSource {
 			throw new \PPI\DataSource\DataSourceException('Invalid DataSource Key: ' . $key);
 		}
 		
-		if(!Autoload::exists('Doctrine')) {
-			Autoload::add('Doctrine', array('path' => VENDORPATH . 'Doctrine'));
-		}
-		
 		$conn = $this->factory($this->_config[$key]);
 		
 		// Connection Caching
@@ -109,11 +136,16 @@ class DataSource {
 	 * Get the connection configuration options for the specified key
 	 * 
 	 * @param string $key
-	 * @todo maybe throw an exception if $key doesn't exist.
 	 * @return array
 	 */
 	function getConnectionConfig($key) {
-		return isset($this->_config[$key]) ? $this->_config[$key] : array();
+		
+		if(isset($this->_config[$key])) {
+			return $this->_config[$key];
+		}
+		
+		throw new \InvalidArgumentException('DataSource Connection Key: ' . $key . ' does not exist');
+		
 	}
 
 }
