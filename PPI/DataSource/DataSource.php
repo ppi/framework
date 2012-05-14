@@ -39,7 +39,7 @@ class DataSource implements DataSourceInterface {
 	 * 
 	 * @static
 	 * @param array $options
-	 * @return PPI_DataSource
+	 * @return PPI\DataSource\DataSource
 	 */
 	public static function create(array $options = array()) {
 		return new self($options);
