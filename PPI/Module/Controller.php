@@ -45,8 +45,8 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	protected function server($key, $default = null, $deep = false) {
-		return $this->getServer()->get($key, $default, $deep);
+	protected function server($key = null, $default = null, $deep = false) {
+		return $key === null ? $this->getServer()->all() : $this->getServer()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -57,8 +57,8 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	protected function post($key, $default = null, $deep = false) {
-		return $this->getPost()->get($key, $default, $deep);
+	protected function post($key = null, $default = null, $deep = false) {
+		return $key === null ? $this->getPost()->all() : $this->getPost()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -69,8 +69,8 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	protected function files($key, $default = null, $deep = false) {
-		return $this->getFiles()->get($key, $default, $deep);
+	protected function files($key = null, $default = null, $deep = false) {
+		return $key === null ? $this->getFiles()->all() : $this->getFiles()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -81,8 +81,8 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	protected function queryString($key, $default = null, $deep = false) {
-		return $this->getQueryString()->get($key, $default, $deep);
+	protected function queryString($key = null, $default = null, $deep = false) {
+		return $key === null ? $this->getQueryString()->all() : $this->getQueryString()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -93,8 +93,8 @@ class Controller {
 	 * @param boolean $deep     If true, a path like foo[bar] will find deeper items
 	 * @return string
 	 */
-	protected function cookie($key, $default = null, $deep = false) {
-		return $this->getCookie()->get($key, $default, $deep);
+	protected function cookie($key = null, $default = null, $deep = false) {
+		return $key === null ? $this->getCookie()->all() : $this->getCookie()->get($key, $default, $deep);
 	}
 	
 	/**
@@ -104,8 +104,8 @@ class Controller {
 	 * @param null|mixed $default If this is not null, it enters setter mode
 	 * @todo TBC, this doesn't work yet.
 	 */
-	protected function session($key, $default = null) {
-		return $this->getSession()->get($key, $default);
+	protected function session($key = null, $default = null) {
+		return $key === null ? $this->getSession()->all() : $this->getSession()->get($key, $default);
 	}
 	
 	/**
@@ -210,7 +210,7 @@ class Controller {
 	 * @param mixed $default
 	 * @return string
 	 */
-	protected function getIP($default = null) {
+	protected function getIP() {
 		return $this->server('REMOTE_ADDR');
 	}
 	
@@ -220,7 +220,7 @@ class Controller {
 	 * @param mixed $default
 	 * @return string
 	 */
-	protected function getUserAgent($default = null) {
+	protected function getUserAgent() {
 		return $this->server('HTTP_USER_AGENT');
 	}
 	
@@ -251,6 +251,15 @@ class Controller {
 	 */
 	protected function getService($service) {
 		return $this->getServiceLocator()->get($service);
+	}
+	
+	/**
+	 * Get the data source service
+	 * 
+	 * @return mixed
+	 */
+	protected function getDataSource() {
+		return $this->getService('DataSource');
 	}
 	
 	/**
