@@ -45,6 +45,7 @@ class App {
 	 */
 	protected $_options = array(
 		'templatingEngine'    => 'php',
+		'useDataSource'       => false,
 		'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
 		'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage'
 	);
@@ -200,6 +201,11 @@ class App {
 			'session'       => $this->getSession()
 		);
 		
+		// If the user wants DataSource available in their application, lets insntantiate it and set up their connections
+		if($this->_options['useDataSource'] === true && isset($this->_options['config']['datasource.connections'])) {
+			$defaultServices['dataSource'] = $this->getDataSource($this->_options['config']['datasource.connections']);
+		}
+		
 		// Services
 		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListeners->getServices()));
 		
@@ -300,6 +306,16 @@ class App {
 		}
 		
 
+	}
+	
+	/**
+	 * Instantiate the DataSource component, optionally taking in its connections
+	 * 
+	 * @param array $connections
+	 * @return DataSource\DataSource
+	 */
+	protected function getDataSource(array $connections = array()) {
+		return new \PPI\DataSource\DataSource($connections);
 	}
 	
 	/**
