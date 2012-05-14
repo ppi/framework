@@ -1,11 +1,9 @@
 <?php
-/**
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @package   DataSource
- * @link      www.ppiframework.com
- */
-namespace PPI\DataSource\PDO;
+
+namespace PPI\DataSource\Storage;
+
+use PPI\DataSource\DataSourceInterface;
+
 class ActiveQuery {
 	
 	/**
@@ -13,21 +11,7 @@ class ActiveQuery {
 	 * 
 	 * @var null
 	 */
-	protected $_table = null;
-	
-	/**
-	 * The primary key
-	 * 
-	 * @var null
-	 */
-	protected $_primary = null;
-	
-	/**
-	 * The datasource connection
-	 * 
-	 * @var null
-	 */
-	protected $_conn = null;
+	protected $_handler = null;
 
 	/**
 	 * The meta data for this instantiation
@@ -47,85 +31,166 @@ class ActiveQuery {
 	*/
 	protected $_options = array();
 	
-	function __construct(array $options = array()) {
+	/**
+	 * Optionally pass in a DataSource 
+	 * 
+	 * @param null|object
+	 */
+	function __construct($dataSource = null) {
 
-		// Setup our connection from the key passed to meta['conn']
-		if(isset($options['meta'])) {
-			$this->_meta = $options['meta'];
+		if($dataSource !== null) {
+			$this->setDataSource($dataSource);
 		}
-		
-		$this->_options = $options;
-	}
-	
-	function setConn($conn) {
-		$this->_conn = $conn;
-	}
-	
-	function fetchAll($criteria = null) {
-		$columns = '*';
-		$joins = $clauses = $order = $group = $order = $limit = ''; 
-		if($criteria !== null && $criteria instanceof \PPI\DataSource\Criteria) {
-			$columns = $criteria->hasColumns() ? $criteria->getColumns()                     : '*';
-			$joins   = $criteria->hasJoins()   ? $this->generateJoins($criteria->getJoins()) : '';
-			$clauses = $criteria->hasWhere()   ? ' WHERE ' . $criteria->getWhere()           : '';
-			$group   = $criteria->hasGroup()   ? ' GROUP BY ' . $criteria->getGroup()        : '';
-			$order   = $criteria->hasOrder()   ? ' ORDER BY ' . $criteria->getOrder()        : '';
-			$limit   = $criteria->hasLimit()   ? ' LIMIT ' . $criteria->getLimit()           : '';
-		}
-		$query = "SELECT $columns FROM {$this->_meta['table']} $joins $clauses $group $order $limit";
-		return $this->_conn->query($query)->fetchAll(\PDO::FETCH_ASSOC);
+
 	}
 	
 	/**
-	 * Generate SQL for Joins.
+	 * Set the datasource service into this class
 	 * 
-	 * @param array $joins
-	 * @return string
+	 * @param \PPI\DataSource\DataSourceInterface $dataSource
 	 */
-	protected function generateJoins(array $joins) {
-		$sql = '';
-		$joinTypes = array('inner', 'left', 'right', 'outer');
-		foreach($joins as $join) {
+	public function setDataSource(DataSourceInterface $dataSource) {
+		
+		// Setup our connection from the key passed to meta['conn']
+		if($this->getConnectionName() !== null && $this->getTableName() !== null) {
 			
-			if(isset($joinTypes[$join['type']])) {
-				$sql .= " {$join['']} JOIN {$join['table']} ON {$join['on']} ";
+			$dsConfig          = $dataSource->getConnectionConfig($this->getConnectionName());
+			$this->_conn       = $dataSource->getConnection($this->getConnectionName());
+			$this->_dataSource = $dataSource;
+			
+			if(isset($dsConfig['type']) && substr($dsConfig['type'], 0, 3) === 'pdo') {
+				
+				$this->_handler = $dataSource->activeQueryFactory('pdo', array('meta' => $this->_meta));
+				$this->_handler->setConn($this->_conn);
 			}
 			
 		}
-		return $sql;
 	}
 	
 	/**
-	 * Find a row by primary key
+	 * Fetch all rows based on the $criteria
+	 * 
+	 * @param null|object $criteria
+	 * @return mixed
+	 */
+	function fetchAll($criteria = null) {
+		return $this->_handler->fetchAll($criteria);
+	}
+
+	/**
+	 * Find a row by its primary key
 	 * 
 	 * @param string $id
-	 * @return array|false
+	 * @return mixed
 	 */
 	function find($id) {
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
+		return $this->_handler->find($id);
 	}
 
+	/**
+	 * Fetch records from the datasource by a $where clause
+	 * 
+	 * @param array $where
+	 * @param array $params
+	 * @return mixed
+	 */
 	function fetch(array $where, array $params = array()) {
-		$clause = '';
-		foreach($where as $field => $val) {
-			$clause .= ' ' . $field . ' = ?,';
-		}
-		$clause = str_replace(',', ' AND ', rtrim($clause, ','));
-		$query = "SELECT * FROM {$this->_meta['table']} WHERE $clause";
-		return $this->_conn->fetchAssoc($query, $params);
+		return $this->_handler->fetch($where, $params);
 	}
 
-	function insert(array $data) {
-		$this->_conn->insert($this->_meta['table'], $data);
-		return $this->_conn->lastInsertId();
+	/**
+	 * Insert data into the table
+	 * 
+	 * @param $data
+	 * @return mixed
+	 */
+	function insert($data) {
+		return $this->_handler->insert($data);
 	}
 
+	/**
+	 * Delete a record by a where clause
+	 * 
+	 * @param array $where
+	 * @return mixed
+	 */
 	function delete($where) {
-		return $this->_conn->delete($this->_meta['table'], $where);
+		return $this->_handler->delete($where);
 	}
 	
-	function update(array $data, $where) {
-		return $this->_conn->update($this->_meta['table'], $data, $where);
+	/**
+	 * Update a record by where clause
+	 * 
+	 * @param array $data The fields and values
+	 * @param array $where The clause
+	 * @return mixed
+	 */
+	function update($data, $where) {
+		return $this->_handler->update($data, $where);
+	}
+	
+	/**
+	 * Get the connection name
+	 * 
+	 * @return string
+	 */
+	protected function getConnectionName() {
+		return isset($this->_meta['conn']) ? $this->_meta['conn'] : null;
+	}
+	
+	/**
+	 * Get the storage class' table name
+	 * 
+	 * @return string
+	 */
+	protected function getTableName() {
+		return isset($this->_meta['table']) ? $this->_meta['table'] : null;
+	}
+	
+	/**
+	 * Get the primary key for this storage class' connection
+	 * 
+	 * @return string
+	 */
+	protected function getPrimaryKey() {
+		return isset($this->_meta['primary']) ? $this->_meta['primary'] : null;
+	}
+	
+	/**
+	 * Get the fetch mode of the active query instance.
+	 * i.e: \PDO::FETCH_ASSOC
+	 * 
+	 * @return null
+	 */
+	protected function getFetchMode() {
+		return isset($this->_meta['fetchmode']) ? $this->_meta['fetchMode'] : null;
+	}
+	
+	/**
+	 * Create the query builder object
+	 * 
+	 * @return mixed
+	 */
+	protected function createQueryBuilder() {
+		return $this->getConnection()->createQueryBuilder();
+	}
+	
+	/**
+	 * Get the connection class
+	 * 
+	 * @return mixed
+	 */
+	protected function getConnection() {
+		return $this->_conn;
+	}
+	
+	/**
+	 * Get the connection options
+	 * 
+	 * @return array
+	 */
+	protected function getConnectionOptions() {
+		return isset($this->_meta) ? $this->_meta : array();
 	}
 
 }
