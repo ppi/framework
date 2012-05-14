@@ -36,6 +36,8 @@ class Autoload {
 
 	static protected $_options = array();
 	
+	static protected $_registeredNamespaces = array();
+	
 	/**
 	 * Add some items to the class config
 	 * 
@@ -54,6 +56,7 @@ class Autoload {
 	 * @param string $path
 	 */
 	public static function add($key, $path) {
+		self::$_registeredNamespaces[$key] = true;
 		self::$_options['loader']->registerNamespace($key, $path);
 	}
 	
@@ -76,6 +79,18 @@ class Autoload {
 	 */
 	public static function register() {
 		self::$_options['loader']->register();
+	}
+	
+	/**
+	 * Check if a namespace has been registered. This is a workaround as the default self::$_options['loader']
+	 * class does not have an exists() method.
+	 * 
+	 * @static
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function exists($key) {
+		return isset(self::$_registeredNamespaces[$key]);
 	}
 	
 }
