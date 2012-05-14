@@ -27,4 +27,5 @@ Autoload::config(array(
 Autoload::add('PPI', dirname(PPI_PATH));
 Autoload::add('Symfony', PPI_VENDOR_PATH);
 Autoload::add('Zend', PPI_VENDOR_PATH);
+Autoload::add('Doctrine', PPI_VENDOR_PATH);
 Autoload::register();
