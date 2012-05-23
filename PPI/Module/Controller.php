@@ -314,7 +314,7 @@ class Controller {
 	 * @return void
 	 */
 	protected function redirectToRoute($route) {
-		$this->redirect($this->getService('url.generator')->generate($route));
+		$this->redirect($this->getService('router')->generate($route));
 	}
 	
 	/**
@@ -326,7 +326,7 @@ class Controller {
 	 * @return string
 	 */
 	protected function generateUrl($route, $parameters = array(), $absolute = false) {
-		return $this->getService('url.generator')->generate($route, $parameters, $absolute);
+		return $this->getService('router')->generate($route, $parameters, $absolute);
 	}
 	
 	/**
