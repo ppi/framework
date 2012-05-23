@@ -28,9 +28,10 @@ use
 	PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
 	
 	// HTTP Stuff and routing
+	PPI\Module\Routing\Router,
+	PPI\Module\Routing\Loader\YamlFileLoader,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\RouteCollection,
-	Symfony\Component\Routing\Matcher\UrlMatcher,
 	Symfony\Component\Routing\Generator\UrlGenerator,
 	Symfony\Component\HttpFoundation\Request as HttpRequest,
 	Symfony\Component\HttpFoundation\Response as HttpResponse,
@@ -165,24 +166,31 @@ class App {
 		// Routing preparation
 		$allRoutes         = $defaultListeners->getRoutes();
 		$matchedRoute      = false;
-		$requestContext    = new RequestContext();
 		$pathInfo          = $this->_request->getPathInfo();
-		$globalRoutes      = new RouteCollection();
+		$routeCollection   = new RouteCollection();
+		$requestContext    = new RequestContext();
 		$requestContext->fromRequest($this->_request);
 		
 		// Make a route collection, merging all the other route collections together from the modules
 		foreach($allRoutes as $routes) {
-			$globalRoutes->addCollection($routes);
+			$routeCollection->addCollection($routes);
 		}
 		
 		try {
-			$matcher              = new UrlMatcher($globalRoutes, $requestContext);
-			$matchedRoute         = $matcher->match($pathInfo);
+			
+			// Lets load up our router and match the appropriate route
+			$router = new Router($requestContext, $routeCollection, array(
+				'cache_dir' => $this->_options['config']['cache_dir']
+			));
+			$matchedRoute = $router->match($pathInfo);
+			
 			$moduleName           = $matchedRoute['_module'];
 			$this->_matchedModule = $moduleManager->getModule($moduleName);
 			$this->_matchedModule->setModuleName($moduleName);
 
-		} catch(ResourceNotFoundException $e) {} catch(\Exception $e) {}
+		} catch(ResourceNotFoundException $e) {} catch(\RuntimeException $e) {
+			die($e->getMessage());
+		} catch(\Exception $e) {}
 
 		// @todo Handle 404 here gracefully using $response object
 		if($matchedRoute === false) {
@@ -197,8 +205,8 @@ class App {
 			'request'       => $this->_request,
 			'response'      => $this->_response,
 			'templating'    => $this->getTemplatingEngine(),
-			'url.generator' => new UrlGenerator($globalRoutes, $requestContext),
-			'session'       => $this->getSession()
+			'session'       => $this->getSession(),
+			'router'        => $router
 		);
 		
 		// If the user wants DataSource available in their application, lets insntantiate it and set up their connections
