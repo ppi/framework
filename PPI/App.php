@@ -13,7 +13,7 @@ use
 	
 	// Modules
 	PPI\Module\ServiceLocator,
-	Zend\Module\Listener\ListenerOptions,
+	PPI\Module\Listener\ListenerOptions,
 	Zend\Module\Manager as ModuleManager,
 	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 	
@@ -105,7 +105,7 @@ class App {
 	 * @param array $options
 	 */
 
-	function __construct(array $options = array()) {
+	public function __construct(array $options = array()) {
 		
 		if(!empty($options)) {
 			foreach ($options as $key => $value) {
@@ -123,7 +123,7 @@ class App {
 	 * @param array $options The options
 	 * @return void
 	 */
-	function setEnv(array $options) {
+	public function setEnv(array $options) {
 
 		// If we pass in a bad sitemode, lets just default to 'development' gracefully.
 		if(isset($options['siteMode'])) {
@@ -144,49 +144,67 @@ class App {
 	 *
 	 * @return $this Fluent interface
 	 */
-	function boot() {
+	public function boot() {
 
 		if(empty($this->_options['moduleConfig']['listenerOptions'])) {
 			throw new \Exception('Missing moduleConfig: listenerOptions');
 		}
 		
-		// Core Objects
 		$this->_request  = HttpRequest::createFromGlobals();
 		$this->_response = new HttpResponse();
+		
+		$routerOptions = array();
+		if($this->getAppConfigValue('cache_dir') !== null) {
+			$routerOptions['cache_dir'] = $this->getAppConfigValue('cache_dir');
+		}
 
+		// Initialise the routing components
+		$routingEnabled  = true;
+		$matchedRoute    = false;
+		$routeCollection = new RouteCollection();
+		$requestContext  = new RequestContext();
+		$requestContext->fromRequest($this->_request);
+		
+		$router = new Router($requestContext, $routeCollection, $routerOptions);
+
+		if(!$this->isDevMode()) {
+			
+			// If we are in production mode, and have the routing file(s) have been cached, then skip route fetching on modules boot
+			if($router->isGeneratorCached() && $router->isMatcherCached()) {
+				$this->_options['moduleConfig']['listenerOptions']['routingEnabled'] = false;
+				$routingEnabled = false;
+			}
+
+		}
+		
 		// Module Listeners
 		$listenerOptions  = new ListenerOptions($this->_options['moduleConfig']['listenerOptions']);
 		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
-		
+
 		// Loading our Modules
 		$moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListeners);
 		$moduleManager->loadModules();
+		
+		// If the routing process for modules has been cached or not.
+		if($routingEnabled) {
 
-		// Routing preparation
-		$allRoutes         = $defaultListeners->getRoutes();
-		$matchedRoute      = false;
-		$pathInfo          = $this->_request->getPathInfo();
-		$routeCollection   = new RouteCollection();
-		$requestContext    = new RequestContext();
-		$requestContext->fromRequest($this->_request);
-		
-		// Make a route collection, merging all the other route collections together from the modules
-		foreach($allRoutes as $routes) {
-			$routeCollection->addCollection($routes);
+			// Merging all the other route collections together from the modules
+			$allRoutes = $defaultListeners->getRoutes();
+			foreach($allRoutes as $routes) {
+				$routeCollection->addCollection($routes);
+			}
+			$router->setRouteCollection($routeCollection);
 		}
-		
+
 		try {
 			
 			// Lets load up our router and match the appropriate route
-			$router = new Router($requestContext, $routeCollection, array(
-				'cache_dir' => $this->_options['config']['cache_dir']
-			));
-			$matchedRoute = $router->match($pathInfo);
-			
-			$moduleName           = $matchedRoute['_module'];
-			$this->_matchedModule = $moduleManager->getModule($moduleName);
-			$this->_matchedModule->setModuleName($moduleName);
+			$router->warmUp();
+			$matchedRoute         = $router->match($this->_request->getPathInfo());
+			$matchedModuleName    = $matchedRoute['_module'];
+			$this->_matchedModule = $moduleManager->getModule($matchedModuleName);
+			$this->_matchedModule->setModuleName($matchedModuleName);
 
 		} catch(ResourceNotFoundException $e) {} catch(\RuntimeException $e) {
 			die($e->getMessage());
@@ -210,8 +228,9 @@ class App {
 		);
 		
 		// If the user wants DataSource available in their application, lets insntantiate it and set up their connections
-		if($this->_options['useDataSource'] === true && isset($this->_options['config']['datasource.connections'])) {
-			$defaultServices['dataSource'] = $this->getDataSource($this->_options['config']['datasource.connections']);
+		$dsConnections = $this->getAppConfigValue('datasource.connections');
+		if($this->_options['useDataSource'] === true && $dsConnections !== null) {
+			$defaultServices['dataSource'] = $this->getDataSource($dsConnections);
 		}
 		
 		// Services
@@ -224,7 +243,7 @@ class App {
 	/**
 	 * Lets dispatch our module's controller action
 	 */
-	function dispatch() {
+	public function dispatch() {
 		
 		// Lets disect our route
 		list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
@@ -347,8 +366,19 @@ class App {
 	 * @param null $default
 	 * @return null
 	 */
-	function getOption($key, $default = null) {
+	public function getOption($key, $default = null) {
 		return isset($this->_options[$key]) ? $this->_options[$key] : $default; 
+	}
+	
+	/**
+	 * Get a config value from the application config
+	 * 
+	 * @param string $key
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	public function getAppConfigValue($key, $default = null) {
+		return isset($this->_options['config'][$key]) ? $this->_options['config'][$key] : $default;
 	}
 	
 	/**
@@ -357,7 +387,7 @@ class App {
 	 * @param $key
 	 * @param $val
 	 */
-	function setOption($key, $val) {
+	public function setOption($key, $val) {
 		$this->_options[$key] = $val;
 	}
 
@@ -368,19 +398,26 @@ class App {
 	 * @param string $value The Value
 	 * @return void
 	 */
-	function __set($option, $value) {
+	public function __set($option, $value) {
 		$this->_options[$option] = $value;
 	}
 	
 	/**
-	 * Obtain the value of an environment option
-	 *
-	 * @param string $key The Environment Option
-	 * @param mixed $default The default value to return if the key is not found
-	 * @return mixed If your key is not found, then NULL is returned
+	 * Get the environment mode the application is in.
+	 * 
+	 * @return string 
 	 */
-	function getEnv($key, $default = null) {
-		return isset($this->_envOptions[$key]) ? $this->_envOptions[$key] : $default;
+	public function getEnv() {
+		return $this->getAppConfigValue('environment');
+	}
+	
+	/**
+	 * Check if the application is in development mode.
+	 * 
+	 * @return bool
+	 */
+	public function isDevMode() {
+		return $this->getEnv() === 'development';
 	}
 	
 	/**
@@ -389,7 +426,7 @@ class App {
 	 * @param string $option The Option
 	 * @return mixed
 	 */
-	function __get($option) {
+	public function __get($option) {
 		return isset($this->_options[$option]) ? $this->_options[$option] : null;
 	}
 
