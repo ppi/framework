@@ -1,0 +1,9 @@
+{
+	"name": "ppi",
+	"require": {
+		"doctrine/common": "2.1.*@stable",
+		"doctrine/dbal": "2.1.*@stable",
+                "symfony/symfony": "2.0.*@stable",
+		"zendframework/zendframework": "dev-master"
+	}
+}
