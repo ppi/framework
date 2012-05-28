@@ -1,5 +1,5 @@
 {
-	"name": "ppi",
+	"name": "ppi/ppi",
 	"require": {
 		"doctrine/common": "2.1.*@stable",
 		"doctrine/dbal": "2.1.*@stable",
