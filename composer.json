@@ -1,9 +1,23 @@
 {
 	"name": "ppi/ppi",
+	"description": "The PPI framework - Version 2",
+	"homepage": "http://symfony.com",
+	"license": "MIT",
+	"keywords": ["framework"],
+	"type": "library",
+	"authors": [
+		{
+			"name": "Paul Dragoonis",
+			"email": "paul@ppi.io"
+		}
+	],
+	"autoload": {
+		"psr-0": { "PPI": "" }
+	},
 	"require": {
 		"doctrine/common": "2.1.*@stable",
 		"doctrine/dbal": "2.1.*@stable",
-                "symfony/symfony": "2.0.*@stable",
+		"symfony/symfony": "2.0.*@stable",
 		"zendframework/zendframework": "dev-master"
 	}
 }
