@@ -6,85 +6,94 @@
  * @link      www.ppiframework.com
  */
 namespace PPI\DataSource\Mongo;
-class ActiveQuery {
-	
-	/**
-	 * The table name
-	 * 
-	 * @var null
-	 */
-	protected $_table = null;
-	
-	/**
-	 * The primary key
-	 * 
-	 * @var null
-	 */
-	protected $_primary = null;
-	
-	/**
-	 * The datasource connection
-	 * 
-	 * @var null
-	 */
-	protected $_conn = null;
+class ActiveQuery
+{
+    /**
+     * The table name
+     *
+     * @var null
+     */
+    protected $_table = null;
 
-	/**
-	 * The meta data for this instantiation
-	 *
-	 * @var array
-	*/
-	protected $_meta = array(
-		'conn'    => null,
-		'table'   => null,
-		'primary' => null
-	);
+    /**
+     * The primary key
+     *
+     * @var null
+     */
+    protected $_primary = null;
 
-	/**
-	 * The options for this instantiation
-	 *
-	 * @var array
-	*/
-	protected $_options = array();
-	
-	function __construct(array $options = array()) {
+    /**
+     * The datasource connection
+     *
+     * @var null
+     */
+    protected $_conn = null;
 
-		// Setup our connection from the key passed to meta['conn']
-		if(isset($options['meta'])) {
-			$this->_conn = \PPI\Core::getDataSourceConnection($this->_meta['conn']);
-		}
+    /**
+     * The meta data for this instantiation
+     *
+     * @var array
+    */
+    protected $_meta = array(
+        'conn'    => null,
+        'table'   => null,
+        'primary' => null
+    );
 
-		$this->_options = $options;
-	}
-	
-	function setConn($conn) {
-		$this->_conn = $conn;
-	}
-	
-	function fetchAll() {
-		return $this->_conn->query("SELECT * FROM {$this->_meta['table']}")->fetchAll(\PDO::FETCH_ASSOC);
-	}
+    /**
+     * The options for this instantiation
+     *
+     * @var array
+    */
+    protected $_options = array();
 
-	function find($id) {
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
-	}
+    public function __construct(array $options = array())
+    {
+        // Setup our connection from the key passed to meta['conn']
+        if (isset($options['meta'])) {
+            $this->_conn = \PPI\Core::getDataSourceConnection($this->_meta['conn']);
+        }
 
-	function fetch(array $where, array $params = array()) {
-		die("SELECT * FROM {$this->_meta['table']} WHERE $where");
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
-	}
+        $this->_options = $options;
+    }
 
-	function insert($data) {
-		$this->_conn->insert($this->_table, $data);
-		return $this->_conn->lastInsertId();
-	}
+    public function setConn($conn)
+    {
+        $this->_conn = $conn;
+    }
 
-	function delete($where) {
-		return $this->_conn->delete($this->_table, $where);
-	}
-	
-	function update($data, $where) {
-		return $this->_conn->update($this->_table, $data, $where);
-	}
+    public function fetchAll()
+    {
+        return $this->_conn->query("SELECT * FROM {$this->_meta['table']}")->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function find($id)
+    {
+        return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
+    }
+
+    public function fetch(array $where, array $params = array())
+    {
+        die("SELECT * FROM {$this->_meta['table']} WHERE $where");
+
+        return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE $where", $params);
+    }
+
+    public function insert($data)
+    {
+        $this->_conn->insert($this->_table, $data);
+
+        return $this->_conn->lastInsertId();
+    }
+
+    public function delete($where)
+    {
+        return $this->_conn->delete($this->_table, $where);
+    }
+
+    public function update($data, $where)
+    {
+        return $this->_conn->update($this->_table, $data, $where);
+    }
 
 }

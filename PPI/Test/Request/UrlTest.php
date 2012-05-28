@@ -10,48 +10,52 @@
 namespace PPI\Test\Request;
 use PPI\Request\Url;
 class UrlTest extends \PHPUnit_Framework_TestCase {
-	public function setUp() {
-		$this->_data = array('foo' => 'bar', 'bar' => 'foo');
-	}
+    public function setUp()
+    {
+        $this->_data = array('foo' => 'bar', 'bar' => 'foo');
+    }
 
-	public function tearDown() {
-		$this->_data = array();
-	}
+    public function tearDown()
+    {
+        $this->_data = array();
+    }
 
-	public function testIsCollected() {
+    public function testIsCollected()
+    {
+        $url = new Url();
+        $this->assertFalse($url->isCollected());
 
-		$url = new Url();
-		$this->assertFalse($url->isCollected());
+        $url = new Url(array('drink' => 'beer'));
+        $this->assertFalse($url->isCollected());
 
-		$url = new Url(array('drink' => 'beer'));
-		$this->assertFalse($url->isCollected());
+        $url = new Url('/foo/bar/');
+        $this->assertFalse($url->isCollected());
+    }
 
-		$url = new Url('/foo/bar/');
-		$this->assertFalse($url->isCollected());
-	}
+    public function testCollectGetQuery()
+    {
+        $url = new Url($this->_data);
+        $this->assertEquals('foo', $url['bar']);
+        $this->assertEquals('bar', $url['foo']);
+        $this->assertEquals(null,  $url['random']);
+        $this->assertFalse($url->isCollected());
+    }
 
-	public function testCollectGetQuery()
-	{
-		$url = new Url($this->_data);
-		$this->assertEquals('foo', $url['bar']);
-		$this->assertEquals('bar', $url['foo']);
-		$this->assertEquals(null,  $url['random']);
-		$this->assertFalse($url->isCollected());
-	}
+    public function testCustomGetQuery()
+    {
+        $url = new Url(array('drink' => 'beer'));
+        $this->assertEquals('beer', $url['drink']);
+        $this->assertEquals(null,   $url['foo']);
+        $this->assertEquals(null,   $url['random']);
+        $this->assertFalse($url->isCollected());
+    }
 
-	public function testCustomGetQuery() {
-		$url = new Url(array('drink' => 'beer'));
-		$this->assertEquals('beer', $url['drink']);
-		$this->assertEquals(null,   $url['foo']);
-		$this->assertEquals(null,   $url['random']);
-		$this->assertFalse($url->isCollected());
-	}
+    public function testUrlString()
+    {
+        $url = new Url('/drink/beer');
+        $this->assertEquals('beer', $url['drink']);
+        $this->assertEquals(null,   $url['beer']);
 
-	public function testUrlString() {
-		$url = new Url('/drink/beer');
-		$this->assertEquals('beer', $url['drink']);
-		$this->assertEquals(null,   $url['beer']);
-
-		$this->assertFalse($url->isCollected());
-	}
+        $this->assertFalse($url->isCollected());
+    }
 }

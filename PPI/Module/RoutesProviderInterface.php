@@ -3,7 +3,7 @@
 namespace PPI\Module;
 
 interface RoutesProviderInterface {
-	
-	function getRoutes();
-	
-} 
+
+    public function getRoutes();
+
+}
