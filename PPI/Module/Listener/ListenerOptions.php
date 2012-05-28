@@ -2,7 +2,7 @@
 
 namespace PPI\Module\Listener;
 
-use Zend\Module\Listener\ListenerOptions as BaseListenerOptions;
+use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
 
 class ListenerOptions extends BaseListenerOptions {
 	
