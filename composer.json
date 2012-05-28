@@ -1,6 +1,6 @@
 {
 	"name": "ppi/ppi",
-	"description": "The PPI framework - Version 2",
+	"description": "The PPI Framework - Version 2",
 	"homepage": "http://www.ppi.io",
 	"license": "MIT",
 	"keywords": ["framework"],
@@ -21,8 +21,8 @@
 		"zendframework/zendframework": "dev-master"
 	},
 	"extra": {
-     "branch-alias": {
-         "dev-master": "2.0-dev"
-     }
- }
+		"branch-alias": {
+			"dev-master": "2.0-dev"
+		}
+	}
 }
