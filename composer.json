@@ -15,9 +15,14 @@
 		"psr-0": { "PPI": "" }
 	},
 	"require": {
-		"doctrine/common": "2.1.*@stable",
-		"doctrine/dbal": "2.1.*@stable",
-		"symfony/symfony": "2.0.*@stable",
+		"doctrine/common": "2.2.*@stable",
+		"doctrine/dbal": "2.2.*@stable",
+		"symfony/symfony": "dev-master",
 		"zendframework/zendframework": "dev-master"
-	}
+	},
+	"extra": {
+     "branch-alias": {
+         "dev-master": "2.0-dev"
+     }
+ }
 }

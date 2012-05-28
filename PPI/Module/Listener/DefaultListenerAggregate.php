@@ -1,8 +1,8 @@
 <?php
 namespace PPI\Module\Listener;
-use Zend\Module\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate,
-	Zend\EventManager\EventCollection,
-	Zend\Module\ModuleEvent;
+use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate,
+	Zend\EventManager\EventManagerInterface,
+	Zend\ModuleManager\ModuleEvent;
 
 class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	
@@ -20,7 +20,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	 */
 	protected $_services = array();
 	
-	public function attach(EventCollection $events) {
+	public function attach(EventManagerInterface $events) {
 
 		parent::attach($events);
 		$options = $this->getOptions();
@@ -37,7 +37,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	/**
 	 * Event callback for 'routesTrigger'
 	 * 
-	 * @param \Zend\Module\ModuleEvent $e
+	 * @param \Zend\ModuleManager\ModuleEvent $e
 	 * @return DefaultListenerAggregate
 	 */
 	public function routesTrigger(ModuleEvent $e) {
@@ -53,7 +53,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	/**
 	 * Event callback for 'initServicesTrigger'
 	 * 
-	 * @param \Zend\Module\ModuleEvent $e
+	 * @param \Zend\ModuleManager\ModuleEvent $e
 	 * @return DefaultListenerAggregate
 	 */
 	public function initServicesTrigger(ModuleEvent $e) {

@@ -14,7 +14,7 @@ use
 	// Modules
 	PPI\Module\ServiceLocator,
 	PPI\Module\Listener\ListenerOptions,
-	Zend\Module\Manager as ModuleManager,
+	Zend\ModuleManager\ModuleManager,
 	PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 
 	// Templating
@@ -48,7 +48,7 @@ class App {
 		'templatingEngine'    => 'php',
 		'useDataSource'       => false,
 		'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
-		'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeFileSessionStorage'
+		'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
 	);
 	
 	/**
@@ -295,8 +295,6 @@ class App {
 		switch($this->getOption('templatingEngine')) {
 			
 			case 'twig':
-				
-				Autoload::addPrefix('Twig_', PPI_VENDOR_PATH);
 				
 				return new TwigEngine(
 					new \Twig_Environment(
