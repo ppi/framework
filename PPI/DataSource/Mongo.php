@@ -8,48 +8,49 @@
 namespace PPI\DataSource;
 use Doctrine\MongoDB\Connection;
 
-class Mongo {
-	
+class Mongo
+{
     protected $conn = array();
 
-	function __construct() {
+    public function __construct()
+    {
+    }
 
-	}
+    /**
+     * Get the doctrine mongodb driver.
+     *
+     * @throws DataSourceException
+     * @param  array                        $config
+     * @return \Doctrine\MongoDB\Connection
+     */
+    public function getDriver(array $config)
+    {
+        if (!extension_loaded('mongo')) {
+            throw new DataSourceException('Mongo extension is missing');
+        }
 
-	/**
-	 * Get the doctrine mongodb driver.
-	 * 
-	 * @throws DataSourceException
-	 * @param array $config
-	 * @return \Doctrine\MongoDB\Connection
-	 */
-	function getDriver(array $config) {
-		
-		if (!extension_loaded('mongo')) {
-			throw new DataSourceException('Mongo extension is missing');
-		}
-		
-		$dsn = 'mongodb://';
-		
-		if(isset($config['username'], $config['password'])) {
-			$dsn .= $config['username'] . ':' . $config['password'] . '@';
-		}
+        $dsn = 'mongodb://';
 
-		$dsn .= $config['hostname'];
-		
-		if(isset($config['port'])) {
-			$dsn .= ":{$config['port']}";
-		}
-		
-		if(!isset($config['options'])) {
-			$config['options'] = array();
-		}
+        if (isset($config['username'], $config['password'])) {
+            $dsn .= $config['username'] . ':' . $config['password'] . '@';
+        }
 
-		$conn = new Connection($dsn, $config['options']);
-		if(isset($config['database'])) {
-			return $conn->selectDatabase($config['database']);
-		}
-		return $conn;
-	}
+        $dsn .= $config['hostname'];
+
+        if (isset($config['port'])) {
+            $dsn .= ":{$config['port']}";
+        }
+
+        if (!isset($config['options'])) {
+            $config['options'] = array();
+        }
+
+        $conn = new Connection($dsn, $config['options']);
+        if (isset($config['database'])) {
+            return $conn->selectDatabase($config['database']);
+        }
+
+        return $conn;
+    }
 
 }

@@ -15,4 +15,3 @@ require_once dirname(__FILE__) . '/../init.php';
 restore_error_handler();
 restore_exception_handler();
 
-

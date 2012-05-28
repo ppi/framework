@@ -21,8 +21,8 @@ $mapLoader = new \Symfony\Component\ClassLoader\MapClassLoader(include_once(PPI_
 $mapLoader->register();
 
 Autoload::config(array(
-	'loader'    => new \Symfony\Component\ClassLoader\UniversalClassLoader(),
-	'mapLoader' => $mapLoader
+    'loader'    => new \Symfony\Component\ClassLoader\UniversalClassLoader(),
+    'mapLoader' => $mapLoader
 ));
 Autoload::add('PPI', dirname(PPI_PATH));
 Autoload::add('Symfony', PPI_VENDOR_PATH);

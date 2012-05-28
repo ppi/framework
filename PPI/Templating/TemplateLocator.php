@@ -1,8 +1,8 @@
 <?php
 
 /**
- * The PPI Template Locator 
- * 
+ * The PPI Template Locator
+ *
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
@@ -14,9 +14,8 @@ namespace PPI\Templating;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
-
 /**
- * 
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class TemplateLocator implements FileLocatorInterface
@@ -42,7 +41,7 @@ class TemplateLocator implements FileLocatorInterface
     /**
      * Returns a full path for a given file.
      *
-     * @param TemplateReferenceInterface $template     A template
+     * @param TemplateReferenceInterface $template A template
      *
      * @return string The full path for the file
      */
@@ -54,9 +53,9 @@ class TemplateLocator implements FileLocatorInterface
     /**
      * Returns a full path for a given file.
      *
-     * @param TemplateReferenceInterface $template     A template
-     * @param string                     $currentPath  Unused
-     * @param Boolean                    $first        Unused
+     * @param TemplateReferenceInterface $template    A template
+     * @param string                     $currentPath Unused
+     * @param Boolean                    $first       Unused
      *
      * @return string The full path for the file
      *
@@ -65,7 +64,7 @@ class TemplateLocator implements FileLocatorInterface
      */
     public function locate($template, $currentPath = null, $first = true)
     {
-		
+
         if (!$template instanceof TemplateReferenceInterface) {
             throw new \InvalidArgumentException("The template must be an instance of TemplateReferenceInterface.");
         }
