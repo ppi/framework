@@ -1,3 +1,0 @@
-Runs the suite for a given test class series.
-
-Usage: %*solar run-tests <Test_Vendor_Class_Name>%n

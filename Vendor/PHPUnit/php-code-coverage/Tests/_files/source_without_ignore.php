@@ -1,4 +1,0 @@
-<?php
-if (FALSE) {
-    print '*';
-}
