@@ -1,7 +1,7 @@
 {
 	"name": "ppi/ppi",
 	"description": "The PPI framework - Version 2",
-	"homepage": "http://symfony.com",
+	"homepage": "http://www.ppi.io",
 	"license": "MIT",
 	"keywords": ["framework"],
 	"type": "library",
