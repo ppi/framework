@@ -330,6 +330,15 @@ class Controller {
 	}
 	
 	/**
+	 * Get the app's global configuration
+	 * 
+	 * @return mixed
+	 */
+	protected function getConfig() {
+		return $this->getService('Config');
+	}
+	
+	/**
 	 * Inject services into our controller using setters matching against service names
 	 * 
 	 * @return void
