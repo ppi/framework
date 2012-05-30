@@ -179,18 +179,20 @@ class App {
 		
 		// Module Listeners
 		$listenerOptions  = new ListenerOptions($this->_options['moduleConfig']['listenerOptions']);
-		$defaultListeners = new PPIDefaultListenerAggregate($listenerOptions);
+		$defaultListener = new PPIDefaultListenerAggregate($listenerOptions);
 
 		// Loading our Modules
 		$moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
-		$moduleManager->events()->attachAggregate($defaultListeners);
+		$moduleManager->events()->attachAggregate($defaultListener);
+
+
 		$moduleManager->loadModules();
 		
 		// If the routing process for modules has been cached or not.
 		if($routingEnabled) {
 
 			// Merging all the other route collections together from the modules
-			$allRoutes = $defaultListeners->getRoutes();
+			$allRoutes = $defaultListener->getRoutes();
 			foreach($allRoutes as $routes) {
 				$routeCollection->addCollection($routes);
 			}
@@ -201,6 +203,7 @@ class App {
 			
 			// Lets load up our router and match the appropriate route
 			$router->warmUp();
+
 			$matchedRoute         = $router->match($this->_request->getPathInfo());
 			$matchedModuleName    = $matchedRoute['_module'];
 			$this->_matchedModule = $moduleManager->getModule($matchedModuleName);
@@ -224,7 +227,8 @@ class App {
 			'response'      => $this->_response,
 			'templating'    => $this->getTemplatingEngine(),
 			'session'       => $this->getSession(),
-			'router'        => $router
+			'router'        => $router,
+			'config'        => $defaultListener->getConfigListener()->getMergedConfig(false)
 		);
 		
 		// If the user wants DataSource available in their application, lets insntantiate it and set up their connections
@@ -234,7 +238,7 @@ class App {
 		}
 		
 		// Services
-		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListeners->getServices()));
+		$this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListener->getServices()));
 		
 		// Fluent Interface
 		return $this;
