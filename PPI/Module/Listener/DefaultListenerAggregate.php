@@ -1,6 +1,8 @@
 <?php
 namespace PPI\Module\Listener;
-use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate,
+
+use
+	Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate,
 	Zend\EventManager\EventManagerInterface,
 	Zend\ModuleManager\ModuleEvent;
 
@@ -20,9 +22,16 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	 */
 	protected $_services = array();
 	
+	/**
+	 * Override of attach(). Customising the events to be triggered upon the 'loadModule' event.
+	 * 
+	 * @param \Zend\EventManager\EventManagerInterface $events
+	 * @return DefaultListenerAggregate
+	 */
 	public function attach(EventManagerInterface $events) {
 
 		parent::attach($events);
+		
 		$options = $this->getOptions();
 		
 		// This process can be expensive and affect perf if enabled. So we have the flexability to skip it.
@@ -83,5 +92,5 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate {
 	public function getServices() {
 		return $this->_services;
 	}
-	
+
 }
