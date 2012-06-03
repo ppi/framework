@@ -1,4 +1,14 @@
 <?php
+
+/**
+ * The base PPI module class. 
+ *
+ * @package   Core
+ * @author    Paul Dragoonis <dragoonis@php.net>
+ * @license   http://opensource.org/licenses/mit-license.php MIT
+ * @link      http://www.ppi.io
+ */
+
 namespace PPI\Module;
 
 use PPI\Module\Routing\Loader\YamlFileLoader,
