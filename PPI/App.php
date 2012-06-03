@@ -328,7 +328,8 @@ class App {
 				return new PhpEngine(
 					new TemplateNameParser(), 
 					new FileSystemLoader($templateLocator), array(
-						new \Symfony\Component\Templating\Helper\SlotsHelper()
+						new \Symfony\Component\Templating\Helper\SlotsHelper(),
+						new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri())
 					)
 				);
 			
