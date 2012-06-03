@@ -302,8 +302,7 @@ class App {
 		));
 		
 		$templateLocator = new TemplateLocator($fileLocator);
-		
-		$assetsHelper = new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri());
+		$assetsHelper = new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getBasePath());
 		
 		switch($this->getOption('templatingEngine')) {
 			
