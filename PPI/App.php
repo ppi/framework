@@ -303,17 +303,24 @@ class App {
 		
 		$templateLocator = new TemplateLocator($fileLocator);
 		
+		$assetsHelper = new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri());
+		
 		switch($this->getOption('templatingEngine')) {
 			
 			case 'twig':
 				
+//				\Symfony\Bridge\Twig\Extension\RoutingExtension
+			
+				$twigEnvironment = new \Twig_Environment(
+					new TwigFileSystemLoader(
+						$templateLocator,
+						new TemplateNameParser()
+					)
+				);
+				$twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\AssetsExtension($assetsHelper));
+				
 				return new TwigEngine(
-					new \Twig_Environment(
-						new TwigFileSystemLoader(
-							$templateLocator,
-							new TemplateNameParser()
-						)
-					),
+					$twigEnvironment,
 					new TemplateNameParser(),
 					$templateLocator
 				);
@@ -337,7 +344,7 @@ class App {
 					new FileSystemLoader($templateLocator), 
 					array(
 						new \Symfony\Component\Templating\Helper\SlotsHelper(),
-						new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri()),
+						$assetsHelper,
 						new \PPI\Templating\Helper\RouterHelper($this->_router)
 					)
 				);
