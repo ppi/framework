@@ -2,7 +2,6 @@
 
 /**
  * The PPI Template Locator 
- * 
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
