@@ -79,6 +79,13 @@ class App {
 	protected $_request = null;
 	
 	/**
+	 * The router object
+	 * 
+	 * @var null
+	 */
+	protected $_router = null;
+	
+	/**
 	 * The response object
 	 * 
 	 * @var null
@@ -218,9 +225,9 @@ class App {
 			die('404');
 		}
 
-		// Set our valid route
 		$this->_matchedRoute  = $matchedRoute;
 		$this->_moduleManager = $moduleManager;
+		$this->_router        = $router;
 		
 		$defaultServices = array(
 			'request'       => $this->_request,
@@ -324,12 +331,14 @@ class App {
 				
 			case 'php':
 			default:
-			
+
 				return new PhpEngine(
 					new TemplateNameParser(), 
-					new FileSystemLoader($templateLocator), array(
+					new FileSystemLoader($templateLocator), 
+					array(
 						new \Symfony\Component\Templating\Helper\SlotsHelper(),
-						new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri())
+						new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getRequestUri()),
+						new \PPI\Templating\Helper\RouterHelper($this->_router)
 					)
 				);
 			
