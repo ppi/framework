@@ -30,6 +30,13 @@ class Controller {
 	protected $_isCache = array();
 	
 	/**
+	 * The options for this controller
+	 * 
+	 * @var array
+	 */
+	protected $_options = array();
+	
+	/**
 	 * Get the request object
 	 * 
 	 * @return object
@@ -346,6 +353,38 @@ class Controller {
 	 */
 	protected function getConfig() {
 		return $this->getService('Config');
+	}
+	
+	/**
+	 * Set the options for this controller
+	 * 
+	 * @param array $options
+	 * 
+	 * @return $this
+	 */
+	public function setOptions($options) {
+		$this->_options = $options;
+		return $this;
+	}
+	
+	/**
+	 * Get an option from the controller
+	 * 
+	 * @param string $option The option name
+	 * @param null   $default The default value if the option does not exist
+	 * @return mixed
+	 */
+	public function getOption($option, $default = null) {
+		return isset($this->_options[$option]) ? $this->_options[$option] : $default;
+	}
+	
+	/**
+	 * Get the environment type, defaulting to 'development' if it has not been set
+	 * 
+	 * @return string
+	 */
+	public function getEnv() {
+		return $this->getOption('environment', 'development');
 	}
 	
 	/**

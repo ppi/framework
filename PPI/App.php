@@ -264,8 +264,13 @@ class App {
 		$className  = "\\{$this->_matchedModule->getModuleName()}\\Controller\\$controllerName";
 		$controller = new $className();
 		
-		// Set Dependencies for our controller
+		// Set Services for our controller
 		$controller->setServiceLocator($this->_serviceLocator);
+		
+		// Set the options for our controller
+		$controller->setOptions(array(
+			'environment' => $this->getEnv()
+		));
 		
 		// Lets do setter injection on our controller
 		$controller->injectServices();
