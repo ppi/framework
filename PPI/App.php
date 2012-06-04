@@ -316,8 +316,12 @@ class App {
 						new TemplateNameParser()
 					)
 				);
-				$twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\AssetsExtension($assetsHelper));
 				
+				// Add some twig extension
+				$twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\AssetsExtension($assetsHelper));
+				$twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\RouterExtension($this->_router));
+				
+				// Return the twig engine
 				return new TwigEngine(
 					$twigEnvironment,
 					new TemplateNameParser(),
