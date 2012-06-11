@@ -192,7 +192,6 @@ class App {
 		$moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
 		$moduleManager->events()->attachAggregate($defaultListener);
 
-
 		$moduleManager->loadModules();
 		
 		// If the routing process for modules has been cached or not.
@@ -232,8 +231,8 @@ class App {
 		$defaultServices = array(
 			'request'       => $this->_request,
 			'response'      => $this->_response,
-			'templating'    => $this->getTemplatingEngine(),
 			'session'       => $this->getSession(),
+			'templating'    => $this->getTemplatingEngine(),
 			'router'        => $router,
 			'config'        => $defaultListener->getConfigListener()->getMergedConfig(false)
 		);
@@ -313,8 +312,6 @@ class App {
 			
 			case 'twig':
 				
-//				\Symfony\Bridge\Twig\Extension\RoutingExtension
-			
 				$twigEnvironment = new \Twig_Environment(
 					new TwigFileSystemLoader(
 						$templateLocator,
@@ -353,7 +350,8 @@ class App {
 					array(
 						new \Symfony\Component\Templating\Helper\SlotsHelper(),
 						$assetsHelper,
-						new \PPI\Templating\Helper\RouterHelper($this->_router)
+						new \PPI\Templating\Helper\RouterHelper($this->_router),
+						new \PPI\Templating\Helper\SessionHelper($this->getSession())
 					)
 				);
 			
@@ -383,7 +381,7 @@ class App {
 			$session->start();
 			$this->session = $session;
 		}
-		return $session;
+		return $this->session;
 	}
 	
 	/**
