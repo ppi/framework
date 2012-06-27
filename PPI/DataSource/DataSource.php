@@ -67,12 +67,11 @@ class DataSource implements DataSourceInterface {
 		} else {
 			$suffix = $options['type'];
 		}
-
+		
 		// Lets instantiate up and get our  driver
 		$adapterName = $options['prefix'] . $suffix;
 		$adapter     = new $adapterName();
 		$driver      = $adapter->getDriver($options);
-
 		return $driver;
 	}
 	
@@ -121,7 +120,7 @@ class DataSource implements DataSourceInterface {
 		
 		// Check that we asked for a valid key
 		if(!isset($this->_config[$key])) {
-			throw new \PPI\DataSource\DataSourceException('Invalid DataSource Key: ' . $key);
+			throw new \Exception('Invalid DataSource Key: ' . $key);
 		}
 		
 		$conn = $this->factory($this->_config[$key]);
