@@ -29,6 +29,7 @@ use
 	
 	// HTTP Stuff and routing
 	PPI\Module\Routing\Router,
+	PPI\Module\Routing\RoutingHelper,
 	PPI\Module\Routing\Loader\YamlFileLoader,
 	Symfony\Component\Routing\RequestContext,
 	Symfony\Component\Routing\RouteCollection,
@@ -270,6 +271,11 @@ class App {
 		$controller->setOptions(array(
 			'environment' => $this->getEnv()
 		));
+		
+		// Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
+		$routeParams = $this->_matchedRoute;
+		unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
+		$controller->setHelper('routing', new RoutingHelper($routeParams));
 		
 		// Lets do setter injection on our controller
 		$controller->injectServices();
