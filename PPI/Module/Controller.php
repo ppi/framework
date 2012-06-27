@@ -35,6 +35,13 @@ class Controller {
 	 * @var array
 	 */
 	protected $_options = array();
+
+	/**
+	 * Controller helpers
+	 * 
+	 * @var array
+	 */
+	protected $_helpers = array();
 	
 	/**
 	 * Get the request object
@@ -52,6 +59,33 @@ class Controller {
 	 */
 	protected function getResponse() {
 		return $this->_serviceLocator->get('response');
+	}
+
+	/**
+	 * Obtain a controller helper by its key name
+	 * 
+	 * @param string $helperName
+	 * @return mixed
+	 * @throws \InvalidArgumentException
+	 */
+	protected function helper($helperName) {
+		
+		if(!isset($this->_helpers[$helperName])) {
+			throw new \InvalidArgumentException('Unable to locate controller helper: ' . $helperName);
+		}
+		
+		return $this->_helpers[$helperName];
+		
+	}
+
+	/**
+	 * Set a helper object
+	 * 
+	 * @param string $helperName
+	 * @param object $helper
+	 */
+	public function setHelper($helperName, $helper) {
+		$this->_helpers[$helperName] = $helper;
 	}
 	
 	/**
@@ -229,6 +263,16 @@ class Controller {
 	 */
 	protected function getIP() {
 		return $this->server('REMOTE_ADDR');
+	}
+
+	/**
+	 * Get a routing param's value
+	 * 
+	 * @param string $param
+	 * @return mixed
+	 */
+	protected function getRouteParam($param) {
+		return $this->helper('routing')->getParam($param);
 	}
 	
 	/**
