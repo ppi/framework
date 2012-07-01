@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  
+ *
  *
  * @package   Core
  * @author    Paul Dragoonis <dragoonis@php.net>
