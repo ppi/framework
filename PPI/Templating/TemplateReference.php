@@ -1,14 +1,13 @@
 <?php
 
-
 namespace PPI\Templating;
 
 use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 
 /**
- * 
+ *
  * Internal representation of a template.
- * 
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Paul Dragoonis <paul@ppi.io>
  */
