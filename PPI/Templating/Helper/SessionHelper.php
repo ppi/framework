@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The session helper for PPI templating component 
+ * The session helper for PPI templating component
  *
  * @package   Templating
  * @author    Paul Dragoonis <dragoonis@php.net>
@@ -9,12 +9,11 @@
  * @link      http://www.ppi.io
  */
 
-
 namespace PPI\Templating\Helper;
 
-use 
-	Symfony\Component\Templating\Helper\Helper,
-	Symfony\Component\HttpFoundation\Session\SessionInterface;
+use
+    Symfony\Component\Templating\Helper\Helper,
+    Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * SessionHelper provides read-only access to the session attributes.
