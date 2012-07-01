@@ -10,7 +10,6 @@ namespace PPI\Templating;
 
 use Symfony\Component\Templating\TemplateNameParser as BaseTemplateNameParser;
 use Symfony\Component\Templating\TemplateReferenceInterface;
-use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 
 /**
  * TemplateNameParser converts template names from the short notation
@@ -20,18 +19,19 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
  * @author Paul Dragoonis <paul@ppi.io>
  */
 
-class TemplateNameParser extends BaseTemplateNameParser {
+class TemplateNameParser extends BaseTemplateNameParser
+{
+    protected $_cache = array();
 
-	protected $_cache = array();
-	
-	/**
-	 * Parses a template to an array of parameters.
-	 *
-	 * @param string $name A template name
-	 *
-	 * @return TemplateReferenceInterface A template
-	 */
-    public function parse($name) {
+    /**
+     * Parses a template to an array of parameters.
+     *
+     * @param string $name A template name
+     *
+     * @return TemplateReferenceInterface A template
+     */
+    public function parse($name)
+    {
         if ($name instanceof TemplateReferenceInterface) {
             return $name;
         } elseif (isset($this->cache[$name])) {
@@ -49,16 +49,16 @@ class TemplateNameParser extends BaseTemplateNameParser {
         if (3 !== count($parts)) {
             throw new \InvalidArgumentException(sprintf('Template name "%s" is not valid (format is "module:template.format.engine").', $name));
         }
-		
+
         $elements = explode('.', $parts[2]);
         if (3 > count($elements)) {
             throw new \InvalidArgumentException(sprintf('Template name "%s" is not valid (format is "module:template.format.engine").', $name));
         }
-		
+
         $engine = array_pop($elements);
         $format = array_pop($elements);
-		$module = $parts[0];
-		$controller = $parts[1];
+        $module = $parts[0];
+        $controller = $parts[1];
         $template = new TemplateReference($module, $controller, implode('.', $elements), $format, $engine);
 
         return $this->cache[$name] = $template;
