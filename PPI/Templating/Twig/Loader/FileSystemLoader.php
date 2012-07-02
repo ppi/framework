@@ -11,7 +11,7 @@ use Symfony\Component\Config\FileLocatorInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FilesystemLoader extends \Twig_Loader_Filesystem
+class FileSystemLoader extends \Twig_Loader_Filesystem
 {
     protected $locator;
     protected $parser;
