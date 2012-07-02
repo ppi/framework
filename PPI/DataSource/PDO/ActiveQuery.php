@@ -7,87 +7,95 @@
  */
 namespace PPI\DataSource\PDO;
 
-class ActiveQuery {
-	
-	/**
-	 * The table name
-	 * 
-	 * @var null
-	 */
-	protected $_table = null;
-	
-	/**
-	 * The primary key
-	 * 
-	 * @var null
-	 */
-	protected $_primary = null;
-	
-	/**
-	 * The datasource connection
-	 * 
-	 * @var null
-	 */
-	protected $_conn = null;
+class ActiveQuery
+{
+    /**
+     * The table name
+     *
+     * @var null
+     */
+    protected $_table = null;
 
-	/**
-	 * The meta data for this instantiation
-	 *
-	 * @var array
-	*/
-	protected $_meta = array(
-		'conn'    => null,
-		'table'   => null,
-		'primary' => null
-	);
+    /**
+     * The primary key
+     *
+     * @var null
+     */
+    protected $_primary = null;
 
-	/**
-	 * The options for this instantiation
-	 *
-	 * @var array
-	*/
-	protected $_options = array();
-	
-	function __construct(array $options = array()) {
+    /**
+     * The datasource connection
+     *
+     * @var null
+     */
+    protected $_conn = null;
 
-		// Setup our connection from the key passed to meta['conn']
-		if(isset($options['meta'])) {
-			$this->_meta = $options['meta'];
-		}
-		
-		$this->_options = $options;
-	}
-	
-	function setConn($conn) {
-		$this->_conn = $conn;
-	}
-	
-	function fetchAll() {
-		$query = "SELECT * FROM {$this->_meta['table']}";
-		return $this->_conn->query($query)->fetchAll();
-	}
-	
-	/**
-	 * Find a row by primary key
-	 * 
-	 * @param string $id
-	 * @return array|false
-	 */
-	function find($id) {
-		return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
-	}
+    /**
+     * The meta data for this instantiation
+     *
+     * @var array
+    */
+    protected $_meta = array(
+        'conn'    => null,
+        'table'   => null,
+        'primary' => null
+    );
 
-	function insert(array $data) {
-		$this->_conn->insert($this->_meta['table'], $data);
-		return $this->_conn->lastInsertId();
-	}
+    /**
+     * The options for this instantiation
+     *
+     * @var array
+    */
+    protected $_options = array();
 
-	function delete($where) {
-		return $this->_conn->delete($this->_meta['table'], $where);
-	}
-	
-	function update(array $data, $where) {
-		return $this->_conn->update($this->_meta['table'], $data, $where);
-	}
+    public function __construct(array $options = array())
+    {
+        // Setup our connection from the key passed to meta['conn']
+        if (isset($options['meta'])) {
+            $this->_meta = $options['meta'];
+        }
+
+        $this->_options = $options;
+    }
+
+    public function setConn($conn)
+    {
+        $this->_conn = $conn;
+    }
+
+    public function fetchAll()
+    {
+        $query = "SELECT * FROM {$this->_meta['table']}";
+
+        return $this->_conn->query($query)->fetchAll();
+    }
+
+    /**
+     * Find a row by primary key
+     *
+     * @param  string      $id
+     * @return array|false
+     */
+    public function find($id)
+    {
+        return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
+    }
+
+    public function insert(array $data)
+    {
+        $this->_conn->insert($this->_meta['table'], $data);
+
+        return $this->_conn->lastInsertId();
+    }
+
+    public function delete($where)
+    {
+        return $this->_conn->delete($this->_meta['table'], $where);
+    }
+
+    public function update(array $data, $where)
+    {
+        return $this->_conn->update($this->_meta['table'], $data, $where);
+    }
 
 }

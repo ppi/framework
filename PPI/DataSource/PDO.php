@@ -8,41 +8,41 @@
 namespace PPI\DataSource;
 
 use
-	Doctrine\Common\ClassLoader,
-	Doctrine\DBAL\DriverManager,
-	Doctrine\DBAL\Configuration,
-	PPI\Autoload;
+    Doctrine\Common\ClassLoader,
+    Doctrine\DBAL\DriverManager,
+    Doctrine\DBAL\Configuration,
+    PPI\Autoload;
 
-class PDO {
+class PDO
+{
+    public function __construct()
+    {
+    }
 
-	function __construct() {
+    public function getDriver(array $config)
+    {
+        $connObject = new Configuration();
 
-	}
+        // We map our config options to Doctrine's naming of them
+        $connParamsMap = array(
+            'database' => 'dbname',
+            'username' => 'user',
+            'hostname' => 'host',
+            'pass'     => 'password'
+        );
 
-	function getDriver(array $config) {
+        foreach ($connParamsMap as $key => $param) {
+            if (isset($config[$key])) {
+                $config[$param] = $config[$key];
+                unset($config[$key]);
+            }
+        }
 
-		$connObject = new Configuration();
+        $config['driver'] = $config['type'];
+        unset($config['type']);
 
-		// We map our config options to Doctrine's naming of them
-		$connParamsMap = array(
-			'database' => 'dbname',
-			'username' => 'user',
-			'hostname' => 'host',
-			'pass'     => 'password'
-		);
+        return DriverManager::getConnection($config, $connObject);
 
-		foreach($connParamsMap as $key => $param) {
-			if(isset($config[$key])) {
-				$config[$param] = $config[$key];
-				unset($config[$key]);
-			}
-		}
-
-		$config['driver'] = $config['type'];
-		unset($config['type']);
-
-		return DriverManager::getConnection($config, $connObject);
-
-	}
+    }
 
 }
