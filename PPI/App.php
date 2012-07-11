@@ -191,7 +191,7 @@ class App
 
         // Loading our Modules
         $moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
-        $moduleManager->events()->attachAggregate($defaultListener);
+        $moduleManager->getEventManager()->attachAggregate($defaultListener);
 
         $moduleManager->loadModules();
 
