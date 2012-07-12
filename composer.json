@@ -15,14 +15,19 @@
 		"psr-0": { "PPI": "" }
 	},
 	"require": {
-		"symfony/class-loader": "2.1.*@beta",
+		
 		"doctrine/common": "2.2.*@stable",
 		"doctrine/dbal": "2.2.*@stable",
+		
 		"twig/twig": ">=1.8,<2.0-dev",
+		
+		"symfony/class-loader": "2.1.*@beta",
+		"symfony/config":
+		"symfony/yaml": "2.1.*@beta",
+		"symfony/http-foundation": "2.1.*@beta",
 		"symfony/templating": "2.1.*@beta",
 		"symfony/routing": "2.1.*@beta",
-		"symfony/http-foundation": "2.1.*@beta",
-		"symfony/yaml": "2.1.*@beta",
+		
 		"ppi/zendframework": "2.0.*@beta"
 	},
 	"repositories": [
