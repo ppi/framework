@@ -15,6 +15,7 @@
 		"psr-0": { "PPI": "" }
 	},
 	"require": {
+		"symfony/class-loader": "2.1.*@beta",
 		"doctrine/common": "2.2.*@stable",
 		"doctrine/dbal": "2.2.*@stable",
 		"twig/twig": ">=1.8,<2.0-dev",
