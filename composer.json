@@ -17,7 +17,10 @@
 	"require": {
 		"doctrine/common": "2.2.*@stable",
 		"doctrine/dbal": "2.2.*@stable",
-		"symfony/symfony": "dev-master",
+		"symfony/templating": "2.1.*@beta",
+		"symfony/routing": "2.1.*@beta",
+		"symfony/http-foundation": "2.1.*@beta",
+		"symfony/yaml": "2.1.*@beta",
 		"zendframework/zendframework": "dev-master"
 	},
 	"extra": {
