@@ -16,11 +16,9 @@ namespace PPI;
  *  * The technical interoperability standards for PHP 5.3 namespaces and
  *    class names (https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md);
  *
- *  * The PEAR naming convention for classes (http://pear.php.net/).
- *
  *  Example usage:
  *
- *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . 'Symfony')
+ *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
  *  PPI\Autoload::register();
  *
  */
@@ -59,19 +57,7 @@ class Autoload
     public static function add($key, $path)
     {
         self::$_registeredNamespaces[$key] = true;
-        self::$_options['loader']->registerNamespace($key, $path);
-    }
-
-    /**
-     * Add a library prefix to the autoloader, eg: 'Twig_', or 'Swift_'
-     *
-     * @static
-     * @param $prefix
-     * @param $path
-     */
-    public static function addPrefix($prefix, $path)
-    {
-        self::$_options['loader']->registerPrefix($prefix, $path);
+        self::$_options['loader']->add($key, $path);
     }
 
     /**
