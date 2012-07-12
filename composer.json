@@ -1,5 +1,5 @@
 {
-	"name": "ppi/ppi",
+	"name": "ppi/framework",
 	"description": "The PPI Framework - A meta-framework built using Symfony2/ZendFramework2 and Doctrine2",
 	"homepage": "http://www.ppi.io",
 	"license": "MIT",
