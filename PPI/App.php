@@ -36,7 +36,10 @@ use
     Symfony\Component\Routing\Generator\UrlGenerator,
     Symfony\Component\HttpFoundation\Request as HttpRequest,
     Symfony\Component\HttpFoundation\Response as HttpResponse,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException;
+    Symfony\Component\Routing\Exception\ResourceNotFoundException,
+	
+	// Misc
+	Zend\Stdlib\ArrayUtils;
 
 class App
 {
@@ -228,15 +231,21 @@ class App
         $this->_matchedRoute  = $matchedRoute;
         $this->_moduleManager = $moduleManager;
         $this->_router        = $router;
+		
+		// Merge the app config with the config from all the modules
+		$mergedConfig         = ArrayUtils::merge(
+			$this->_options['config'], 
+			$defaultListener->getConfigListener()->getMergedConfig(false)
+		);
 
-        $defaultServices = array(
-            'request'       => $this->_request,
-            'response'      => $this->_response,
-            'session'       => $this->getSession(),
-            'templating'    => $this->getTemplatingEngine(),
-            'router'        => $router,
-            'config'        => $defaultListener->getConfigListener()->getMergedConfig(false)
-        );
+		$defaultServices = array(
+			'request'       => $this->_request,
+			'response'      => $this->_response,
+			'session'       => $this->getSession(),
+			'templating'    => $this->getTemplatingEngine(),
+			'router'        => $router,
+			'config'        => $mergedConfig
+		);
 
         // If the user wants DataSource available in their application, lets insntantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
