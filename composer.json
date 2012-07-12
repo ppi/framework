@@ -21,8 +21,24 @@
 		"symfony/routing": "2.1.*@beta",
 		"symfony/http-foundation": "2.1.*@beta",
 		"symfony/yaml": "2.1.*@beta",
-		"zendframework/zendframework": "dev-master"
+		"ppi-zendframework": ">=2.0.0-beta5"
 	},
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "ppi-zendframework",
+				"version": "2.0.0-beta5",
+				"dist": {
+					"url": "http://packages.zendframework.com/releases/ZendFramework-2.0.0beta5/ZendFramework-2.0.0beta5-minimal.zip",
+					"type": "zip"
+				},
+				"autoload": {
+					"psr-0": { "Zend": "library" }
+				}
+			}
+		}
+	],
 	"extra": {
 		"branch-alias": {
 			"dev-master": "2.0-dev"
