@@ -1,54 +1,55 @@
 {
-	"name": "ppi/framework",
-	"description": "The PPI Framework - A meta-framework built using Symfony2/ZendFramework2 and Doctrine2",
-	"homepage": "http://www.ppi.io",
-	"license": "MIT",
-	"keywords": ["framework"],
-	"type": "library",
-	"authors": [
-		{
-			"name": "Paul Dragoonis",
-			"email": "paul@ppi.io"
-		}
-	],
-	"autoload": {
-		"psr-0": { "PPI": "" }
-	},
-	"require": {
-		
-		"doctrine/common": "2.2.*@stable",
-		"doctrine/dbal": "2.2.*@stable",
-		
-		"twig/twig": ">=1.8,<2.0-dev",
-		
-		"symfony/class-loader": "2.1.*@beta",
-		"symfony/config": "2.1.*@beta",
-		"symfony/yaml": "2.1.*@beta",
-		"symfony/http-foundation": "2.1.*@beta",
-		"symfony/templating": "2.1.*@beta",
-		"symfony/routing": "2.1.*@beta",
-		
-		"ppi/zendframework": "2.0.*@beta"
-	},
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "ppi/zendframework",
-				"version": "2.0.0-beta5",
-				"dist": {
-					"url": "http://packages.zendframework.com/releases/ZendFramework-2.0.0beta5/ZendFramework-2.0.0beta5-minimal.zip",
-					"type": "zip"
-				},
-				"autoload": {
-					"psr-0": { "Zend": "library" }
-				}
-			}
-		}
-	],
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.0-dev"
-		}
-	}
+    "name": "ppi/framework",
+    "description": "The PPI Framework - A meta-framework built using Symfony2/ZendFramework2 and Doctrine2",
+    "homepage": "http://www.ppi.io",
+    "license": "MIT",
+    "keywords": ["framework"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Paul Dragoonis",
+            "email": "paul@ppi.io"
+        }
+    ],
+    "autoload": {
+        "psr-0": { "PPI": "" }
+    },
+    "require": {
+
+        "doctrine/common": "2.2.*@stable",
+        "doctrine/dbal": "2.2.*@stable",
+
+        "twig/twig": ">=1.8,<2.0-dev",
+        "smarty/smarty": "v3.1.11",
+
+        "symfony/class-loader": "2.1.*@beta",
+        "symfony/config": "2.1.*@beta",
+        "symfony/yaml": "2.1.*@beta",
+        "symfony/http-foundation": "2.1.*@beta",
+        "symfony/templating": "2.1.*@beta",
+        "symfony/routing": "2.1.*@beta",
+
+        "ppi/zendframework": "2.0.*@beta"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "ppi/zendframework",
+                "version": "2.0.0-beta5",
+                "dist": {
+                    "url": "http://packages.zendframework.com/releases/ZendFramework-2.0.0beta5/ZendFramework-2.0.0beta5-minimal.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": { "Zend": "library" }
+                }
+            }
+        }
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0-dev"
+        }
+    }
 }
