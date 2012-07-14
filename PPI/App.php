@@ -41,6 +41,15 @@ use
 	// Misc
 	Zend\Stdlib\ArrayUtils;
 
+/**
+ * The PPI App bootstrap class.
+ *
+ * This class sets various app settings, and allows you to override clases used
+ * in the bootup process.
+ *
+ * @author Paul Dragoonis <dragoonis@php.net>
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
+ */
 class App
 {
     /**
@@ -347,15 +356,27 @@ class App
 
             case 'smarty':
 
-                defined('SMARTY_DIR') || define('SMARTY_DIR', PPI_VENDOR_PATH . 'Smarty/');
-                $smartyDriver = new \PPI\Templating\Smarty\Smarty();
-                $engine = new SmartyEngine(
-                    $smartyDriver,
+                if (null == $cacheDir = $this->getAppConfigValue('cache_dir')) {
+                    $cacheDir = $fileLocator->getAppPath().DIRECTORY_SEPARATOR.'cache';
+                }
+                $cacheDir .= DIRECTORY_SEPARATOR.'smarty';
+
+                $smartyEngine = new SmartyEngine(
+                    new \Smarty(),
+                    $templateLocator,
                     new TemplateNameParser(),
-                    new FileSystemLoader($templateLocator)
+                    new FileSystemLoader($templateLocator),
+                    array(
+                        'cache_dir'     => $cacheDir.DIRECTORY_SEPARATOR.'cache',
+                        'compile_dir'   => $cacheDir.DIRECTORY_SEPARATOR.'templates_c',
+                    )
                 );
 
-                return $engine;
+                // Add some SmartyBundle extensions
+                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\AssetsExtension($assetsHelper));
+                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\RouterExtension($this->_router));
+
+                return $smartyEngine;
 
             case 'php':
             default:
