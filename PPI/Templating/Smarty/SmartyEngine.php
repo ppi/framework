@@ -24,7 +24,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  * @author Paul Dragoonis <paul@ppi.io>
  * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
-class SmartyEngine extends BaseSmartyEngine implements EngineInterface
+class SmartyEngine extends BaseSmartyEngine
 {
     protected $locator;
 
