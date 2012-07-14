@@ -9,6 +9,7 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Paul Dragoonis <paul@ppi.io>
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class FileLocator extends BaseFileLocator
 {
@@ -59,6 +60,30 @@ class FileLocator extends BaseFileLocator
 
             throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
         }
+    }
 
+    /**
+     * Returns the path to the app directory.
+     *
+     * @return string The path to the app directory.
+     */
+    public function getAppPath()
+    {
+        return $this->appPath;
+    }
+
+    /**
+     * Returns an array of paths to modules.
+     *
+     * @return array An array of paths to each loaded module
+     */
+    public function getModulesPath()
+    {
+        $paths = array();
+        foreach ($this->modules as $module) {
+            $paths[$module] = $this->baseModulePath.DIRECTORY_SEPARATOR.$module;
+        }
+
+        return $paths;
     }
 }
