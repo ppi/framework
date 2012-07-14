@@ -347,10 +347,8 @@ class App
 
             case 'smarty':
 
-                defined('SMARTY_DIR') || define('SMARTY_DIR', PPI_VENDOR_PATH . 'Smarty/');
-                $smartyDriver = new \PPI\Templating\Smarty\Smarty();
                 $engine = new SmartyEngine(
-                    $smartyDriver,
+                    new \Smarty(),
                     new TemplateNameParser(),
                     new FileSystemLoader($templateLocator)
                 );
