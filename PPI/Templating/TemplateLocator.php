@@ -10,12 +10,13 @@
  */
 namespace PPI\Templating;
 
+use PPI\Templating\TemplateReference;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
- *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class TemplateLocator implements FileLocatorInterface
 {
@@ -79,5 +80,30 @@ class TemplateLocator implements FileLocatorInterface
         } catch (\InvalidArgumentException $e) {
             throw new \InvalidArgumentException(sprintf('Unable to find template "%s" : "%s".', $template, $e->getMessage()), 0, $e);
         }
+    }
+
+    /**
+     * Returns the path to the views directory in the app dir.
+     *
+     * @return string The path to the app directory.
+     */
+    public function getAppPath()
+    {
+        return $this->locator->appPath.DIRECTORY_SEPARATOR.TemplateReference::APP_VIEWS_DIRECTORY;;
+    }
+
+    /**
+     * Returns an array of paths to modules views dir.
+     *
+     * @return array An array of paths to each loaded module
+     */
+    public function getModulesPath()
+    {
+        $paths = $this->locator->getModulesPath();
+        foreach (array_keys($paths) as $module) {
+            $paths[$module] .= DIRECTORY_SEPARATOR.TemplateReference::MODULE_VIEWS_DIRECTORY;
+        }
+
+        return $paths;
     }
 }
