@@ -21,6 +21,7 @@
 
         "twig/twig": ">=1.8,<2.0-dev",
         "smarty/smarty": "v3.1.11",
+        "noiselabs/smarty-bundle": "dev-master",
 
         "symfony/class-loader": "2.1.*@beta",
         "symfony/config": "2.1.*@beta",
