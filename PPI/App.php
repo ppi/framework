@@ -347,13 +347,18 @@ class App
 
             case 'smarty':
 
-                $engine = new SmartyEngine(
+                $smartyEngine = new SmartyEngine(
                     new \Smarty(),
+                    $templateLocator,
                     new TemplateNameParser(),
                     new FileSystemLoader($templateLocator)
                 );
 
-                return $engine;
+                // Add some SmartyBundle extensions
+                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\AssetsExtension($assetsHelper));
+                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\RouterExtension($this->_router));
+
+                return $smartyEngine;
 
             case 'php':
             default:
