@@ -31,14 +31,14 @@ class SmartyEngine extends BaseSmartyEngine implements EngineInterface
     /**
      * Constructor.
      *
-     * @param \Smarty                      $smarty   A \Smarty instance
-     * @param TemplateLocator              $locator  A TemplateLocator instance
-     * @param TemplateNameParserInterface  $parser   A TemplateNameParserInterface instance
-     * @param LoaderInterface              $loader   A LoaderInterface instance
-     * @param array                        $options  An array of \Smarty properties
-     * @param GlobalVariables|null         $globals  A GlobalVariables instance or null
+     * @param \Smarty                     $smarty  A \Smarty instance
+     * @param TemplateLocator             $locator A TemplateLocator instance
+     * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
+     * @param LoaderInterface             $loader  A LoaderInterface instance
+     * @param array                       $options An array of \Smarty properties
+     * @param GlobalVariables|null        $globals A GlobalVariables instance or null
      */
-    public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser, LoaderInterface $loader, 
+    public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser, LoaderInterface $loader,
     array $options = array(), GlobalVariables $globals = null)
     {
         $this->smarty = $smarty;
