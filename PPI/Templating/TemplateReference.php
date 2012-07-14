@@ -10,9 +10,13 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Paul Dragoonis <paul@ppi.io>
+ * @author Vítor Brandão <noisebleed@noiselabs.org>
  */
 class TemplateReference extends BaseTemplateReference
 {
+    const APP_VIEWS_DIRECTORY = 'views';
+    const MODULE_VIEWS_DIRECTORY = 'resources/views';
+
     public function __construct($module = null, $controller = null, $name = null, $format = null, $engine = null)
     {
         $this->parameters = array(
@@ -37,7 +41,7 @@ class TemplateReference extends BaseTemplateReference
 
         $path = (empty($controller) ? '' : $controller.'/').$this->get('name').'.'.$this->get('format').'.'.$this->get('engine');
 
-        return empty($this->parameters['module']) ? 'views/'.$path : '@'.$this->get('module').'/resources/views/'.$path;
+        return empty($this->parameters['module']) ? self::APP_VIEWS_DIRECTORY.'/'.$path : '@'.$this->get('module').'/'.self::MODULE_VIEWS_DIRECTORY.'/'.$path;
     }
 
     /**
