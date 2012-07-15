@@ -9,6 +9,7 @@
  * @link      http://www.ppi.io
  */
 namespace PPI;
+
 use
 
     // Modules
@@ -59,6 +60,7 @@ class App
      */
     protected $_options = array(
         'templatingEngine'    => 'php',
+        '404RouteName'        => 'Framework_404',
         'useDataSource'       => false,
         'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
         'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
@@ -185,12 +187,12 @@ class App
         $requestContext  = new RequestContext();
         $requestContext->fromRequest($this->_request);
 
-        $router = new Router($requestContext, $routeCollection, $routerOptions);
+        $this->_router = new Router($requestContext, $routeCollection, $routerOptions);
 
         if (!$this->isDevMode()) {
 
             // If we are in production mode, and have the routing file(s) have been cached, then skip route fetching on modules boot
-            if ($router->isGeneratorCached() && $router->isMatcherCached()) {
+            if ($this->_router->isGeneratorCached() && $this->_router->isMatcherCached()) {
                 $this->_options['moduleConfig']['listenerOptions']['routingEnabled'] = false;
                 $routingEnabled = false;
             }
@@ -202,10 +204,9 @@ class App
         $defaultListener = new PPIDefaultListenerAggregate($listenerOptions);
 
         // Loading our Modules
-        $moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
-        $moduleManager->getEventManager()->attachAggregate($defaultListener);
-
-        $moduleManager->loadModules();
+        $this->_moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
+        $this->_moduleManager->getEventManager()->attachAggregate($defaultListener);
+        $this->_moduleManager->loadModules();
 
         // If the routing process for modules has been cached or not.
         if ($routingEnabled) {
@@ -215,31 +216,10 @@ class App
             foreach ($allRoutes as $routes) {
                 $routeCollection->addCollection($routes);
             }
-            $router->setRouteCollection($routeCollection);
+            $this->_router->setRouteCollection($routeCollection);
         }
 
-        try {
-
-            // Lets load up our router and match the appropriate route
-            $router->warmUp();
-
-            $matchedRoute         = $router->match($this->_request->getPathInfo());
-            $matchedModuleName    = $matchedRoute['_module'];
-            $this->_matchedModule = $moduleManager->getModule($matchedModuleName);
-            $this->_matchedModule->setModuleName($matchedModuleName);
-
-        } catch (ResourceNotFoundException $e) {} catch(\RuntimeException $e) {
-            die($e->getMessage());
-        } catch (\Exception $e) {}
-
-        // @todo Handle 404 here gracefully using $response object
-        if ($matchedRoute === false) {
-            die('404');
-        }
-
-        $this->_matchedRoute  = $matchedRoute;
-        $this->_moduleManager = $moduleManager;
-        $this->_router        = $router;
+        $this->handleRouting();
 		
 		// Merge the app config with the config from all the modules
 		$mergedConfig         = ArrayUtils::merge(
@@ -252,7 +232,7 @@ class App
 			'response'      => $this->_response,
 			'session'       => $this->getSession(),
 			'templating'    => $this->getTemplatingEngine(),
-			'router'        => $router,
+			'router'        => $this->_router,
 			'config'        => $mergedConfig
 		);
 
@@ -274,6 +254,7 @@ class App
      */
     public function dispatch()
     {
+        
         // Lets disect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
         $actionName = $actionName . 'Action';
@@ -323,6 +304,7 @@ class App
 
     protected function getTemplatingEngine()
     {
+        
         $fileLocator = new FileLocator(array(
             'modules'     => $this->_moduleManager->getModules(),
             'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
@@ -394,6 +376,61 @@ class App
 
         }
 
+    }
+
+    /**
+     * Match a route based on the specified $uri.
+     * Set up _matchedRoute and _matchedModule too
+     * 
+     * @param  string $uri
+     * @return void
+     */
+    protected function matchRoute($uri) {
+        
+        $this->_matchedRoute  = $this->_router->match($uri);
+        $matchedModuleName    = $this->_matchedRoute['_module'];
+        $this->_matchedModule = $this->_moduleManager->getModule($matchedModuleName);
+        $this->_matchedModule->setModuleName($matchedModuleName);
+        
+    }
+
+    /**
+     * 
+     */
+    protected function handleRouting() {
+        
+        try {
+
+            // Lets load up our router and match the appropriate route
+            $this->_router->warmUp();
+            $this->matchRoute($this->_request->getPathInfo());
+
+        } catch (\Exception $e) {
+            $this->_matchedRoute = false;
+        }
+        
+        // Lets grab the 'Framework 404' route and dispatch it.
+        if ($this->_matchedRoute === false) {
+                
+            try {
+                
+                $baseUrl  = $this->_router->getContext()->getBaseUrl();
+                $routeUri = $this->_router->generate($this->_options['404RouteName']);
+                
+                // If the base url is preset before the $routeUri, get rid of it
+                if( ($pos = strpos($routeUri, $baseUrl)) !== false ) {
+                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
+                }
+                
+                $this->matchRoute($routeUri);
+                
+            // @todo handle a 502 here
+            } catch(\Exception $e) {
+                die('Unable to load 404 page. An internal error occured');
+            }
+            
+        }
+        
     }
 
     /**
