@@ -161,7 +161,7 @@ class Controller
      *
      * @param string     $key
      * @param null|mixed $default If this is not null, it enters setter mode
-     * @todo TBC, this doesn't work yet.
+     * return mixed
      */
     protected function session($key = null, $default = null)
     {
