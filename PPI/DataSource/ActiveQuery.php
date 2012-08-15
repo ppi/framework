@@ -172,7 +172,7 @@ class ActiveQuery
      */
     protected function getFetchMode()
     {
-        return isset($this->_meta['fetchmode']) ? $this->_meta['fetchMode'] : null;
+        return isset($this->_meta['fetchMode']) ? $this->_meta['fetchMode'] : null;
     }
 
     /**
