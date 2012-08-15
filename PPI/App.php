@@ -276,9 +276,6 @@ class App
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
         $controller->setHelper('routing', new RoutingHelper($routeParams));
 
-        // Lets do setter injection on our controller
-        $controller->injectServices();
-
         // Prep our module for dispatch
         $this->_matchedModule
             ->setControllerName($controllerName)
