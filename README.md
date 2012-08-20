@@ -24,7 +24,7 @@ The documentation for PPI is available at http://www.ppi.io/docs
 
 Contributing
 ------------
-PPI is an open source, community-driven project. If you'd like to contribute, please read the http://www.ppi.io/contributing page. If you're submitting a pull request, please do so on your own branch on github.
+PPI is an open source, community-driven project. If you'd like to contribute, please read the http://www.ppi.io/contribute page. If you're submitting a pull request, please do so on your own branch on github.
 
 Requirements
 ------------
