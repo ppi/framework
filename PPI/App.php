@@ -42,6 +42,8 @@ use
     // Misc
     Zend\Stdlib\ArrayUtils;
 
+use PPI\ServiceManager\ServiceManager;
+
 /**
  * The PPI App bootstrap class.
  *
@@ -115,15 +117,16 @@ class App
     protected $_matchedModule = null;
 
     /**
-     * Service Builder
+     * Service Manager (Zend implementation)
      *
-     * @var null|\PPI\Module\ServiceBuilder
+     * @var \PPI\Module\ServiceManager\ServiceManager
      */
-    protected $_serviceBuilder = null;
+     protected $serviceManager;
     
     /**
      * Service Locator
      *
+     * @deprecated by $serviceManager
      * @var null|\PPI\Module\ServiceLocator
      */
     protected $_serviceLocator = null;
