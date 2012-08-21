@@ -2,4 +2,6 @@ vendor/*
 composer.phar
 composer.lock
 
+# IDE backup files
 *~
+*.kate-swp
