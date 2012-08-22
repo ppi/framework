@@ -86,7 +86,7 @@ class TemplatingConfig extends Config
                 new FileSystemLoader($serviceManager->get('templating.locator')),
                 array(
                     new SlotsHelper(),
-                    $serviceManager->get('templating.assets.helper'),
+                    $serviceManager->get('templating.helper.assets'),
                     new RouterHelper($serviceManager->get('router')),
                     new SessionHelper($serviceManager->get('session'))
                 )
@@ -103,7 +103,7 @@ class TemplatingConfig extends Config
             );
 
             // Add some twig extension
-            $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.assets.helper')));
+            $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.helper.assets')));
             $twigEnvironment->addExtension(new TwigRouterExtension($serviceManager->get('router')));
 
             return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templatingLocator);
@@ -129,7 +129,7 @@ class TemplatingConfig extends Config
             );
 
             // Add some SmartyBundle extensions
-            $smartyEngine->addExtension(new SmartyAssetsExtension($serviceManager->get('templating.assets.helper')));
+            $smartyEngine->addExtension(new SmartyAssetsExtension($serviceManager->get('templating.helper.assets')));
             $smartyEngine->addExtension(new SmartyRouterExtension($serviceManager->get('router')));
 
             return $smartyEngine;
