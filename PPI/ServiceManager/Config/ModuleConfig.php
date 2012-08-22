@@ -35,7 +35,9 @@ class ModuleConfig extends Config
 
         // default listener
         $serviceManager->setFactory('module.defaultListener', function($serviceManager) {
-            return new PPIDefaultListenerAggregate($serviceManager->get('module.listenerOptions'));
+            $listener = new PPIDefaultListenerAggregate($serviceManager->get('module.listenerOptions'));
+            $listener->setServiceManager($serviceManager);
+            return $listener;
         });
 
         // Module Manager
