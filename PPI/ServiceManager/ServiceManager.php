@@ -30,7 +30,7 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 class ServiceManager extends BaseServiceManager
 {
     /**
-     * @param array $config Array of ConfigInterface instances
+     * @param array $configs Array of ConfigInterface instances
      */
     public function __construct($configs = array())
     {
