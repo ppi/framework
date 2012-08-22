@@ -14,19 +14,10 @@ namespace PPI;
 use
 
     // Modules
-    PPI\Module\ServiceBuilder,
     PPI\Module\ServiceLocator,
     PPI\Module\Listener\ListenerOptions,
     Zend\ModuleManager\ModuleManager,
     PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
-
-    // Templating
-    PPI\Templating\DelegatingEngine,
-    PPI\Templating\FileLocator,
-    PPI\Templating\Twig\TwigEngine,
-    PPI\Templating\TemplateLocator,
-    PPI\Templating\Smarty\SmartyEngine,
-    PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
 
     // HTTP Stuff and routing
     PPI\Module\Routing\Router,
@@ -43,6 +34,10 @@ use
     Zend\Stdlib\ArrayUtils;
 
 use PPI\ServiceManager\ServiceManager;
+use PPI\ServiceManager\Config\OptionsConfig;
+use PPI\ServiceManager\Config\HttpConfig;
+use PPI\ServiceManager\Config\ModuleConfig;
+use PPI\ServiceManager\Config\TemplatingConfig;
 
 /**
  * The PPI App bootstrap class.
@@ -61,7 +56,7 @@ class App
      * @var array
      */
     protected $_options = array(
-       'templating.engines'   => array('php'),
+        'templating.engines'   => array('php'),
         '404RouteName'        => 'Framework_404',
         'useDataSource'       => false,
         'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
@@ -117,12 +112,19 @@ class App
     protected $_matchedModule = null;
 
     /**
-     * Service Manager (Zend implementation)
+     * Service Manager (ZF2 implementation)
      *
      * @var \PPI\Module\ServiceManager\ServiceManager
      */
      protected $serviceManager;
-    
+
+    /**
+     * Service configuration
+     *
+     * @var \PPI\Module\ServiceManager\ServiceConfig
+     */
+     protected $serviceConfig;
+
     /**
      * Service Locator
      *
@@ -181,6 +183,13 @@ class App
         if (empty($this->_options['moduleConfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
+
+        $this->serviceManager = new ServiceManager(array(
+            new OptionsConfig($this->_options),
+            new HttpConfig(),
+            new ModuleConfig(),
+            new TemplatingConfig()
+        ));
 
         $this->_request  = HttpRequest::createFromGlobals();
         $this->_response = new HttpResponse();
@@ -245,7 +254,7 @@ class App
             'router'        => $this->_router,
             'config'        => $mergedConfig
         );
-       
+
         // If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
@@ -254,9 +263,6 @@ class App
 
         // Services
         $this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListener->getServices()));
-        $this->_serviceBuilder = new ServiceBuilder($this->_serviceLocator);
-
-        $this->createTemplatingServices();
 
         // Fluent Interface
         return $this;
@@ -309,48 +315,6 @@ class App
         // Send our content to the browser
         $this->_response->setContent($result);
         $this->_response->send();
-
-    }
-
-    /**
-     * Registers in the ServiceLocator all the templating services like
-     * DelegatingEngine and Php/Twig/SmartyEngine.
-     *
-     * The serviceLocator property needs to be available at this point.
-     *
-     * Engines available in ServiceBuilder should be added to $knownEngineIds.
-     */
-    protected function createTemplatingServices()
-    {
-        $knownEngineIds = array('php', 'smarty', 'twig');
-        $engineIds = $this->getAppConfigValue('templating.engines', $this->getOption('templating.engines'));
-        
-        // filter templating engines
-        $engineIds = array_intersect($engineIds, $knownEngineIds);
-        if (empty($engineIds)) {
-            throw new \RuntimeException(sprintf('At least one templating engine should be defined in your app config (in $config[\'templating.engines\']). These are the available ones: "%s". Example: "$config[\'templating.engines\'] = array(\'%s\');"', implode('", ', $knownEngineIds), implode("', ", $knownEngineIds)));
-        }    
-
-        $this->_serviceLocator->set('file_locator', new FileLocator(array(
-            'modules'     => $this->_moduleManager->getModules(),
-            'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-            'appPath'     => getcwd() . '/app'
-        )));
-
-        $this->_serviceLocator->set('templating.locator', new TemplateLocator($this->_serviceLocator->get('file_locator')));
-        
-        $this->_serviceLocator->set('templating.helper.assets', new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getBasePath()));
-
-        $engines = array();
-        foreach ($engineIds as $id) {
-            $method = 'createTemplatingEngine'.ucfirst($id).'Service';
-            if (method_exists($this->_serviceBuilder, $method)) {
-                $engines[$id] = $this->_serviceBuilder->$method();
-                $this->_serviceLocator->set('templating.engine.'.$id, $engines[$id]);
-            }
-        }
-        
-        $this->_serviceLocator->set('templating', new DelegatingEngine($engines));
 
     }
 

@@ -11,7 +11,7 @@
 
 namespace PPI\ServiceManager;
 
-use Zend\ServiceManager as BaseServiceManager;
+use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
 /**
  * ServiceManager implements the Service Locator design pattern.
@@ -29,4 +29,21 @@ use Zend\ServiceManager as BaseServiceManager;
  */
 class ServiceManager extends BaseServiceManager
 {
+    /**
+     * @param array $config Array of ConfigInterface instances
+     */
+    public function __construct($configs = array())
+    {
+        foreach ($configs as $config) {
+            $config->configureServiceManager($this);
+        }
+    }
+
+    /**
+     * An alias to $this->setService()
+     */
+    public function set($name, $service, $shared = true)
+    {
+        return $this->setService($name, $service, $shared);
+    }
 }
