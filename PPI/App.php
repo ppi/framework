@@ -18,6 +18,13 @@ use
     PPI\Module\Listener\ListenerOptions,
     Zend\ModuleManager\ModuleManager,
     PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
+    
+    // Services
+    PPI\ServiceManager\ServiceManager,
+    PPI\ServiceManager\Config\HttpConfig,
+    PPI\ServiceManager\Config\ModuleConfig,
+    PPI\ServiceManager\Config\OptionsConfig,
+    PPI\ServiceManager\Config\TemplatingConfig,
 
     // HTTP Stuff and routing
     PPI\Module\Routing\Router,
@@ -33,11 +40,7 @@ use
     // Misc
     Zend\Stdlib\ArrayUtils;
 
-use PPI\ServiceManager\ServiceManager;
-use PPI\ServiceManager\Config\OptionsConfig;
-use PPI\ServiceManager\Config\HttpConfig;
-use PPI\ServiceManager\Config\ModuleConfig;
-use PPI\ServiceManager\Config\TemplatingConfig;
+
 
 /**
  * The PPI App bootstrap class.
@@ -191,8 +194,8 @@ class App
             new TemplatingConfig()
         ));
 
-        $this->_request  = HttpRequest::createFromGlobals();
-        $this->_response = new HttpResponse();
+        $this->_request  = $this->serviceManager->get('request');
+        $this->_response = $this->serviceManager->get('response');
 
         $routerOptions = array();
         if ($this->getAppConfigValue('cache_dir') !== null) {
@@ -218,16 +221,24 @@ class App
 
         }
 
-        // Module Listeners
-        $listenerOptions  = new ListenerOptions($this->_options['moduleConfig']['listenerOptions']);
-        $defaultListener = new PPIDefaultListenerAggregate($listenerOptions);
-
         // Loading our Modules
-        $this->_moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
-        $this->_moduleManager->getEventManager()->attachAggregate($defaultListener);
+        $defaultListener = $this->serviceManager->get('module.defaultListener');
+        $this->_moduleManager = $this->serviceManager->get('module.manager');
         $this->_moduleManager->loadModules();
+        
+        // CONFIG - Merge the app config with the config from all the modules
+        $mergedConfig = ArrayUtils::merge(
+            $this->_options['config'],
+            $defaultListener->getConfigListener()->getMergedConfig(false)
+        );
+        
+        // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
+        $moduleServices = $defaultListener->getServices();
+        foreach($moduleServices as $serviceKey => $serviceVal) {
+            $this->serviceManager->setFactory($serviceKey, $serviceVal);
+        }
 
-        // If the routing process for modules has been cached or not.
+        // ROUTING - If the routing process for modules has been cached or not.
         if ($routingEnabled) {
 
             // Merging all the other route collections together from the modules
@@ -240,29 +251,15 @@ class App
 
         $this->handleRouting();
 
-        // Merge the app config with the config from all the modules
-        $mergedConfig         = ArrayUtils::merge(
-            $this->_options['config'],
-            $defaultListener->getConfigListener()->getMergedConfig(false)
-        );
-
-        $defaultServices = array(
-            'request'       => $this->_request,
-            'response'      => $this->_response,
-            'session'       => $this->getSession(),
-            'templating'    => null,
-            'router'        => $this->_router,
-            'config'        => $mergedConfig
-        );
-
-        // If the user wants DataSource available in their application, lets instantiate it and set up their connections
+        $this->serviceManager->set('session', $this->getSession());
+        $this->serviceManager->set('config', $mergedConfig);
+        $this->serviceManager->set('router', $this->_router);
+        
+        // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
             $defaultServices['dataSource'] = $this->getDataSource($dsConnections);
         }
-
-        // Services
-        $this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListener->getServices()));
 
         // Fluent Interface
         return $this;
@@ -283,7 +280,7 @@ class App
         $controller = new $className();
 
         // Set Services for our controller
-        $controller->setServiceLocator($this->_serviceLocator);
+        $controller->setServiceLocator($this->serviceManager);
 
         // Set the options for our controller
         $controller->setOptions(array(
