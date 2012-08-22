@@ -81,6 +81,7 @@ class TemplatingConfig extends Config
 
         // PHP Engine
         $serviceManager->setFactory('templating.engine.php', function($serviceManager) {
+            
             return new PhpEngine(
                 new TemplateNameParser(),
                 new FileSystemLoader($serviceManager->get('templating.locator')),
@@ -95,15 +96,18 @@ class TemplatingConfig extends Config
 
         // Twig Engine
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
+            
+            $templatingLocator = $serviceManager->get('templating.locator');
+            
             $twigEnvironment = new \Twig_Environment(
-                new TwigFileSystemLoader($templateLocator, new TemplateNameParser())
+                new TwigFileSystemLoader($templatingLocator, new TemplateNameParser())
             );
 
             // Add some twig extension
             $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.assets.helper')));
             $twigEnvironment->addExtension(new TwigRouterExtension($serviceManager->get('router')));
 
-            return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templateLocator);
+            return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templatingLocator);
         });
 
         // Smarty Engine
