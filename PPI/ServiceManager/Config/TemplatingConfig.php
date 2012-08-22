@@ -71,7 +71,7 @@ class TemplatingConfig extends Config
 
         // Templating locator
         $serviceManager->setFactory('templating.locator', function($serviceManager) {
-            new TemplateLocator($serviceManager->get('filelocator'));
+            return new TemplateLocator($serviceManager->get('filelocator'));
         });
 
         // Templating assets helper
@@ -81,7 +81,6 @@ class TemplatingConfig extends Config
 
         // PHP Engine
         $serviceManager->setFactory('templating.engine.php', function($serviceManager) {
-            
             return new PhpEngine(
                 new TemplateNameParser(),
                 new FileSystemLoader($serviceManager->get('templating.locator')),
@@ -96,9 +95,9 @@ class TemplatingConfig extends Config
 
         // Twig Engine
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
-            
+
             $templatingLocator = $serviceManager->get('templating.locator');
-            
+
             $twigEnvironment = new \Twig_Environment(
                 new TwigFileSystemLoader($templatingLocator, new TemplateNameParser())
             );
