@@ -258,7 +258,7 @@ class App
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
-            $defaultServices['dataSource'] = $this->getDataSource($dsConnections);
+             $this->serviceManager->set('datasource', $this->getDataSource($dsConnections));
         }
 
         // Fluent Interface
@@ -299,17 +299,30 @@ class App
             ->setController($controller);
 
         // Dispatch our action, return the content from the action called.
+        $controller = $this->_matchedModule->getController();
+        $this->serviceManager = $controller->getServiceLocator();
         $result = $this->_matchedModule->dispatch();
+        
+        switch(true) {
+            
+            // If the controller is just returning HTML content then that becomes our body response.
+            case is_string($result):
+                $response = $controller->getServiceLocator()->get('response');
+                break;
+            
+            // The controller action didn't bother returning a value, just grab the response object from SM
+            case is_null($result):
+                $response = $controller->getServiceLocator()->get('response');
+                break;
+                
+            // Anything else is unpredictable so we safely rely on the SM
+            default:
+                $response = $result;
+                break;
+            
+        }
 
-        $serviceLocator = $controller->getServiceLocator();
-
-        // The controller manipulates the state of the Request and Response so after dispatch has occurred
-        // Then we obtain these back for further uses.
-        $controller      = $this->_matchedModule->getController();
-        $this->_request  = $serviceLocator->get('request');
-        $this->_response = $serviceLocator->get('response');
-
-        // Send our content to the browser
+        $this->_response = $response;
         $this->_response->setContent($result);
         $this->_response->send();
 
