@@ -26,7 +26,7 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
     protected $serviceLocator;
 
     /**
-     * Sets the Container associated with this Controller.
+     * Set serviceManager instance.
      *
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator A \Zend\ServiceManager\ServiceLocatorInterface instance
      */
@@ -36,6 +36,8 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Retrieve serviceManager instance
+     *
      * @return \Zend\ServiceManager\ServiceLocatorInterface
      */
     public function getServiceLocator()
