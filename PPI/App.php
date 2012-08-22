@@ -1,13 +1,14 @@
 <?php
 /**
- * The PPI App bootstrap class.
- * This class sets various app settings, and allows you to override clases used in the bootup process.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @category    PPI
+ * @package     Core
+ * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license     http://opensource.org/licenses/mit-license.php MIT
+ * @link        http://www.ppi.io
  */
+
 namespace PPI;
 
 use
@@ -17,16 +18,13 @@ use
     PPI\Module\Listener\ListenerOptions,
     Zend\ModuleManager\ModuleManager,
     PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
-
-    // Templating
-    PPI\Templating\FileLocator,
-    PPI\Templating\Twig\TwigEngine,
-    PPI\Templating\TemplateLocator,
-    PPI\Templating\TemplateNameParser,
-    PPI\Templating\Smarty\SmartyEngine,
-    PPI\Templating\Php\FileSystemLoader,
-    Symfony\Component\Templating\PhpEngine,
-    PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
+    
+    // Services
+    PPI\ServiceManager\ServiceManager,
+    PPI\ServiceManager\Config\HttpConfig,
+    PPI\ServiceManager\Config\ModuleConfig,
+    PPI\ServiceManager\Config\OptionsConfig,
+    PPI\ServiceManager\Config\TemplatingConfig,
 
     // HTTP Stuff and routing
     PPI\Module\Routing\Router,
@@ -38,9 +36,11 @@ use
     Symfony\Component\HttpFoundation\Request as HttpRequest,
     Symfony\Component\HttpFoundation\Response as HttpResponse,
     Symfony\Component\Routing\Exception\ResourceNotFoundException,
-	
-	// Misc
-	Zend\Stdlib\ArrayUtils;
+
+    // Misc
+    Zend\Stdlib\ArrayUtils;
+
+
 
 /**
  * The PPI App bootstrap class.
@@ -49,17 +49,17 @@ use
  * in the bootup process.
  *
  * @author Paul Dragoonis <dragoonis@php.net>
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class App
 {
     /**
-     * Options for the app
+     * Default options for the app.
      *
      * @var array
      */
     protected $_options = array(
-        'templatingEngine'    => 'php',
+        'templating.engines'   => array('php'),
         '404RouteName'        => 'Framework_404',
         'useDataSource'       => false,
         'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
@@ -115,8 +115,23 @@ class App
     protected $_matchedModule = null;
 
     /**
+     * Service Manager (ZF2 implementation)
+     *
+     * @var \PPI\Module\ServiceManager\ServiceManager
+     */
+     protected $serviceManager;
+
+    /**
+     * Service configuration
+     *
+     * @var \PPI\Module\ServiceManager\ServiceConfig
+     */
+     protected $serviceConfig;
+
+    /**
      * Service Locator
      *
+     * @deprecated by $serviceManager
      * @var null|\PPI\Module\ServiceLocator
      */
     protected $_serviceLocator = null;
@@ -172,8 +187,15 @@ class App
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
 
-        $this->_request  = HttpRequest::createFromGlobals();
-        $this->_response = new HttpResponse();
+        $this->serviceManager = new ServiceManager(array(
+            new OptionsConfig($this->_options),
+            new HttpConfig(),
+            new ModuleConfig(),
+            new TemplatingConfig()
+        ));
+
+        $this->_request  = $this->serviceManager->get('request');
+        $this->_response = $this->serviceManager->get('response');
 
         $routerOptions = array();
         if ($this->getAppConfigValue('cache_dir') !== null) {
@@ -199,16 +221,24 @@ class App
 
         }
 
-        // Module Listeners
-        $listenerOptions  = new ListenerOptions($this->_options['moduleConfig']['listenerOptions']);
-        $defaultListener = new PPIDefaultListenerAggregate($listenerOptions);
-
         // Loading our Modules
-        $this->_moduleManager = new ModuleManager($this->_options['moduleConfig']['activeModules']);
-        $this->_moduleManager->getEventManager()->attachAggregate($defaultListener);
+        $defaultListener = $this->serviceManager->get('module.defaultListener');
+        $this->_moduleManager = $this->serviceManager->get('module.manager');
         $this->_moduleManager->loadModules();
+        
+        // CONFIG - Merge the app config with the config from all the modules
+        $mergedConfig = ArrayUtils::merge(
+            $this->_options['config'],
+            $defaultListener->getConfigListener()->getMergedConfig(false)
+        );
+        
+        // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
+        $moduleServices = $defaultListener->getServices();
+        foreach($moduleServices as $serviceKey => $serviceVal) {
+            $this->serviceManager->setFactory($serviceKey, $serviceVal);
+        }
 
-        // If the routing process for modules has been cached or not.
+        // ROUTING - If the routing process for modules has been cached or not.
         if ($routingEnabled) {
 
             // Merging all the other route collections together from the modules
@@ -220,30 +250,16 @@ class App
         }
 
         $this->handleRouting();
-		
-		// Merge the app config with the config from all the modules
-		$mergedConfig         = ArrayUtils::merge(
-			$this->_options['config'], 
-			$defaultListener->getConfigListener()->getMergedConfig(false)
-		);
 
-		$defaultServices = array(
-			'request'       => $this->_request,
-			'response'      => $this->_response,
-			'session'       => $this->getSession(),
-			'templating'    => $this->getTemplatingEngine(),
-			'router'        => $this->_router,
-			'config'        => $mergedConfig
-		);
-
-        // If the user wants DataSource available in their application, lets insntantiate it and set up their connections
+        $this->serviceManager->set('session', $this->getSession());
+        $this->serviceManager->set('config', $mergedConfig);
+        $this->serviceManager->set('router', $this->_router);
+        
+        // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
-            $defaultServices['dataSource'] = $this->getDataSource($dsConnections);
+             $this->serviceManager->set('datasource', $this->getDataSource($dsConnections));
         }
-
-        // Services
-        $this->_serviceLocator = new ServiceLocator(array_merge($defaultServices, $defaultListener->getServices()));
 
         // Fluent Interface
         return $this;
@@ -254,7 +270,7 @@ class App
      */
     public function dispatch()
     {
-        
+
         // Lets disect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
         $actionName = $actionName . 'Action';
@@ -264,7 +280,7 @@ class App
         $controller = new $className();
 
         // Set Services for our controller
-        $controller->setServiceLocator($this->_serviceLocator);
+        $controller->setServiceLocator($this->serviceManager);
 
         // Set the options for our controller
         $controller->setOptions(array(
@@ -283,119 +299,56 @@ class App
             ->setController($controller);
 
         // Dispatch our action, return the content from the action called.
+        $controller = $this->_matchedModule->getController();
+        $this->serviceManager = $controller->getServiceLocator();
         $result = $this->_matchedModule->dispatch();
+        
+        switch(true) {
+            
+            // If the controller is just returning HTML content then that becomes our body response.
+            case is_string($result):
+                $response = $controller->getServiceLocator()->get('response');
+                break;
+            
+            // The controller action didn't bother returning a value, just grab the response object from SM
+            case is_null($result):
+                $response = $controller->getServiceLocator()->get('response');
+                break;
+                
+            // Anything else is unpredictable so we safely rely on the SM
+            default:
+                $response = $result;
+                break;
+            
+        }
 
-        $serviceLocator = $controller->getServiceLocator();
-
-        // The controller manipulates the state of the Request and Response so after dispatch has occurred
-        // Then we obtain these back for further uses.
-        $controller      = $this->_matchedModule->getController();
-        $this->_request  = $serviceLocator->get('request');
-        $this->_response = $serviceLocator->get('response');
-
-        // Send our content to the browser
+        $this->_response = $response;
         $this->_response->setContent($result);
         $this->_response->send();
-
-    }
-
-    protected function getTemplatingEngine()
-    {
-        
-        $fileLocator = new FileLocator(array(
-            'modules'     => $this->_moduleManager->getModules(),
-            'modulesPath' => realpath($this->_options['moduleConfig']['listenerOptions']['module_paths'][0]),
-            'appPath'     => getcwd() . '/app'
-        ));
-
-        $templateLocator = new TemplateLocator($fileLocator);
-        $assetsHelper = new \Symfony\Component\Templating\Helper\AssetsHelper($this->_request->getBasePath());
-
-        switch ($this->getOption('templatingEngine')) {
-
-            case 'twig':
-
-                $twigEnvironment = new \Twig_Environment(
-                    new TwigFileSystemLoader(
-                        $templateLocator,
-                        new TemplateNameParser()
-                    )
-                );
-
-                // Add some twig extension
-                $twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\AssetsExtension($assetsHelper));
-                $twigEnvironment->addExtension(new \PPI\Templating\Twig\Extension\RouterExtension($this->_router));
-
-                // Return the twig engine
-                return new TwigEngine(
-                    $twigEnvironment,
-                    new TemplateNameParser(),
-                    $templateLocator
-                );
-
-            case 'smarty':
-
-                if (null == $cacheDir = $this->getAppConfigValue('cache_dir')) {
-                    $cacheDir = $fileLocator->getAppPath().DIRECTORY_SEPARATOR.'cache';
-                }
-                $cacheDir .= DIRECTORY_SEPARATOR.'smarty';
-
-                $smartyEngine = new SmartyEngine(
-                    new \Smarty(),
-                    $templateLocator,
-                    new TemplateNameParser(),
-                    new FileSystemLoader($templateLocator),
-                    array(
-                        'cache_dir'     => $cacheDir.DIRECTORY_SEPARATOR.'cache',
-                        'compile_dir'   => $cacheDir.DIRECTORY_SEPARATOR.'templates_c',
-                    )
-                );
-
-                // Add some SmartyBundle extensions
-                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\AssetsExtension($assetsHelper));
-                $smartyEngine->addExtension(new \PPI\Templating\Smarty\Extension\RouterExtension($this->_router));
-
-                return $smartyEngine;
-
-            case 'php':
-            default:
-
-                return new PhpEngine(
-                    new TemplateNameParser(),
-                    new FileSystemLoader($templateLocator),
-                    array(
-                        new \Symfony\Component\Templating\Helper\SlotsHelper(),
-                        $assetsHelper,
-                        new \PPI\Templating\Helper\RouterHelper($this->_router),
-                        new \PPI\Templating\Helper\SessionHelper($this->getSession())
-                    )
-                );
-
-        }
 
     }
 
     /**
      * Match a route based on the specified $uri.
      * Set up _matchedRoute and _matchedModule too
-     * 
+     *
      * @param  string $uri
      * @return void
      */
-    protected function matchRoute($uri) {
-        
+    protected function matchRoute($uri)
+    {
         $this->_matchedRoute  = $this->_router->match($uri);
         $matchedModuleName    = $this->_matchedRoute['_module'];
         $this->_matchedModule = $this->_moduleManager->getModule($matchedModuleName);
         $this->_matchedModule->setModuleName($matchedModuleName);
-        
+
     }
 
     /**
-     * 
+     *
      */
-    protected function handleRouting() {
-        
+    protected function handleRouting()
+    {
         try {
 
             // Lets load up our router and match the appropriate route
@@ -405,29 +358,29 @@ class App
         } catch (\Exception $e) {
             $this->_matchedRoute = false;
         }
-        
+
         // Lets grab the 'Framework 404' route and dispatch it.
         if ($this->_matchedRoute === false) {
-                
+
             try {
-                
+
                 $baseUrl  = $this->_router->getContext()->getBaseUrl();
                 $routeUri = $this->_router->generate($this->_options['404RouteName']);
-                
+
                 // If the base url is preset before the $routeUri, get rid of it
-                if( ($pos = strpos($routeUri, $baseUrl)) !== false ) {
+                if ( ($pos = strpos($routeUri, $baseUrl)) !== false ) {
                     $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
                 }
-                
+
                 $this->matchRoute($routeUri);
-                
+
             // @todo handle a 502 here
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 die('Unable to load 404 page. An internal error occured');
             }
-            
+
         }
-        
+
     }
 
     /**
