@@ -37,6 +37,11 @@ class ServiceManager extends BaseServiceManager
         foreach ($configs as $config) {
             $config->configureServiceManager($this);
         }
+        
+        // Unfortunately we need this to allow 'response' key to be overridden. 
+        // Hopefully in a later version we can refactor and break Backwards Compatibility and thus disable this feature.
+        $this->setAllowOverride(true); 
+        
     }
 
     /**
