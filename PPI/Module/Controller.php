@@ -392,7 +392,7 @@ class Controller
      */
     protected function redirect($url, $statusCode = 302)
     {
-        $this->getServiceLocator()->set('response', new RedirectResponse($url, $statusCode));
+        $this->getServiceLocator()->set('http.response', new RedirectResponse($url, $statusCode));
     }
 
     /**
