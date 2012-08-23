@@ -13,6 +13,7 @@ namespace PPI\ServiceManager\Config;
 
 use PPI\Templating\DelegatingEngine;
 use PPI\Templating\FileLocator;
+use PPI\Templating\GlobalVariables;
 use PPI\Templating\TemplateLocator;
 use PPI\Templating\TemplateNameParser;
 use PPI\Templating\Helper\RouterHelper;
@@ -77,6 +78,11 @@ class TemplatingConfig extends Config
             return new AssetsHelper($serviceManager->get('request')->getBasePath());
         });
 
+        // Templating globals
+        $serviceManager->setFactory('templating.globals', function($serviceManager) {
+            return new GlobalVariables($serviceManager->get('servicemanager'));
+        });
+
         // PHP Engine
         $serviceManager->setFactory('templating.engine.php', function($serviceManager) {
             return new PhpEngine(
@@ -119,7 +125,8 @@ class TemplatingConfig extends Config
                 array(
                     'cache_dir'     => $cacheDir.DIRECTORY_SEPARATOR.'cache',
                     'compile_dir'   => $cacheDir.DIRECTORY_SEPARATOR.'templates_c',
-                )
+                ),
+                $serviceManager->get('templating.globals')
             );
 
             // Add some SmartyBundle extensions
