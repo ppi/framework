@@ -19,7 +19,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
-class GlobalVariables
+class GlobalVariables implements \ArrayAccess
 {
     protected $serviceManager;
 
@@ -74,4 +74,41 @@ class GlobalVariables
     {
         return (Boolean) $this->serviceManager->getOption('app.debug');
     }
+
+    /**
+     * @param string $option The property name.
+     *
+     * @return Boolean Whether the property exists.
+     *
+     * @see \ArrayAccess::offsetExists()
+     */
+    public function offsetExists($property)
+    {
+        return method_exists($this, 'get'.ucfirst($property));
+    }
+
+    /**
+     * @see \ArrayAccess::offsetGet()
+     */
+    public function offsetGet($property)
+    {
+        return call_user_func(array($this, 'get'.ucfirst($property)));
+    }
+
+    /**
+     * @see \ArrayAccess::offsetSet()
+     */
+    public function offsetSet($property, $value)
+    {
+        throw new \RuntimeException('Usage of '.__METHOD__.' is not allowed');
+    }
+
+    /**
+     * @see \ArrayAccess::offsetUnset()
+     */
+    public function offsetUnset($property)
+    {
+        throw new \RuntimeException('Usage of '.__METHOD__.' is not allowed');
+    }
+
 }

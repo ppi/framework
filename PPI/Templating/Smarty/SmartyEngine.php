@@ -12,6 +12,7 @@
 namespace PPI\Templating\Smarty;
 
 use PPI\Templating\EngineInterface;
+use PPI\Templating\GlobalVariables;
 use PPI\Templating\TemplateLocator;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
 use Symfony\Component\Templating\Loader\LoaderInterface;

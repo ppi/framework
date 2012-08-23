@@ -48,6 +48,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
             $config->configureServiceManager($this);
         }
 
+        $this->set('servicemanager', $this);
+
         /**
          * @note Unfortunately we need this to allow 'response' key to be overridden.
          * Hopefully in a later version we can refactor and break Backwards
