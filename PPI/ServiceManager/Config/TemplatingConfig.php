@@ -50,9 +50,7 @@ class TemplatingConfig extends Config
         $knownEngineIds = array('php', 'smarty', 'twig');
 
         // these are the engines selected by the user
-        $options =  $serviceManager->get('options');
-        $engineIds = isset($options['config']['templating.engines']) ?
-            $options['config']['templating.engines'] : $options['templating.engines'];
+        $engineIds = $serviceManager->getOption( 'templating.engines');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
@@ -61,11 +59,11 @@ class TemplatingConfig extends Config
         }
 
         // File locator
-        $serviceManager->setFactory('filelocator', function($serviceManager) use ($options) {
+        $serviceManager->setFactory('filelocator', function($serviceManager) {
             return new FileLocator(array(
                 'modules'     => $serviceManager->get('module.manager')->getModules(),
-                'modulesPath' => realpath($options['moduleConfig']['listenerOptions']['module_paths'][0]),
-                'appPath'     => getcwd() . '/app'
+                'modulesPath' => realpath($serviceManager['moduleConfig']['listenerOptions']['module_paths'][0]),
+                'appPath'     => $serviceManager->getOption('app.root_dir')
             ));
         });
 
@@ -110,12 +108,8 @@ class TemplatingConfig extends Config
         });
 
         // Smarty Engine
-        $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) use ($options) {
-            if (!isset($options['config']['cache_dir']) || (null == $cacheDir = $options['config']['cache_dir'])) {
-                $fileLocator = $serviceManager->get('filelocator');
-                $cacheDir = $fileLocator->getAppPath().DIRECTORY_SEPARATOR.'cache';
-            }
-            $cacheDir .= DIRECTORY_SEPARATOR.'smarty';
+        $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) {
+            $cacheDir = $serviceManager->getOption('app.cache_dir').DIRECTORY_SEPARATOR.'smarty';
 
             $smartyEngine = new SmartyEngine(
                 new \Smarty(),
@@ -137,12 +131,12 @@ class TemplatingConfig extends Config
 
         // Delegating Engine
         $serviceManager->setFactory('templating', function($serviceManager) use ($engineIds) {
-            $engines = array();
+            $delegatingEngine = new DelegatingEngine();
             foreach ($engineIds as $id) {
-                $engines[] = $serviceManager->get('templating.engine.'.$id);
+                $delegatingEngine->addEngine($serviceManager->get('templating.engine.'.$id));
             }
 
-            return new DelegatingEngine($engines);
+            return $delegatingEngine;
         });
     }
 }

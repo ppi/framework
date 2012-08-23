@@ -62,8 +62,9 @@ class SessionHelper extends Helper
     {
         return $this->session->getFlashBag()->has($name);
     }
-    
-    public function hasFlashes() {
+
+    public function hasFlashes()
+    {
         return $this->session->getFlashBag()->count();
     }
 
