@@ -20,9 +20,9 @@ use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
  */
 class DelegatingEngine extends BaseDelegatingEngine
 {
-    
+
     protected $globals = array();
-    
+
     /**
      * Renders a template.
      *
@@ -39,19 +39,19 @@ class DelegatingEngine extends BaseDelegatingEngine
     public function render($name, array $parameters = array())
     {
         $engine = $this->getEngine($name);
-        
-        if(!empty($this->globals)) {
-            foreach($this->globals as $key => $val) {
+
+        if (!empty($this->globals)) {
+            foreach ($this->globals as $key => $val) {
                 $engine->addGlobal($key, $val);
             }
         }
-        
+
         return $engine->render($name, $parameters);
     }
-    
+
     /**
      * Add a global parameter to the sub-engine selected
-     * 
+     *
      * @param string $name
      * @param mixed  $value
      *
@@ -61,5 +61,5 @@ class DelegatingEngine extends BaseDelegatingEngine
     {
         $this->globals[$name] = $value;
     }
-    
+
 }

@@ -26,11 +26,9 @@ class ModuleConfig extends Config
 {
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        $options = $serviceManager->get('options');
-
         // listener options
-        $serviceManager->setFactory('module.listenerOptions', function($serviceManager) use ($options) {
-            return new ListenerOptions($options['moduleConfig']['listenerOptions']);
+        $serviceManager->setFactory('module.listenerOptions', function($serviceManager) {
+            return new ListenerOptions($serviceManager['moduleConfig']['listenerOptions']);
         });
 
         // default listener
@@ -42,8 +40,8 @@ class ModuleConfig extends Config
         });
 
         // Module Manager
-        $serviceManager->setFactory('module.manager', function($serviceManager) use ($options) {
-            $moduleManager = new ModuleManager($options['moduleConfig']['activeModules']);
+        $serviceManager->setFactory('module.manager', function($serviceManager) {
+            $moduleManager = new ModuleManager($serviceManager['moduleConfig']['activeModules']);
             $moduleManager->getEventManager()->attachAggregate($serviceManager->get('module.defaultListener'));
             $moduleManager->loadModules();
 

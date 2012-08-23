@@ -31,17 +31,18 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 
     /**
      * The Service Manager
-     * 
+     *
      * @var
      */
     protected $_serviceManager;
 
     /**
      * Set the service manager
-     * 
+     *
      * @param \PPI\ServiceManager\ServiceManager $sm
      */
-    public function setServiceManager(ServiceManager $sm) {
+    public function setServiceManager(ServiceManager $sm)
+    {
         $this->_serviceManager = $sm;
     }
 
@@ -104,7 +105,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $module = $e->getModule();
         if (is_callable(array($module, 'getServiceConfig'))) {
             $services = $module->getServiceConfig();
-            if(isset($services['factories'])) {
+            if (isset($services['factories'])) {
                 $this->_services[$e->getModuleName()] = $services['factories'];
             }
         }
@@ -131,9 +132,10 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     public function getServices()
     {
         $mergedModuleServices = array();
-        foreach($this->_services as $services) {
+        foreach ($this->_services as $services) {
             $mergedModuleServices = ArrayUtils::merge($mergedModuleServices, $services);
         }
+
         return $mergedModuleServices;
     }
 

@@ -265,7 +265,6 @@ class Controller
 
                 return $this->_isCache['secure'];
 
-
             default:
                 throw new \InvalidArgumentException("Invalid 'is' key supplied: {$key}");
 
@@ -468,9 +467,9 @@ class Controller
 
     /**
      * Add a template global variable
-     * 
+     *
      * @param string $param
-     * @param mixed $value
+     * @param mixed  $value
      */
     protected function addTemplateGlobal($param, $value)
     {

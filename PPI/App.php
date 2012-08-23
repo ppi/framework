@@ -18,13 +18,13 @@ use
     PPI\Module\Listener\ListenerOptions,
     Zend\ModuleManager\ModuleManager,
     PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
-    
+
     // Services
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
     PPI\ServiceManager\Config\ModuleConfig,
-    PPI\ServiceManager\Config\OptionsConfig,
     PPI\ServiceManager\Config\TemplatingConfig,
+    PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
     PPI\Module\Routing\Router,
@@ -39,8 +39,6 @@ use
 
     // Misc
     Zend\Stdlib\ArrayUtils;
-
-
 
 /**
  * The PPI App bootstrap class.
@@ -59,11 +57,25 @@ class App
      * @var array
      */
     protected $_options = array(
-        'templating.engines'   => array('php'),
-        '404RouteName'        => 'Framework_404',
-        'useDataSource'       => false,
-        'sessionclass'        => 'Symfony\Component\HttpFoundation\Session\Session',
-        'sessionstorageclass' => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
+        // app core parameters
+        'app.environment'       => 'production',
+        'app.debug'             => false,
+        'app.root_dir'          => null,
+        'app.cache_dir'         => '%app.root_dir%/cache',
+        'app.logs_dir'          => '%app.root_dir%/logs',
+        'app.module_dirs'       => null,
+        'app.modules'           => array(),
+        'app.charset'           => 'UTF-8',
+        // templating
+        'templating.engines'    => array('php'),
+        'templating.globals'    => array(),
+        // routing
+        '404RouteName'          => 'Framework_404',
+        // datasource
+        'useDataSource'         => false,
+        // session
+        'sessionclass'          => 'Symfony\Component\HttpFoundation\Session\Session',
+        'sessionstorageclass'   => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
     );
 
     /**
@@ -152,6 +164,8 @@ class App
                 }
             }
         }
+
+        $this->_options['app.root_dir'] = getcwd().'/app';
     }
 
     /**
@@ -187,12 +201,12 @@ class App
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
 
-        $this->serviceManager = new ServiceManager(array(
-            new OptionsConfig($this->_options),
+        $this->serviceManager = new ServiceManager(new AppOptions($this->_options), array(
             new HttpConfig(),
             new ModuleConfig(),
             new TemplatingConfig()
         ));
+        $this->serviceManager->compile();
 
         $this->_request  = $this->serviceManager->get('request');
         $this->_response = $this->serviceManager->get('response');
@@ -225,16 +239,16 @@ class App
         $defaultListener = $this->serviceManager->get('module.defaultListener');
         $this->_moduleManager = $this->serviceManager->get('module.manager');
         $this->_moduleManager->loadModules();
-        
+
         // CONFIG - Merge the app config with the config from all the modules
         $mergedConfig = ArrayUtils::merge(
             $this->_options['config'],
             $defaultListener->getConfigListener()->getMergedConfig(false)
         );
-        
+
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
-        foreach($moduleServices as $serviceKey => $serviceVal) {
+        foreach ($moduleServices as $serviceKey => $serviceVal) {
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
 
@@ -254,7 +268,7 @@ class App
         $this->serviceManager->set('session', $this->getSession());
         $this->serviceManager->set('config', $mergedConfig);
         $this->serviceManager->set('router', $this->_router);
-        
+
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
@@ -302,24 +316,24 @@ class App
         $controller = $this->_matchedModule->getController();
         $this->serviceManager = $controller->getServiceLocator();
         $result = $this->_matchedModule->dispatch();
-        
-        switch(true) {
-            
+
+        switch (true) {
+
             // If the controller is just returning HTML content then that becomes our body response.
             case is_string($result):
                 $response = $controller->getServiceLocator()->get('response');
                 break;
-            
+
             // The controller action didn't bother returning a value, just grab the response object from SM
             case is_null($result):
                 $response = $controller->getServiceLocator()->get('response');
                 break;
-                
+
             // Anything else is unpredictable so we safely rely on the SM
             default:
                 $response = $result;
                 break;
-            
+
         }
 
         $this->_response = $response;
