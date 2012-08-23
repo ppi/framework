@@ -249,7 +249,6 @@ class App
 
         $this->handleRouting();
 
-        $this->serviceManager->set('session', $this->getSession());
         $this->serviceManager->set('config', $mergedConfig);
         $this->serviceManager->set('router', $this->_router);
 
@@ -390,22 +389,6 @@ class App
     protected function getDataSource(array $connections = array())
     {
         return new \PPI\DataSource\DataSource($connections);
-    }
-
-    /**
-     * Get the session class
-     *
-     * @return \Symfony\Component\HttpFoundation\Session\Session
-     */
-    protected function getSession()
-    {
-        if ($this->session === null) {
-            $session = new $this->_options['sessionclass'](new $this->_options['sessionstorageclass']());
-            $session->start();
-            $this->session = $session;
-        }
-
-        return $this->session;
     }
 
     /**
