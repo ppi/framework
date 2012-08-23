@@ -134,26 +134,10 @@ class App
      protected $serviceManager;
 
     /**
-     * Service configuration
-     *
-     * @var \PPI\Module\ServiceManager\ServiceConfig
-     */
-     protected $serviceConfig;
-
-    /**
-     * Service Locator
-     *
-     * @deprecated by $serviceManager
-     * @var null|\PPI\Module\ServiceLocator
-     */
-    protected $_serviceLocator = null;
-
-    /**
      * The constructor.
      *
      * @param array $options
      */
-
     public function __construct(array $options = array())
     {
         if (!empty($options)) {
