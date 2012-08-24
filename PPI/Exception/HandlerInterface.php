@@ -1,13 +1,17 @@
 <?php
 
 /**
+ * This file is part of the PPI Framework.
  *
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @package   Cache
- * @link	  http://www.ppiframework.com
+ * @category    PPI
+ * @package     Core
+ * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license     http://opensource.org/licenses/mit-license.php MIT
+ * @link        http://www.ppi.io
  */
+
 namespace PPI\Exception;
+
 interface HandlerInterface {
 
 	public function handle(\Exception $e);
