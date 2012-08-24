@@ -26,15 +26,14 @@ use
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
     PPI\ServiceManager\Config\ModuleConfig,
+    PPI\ServiceManager\Config\RouterConfig,
     PPI\ServiceManager\Config\TemplatingConfig,
     PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
-    PPI\Module\Routing\Router,
+
     PPI\Module\Routing\RoutingHelper,
     PPI\Module\Routing\Loader\YamlFileLoader,
-    Symfony\Component\Routing\RequestContext,
-    Symfony\Component\Routing\RouteCollection,
     Symfony\Component\Routing\Generator\UrlGenerator,
     Symfony\Component\HttpFoundation\Request as HttpRequest,
     Symfony\Component\HttpFoundation\Response as HttpResponse,
@@ -201,36 +200,13 @@ class App
         $this->serviceManager = new ServiceManager(new AppOptions($this->_options), array(
             new HttpConfig(),
             new ModuleConfig(),
+            new RouterConfig(),
             new TemplatingConfig()
         ));
         $this->serviceManager->compile();
 
         $this->_request  = $this->serviceManager->get('request');
         $this->_response = $this->serviceManager->get('response');
-
-        $routerOptions = array();
-        if ($this->getAppConfigValue('cache_dir') !== null) {
-            $routerOptions['cache_dir'] = $this->getAppConfigValue('cache_dir');
-        }
-
-        // Initialise the routing components
-        $routingEnabled  = true;
-        $matchedRoute    = false;
-        $routeCollection = new RouteCollection();
-        $requestContext  = new RequestContext();
-        $requestContext->fromRequest($this->_request);
-
-        $this->_router = new Router($requestContext, $routeCollection, $routerOptions);
-
-        if (!$this->isDevMode()) {
-
-            // If we are in production mode, and have the routing file(s) have been cached, then skip route fetching on modules boot
-            if ($this->_router->isGeneratorCached() && $this->_router->isMatcherCached()) {
-                $this->_options['moduleConfig']['listenerOptions']['routingEnabled'] = false;
-                $routingEnabled = false;
-            }
-
-        }
 
         // Loading our Modules
         $defaultListener = $this->serviceManager->get('module.defaultListener');
@@ -242,6 +218,7 @@ class App
             $this->_options['config'],
             $defaultListener->getConfigListener()->getMergedConfig(false)
         );
+        $this->serviceManager->set('config', $mergedConfig);
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
@@ -249,21 +226,11 @@ class App
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
 
-        // ROUTING - If the routing process for modules has been cached or not.
-        if ($routingEnabled) {
-
-            // Merging all the other route collections together from the modules
-            $allRoutes = $defaultListener->getRoutes();
-            foreach ($allRoutes as $routes) {
-                $routeCollection->addCollection($routes);
-            }
-            $this->_router->setRouteCollection($routeCollection);
-        }
-
+        // ROUTING
+        $this->_router = $this->serviceManager->get('router');
         $this->handleRouting();
 
-        $this->serviceManager->set('config', $mergedConfig);
-        $this->serviceManager->set('router', $this->_router);
+        
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
@@ -386,7 +353,7 @@ class App
 
             // @todo handle a 502 here
             } catch (\Exception $e) {
-                die('Unable to load 404 page. An internal error occured');
+                throw new \Exception('Unable to load 404 page. An internal error occured');
             }
 
         }
