@@ -34,7 +34,8 @@ class Handler {
 	 * 
 	 * @param object $e Exception object
 	 */
-	public function handle(\Exception $e) {
+	public function handle(\Exception $e)
+    {
 		
         $trace = $e->getTrace();
         
@@ -47,6 +48,12 @@ class Handler {
 				);
 			}
             
+            $error = array(
+                'file'    => $e->getFile(),
+                'line'    => $e->getLine(),
+                'message' => $e->getMessage()
+            );
+            
             require(__DIR__ . '/templates/fatal.php');
             
 
@@ -55,6 +62,35 @@ class Handler {
 		}
 		exit;
 	}
+    
+    public function handleError($errno = '', $errstr = '', $errfile = '', $errline = '')
+    {
+        $error = array(
+            'message' => $errstr,
+            'file'    => $errfile,
+            'line'    => $errline
+        );
+        
+        try {
+            throw new \Exception('');
+        } catch(\Exception $e) {
+            
+            try {
+                // Execute each callback
+                foreach($this->_handlers as $handler) {
+                    $this->_handlerStatus[] = array(
+                        'object'   => get_class($handler),
+                        'response' => $handler->handle($e)
+                    );
+                }
+            } catch(\Exception $e) {}
+            
+            $trace = $e->getTrace();
+        }
+        
+        require(__DIR__ . '/templates/fatal.php');
+        exit;
+    }
 	
 	/**
 	 * Add an Exception callback

@@ -190,6 +190,10 @@ class App
         $exceptionHandler->addHandler(new \PPI\Exception\Log());
         set_exception_handler(array($exceptionHandler, 'handle'));
         
+        if($this->getEnv() !== 'production') {
+            set_error_handler(array($exceptionHandler, 'handleError'));
+        }
+        
         if (empty($this->_options['moduleConfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
