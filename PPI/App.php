@@ -13,6 +13,9 @@ namespace PPI;
 
 use
 
+    // Exceptions
+    PPI\Exception\Handler as ExceptionHandler,
+
     // Modules
     PPI\Module\ServiceLocator,
     PPI\Module\Listener\ListenerOptions,
@@ -46,7 +49,7 @@ use
  * This class sets various app settings, and allows you to override clases used
  * in the bootup process.
  *
- * @author Paul Dragoonis <dragoonis@php.net>
+ * @author Paul Dragoonis <paul@ppi.io>
  * @author Vítor Brandão <vitor@ppi.io>
  */
 class App
@@ -181,6 +184,12 @@ class App
      */
     public function boot()
     {
+        
+        // Lets setup exception handlers to catch anything that fails during boot as well.
+        $exceptionHandler = new ExceptionHandler();
+        $exceptionHandler->addHandler(new \PPI\Exception\Log());
+        set_exception_handler(array($exceptionHandler, 'handle'));
+        
         if (empty($this->_options['moduleConfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
