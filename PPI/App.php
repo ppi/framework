@@ -230,12 +230,10 @@ class App
         $this->_router = $this->serviceManager->get('router');
         $this->handleRouting();
 
-        
-
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->getAppConfigValue('datasource.connections');
         if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
-             $this->serviceManager->set('datasource', $this->getDataSource($dsConnections));
+             $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
 
         // Fluent Interface
@@ -343,9 +341,9 @@ class App
 
                 $baseUrl  = $this->_router->getContext()->getBaseUrl();
                 $routeUri = $this->_router->generate($this->_options['404RouteName']);
-
-                // If the base url is preset before the $routeUri, get rid of it
-                if ( ($pos = strpos($routeUri, $baseUrl)) !== false ) {
+                
+                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
+                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
                     $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
                 }
 
@@ -358,17 +356,6 @@ class App
 
         }
 
-    }
-
-    /**
-     * Instantiate the DataSource component, optionally taking in its connections
-     *
-     * @param  array                 $connections
-     * @return DataSource\DataSource
-     */
-    protected function getDataSource(array $connections = array())
-    {
-        return new \PPI\DataSource\DataSource($connections);
     }
 
     /**
