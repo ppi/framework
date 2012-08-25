@@ -12,7 +12,7 @@
 
 namespace PPI\Exception;
 
-interface HandlerInterface {
-
-	public function handle(\Exception $e);
+interface HandlerInterface
+{
+    public function handle(\Exception $e);
 }
