@@ -34,6 +34,36 @@ class AppOptions extends AbstractOptions
             unset($parameters['config']);
         }
 
-        parent::__construct($parameters);
+        parent::__construct(array_merge($this->getDefaultOptions(), $parameters));
+    }
+
+    public function getDefaultOptions()
+    {
+        $defaults = array(
+        // app core parameters
+        'app.environment'       => 'production',
+        'app.debug'             => false,
+        'app.root_dir'          => null,
+        'app.cache_dir'         => '%app.root_dir%/cache',
+        'app.logs_dir'          => '%app.root_dir%/logs',
+        'app.module_dirs'       => null,
+        'app.modules'           => array(),
+        'app.charset'           => 'UTF-8',
+        'app.locale'            => 'en',
+        // templating
+        'templating.engines'    => array('php'),
+        'templating.globals'    => array(),
+        // routing
+        '404RouteName'          => 'Framework_404',
+        // datasource
+        'useDataSource'         => false,
+        // session
+        'sessionclass'          => 'Symfony\Component\HttpFoundation\Session\Session',
+        'sessionstorageclass'   => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
+        );
+
+        $defaults['app.root_dir'] = getcwd().'/app';
+
+        return $defaults;
     }
 }

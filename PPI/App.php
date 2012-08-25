@@ -54,31 +54,18 @@ use
 class App
 {
     /**
+     * Application Options.
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Default options for the app.
      *
      * @var array
      */
-    protected $_options = array(
-        // app core parameters
-        'app.environment'       => 'production',
-        'app.debug'             => false,
-        'app.root_dir'          => null,
-        'app.cache_dir'         => '%app.root_dir%/cache',
-        'app.logs_dir'          => '%app.root_dir%/logs',
-        'app.module_dirs'       => null,
-        'app.modules'           => array(),
-        'app.charset'           => 'UTF-8',
-        // templating
-        'templating.engines'    => array('php'),
-        'templating.globals'    => array(),
-        // routing
-        '404RouteName'          => 'Framework_404',
-        // datasource
-        'useDataSource'         => false,
-        // session
-        'sessionclass'          => 'Symfony\Component\HttpFoundation\Session\Session',
-        'sessionstorageclass'   => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
-    );
+    protected $_options;
 
     /**
      * The session object
@@ -142,6 +129,9 @@ class App
      */
     public function __construct(array $options = array())
     {
+        $this->options = new AppOptions();
+        $this->_options = $this->options->getDefaultOptions();
+
         if (!empty($options)) {
             foreach ($options as $key => $value) {
                 $prop = '_' . $key;
@@ -150,8 +140,6 @@ class App
                 }
             }
         }
-
-        $this->_options['app.root_dir'] = getcwd().'/app';
     }
 
     /**
@@ -183,16 +171,16 @@ class App
      */
     public function boot()
     {
-        
+
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
         $exceptionHandler->addHandler(new \PPI\Exception\Log());
         set_exception_handler(array($exceptionHandler, 'handle'));
-        
-        if($this->getEnv() !== 'production') {
+
+        if ($this->getEnv() !== 'production') {
             set_error_handler(array($exceptionHandler, 'handleError'));
         }
-        
+
         if (empty($this->_options['moduleConfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
@@ -341,7 +329,7 @@ class App
 
                 $baseUrl  = $this->_router->getContext()->getBaseUrl();
                 $routeUri = $this->_router->generate($this->_options['404RouteName']);
-                
+
                 // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
                 if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
                     $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
@@ -423,6 +411,18 @@ class App
     public function isDevMode()
     {
         return $this->getEnv() === 'development';
+    }
+
+    /**
+     * Checks if debug mode is enabled.
+     *
+     * @return Boolean true if debug mode is enabled, false otherwise
+     *
+     * @api
+     */
+    public function isDebug()
+    {
+        return $this->options->get('app.debug');
     }
 
     /**
