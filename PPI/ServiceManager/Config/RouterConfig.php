@@ -27,10 +27,10 @@ class RouterConfig extends Config
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         $serviceManager->setFactory('router', function($serviceManager) {
-            
+
             $routeCollection = new RouteCollection();
             $requestContext  = new RequestContext();
-            
+
             $requestContext->fromRequest($serviceManager->get('request'));
 
             $routerOptions = array();
@@ -44,17 +44,17 @@ class RouterConfig extends Config
 //                $this->_options['moduleConfig']['listenerOptions']['routingEnabled'] = false;
 //                $routingEnabled = false;
 //            }
-            
+
             // Merging all the other route collections together from the modules
             $allRoutes = $serviceManager->get('module.defaultListener')->getRoutes();
             foreach ($allRoutes as $routes) {
                 $routeCollection->addCollection($routes);
             }
             $router->setRouteCollection($routeCollection);
-            
+
             return $router;
-        
+
         });
-        
+
     }
 }
