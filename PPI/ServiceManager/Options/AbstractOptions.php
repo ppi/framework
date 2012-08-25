@@ -34,7 +34,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function offsetExists($option)
     {
-        return $this->parameters->has($option);
+        return $this->has($option);
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function offsetGet($option)
     {
-        return $this->parameters->get($option);
+        return $this->get($option);
     }
 
     /**
@@ -70,7 +70,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function offsetSet($option, $value)
     {
-        $this->parameters->set($option, $value);
+        $this->set($option, $value);
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function offsetUnset($option)
     {
-        $this->parameters->remove($option);
+        $this->remove($option);
     }
 
    /**
@@ -96,7 +96,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->parameters->all());
+        return new \ArrayIterator($this->all());
     }
 
     /**
@@ -106,6 +106,6 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function count()
     {
-        return count($this->parameters->all());
+        return count($this->all());
     }
 }
