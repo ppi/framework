@@ -31,7 +31,6 @@ use
     PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
-
     PPI\Module\Routing\RoutingHelper,
     PPI\Module\Routing\Loader\YamlFileLoader,
     Symfony\Component\Routing\Generator\UrlGenerator,
@@ -59,13 +58,6 @@ class App
      * @var array
      */
     protected $options;
-
-    /**
-     * Default options for the app.
-     *
-     * @var array
-     */
-    protected $_options;
 
     /**
      * The session object
@@ -130,7 +122,6 @@ class App
     public function __construct(array $options = array())
     {
         $this->options = new AppOptions();
-        $this->_options = $this->options->getDefaultOptions();
 
         if (!empty($options)) {
             foreach ($options as $key => $value) {
@@ -171,6 +162,9 @@ class App
      */
     public function boot()
     {
+        if (isset($this->options['config'])) {
+            $this->options->add($this->options['config']);
+        }
 
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
@@ -181,16 +175,18 @@ class App
             set_error_handler(array($exceptionHandler, 'handleError'));
         }
 
-        if (empty($this->_options['moduleConfig']['listenerOptions'])) {
+        if (!$this->options->has('moduleconfig') || empty($this->options['moduleconfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
 
-        $this->serviceManager = new ServiceManager(new AppOptions($this->_options), array(
+        $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
             new ModuleConfig(),
             new RouterConfig(),
             new TemplatingConfig()
         ));
+
+        // resolve options placeholders
         $this->serviceManager->compile();
 
         $this->_request  = $this->serviceManager->get('request');
@@ -202,11 +198,7 @@ class App
         $this->_moduleManager->loadModules();
 
         // CONFIG - Merge the app config with the config from all the modules
-        $mergedConfig = ArrayUtils::merge(
-            $this->_options['config'],
-            $defaultListener->getConfigListener()->getMergedConfig(false)
-        );
-        $this->serviceManager->set('config', $mergedConfig);
+        $this->options->add($defaultListener->getConfigListener()->getMergedConfig(false));
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
@@ -219,8 +211,8 @@ class App
         $this->handleRouting();
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
-        $dsConnections = $this->getAppConfigValue('datasource.connections');
-        if ($this->_options['useDataSource'] === true && $dsConnections !== null) {
+        $dsConnections = $this->options->get('datasource.connections');
+        if ($this->options['useDataSource'] === true && $dsConnections !== null) {
              $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
 
@@ -328,7 +320,7 @@ class App
             try {
 
                 $baseUrl  = $this->_router->getContext()->getBaseUrl();
-                $routeUri = $this->_router->generate($this->_options['404RouteName']);
+                $routeUri = $this->_router->generate($this->options['404RouteName']);
 
                 // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
                 if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
@@ -355,19 +347,7 @@ class App
      */
     public function getOption($key, $default = null)
     {
-        return isset($this->_options[$key]) ? $this->_options[$key] : $default;
-    }
-
-    /**
-     * Get a config value from the application config
-     *
-     * @param  string $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function getAppConfigValue($key, $default = null)
-    {
-        return isset($this->_options['config'][$key]) ? $this->_options['config'][$key] : $default;
+        return $this->options->has($key) ? $this->options->get($key) : $default;
     }
 
     /**
@@ -378,7 +358,7 @@ class App
      */
     public function setOption($key, $val)
     {
-        $this->_options[$key] = $val;
+        $this->options[$key] = $val;
     }
 
     /**
@@ -390,7 +370,7 @@ class App
      */
     public function __set($option, $value)
     {
-        $this->_options[$option] = $value;
+        $this->options[$option] = $value;
     }
 
     /**
@@ -400,7 +380,7 @@ class App
      */
     public function getEnv()
     {
-        return $this->getAppConfigValue('environment');
+        return $this->options->get('environment');
     }
 
     /**
@@ -422,7 +402,7 @@ class App
      */
     public function isDebug()
     {
-        return $this->options->get('app.debug');
+        return $this->options->get('debug');
     }
 
     /**
@@ -433,7 +413,6 @@ class App
      */
     public function __get($option)
     {
-        return isset($this->_options[$option]) ? $this->_options[$option] : null;
+        return isset($this->options[$option]) ? $this->options[$option] : null;
     }
-
 }
