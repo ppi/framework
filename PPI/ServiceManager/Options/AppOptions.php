@@ -35,31 +35,26 @@ class AppOptions extends AbstractOptions
     public function getDefaultOptions()
     {
         $defaults = array(
+            // app core parameters
+            'environment'               => 'production',
+            'debug'                     => false,
+            'app.root_dir'              => null,
+            'app.cache_dir'             => '%app.root_dir%/cache',
+            'app.logs_dir'              => '%app.root_dir%/logs',
+            'app.module_dirs'           => null,
+            'app.modules'               => array(),
+            'app.charset'               => 'UTF-8',
+            'app.locale'                => 'en',
 
-        // app core parameters
-        'environment'           => 'production',
-        'debug'                 => false,
-        'app.root_dir'          => null,
-        'app.cache_dir'         => '%app.root_dir%/cache',
-        'app.logs_dir'          => '%app.root_dir%/logs',
-        'app.module_dirs'       => null,
-        'app.modules'           => array(),
-        'app.charset'           => 'UTF-8',
-        'app.locale'            => 'en',
+            // templating
+            'templating.engines'        => array('php'),
+            'templating.globals'        => array(),
 
-        // templating
-        'templating.engines'    => array('php'),
-        'templating.globals'    => array(),
+            // routing
+            '404RouteName'              => 'Framework_404',
 
-        // routing
-        '404RouteName'          => 'Framework_404',
-
-        // datasource
-        'useDataSource'         => false,
-
-        // session
-        'sessionclass'          => 'Symfony\Component\HttpFoundation\Session\Session',
-        'sessionstorageclass'   => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage'
+            // datasource
+            'useDataSource'             => false
         );
 
         $defaults['app.root_dir'] = getcwd().'/app';

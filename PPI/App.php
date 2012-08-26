@@ -25,6 +25,7 @@ use
     // Services
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
+    PPI\ServiceManager\Config\SessionConfig,
     PPI\ServiceManager\Config\ModuleConfig,
     PPI\ServiceManager\Config\RouterConfig,
     PPI\ServiceManager\Config\TemplatingConfig,
@@ -179,8 +180,10 @@ class App
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
 
+        // all user and app configuration must be set up to this point
         $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
+            new SessionConfig(),
             new ModuleConfig(),
             new RouterConfig(),
             new TemplatingConfig()
