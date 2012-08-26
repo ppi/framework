@@ -34,16 +34,5 @@ class HttpConfig extends Config
         $serviceManager->setFactory('http.response', function($serviceManager) {
             return new HttpResponse();
         })->setAlias('response', 'http.response');
-
-        // Session
-        $serviceManager->setFactory('session', function($serviceManager) {
-            $sessionClass = $serviceManager->getOption('sessionclass');
-            $sessionstorageClass = $serviceManager->getOption('sessionstorageclass');
-
-            $session = new $sessionClass(new $sessionstorageClass());
-            $session->start();
-
-            return $session;
-        });
     }
 }
