@@ -31,7 +31,7 @@ class SessionConfig extends AbstractConfig
         'app.session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
         'app.session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
         'app.session.flashbag.class'            => 'Symfony\Component\HttpFoundation\Session\Flash\FlashBag',
-        'app.session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag</parameter',
+        'app.session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
         'app.session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
         'app.session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
 
@@ -65,11 +65,13 @@ class SessionConfig extends AbstractConfig
         $serviceManager->setOption('app.session.storage', $config['storage_id']);
 
         $options = array();
-        foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor') as $key) {
+        foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
+            // @todo - the default values are null, so isset() fails, make sure this is intentional
             if (isset($config[$key])) {
                 $options[$key] = $config[$key];
             }
         }
+
         $serviceManager->setOption('app.session.storage.options', $options);
 
         // session handler (the internal callback registered with PHP session management)
@@ -94,23 +96,22 @@ class SessionConfig extends AbstractConfig
 
         // session flash bag
         $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
-            $class = $serviceManager('app.session.flashbag.class');
+            $class = $serviceManager->getOption('app.session.flashbag.class');
 
             return new $class();
         });
 
         // session attribute bag
         $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
-            $class = $serviceManager('app.session.attribute_bag.class');
-
+            $class = $serviceManager->getOption('app.session.attribute_bag.class');
             return new $class();
         });
 
         // session handler native file
-        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) {
+        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($config) {
             $class = $serviceManager->getOption('app.session.handler.native_file.class');
-
-            return new $class($serviceManager->getOption('session.save_path'));
+            $storageOptions = $serviceManager->getOption('app.session.storage.options');
+            return new $class($storageOptions['save_path']);
         });
 
         // session
