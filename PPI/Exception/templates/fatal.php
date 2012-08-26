@@ -205,10 +205,10 @@ border-spacing: 0;
                                 <?php foreach($trace as $k => $t): ?>
                                 <tr class="<?= ($k % 2 == 0) ? 'alt' : '' ?>">
                                         <td><?= $k ?></td>
-                                        <td><?= $t['file'] ?></td>
-                                        <td><?= $t['line'] ?></td>
-                                        <td><?= $t['class'] ?></td>
-                                        <td><?= $t['function'] ?></td>
+                                        <td><?= isset($t['file']) ? $t['file'] : ''; ?></td>
+                                        <td><?= isset($t['line']) ? $t['line'] : ''; ?></td>
+                                        <td><?= isset($t['class']) ? $t['class'] : ''; ?></td>
+                                        <td><?= isset($t['function']) ? $t['function'] : ''; ?></td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>

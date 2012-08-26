@@ -86,7 +86,6 @@ class Handler
 
             $trace = $e->getTrace();
         }
-
         require(__DIR__ . '/templates/fatal.php');
         exit;
     }
