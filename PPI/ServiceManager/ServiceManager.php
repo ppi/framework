@@ -101,6 +101,16 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
+     * Returns the OptionsInterface instance used to store app parameters.
+     *
+     * @return OptionsInterface
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
      * Gets an option.
      *
      * @param string $name The option name
