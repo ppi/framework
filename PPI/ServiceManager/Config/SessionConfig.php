@@ -85,7 +85,7 @@ class SessionConfig extends AbstractConfig
         // session storage native
         $serviceManager->setFactory('session.storage.native', function($serviceManager) {           
             $class = $serviceManager->getOption('app.session.storage.native.class');
-var_dump($serviceManager->get('session.handler'));die;
+
             return new $class(
                 $serviceManager->getOption('app.session.storage.options'),
                 $serviceManager->get('session.handler')
@@ -118,9 +118,9 @@ var_dump($serviceManager->get('session.handler'));die;
             $class = $serviceManager->getOption('app.session.class');
 
             $session = new $class(
-                $serviceManager->get($serviceManager->getOption('app.session.storage'))
-                //$serviceManager->get('session.attribute_bag'),
-                //$serviceManager->get('session.flash_bag')
+                $serviceManager->get($serviceManager->getOption('app.session.storage')),
+                $serviceManager->get('session.attribute_bag'),
+                $serviceManager->get('session.flash_bag')
             );
             $session->start();
 
