@@ -25,6 +25,7 @@ use
     // Services
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
+    PPI\ServiceManager\Config\SessionConfig,
     PPI\ServiceManager\Config\ModuleConfig,
     PPI\ServiceManager\Config\RouterConfig,
     PPI\ServiceManager\Config\TemplatingConfig,
@@ -179,8 +180,10 @@ class App
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
 
+        // all user and app configuration must be set up to this point
         $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
+            new SessionConfig(),
             new ModuleConfig(),
             new RouterConfig(),
             new TemplatingConfig()
@@ -198,7 +201,7 @@ class App
         $this->_moduleManager->loadModules();
 
         // CONFIG - Merge the app config with the config from all the modules
-        $this->options->add($defaultListener->getConfigListener()->getMergedConfig(false));
+        $this->serviceManager->set('config', $defaultListener->getConfigListener()->getMergedConfig(false));
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
