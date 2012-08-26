@@ -201,7 +201,7 @@ class App
         $this->_moduleManager->loadModules();
 
         // CONFIG - Merge the app config with the config from all the modules
-        $this->options->add($defaultListener->getConfigListener()->getMergedConfig(false));
+        $this->serviceManager->set('config', $defaultListener->getConfigListener()->getMergedConfig(false));
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
