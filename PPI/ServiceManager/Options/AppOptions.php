@@ -45,6 +45,8 @@ class AppOptions extends AbstractOptions
             'app.modules'               => array(),
             'app.charset'               => 'UTF-8',
             'app.locale'                => 'en',
+            
+            'app.auto_dispatch'         => true,
 
             // templating
             'templating.engines'        => array('php'),
