@@ -282,7 +282,10 @@ class App
 
         $this->_response = $response;
         $this->_response->setContent($result);
-        $this->_response->send();
+        
+        if($this->getOption('app.auto_dispatch')) {
+            $this->_response->send();
+        }
 
     }
 
