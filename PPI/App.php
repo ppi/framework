@@ -122,16 +122,8 @@ class App
      */
     public function __construct(array $options = array())
     {
-        $this->options = new AppOptions();
+        $this->options = new AppOptions($options);
 
-        if (!empty($options)) {
-            foreach ($options as $key => $value) {
-                $prop = '_' . $key;
-                if (property_exists($this, $prop)) {
-                    $this->$prop = $value;
-                }
-            }
-        }
     }
 
     /**
@@ -282,7 +274,7 @@ class App
 
         $this->_response = $response;
         $this->_response->setContent($result);
-        
+
         if($this->getOption('app.auto_dispatch')) {
             $this->_response->send();
         }
@@ -310,6 +302,7 @@ class App
      */
     protected function handleRouting()
     {
+        
         try {
 
             // Lets load up our router and match the appropriate route
