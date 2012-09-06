@@ -414,4 +414,13 @@ class App
     {
         return isset($this->options[$option]) ? $this->options[$option] : null;
     }
+
+    /**
+     * Get the service manager
+     * 
+     * @return ServiceManager\ServiceManager
+     */
+    public function getServiceManager() {
+        return $this->serviceManager;
+    }
 }
