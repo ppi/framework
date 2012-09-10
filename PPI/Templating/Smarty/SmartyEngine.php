@@ -45,6 +45,7 @@ class SmartyEngine extends BaseSmartyEngine
         $this->parser = $parser;
         $this->loader = $loader;
         $this->globals = array();
+        $this->logger = null;
 
         // There are no default extensions.
         $this->extensions = array();
@@ -72,5 +73,24 @@ class SmartyEngine extends BaseSmartyEngine
         if (null !== $globals) {
             $this->addGlobal('app', $globals);
         }
+
+        /**
+         * @note muteExpectedErrors() was activated to workaround the following issue:
+         *
+         * <code>Warning: filemtime(): stat failed for /path/to/smarty/cache/3ab50a623e65185c49bf17c63c90cc56070ea85c.one.tpl.php
+in /path/to/smarty/libs/sysplugins/smarty_resource.php</code>
+         *
+         * This means that your application registered a custom error hander
+         * (using set_error_handler()) which is not respecting the given $errno
+         * as it should. If, for whatever reason, this is the desired behaviour
+         * of your custom error handler, please call muteExpectedErrors() after
+         * you've registered your custom error handler.
+         *
+        * muteExpectedErrors() registers a custom error handler using
+         * set_error_handler(). The error handler merely inspects $errno and
+         * $errfile to determine if the given error was produced deliberately
+         * and must be ignored, or should be passed on to the next error handler.
+         */
+        $smarty->muteExpectedErrors();
     }
 }
