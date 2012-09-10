@@ -4,7 +4,7 @@ namespace PPI\Templating\Twig;
 
 use PPI\Templating\TemplateReference;
 use PPI\Templating\EngineInterface;
-
+use PPI\Templating\GlobalVariables;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Templating\StreamingEngineInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,12 +28,17 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      * @param \Twig_Environment           $environment A \Twig_Environment instance
      * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
      * @param FileLocatorInterface        $locator     A FileLocatorInterface instance
+     * @param GlobalVariables|null        $globals     A GlobalVariables instance or null
      */
-    public function __construct(\Twig_Environment $environment, TemplateNameParserInterface $parser, FileLocatorInterface $locator)
+    public function __construct(\Twig_Environment $environment, TemplateNameParserInterface $parser, FileLocatorInterface $locator, GlobalVariables $globals = null)
     {
         $this->environment = $environment;
         $this->parser = $parser;
         $this->locator = $locator;
+
+        if (null !== $globals) {
+            $environment->addGlobal('app', $globals);
+        }
     }
 
     /**
@@ -131,6 +136,16 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
         $response->setContent($this->render($view, $parameters));
 
         return $response;
+    }
+
+    /**
+     * Pass methods not available in this engine to the Twig_Environment instance.
+     *
+     * @warning This method was added for BC and may be removed in future releases.
+     */
+    public function __call($name, $args)
+    {
+        return call_user_func_array(array($this->environment, $name), $args);
     }
 
     /**

@@ -110,7 +110,7 @@ class TemplatingConfig extends Config
             $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.helper.assets')));
             $twigEnvironment->addExtension(new TwigRouterExtension($serviceManager->get('router')));
 
-            return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templatingLocator);
+            return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templatingLocator, $serviceManager->get('templating.globals'));
         });
 
         // Smarty Engine
