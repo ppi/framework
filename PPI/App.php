@@ -53,6 +53,8 @@ use
  */
 class App
 {
+    const VERSION = '2.0.0-DEV';
+
     /**
      * Application Options.
      *
@@ -275,7 +277,7 @@ class App
         $this->_response = $response;
         $this->_response->setContent($result);
 
-        if($this->getOption('app.auto_dispatch')) {
+        if ($this->getOption('app.auto_dispatch')) {
             $this->_response->send();
         }
 
@@ -302,7 +304,7 @@ class App
      */
     protected function handleRouting()
     {
-        
+
         try {
 
             // Lets load up our router and match the appropriate route
@@ -417,10 +419,11 @@ class App
 
     /**
      * Get the service manager
-     * 
+     *
      * @return ServiceManager\ServiceManager
      */
-    public function getServiceManager() {
+    public function getServiceManager()
+    {
         return $this->serviceManager;
     }
 }
