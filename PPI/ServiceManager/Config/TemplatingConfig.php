@@ -40,10 +40,6 @@ use PPI\Templating\Smarty\SmartyEngine;
 use PPI\Templating\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
 use PPI\Templating\Smarty\Extension\RouterExtension as SmartyRouterExtension;
 
-// Mustache
-use PPI\Templating\Mustache\MustacheEngine;
-use PPI\Templating\Mustache\Loader\FilesystemLoader as MustacheFileSystemLoader;
-
 // Service Manager
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
