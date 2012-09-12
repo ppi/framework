@@ -1,17 +1,19 @@
 <?php
-
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Core
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Exception;
 
+/**
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage Exception
+ */
 class Log implements HandlerInterface
 {
     /**
@@ -32,6 +34,8 @@ class Log implements HandlerInterface
      * Set the log listener options
      *
      * @param array $options
+     *
+     * @return void
      */
     public function __construct(array $options = array())
     {
@@ -41,10 +45,12 @@ class Log implements HandlerInterface
     }
 
     /**
-    * Set the log file
-    *
-    * @param string $logFile
-    */
+     * Set the log file
+     *
+     * @param string $logFile
+     *
+     * @return void
+     */
     public function setLogFile($logFile)
     {
         if (is_string($logFile)) {
@@ -66,6 +72,8 @@ class Log implements HandlerInterface
      * Write the Exception to a log file
      *
      * @param \Exception
+     *
+     * @return array
      */
     public function handle(\Exception $e)
     {
@@ -80,4 +88,5 @@ class Log implements HandlerInterface
 
         return array('status' => false, 'message' => 'Unable to write to log file ' . $logFile);
     }
+
 }

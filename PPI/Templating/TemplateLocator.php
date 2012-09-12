@@ -1,26 +1,35 @@
 <?php
-
 /**
- * The PPI Template Locator
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
 namespace PPI\Templating;
 
-use PPI\Templating\TemplateReference;
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Templating\TemplateReferenceInterface;
+use PPI\Templating\TemplateReference,
+    Symfony\Component\Config\FileLocatorInterface,
+    Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * The PPI Template Locator.
+ *
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @package    PPI
+ * @subpackage Templating
  */
 class TemplateLocator implements FileLocatorInterface
 {
+    /**
+     * @todo Add inline documentation.
+     */
     protected $locator;
+
+    /**
+     * @todo Add inline documentation.
+     */
     protected $cache;
 
     /**
@@ -28,6 +37,8 @@ class TemplateLocator implements FileLocatorInterface
      *
      * @param FileLocatorInterface $locator  A FileLocatorInterface instance
      * @param string               $cacheDir The cache path
+     *
+     * @return void
      */
     public function __construct(FileLocatorInterface $locator, $cacheDir = null)
     {
@@ -55,7 +66,7 @@ class TemplateLocator implements FileLocatorInterface
      *
      * @param TemplateReferenceInterface $template    A template
      * @param string                     $currentPath Unused
-     * @param Boolean                    $first       Unused
+     * @param boolean                    $first       Unused
      *
      * @return string The full path for the file
      *
@@ -64,7 +75,6 @@ class TemplateLocator implements FileLocatorInterface
      */
     public function locate($template, $currentPath = null, $first = true)
     {
-
         if (!$template instanceof TemplateReferenceInterface) {
             throw new \InvalidArgumentException("The template must be an instance of TemplateReferenceInterface.");
         }
@@ -100,10 +110,12 @@ class TemplateLocator implements FileLocatorInterface
     public function getModulesPath()
     {
         $paths = $this->locator->getModulesPath();
+
         foreach (array_keys($paths) as $module) {
             $paths[$module] .= DIRECTORY_SEPARATOR.TemplateReference::MODULE_VIEWS_DIRECTORY;
         }
 
         return $paths;
     }
+
 }

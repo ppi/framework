@@ -1,18 +1,21 @@
 <?php
-
 /**
- * The base PPI controller class.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * The base PPI controller class
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class Controller
 {
     /**
@@ -374,8 +377,9 @@ class Controller
     /**
      * Set Flash Message
      *
-     * @param string $flashType The flash type
-     * @param string $message   The flash message
+     * @param  string $flashType The flash type
+     * @param  string $message   The flash message
+     * @return void
      */
     protected function setFlash($flashType, $message)
     {
@@ -385,8 +389,8 @@ class Controller
     /**
      * Create a RedirectResponse object with your $url and $statusCode
      *
-     * @param  string $url
-     * @param  int    $statusCode
+     * @param  string  $url
+     * @param  integer $statusCode
      * @return void
      */
     protected function redirect($url, $statusCode = 302)
@@ -432,14 +436,12 @@ class Controller
     /**
      * Set the options for this controller
      *
-     * @param array $options
-     *
+     * @param  array $options
      * @return $this
      */
     public function setOptions($options)
     {
         $this->_options = $options;
-
         return $this;
     }
 
@@ -468,8 +470,9 @@ class Controller
     /**
      * Add a template global variable
      *
-     * @param string $param
-     * @param mixed  $value
+     * @param  string $param
+     * @param  mixed  $value
+     * @return void
      */
     protected function addTemplateGlobal($param, $value)
     {

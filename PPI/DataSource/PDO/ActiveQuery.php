@@ -1,12 +1,19 @@
 <?php
 /**
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @package   DataSource
- * @link      www.ppi.io
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
 namespace PPI\DataSource\PDO;
 
+/**
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage DataSource
+ */
 class ActiveQuery
 {
     /**
@@ -34,7 +41,7 @@ class ActiveQuery
      * The meta data for this instantiation
      *
      * @var array
-    */
+     */
     protected $_meta = array(
         'conn'    => null,
         'table'   => null,
@@ -45,9 +52,14 @@ class ActiveQuery
      * The options for this instantiation
      *
      * @var array
-    */
+     */
     protected $_options = array();
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function __construct(array $options = array())
     {
         // Setup our connection from the key passed to meta['conn']
@@ -58,29 +70,45 @@ class ActiveQuery
         $this->_options = $options;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function setConn($conn)
     {
         $this->_conn = $conn;
     }
 
+    /**
+     * @todo Add inline documentation.
+     */
     public function fetchAll()
     {
-        $query = "SELECT * FROM {$this->_meta['table']}";
-
-        return $this->_conn->query($query)->fetchAll();
+        return $this->_conn->query(sprintf(
+            'SELECT * FROM %s', $this->_meta['table']
+        ))->fetchAll();
     }
 
     /**
      * Find a row by primary key
      *
-     * @param  string      $id
+     * @param string      $id
+     *
      * @return array|false
      */
     public function find($id)
     {
-        return $this->_conn->fetchAssoc("SELECT * FROM {$this->_meta['table']} WHERE {$this->_meta['primary']} = ?", array($id));
+        return $this->_conn->fetchAssoc(sprintf(
+            'SELECT * FROM %s WHERE %s = ?',
+            $this->_meta['table'],
+            $this->_meta['primary']
+        ), array($id));
     }
 
+    /**
+     * @todo Add inline documentation.
+     */
     public function insert(array $data)
     {
         $this->_conn->insert($this->_meta['table'], $data);
@@ -88,11 +116,17 @@ class ActiveQuery
         return $this->_conn->lastInsertId();
     }
 
+    /**
+     * @todo Add inline documentation.
+     */
     public function delete($where)
     {
         return $this->_conn->delete($this->_meta['table'], $where);
     }
 
+    /**
+     * @todo Add inline documentation.
+     */
     public function update(array $data, $where)
     {
         return $this->_conn->update($this->_meta['table'], $data, $where);

@@ -2,13 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Templating;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -17,14 +14,23 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * GlobalVariables is the entry point for PPI global variables in PHP/Smarty/Twig
  * templates.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage Templating
  */
 class GlobalVariables implements \ArrayAccess
 {
+    /**
+     * @todo Add inline documentation.
+     */
     protected $serviceManager;
 
     /**
+     * Constructor.
+     *
      * @param ServiceLocatorInterface $serviceManager
+     *
+     * @return void
      */
     public function __construct(ServiceLocatorInterface $serviceManager)
     {
@@ -34,7 +40,7 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the current request.
      *
-     * @return Symfony\Component\HttpFoundation\Request|void The http request object
+     * @return Symfony\Component\HttpFoundation\Request|void Http request object
      */
     public function getRequest()
     {
@@ -68,18 +74,14 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the current app debug mode.
      *
-     * @return Boolean The current debug mode
+     * @return boolean The current debug mode
      */
     public function getDebug()
     {
-        return (Boolean) $this->serviceManager->getOption('app.debug');
+        return (boolean) $this->serviceManager->getOption('app.debug');
     }
 
     /**
-     * @param string $option The property name.
-     *
-     * @return Boolean Whether the property exists.
-     *
      * @see \ArrayAccess::offsetExists()
      */
     public function offsetExists($property)
