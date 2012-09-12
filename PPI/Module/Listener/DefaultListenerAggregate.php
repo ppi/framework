@@ -19,6 +19,8 @@ use PPI\ServiceManager\ServiceManager,
     Zend\Stdlib\ArrayUtils;
 
 /**
+ * DefaultListenerAggregate class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -43,14 +45,15 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     /**
      * The Service Manager
      *
-     * @var
+     * @var type
      */
     protected $_serviceManager;
 
     /**
      * Set the service manager
      *
-     * @param  \PPI\ServiceManager\ServiceManager $sm
+     * @param ServiceManager $sm
+     *
      * @return void
      */
     public function setServiceManager(ServiceManager $sm)
@@ -59,9 +62,11 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Override of attach(). Customising the events to be triggered upon the 'loadModule' event.
+     * Override of attach(). Customising the events to be triggered upon the
+     * 'loadModule' event.
      *
-     * @param  \Zend\EventManager\EventManagerInterface $events
+     * @param EventManagerInterface $events
+     *
      * @return $this
      */
     public function attach(EventManagerInterface $events)
@@ -78,20 +83,22 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new InitTrigger($options));
         $this->listeners[] = $events->attach($configListener);
 
-        // This process can be expensive and affect perf if enabled. So we have the flexability to skip it.
+        // This process can be expensive and affect perf if enabled. So we have
+        // the flexability to skip it.
         if ($options->routingEnabled) {
             $this->listeners[] = $events->attach('loadModule', array($this, 'routesTrigger'), 3000);
         }
+
         $this->listeners[] = $events->attach('loadModule', array($this, 'getServicesTrigger'), 3000);
 
         return $this;
-
     }
 
     /**
      * Event callback for 'routesTrigger'
      *
-     * @param  \Zend\ModuleManager\ModuleEvent $e
+     * @param ModuleEvent $e
+     *
      * @return $this
      */
     public function routesTrigger(ModuleEvent $e)
@@ -108,12 +115,14 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     /**
      * Event callback for 'initServicesTrigger'
      *
-     * @param  \Zend\ModuleManager\ModuleEvent $e
+     * @param ModuleEvent $e
+     *
      * @return $this
      */
     public function getServicesTrigger(ModuleEvent $e)
     {
         $module = $e->getModule();
+
         if (is_callable(array($module, 'getServiceConfig'))) {
             $services = $module->getServiceConfig();
             if (isset($services['factories'])) {

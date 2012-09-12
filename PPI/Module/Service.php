@@ -32,7 +32,9 @@ class Service
     protected $_factoryMethod = null;
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param type $className
      *
      * @return void
      */
@@ -54,7 +56,7 @@ class Service
     /**
      * Check if we have a class name for this service
      *
-     * @return bool
+     * @return boolean
      */
     public function hasClassName()
     {
@@ -64,7 +66,8 @@ class Service
     /**
      * Set the factory method name
      *
-     * @param  string $method
+     * @param string $method
+     *
      * @return void
      */
     public function setFactoryMethod($method)
@@ -85,7 +88,7 @@ class Service
     /**
      * Check if we have a factory method name
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFactoryMethod()
     {

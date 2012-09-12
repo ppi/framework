@@ -30,16 +30,26 @@ class Autoload
      * The ClassLoader object
      *
      * @var null|object
+     *
+     * @static
      */
     protected static $_loader = null;
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var array
+     *
+     * @static
      */
     protected static $_options = array();
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var array
+     *
+     * @static
      */
     protected static $_registeredNamespaces = array();
 

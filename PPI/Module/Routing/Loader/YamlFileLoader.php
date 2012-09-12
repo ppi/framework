@@ -12,6 +12,8 @@ use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader,
     Symfony\Component\Routing\RouteCollection;
 
 /**
+ * YamlFileLoader class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -21,11 +23,15 @@ class YamlFileLoader extends BaseYamlFileLoader
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var array
      */
     protected $_defaults = array();
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param type $defaults
      *
      * @return void
      */
@@ -36,6 +42,11 @@ class YamlFileLoader extends BaseYamlFileLoader
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param RouteCollection $collection
+     * @param type            $name
+     * @param type            $config
+     * @param type            $file
      *
      * @return void
      */

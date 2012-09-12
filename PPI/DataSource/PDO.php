@@ -8,12 +8,12 @@
  */
 namespace PPI\DataSource;
 
-use Doctrine\Common\ClassLoader,
-    Doctrine\DBAL\DriverManager,
-    Doctrine\DBAL\Configuration,
-    PPI\Autoload;
+use Doctrine\DBAL\DriverManager,
+    Doctrine\DBAL\Configuration;
 
 /**
+ * PDO class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -22,7 +22,7 @@ use Doctrine\Common\ClassLoader,
 class PDO
 {
     /**
-     * @todo Add inline documentation.
+     * Constructor.
      *
      * @return void
      */
@@ -32,6 +32,10 @@ class PDO
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param array $config
+     *
+     * @return type
      */
     public function getDriver(array $config)
     {

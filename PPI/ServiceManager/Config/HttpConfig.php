@@ -8,8 +8,7 @@
  */
 namespace PPI\ServiceManager\Config;
 
-use
-    Symfony\Component\HttpFoundation\Request as HttpRequest,
+use Symfony\Component\HttpFoundation\Request as HttpRequest,
     Symfony\Component\HttpFoundation\Response as HttpResponse,
     Zend\ServiceManager\Config,
     Zend\ServiceManager\ServiceManager;

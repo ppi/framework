@@ -11,12 +11,6 @@ namespace PPI;
 use // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
 
-    // Modules
-    PPI\Module\ServiceLocator,
-    PPI\Module\Listener\ListenerOptions,
-    Zend\ModuleManager\ModuleManager,
-    PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
-
     // Services
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
@@ -27,15 +21,7 @@ use // Exceptions
     PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
-    PPI\Module\Routing\RoutingHelper,
-    PPI\Module\Routing\Loader\YamlFileLoader,
-    Symfony\Component\Routing\Generator\UrlGenerator,
-    Symfony\Component\HttpFoundation\Request as HttpRequest,
-    Symfony\Component\HttpFoundation\Response as HttpResponse,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-
-    // Misc
-    Zend\Stdlib\ArrayUtils;
+    PPI\Module\Routing\RoutingHelper;
 
 /**
  * The PPI App bootstrap class.
@@ -51,6 +37,8 @@ use // Exceptions
 class App
 {
     /**
+     * Version string.
+     *
      * @var string
      */
     const VERSION = '2.0.0-DEV';

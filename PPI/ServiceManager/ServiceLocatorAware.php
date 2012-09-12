@@ -20,14 +20,16 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @todo Add inline documentation.
+     *
+     * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
 
     /**
      * Set serviceManager instance.
      *
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
      *
      * @return void
      */
@@ -39,7 +41,7 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
     /**
      * Retrieve serviceManager instance
      *
-     * @return \Zend\ServiceManager\ServiceLocatorInterface
+     * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {

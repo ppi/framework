@@ -33,6 +33,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $options;
 
@@ -87,8 +89,6 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      * @param boolean $shared
      *
      * @return ServiceManager
-     *
-     * @throws Exception\InvalidServiceNameException
      */
     public function set($name, $service, $shared = true)
     {
@@ -125,8 +125,6 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      * @param string $name The option name
      *
      * @return mixed  The option value
-     *
-     * @throws InvalidArgumentException if the option is not defined
      */
     public function getOption($name)
     {
@@ -157,6 +155,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     {
         $this->options->set($name, $value);
     }
+
+    // ArrayAccess, IteratorAggregate, Countable
 
     /**
      * @see \ArrayAccess::offsetExists()
@@ -191,9 +191,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Returns an iterator for parameters.
-     *
-     * @return \ArrayIterator
+     * @see \Traversable::getIterator()
      */
     public function getIterator()
     {
@@ -201,9 +199,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Returns the number of parameters.
-     *
-     * @return integer The number of parameters
+     * @see \Countable::count()
      */
     public function count()
     {

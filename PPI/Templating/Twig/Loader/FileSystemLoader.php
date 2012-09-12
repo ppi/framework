@@ -23,11 +23,15 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $locator;
 
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $parser;
 

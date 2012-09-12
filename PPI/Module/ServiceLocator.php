@@ -19,17 +19,23 @@ use PPI\Module\Service;
 class ServiceLocator
 {
     /**
+     * @todo Add inline documentation.
+     *
      * @var array
      */
     protected $_loadedService = array();
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var array
      */
     protected $_services = array();
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param array $services
      *
      * @return void
      */
@@ -105,7 +111,7 @@ class ServiceLocator
      *
      * @param string $key
      *
-     * @return bool
+     * @return boolean
      */
     public function has($key)
     {

@@ -28,16 +28,22 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $environment;
 
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $parser;
 
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $locator;
 
@@ -80,8 +86,15 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
         } catch (\Twig_Error $e) {
             if ($name instanceof TemplateReference) {
                 try {
-                    // try to get the real file name of the template where the error occurred
-                    $e->setTemplateFile(sprintf('%s', $this->locator->locate($this->parser->parse($e->getTemplateFile()))));
+                    // try to get the real file name of the template where the
+                    // error occurred
+                    $e->setTemplateFile(sprintf('%s',
+                        $this->locator->locate(
+                            $this->parser->parse(
+                                $e->getTemplateFile()
+                            )
+                        )
+                    ));
                 } catch (\Exception $ex) {
                 }
             }
@@ -98,7 +111,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      *
      * @return void
      *
-     * @throws \RuntimeException if the template cannot be rendered
+     * @throws \RuntimeException If the template cannot be rendered
      */
     public function stream($name, array $parameters = array())
     {
@@ -162,9 +175,16 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * Pass methods not available in this engine to the Twig_Environment instance.
+     * Pass methods not available in this engine to the Twig_Environment
+     * instance.
      *
-     * @warning This method was added for BC and may be removed in future releases.
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     *
+     * @warning This method was added for BC and may be removed in future
+     *          releases.
      */
     public function __call($name, $args)
     {

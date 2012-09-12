@@ -9,6 +9,8 @@
 namespace PPI\Exception;
 
 /**
+ * Log class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -71,22 +73,35 @@ class Log implements HandlerInterface
     /**
      * Write the Exception to a log file
      *
-     * @param \Exception
+     * @param \Exception $e
      *
      * @return array
      */
     public function handle(\Exception $e)
     {
         $logFile = $this->_getLogFile();
+
         if (is_writable($logFile)) {
-            $logEntry  = '[' . date($this->_dateFormat) . '] ' . $e->getMessage();
-            $logEntry .= ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
+            $logEntry = sprintf(
+                '[%s] %s in %s on line %s' . PHP_EOL,
+                date($this->_dateFormat),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            );
+
             if (file_put_contents($logFile, $logEntry , FILE_APPEND|LOCK_EX) > 0) {
-                return array('status' => true, 'message' => 'Written to log file ' . $logFile);
+                return array(
+                    'status'  => true,
+                    'message' => 'Written to log file ' . $logFile
+                );
             }
         }
 
-        return array('status' => false, 'message' => 'Unable to write to log file ' . $logFile);
+        return array(
+            'status'  => false,
+            'message' => 'Unable to write to log file ' . $logFile
+        );
     }
 
 }
