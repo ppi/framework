@@ -2,29 +2,31 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Templating
- * @copyright   Copyright (c) 2012 Paul Dragoonis <dragoonis@php.net>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Templating\Smarty;
 
-use PPI\Templating\GlobalVariables;
-use PPI\Templating\TemplateLocator;
-use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
-use Symfony\Component\Templating\Loader\LoaderInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
+use PPI\Templating\GlobalVariables,
+    PPI\Templating\TemplateLocator,
+    NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine,
+    Symfony\Component\Templating\Loader\LoaderInterface,
+    Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * SmartyEngine is an engine able to render Smarty templates.
  *
- * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage Templating
  */
 class SmartyEngine extends BaseSmartyEngine
 {
+    /**
+     * @todo Add inline documentation.
+     */
     protected $locator;
 
     /**
@@ -36,9 +38,17 @@ class SmartyEngine extends BaseSmartyEngine
      * @param LoaderInterface             $loader  A LoaderInterface instance
      * @param array                       $options An array of \Smarty properties
      * @param GlobalVariables|null        $globals A GlobalVariables instance or null
+     *
+     * @return void
      */
-    public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser, LoaderInterface $loader,
-    array $options = array(), GlobalVariables $globals = null)
+    public function __construct(
+        \Smarty $smarty,
+        TemplateLocator $locator,
+        TemplateNameParserInterface $parser,
+        LoaderInterface $loader,
+        array $options = array(),
+        GlobalVariables $globals = null
+    )
     {
         $this->smarty = $smarty;
         $this->locator = $locator;
@@ -54,7 +64,7 @@ class SmartyEngine extends BaseSmartyEngine
          * Register an handler for 'logical' filenames of the type:
          * <code>file:Application:index:index.html.smarty</code>
          */
-        $this->smarty->default_template_handler_func = array($this,  'smartyDefaultTemplateHandler');
+        $this->smarty->default_template_handler_func = array($this, 'smartyDefaultTemplateHandler');
 
         /**
          * Define a set of template dirs to look for. This will allow the
@@ -78,7 +88,7 @@ class SmartyEngine extends BaseSmartyEngine
          * @note muteExpectedErrors() was activated to workaround the following issue:
          *
          * <code>Warning: filemtime(): stat failed for /path/to/smarty/cache/3ab50a623e65185c49bf17c63c90cc56070ea85c.one.tpl.php
-in /path/to/smarty/libs/sysplugins/smarty_resource.php</code>
+         * in /path/to/smarty/libs/sysplugins/smarty_resource.php</code>
          *
          * This means that your application registered a custom error hander
          * (using set_error_handler()) which is not respecting the given $errno
@@ -93,4 +103,5 @@ in /path/to/smarty/libs/sysplugins/smarty_resource.php</code>
          */
         $smarty->muteExpectedErrors();
     }
+
 }

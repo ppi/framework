@@ -1,12 +1,19 @@
 <?php
 /**
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @package   DataSource
- * @link      www.ppi.io
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
 namespace PPI\DataSource;
 
+/**
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage DataSource
+ */
 class DataSource implements DataSourceInterface
 {
     /**
@@ -27,6 +34,8 @@ class DataSource implements DataSourceInterface
      * The constructor, taking in options which are currently
      *
      * @param array $options
+     *
+     * @return void
      */
     public function __construct(array $options = array())
     {
@@ -34,11 +43,7 @@ class DataSource implements DataSourceInterface
     }
 
     /**
-     * Create a new instance of ourself.
-     *
-     * @static
-     * @param  array                     $options
-     * @return PPI\DataSource\DataSource
+     * {@inheritdoc}
      */
     public static function create(array $options = array())
     {
@@ -46,11 +51,7 @@ class DataSource implements DataSourceInterface
     }
 
     /**
-     * The DataSource Factory - this is where we manufacture our drivers
-     *
-     * @throws DataSourceException
-     * @param  string              $key
-     * @return object
+     * {@inheritdoc}
      */
     public function factory(array $options)
     {
@@ -77,39 +78,7 @@ class DataSource implements DataSourceInterface
     }
 
     /**
-     * Create an active query driver connection
-     *
-     * @param  string                    $type    The type of driver to use for the active query factory
-     * @param  array                     $options Options to be passed to the active query driver
-     * @return PDO\ActiveQuery
-     * @throws \InvalidArgumentException
-     */
-    public function activeQueryFactory($type, array $options)
-    {
-        switch ($type) {
-
-            case 'mongodb':
-                throw new \InvalidArgumentException('Invalid activeQueryFactory type. MongoDB not yet implemented');
-                break;
-
-            case 'couchdb':
-                throw new \InvalidArgumentException('Invalid activeQueryFactory type. CouchDB not yet implemented');
-                break;
-
-            case 'pdo':
-            default:
-                return new \PPI\DataSource\PDO\ActiveQuery($options);
-
-        }
-
-    }
-
-    /**
-     * Return the connection from the factory
-     *
-     * @throws DataSourceException
-     * @param  string              $key
-     * @return object
+     * {@inheritdoc}
      */
     public function getConnection($key)
     {
@@ -132,10 +101,7 @@ class DataSource implements DataSourceInterface
     }
 
     /**
-     * Get the connection configuration options for the specified key
-     *
-     * @param  string $key
-     * @return array
+     * {@inheritdoc}
      */
     public function getConnectionConfig($key)
     {
@@ -143,8 +109,38 @@ class DataSource implements DataSourceInterface
             return $this->_config[$key];
         }
 
-        throw new \InvalidArgumentException('DataSource Connection Key: ' . $key . ' does not exist');
+        throw new \InvalidArgumentException(sprintf(
+            'DataSource Connection Key: %s does not exist', $key
+        ));
+    }
 
+    /**
+     * Create an active query driver connection
+     *
+     * @param string                    $type    The type of driver to use for the active query factory
+     * @param array                     $options Options to be passed to the active query driver
+     *
+     * @return PDO\ActiveQuery
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function activeQueryFactory($type, array $options)
+    {
+        switch ($type) {
+
+            case 'mongodb':
+                throw new \InvalidArgumentException('Invalid activeQueryFactory type. MongoDB not yet implemented');
+                break;
+
+            case 'couchdb':
+                throw new \InvalidArgumentException('Invalid activeQueryFactory type. CouchDB not yet implemented');
+                break;
+
+            case 'pdo':
+            default:
+                return new \PPI\DataSource\PDO\ActiveQuery($options);
+                break;
+        }
     }
 
 }

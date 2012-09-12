@@ -1,19 +1,34 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\Templating\Twig\Loader;
 
-use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface,
+    Symfony\Component\Config\FileLocatorInterface;
 
 /**
  * FilesystemLoader extends the default Twig filesystem loader
  * to work with the Symfony2 paths.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @package    PPI
+ * @subpackage Templating
  */
 class FileSystemLoader extends \Twig_Loader_Filesystem
 {
+    /**
+     * @todo Add inline documentation.
+     */
     protected $locator;
+
+    /**
+     * @todo Add inline documentation.
+     */
     protected $parser;
 
     /**
@@ -21,6 +36,8 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
      *
      * @param FileLocatorInterface        $locator A FileLocatorInterface instance
      * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
+     *
+     * @return void
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
@@ -75,4 +92,5 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
 
         return $this->cache[$logicalName] = $file;
     }
+
 }

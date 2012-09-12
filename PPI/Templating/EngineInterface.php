@@ -1,14 +1,22 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\Templating;
 
-use Symfony\Component\Templating\EngineInterface as BaseEngineInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\EngineInterface as BaseEngineInterface,
+    Symfony\Component\HttpFoundation\Response;
 
 /**
  * EngineInterface is the interface each engine must implement.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @package    PPI
+ * @subpackage Templating
  */
 interface EngineInterface extends BaseEngineInterface
 {
@@ -22,4 +30,5 @@ interface EngineInterface extends BaseEngineInterface
      * @return Response A Response instance
      */
     public function renderResponse($view, array $parameters = array(), Response $response = null);
+
 }

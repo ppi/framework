@@ -1,16 +1,19 @@
 <?php
-
 /**
- * The Routing Helper For The Controller
+ * This file is part of the PPI Framework.
  *
- * @package   Controller
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module\Routing;
 
+/**
+ * The routing helper for the controller.
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class RoutingHelper
 {
     /**
@@ -20,12 +23,16 @@ class RoutingHelper
      */
     protected $_params = array();
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function __construct(array $params = array())
     {
         if (!empty($params)) {
             $this->setParams($params);
         }
-
     }
 
     /**
@@ -41,14 +48,14 @@ class RoutingHelper
         }
 
         return $this->_params[$param];
-
     }
 
     /**
      * Set a routing param's value
      *
-     * @param string $param
-     * @param string $value
+     * @param  string $param
+     * @param  string $value
+     * @return void
      */
     public function setParam($param, $value)
     {
@@ -68,7 +75,8 @@ class RoutingHelper
     /**
      * Set the routing params
      *
-     * @param array $params
+     * @param  array $params
+     * @return void
      */
     public function setParams(array $params)
     {

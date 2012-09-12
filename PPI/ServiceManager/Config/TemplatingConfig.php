@@ -2,40 +2,39 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Config;
 
-use PPI\Templating\DelegatingEngine;
-use PPI\Templating\FileLocator;
-use PPI\Templating\GlobalVariables;
-use PPI\Templating\TemplateLocator;
-use PPI\Templating\TemplateNameParser;
-use PPI\Templating\Helper\RouterHelper;
-use PPI\Templating\Helper\SessionHelper;
-use PPI\Templating\Php\FileSystemLoader;
-use PPI\Templating\Twig\TwigEngine;
-use PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
-use PPI\Templating\Twig\Extension\AssetsExtension as TwigAssetsExtension;
-use PPI\Templating\Twig\Extension\RouterExtension as TwigRouterExtension;
-use PPI\Templating\Smarty\SmartyEngine;
-use PPI\Templating\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
-use PPI\Templating\Smarty\Extension\RouterExtension as SmartyRouterExtension;
-use Symfony\Component\Templating\PhpEngine;
-use Symfony\Component\Templating\Helper\SlotsHelper;
-use Symfony\Component\Templating\Helper\AssetsHelper;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use PPI\Templating\DelegatingEngine,
+    PPI\Templating\FileLocator,
+    PPI\Templating\GlobalVariables,
+    PPI\Templating\TemplateLocator,
+    PPI\Templating\TemplateNameParser,
+    PPI\Templating\Helper\RouterHelper,
+    PPI\Templating\Helper\SessionHelper,
+    PPI\Templating\Php\FileSystemLoader,
+    PPI\Templating\Twig\TwigEngine,
+    PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader,
+    PPI\Templating\Twig\Extension\AssetsExtension as TwigAssetsExtension,
+    PPI\Templating\Twig\Extension\RouterExtension as TwigRouterExtension,
+    PPI\Templating\Smarty\SmartyEngine,
+    PPI\Templating\Smarty\Extension\AssetsExtension as SmartyAssetsExtension,
+    PPI\Templating\Smarty\Extension\RouterExtension as SmartyRouterExtension,
+    Symfony\Component\Templating\PhpEngine,
+    Symfony\Component\Templating\Helper\SlotsHelper,
+    Symfony\Component\Templating\Helper\AssetsHelper,
+    Zend\ServiceManager\Config,
+    Zend\ServiceManager\ServiceManager;
 
 /**
  * ServiceManager configuration for the Templating component.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class TemplatingConfig extends Config
 {
@@ -44,6 +43,10 @@ class TemplatingConfig extends Config
      * * PHP
      * * Twig
      * * Smarty
+     *
+     * @param ServiceManager $serviceManager
+     *
+     * @return ?
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
@@ -146,4 +149,5 @@ class TemplatingConfig extends Config
             return $delegatingEngine;
         });
     }
+
 }
