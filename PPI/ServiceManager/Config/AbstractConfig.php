@@ -2,22 +2,20 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Config;
 
 use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
 
 /**
  * AbstractConfig class.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 abstract class AbstractConfig extends Config
 {
@@ -27,4 +25,5 @@ abstract class AbstractConfig extends Config
      * @return array
      */
     abstract public function getDefaultOptions();
+
 }

@@ -1,25 +1,50 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\Templating\Twig;
 
-use PPI\Templating\TemplateReference;
-use PPI\Templating\EngineInterface;
-use PPI\Templating\GlobalVariables;
-use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\Templating\StreamingEngineInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Config\FileLocatorInterface;
+use PPI\Templating\TemplateReference,
+    PPI\Templating\EngineInterface,
+    PPI\Templating\GlobalVariables,
+    Symfony\Component\Templating\TemplateNameParserInterface,
+    Symfony\Component\Templating\StreamingEngineInterface,
+    Symfony\Component\HttpFoundation\Response,
+    Symfony\Component\Config\FileLocatorInterface;
 
 /**
  * This engine knows how to render Twig templates.
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @package    PPI
+ * @subpackage Templating
  */
 class TwigEngine implements EngineInterface, StreamingEngineInterface
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     protected $environment;
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     protected $parser;
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     protected $locator;
 
     /**
@@ -29,6 +54,8 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
      * @param FileLocatorInterface        $locator     A FileLocatorInterface instance
      * @param GlobalVariables|null        $globals     A GlobalVariables instance or null
+     *
+     * @return void
      */
     public function __construct(\Twig_Environment $environment, TemplateNameParserInterface $parser, FileLocatorInterface $locator, GlobalVariables $globals = null)
     {
@@ -59,8 +86,15 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
         } catch (\Twig_Error $e) {
             if ($name instanceof TemplateReference) {
                 try {
-                    // try to get the real file name of the template where the error occurred
-                    $e->setTemplateFile(sprintf('%s', $this->locator->locate($this->parser->parse($e->getTemplateFile()))));
+                    // try to get the real file name of the template where the
+                    // error occurred
+                    $e->setTemplateFile(sprintf('%s',
+                        $this->locator->locate(
+                            $this->parser->parse(
+                                $e->getTemplateFile()
+                            )
+                        )
+                    ));
                 } catch (\Exception $ex) {
                 }
             }
@@ -75,7 +109,9 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      * @param mixed $name       A template name or a TemplateReferenceInterface instance
      * @param array $parameters An array of parameters to pass to the template
      *
-     * @throws \RuntimeException if the template cannot be rendered
+     * @return void
+     *
+     * @throws \RuntimeException If the template cannot be rendered
      */
     public function stream($name, array $parameters = array())
     {
@@ -87,7 +123,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      *
      * @param mixed $name A template name
      *
-     * @return Boolean true if the template exists, false otherwise
+     * @return boolean true if the template exists, false otherwise
      */
     public function exists($name)
     {
@@ -105,7 +141,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      *
      * @param string $name A template name
      *
-     * @return Boolean True if this class supports the given resource, false otherwise
+     * @return boolean True if this class supports the given resource, false otherwise
      */
     public function supports($name)
     {
@@ -139,9 +175,16 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     }
 
     /**
-     * Pass methods not available in this engine to the Twig_Environment instance.
+     * Pass methods not available in this engine to the Twig_Environment
+     * instance.
      *
-     * @warning This method was added for BC and may be removed in future releases.
+     * @param string $name
+     * @param array  $args
+     *
+     * @return mixed
+     *
+     * @warning This method was added for BC and may be removed in future
+     *          releases.
      */
     public function __call($name, $args)
     {
@@ -169,4 +212,5 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
+
 }

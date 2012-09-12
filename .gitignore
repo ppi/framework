@@ -1,7 +1,72 @@
-vendor/*
+# gitignore - Specifies intentionally untracked files to ignore
+# http://git-scm.com/docs/gitignore
+
+# Project-specific ignores
+# ------------------------
+
+### Composer
+
+vendor
 composer.phar
 composer.lock
 
-# IDE backup files
+# Common unintentionally generated files
+# --------------------------------------
+
+# Note: In a saner world, the following rules would be in every contributors
+# global configuration. For sanity however, we'll retain the whole shebang.
+
+### Numerous always-ignore extensions
+
+*.diff
+*.err
+*.orig
+*.log
+*.rej
+*.swo
+*.swp
+*.vi
 *~
+*.sass-cache
+
+### OS or Editor folders
+
+.DS_Store
+._*
+Thumbs.db
+.cache
+.project
+.settings
+.tmproj
+nbproject
 *.kate-swp
+*.sublime-project
+*.sublime-workspace
+
+#### Dreamweaver added files
+
+_notes
+dwsync.xml
+
+#### Komodo
+
+*.komodoproject
+.komodotools
+
+#### Espresso
+
+*.esproj
+*.espressostorage
+
+### Rubinius
+
+*.rbc
+
+### Folders to ignore
+
+.hg
+.svn
+.CVS
+intermediate
+publish
+.idea
