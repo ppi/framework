@@ -1,4 +1,14 @@
 <?php
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @category    PPI
+ * @package     Templating
+ * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license     http://opensource.org/licenses/mit-license.php MIT
+ * @link        http://www.ppi.io
+ */
+
 
 namespace PPI\Templating;
 
@@ -9,7 +19,7 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class FileLocator extends BaseFileLocator
 {
@@ -37,8 +47,9 @@ class FileLocator extends BaseFileLocator
 
     public function locate($file, $currentPath = null, $first = true)
     {
+        
         if ('@' === $file[0]) {
-
+            
            if (false !== strpos($file, '..')) {
                throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $file));
            }
@@ -60,6 +71,8 @@ class FileLocator extends BaseFileLocator
 
             throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
         }
+        
+        var_dump('here'); exit;
     }
 
     /**
