@@ -2,17 +2,14 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\Options\OptionsInterface;
-use Zend\ServiceManager\ServiceManager as BaseServiceManager;
+use PPI\ServiceManager\Options\OptionsInterface,
+    Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
 /**
  * ServiceManager implements the Service Locator design pattern.
@@ -28,10 +25,17 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
  *
  * Options keys are case insensitive.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class ServiceManager extends BaseServiceManager implements \ArrayAccess, \IteratorAggregate, \Countable
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     protected $options;
 
     /**
@@ -39,6 +43,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * @param OptionsInterface $options Application options
      * @param array            $configs Array of ConfigInterface instances
+     *
+     * @return void
      */
     public function __construct(OptionsInterface $options, array $configs = array())
     {
@@ -63,8 +69,9 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * This method is an alias to $this->get().
      *
-     * @param  string       $cName
-     * @param  bool         $usePeeringServiceManagers
+     * @param string  $cName
+     * @param boolean $usePeeringServiceManagers
+     *
      * @return object|array
      */
     public function getService($name, $usePeeringServiceManagers = true)
@@ -77,11 +84,11 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * This method is an alias to $this->setService().
      *
-     * @param  string                                $name
-     * @param  mixed                                 $service
-     * @param  bool                                  $shared
+     * @param string  $name
+     * @param mixed   $service
+     * @param boolean $shared
+     *
      * @return ServiceManager
-     * @throws Exception\InvalidServiceNameException
      */
     public function set($name, $service, $shared = true)
     {
@@ -94,6 +101,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      * This method does one thing:
      *
      *  * Parameter values are resolved;
+     *
+     * @return void
      */
     public function compile()
     {
@@ -115,9 +124,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * @param string $name The option name
      *
-     * @return mixed The option value
-     *
-     * @throws InvalidArgumentException if the option is not defined
+     * @return mixed  The option value
      */
     public function getOption($name)
     {
@@ -129,7 +136,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * @param string $name The option name
      *
-     * @return Boolean The presence of option in container
+     * @return boolean The presence of option in container
      */
     public function hasOption($name)
     {
@@ -141,19 +148,17 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * @param string $name  The option name
      * @param mixed  $value The option value
+     *
+     * @return void
      */
     public function setOption($name, $value)
     {
         $this->options->set($name, $value);
     }
 
+    // ArrayAccess, IteratorAggregate, Countable
+
     /**
-     * Equivalent to {@link has()}.
-     *
-     * @param string $option The option name.
-     *
-     * @return Boolean Whether the option exists.
-     *
      * @see \ArrayAccess::offsetExists()
      */
     public function offsetExists($option)
@@ -162,16 +167,6 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Equivalent to {@link get()}.
-     *
-     * @param string $option The option name.
-     *
-     * @return mixed The option value.
-     *
-     * @throws \OutOfBoundsException     If the option does not exist.
-     * @throws OptionDefinitionException If a cyclic dependency is detected
-     *                                   between two lazy options.
-     *
      * @see \ArrayAccess::offsetGet()
      */
     public function offsetGet($option)
@@ -180,16 +175,6 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Equivalent to {@link set()}.
-     *
-     * @param string $option The name of the option.
-     * @param mixed  $value  The value of the option. May be a closure with a
-     *                       signature as defined in DefaultOptions::add().
-     *
-     * @throws OptionDefinitionException If options have already been read.
-     *                                   Once options are read, the container
-     *                                   becomes immutable.
-     *
      * @see \ArrayAccess::offsetSet()
      */
     public function offsetSet($option, $value)
@@ -198,14 +183,6 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Equivalent to {@link remove()}.
-     *
-     * @param string $option The option name.
-     *
-     * @throws OptionDefinitionException If options have already been read.
-     *                                   Once options are read, the container
-     *                                   becomes immutable.
-     *
      * @see \ArrayAccess::offsetUnset()
      */
     public function offsetUnset($option)
@@ -213,10 +190,8 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
         $this->options->remove($option);
     }
 
-   /**
-     * Returns an iterator for parameters.
-     *
-     * @return \ArrayIterator An \ArrayIterator instance
+    /**
+     * @see \Traversable::getIterator()
      */
     public function getIterator()
     {
@@ -224,12 +199,11 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     }
 
     /**
-     * Returns the number of parameters.
-     *
-     * @return int The number of parameters
+     * @see \Countable::count()
      */
     public function count()
     {
         return count($this->options->all());
     }
+
 }
