@@ -9,6 +9,8 @@
 namespace PPI\DataSource\PDO;
 
 /**
+ * ActiveQuery class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -56,7 +58,9 @@ class ActiveQuery
     protected $_options = array();
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param array $options
      *
      * @return void
      */
@@ -73,6 +77,8 @@ class ActiveQuery
     /**
      * @todo Add inline documentation.
      *
+     * @param type $conn
+     *
      * @return void
      */
     public function setConn($conn)
@@ -82,6 +88,8 @@ class ActiveQuery
 
     /**
      * @todo Add inline documentation.
+     *
+     * @return type
      */
     public function fetchAll()
     {
@@ -93,7 +101,7 @@ class ActiveQuery
     /**
      * Find a row by primary key
      *
-     * @param string      $id
+     * @param string $id
      *
      * @return array|false
      */
@@ -108,6 +116,10 @@ class ActiveQuery
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param array $data
+     *
+     * @return type
      */
     public function insert(array $data)
     {
@@ -118,6 +130,10 @@ class ActiveQuery
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param type $where
+     *
+     * @return type
      */
     public function delete($where)
     {
@@ -126,6 +142,11 @@ class ActiveQuery
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param array $data
+     * @param type  $where
+     *
+     * @return type
      */
     public function update(array $data, $where)
     {

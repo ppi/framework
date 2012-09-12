@@ -24,6 +24,8 @@ class TemplateNameParser extends BaseTemplateNameParser
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var array
      */
     protected $_cache = array();
 

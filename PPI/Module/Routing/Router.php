@@ -21,7 +21,11 @@ use Symfony\Component\Routing\Router as BaseRouter,
 class Router extends BaseRouter
 {
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param RequestContext $requestContext
+     * @param type           $collection
+     * @param array          $options
      *
      * @return void
      */
@@ -37,7 +41,8 @@ class Router extends BaseRouter
     /**
      * Set the route collection
      *
-     * @param  $collection
+     * @param type $collection
+     *
      * @return void
      */
     public function setRouteCollection($collection)
@@ -48,21 +53,31 @@ class Router extends BaseRouter
     /**
      * Has the cache matcher class been generated
      *
-     * @return bool
+     * @return boolean
      */
     public function isMatcherCached()
     {
-        return file_exists($this->options['cache_dir'].'/'.$this->options['matcher_cache_class'].'.php');
+        return file_exists(
+            $this->options['cache_dir'].
+            DIRECTORY_SEPARATOR.
+            $this->options['matcher_cache_class'].
+            '.php'
+        );
     }
 
     /**
      * Has the cache url generator class been generated
      *
-     * @return bool
+     * @return boolean
      */
     public function isGeneratorCached()
     {
-        return file_exists($this->options['cache_dir'].'/'.$this->options['generator_cache_class'].'.php');
+        return file_exists(
+            $this->options['cache_dir'].
+            DIRECTORY_SEPARATOR.
+            $this->options['generator_cache_class'].
+            '.php'
+        );
     }
 
     /**
@@ -74,7 +89,6 @@ class Router extends BaseRouter
     {
         $this->getMatcher();
         $this->getGenerator();
-
     }
 
 }

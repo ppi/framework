@@ -23,13 +23,15 @@ class SessionHelper extends Helper
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var SessionInterface
      */
     protected $session;
 
     /**
      * Constructor.
      *
-     * @param Request $request A Request instance
+     * @param SessionInterface $session
      *
      * @return void
      */
@@ -53,6 +55,11 @@ class SessionHelper extends Helper
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param type  $name
+     * @param array $default
+     *
+     * @return type
      */
     public function getFlash($name, array $default = array())
     {
@@ -61,6 +68,8 @@ class SessionHelper extends Helper
 
     /**
      * @todo Add inline documentation.
+     *
+     * @return type
      */
     public function getFlashes()
     {
@@ -69,6 +78,10 @@ class SessionHelper extends Helper
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param type $name
+     *
+     * @return type
      */
     public function hasFlash($name)
     {
@@ -77,6 +90,8 @@ class SessionHelper extends Helper
 
     /**
      * @todo Add inline documentation.
+     *
+     * @return type
      */
     public function hasFlashes()
     {
@@ -84,9 +99,9 @@ class SessionHelper extends Helper
     }
 
     /**
-     * Returns the canonical name of this helper.
+     * @todo Add inline documentation.
      *
-     * @return string The canonical name
+     * @return string
      */
     public function getName()
     {

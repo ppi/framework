@@ -46,7 +46,7 @@ class TemplatingConfig extends Config
      *
      * @param ServiceManager $serviceManager
      *
-     * @return ?
+     * @return type
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {

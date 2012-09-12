@@ -9,6 +9,8 @@
 namespace PPI\DataSource;
 
 /**
+ * DataSourceInterface interface
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI

@@ -24,7 +24,9 @@ class RoutingHelper
     protected $_params = array();
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param array $params
      *
      * @return void
      */
@@ -38,7 +40,10 @@ class RoutingHelper
     /**
      * Obtain a param's value
      *
-     * @param  string                    $param The param name
+     * @param string $param The param name
+     *
+     * @return type
+     *
      * @throws \InvalidArgumentException When the param does not exist
      */
     public function getParam($param)
@@ -53,8 +58,9 @@ class RoutingHelper
     /**
      * Set a routing param's value
      *
-     * @param  string $param
-     * @param  string $value
+     * @param string $param
+     * @param string $value
+     *
      * @return void
      */
     public function setParam($param, $value)
@@ -75,7 +81,8 @@ class RoutingHelper
     /**
      * Set the routing params
      *
-     * @param  array $params
+     * @param array $params
+     *
      * @return void
      */
     public function setParams(array $params)

@@ -23,16 +23,28 @@ class TemplateReference extends BaseTemplateReference
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var string
      */
     const APP_VIEWS_DIRECTORY = 'views';
 
     /**
      * @todo Add inline documentation.
+     *
+     * @var string
      */
     const MODULE_VIEWS_DIRECTORY = 'resources/views';
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
+     *
+     * @param type $module
+     * @param type $controller
+     * @param type $name
+     * @param type $format
+     * @param type $engine
+     *
+     * @return void
      */
     public function __construct($module = null, $controller = null, $name = null, $format = null, $engine = null)
     {

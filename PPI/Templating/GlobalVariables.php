@@ -22,6 +22,8 @@ class GlobalVariables implements \ArrayAccess
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var ServiceLocatorInterface
      */
     protected $serviceManager;
 
@@ -56,7 +58,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function getSession()
     {
-        if ($request = $this->getRequest()) {
+        if (($request = $this->getRequest()) != false) {
             return $request->getSession();
         }
     }

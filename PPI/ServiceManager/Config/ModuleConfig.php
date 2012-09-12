@@ -26,7 +26,9 @@ class ModuleConfig extends Config
     /**
      * @todo Add inline documentation.
      *
-     * @return void
+     * @param ServiceManager $serviceManager
+     *
+     * @return type
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {

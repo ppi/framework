@@ -9,6 +9,8 @@
 namespace PPI\Exception;
 
 /**
+ * Handler class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -63,6 +65,11 @@ class Handler
     /**
      * @todo Add inline documentation.
      *
+     * @param type $errno
+     * @param type $errstr
+     * @param type $errfile
+     * @param type $errline
+     *
      * @return void
      */
     public function handleError($errno = '', $errstr = '', $errfile = '', $errline = '')
@@ -97,7 +104,7 @@ class Handler
     /**
      * Add an Exception callback
      *
-     * @param \PPI\Exception\HandlerInterface $handler
+     * @param HandlerInterface $handler
      *
      * @return void
      */
@@ -105,4 +112,5 @@ class Handler
     {
         $this->_handlers[] = $handler;
     }
+
 }

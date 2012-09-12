@@ -23,11 +23,13 @@ class AssetsExtension extends BaseAssetsExtension
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var AssetsHelper
      */
     protected $assetsHelper = null;
 
     /**
-     * @todo Add inline documentation.
+     * Constructor.
      *
      * @param AssetsHelper $assetsHelper
      *
@@ -54,11 +56,13 @@ class AssetsExtension extends BaseAssetsExtension
     }
 
     /**
-     * Returns the public path of an asset
+     * Returns the public path of an asset. Absolute paths (i.e. http://...) are
+     * returned unmodified.
      *
-     * Absolute paths (i.e. http://...) are returned unmodified.
-     *
-     * @param string $path A public path
+     * @param array $parameters
+     * @param type  $path
+     * @param type  $template
+     * @param type  $repeat
      *
      * @return string A public path which takes into account the base path and URL path
      */
@@ -79,7 +83,8 @@ class AssetsExtension extends BaseAssetsExtension
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *
-     * @param string $path A public path
+     * @param string $path    A public path
+     * @param type   $package
      *
      * @return string A public path which takes into account the base path
      *                and URL path
@@ -90,7 +95,10 @@ class AssetsExtension extends BaseAssetsExtension
     }
 
     /**
-     * Returns the version of the assets in a package
+     * Returns the version of the assets in a package.
+     *
+     * @param array                     $parameters
+     * @param \Smarty_Internal_Template $template
      *
      * @return integer
      */

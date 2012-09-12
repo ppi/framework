@@ -20,6 +20,8 @@ class AssetsExtension extends \Twig_Extension
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $assetsHelper = null;
 
