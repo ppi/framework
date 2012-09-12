@@ -11,24 +11,36 @@
 
 namespace PPI\ServiceManager\Config;
 
-use PPI\Templating\DelegatingEngine;
 use PPI\Templating\FileLocator;
 use PPI\Templating\GlobalVariables;
 use PPI\Templating\TemplateLocator;
+use PPI\Templating\DelegatingEngine;
 use PPI\Templating\TemplateNameParser;
+use PPI\Templating\Php\FileSystemLoader;
+use Symfony\Component\Templating\PhpEngine;
+
+// Helpers
 use PPI\Templating\Helper\RouterHelper;
 use PPI\Templating\Helper\SessionHelper;
-use PPI\Templating\Php\FileSystemLoader;
+use Symfony\Component\Templating\Helper\SlotsHelper;
+use Symfony\Component\Templating\Helper\AssetsHelper;
+
+// Twig
 use PPI\Templating\Twig\TwigEngine;
 use PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
 use PPI\Templating\Twig\Extension\AssetsExtension as TwigAssetsExtension;
 use PPI\Templating\Twig\Extension\RouterExtension as TwigRouterExtension;
+
+// Mustache
+use PPI\Templating\Mustache\MustacheEngine;
+use PPI\Templating\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
+
+// Smarty
 use PPI\Templating\Smarty\SmartyEngine;
 use PPI\Templating\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
 use PPI\Templating\Smarty\Extension\RouterExtension as SmartyRouterExtension;
-use Symfony\Component\Templating\PhpEngine;
-use Symfony\Component\Templating\Helper\SlotsHelper;
-use Symfony\Component\Templating\Helper\AssetsHelper;
+
+// Service Manager
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -48,7 +60,7 @@ class TemplatingConfig extends Config
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         // these are the templating engines currently supported
-        $knownEngineIds = array('php', 'smarty', 'twig');
+        $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
         $engineIds = $serviceManager->getOption( 'templating.engines');
@@ -72,6 +84,11 @@ class TemplatingConfig extends Config
         $serviceManager->setFactory('templating.locator', function($serviceManager) {
             return new TemplateLocator($serviceManager->get('filelocator'));
         });
+        
+        // Templating Name Parser
+        $serviceManager->setFactory('templating.name.parser', function($serviceManager) {
+            return new TemplateNameParser();
+        });
 
         // Templating assets helper
         $serviceManager->setFactory('templating.helper.assets', function($serviceManager) {
@@ -86,17 +103,17 @@ class TemplatingConfig extends Config
         // PHP Engine
         $serviceManager->setFactory('templating.engine.php', function($serviceManager) {
             return new PhpEngine(
-                new TemplateNameParser(),
+                $serviceManager->get('templating.name.parser'),
                 new FileSystemLoader($serviceManager->get('templating.locator')),
                 array(
                     new SlotsHelper(),
                     $serviceManager->get('templating.helper.assets'),
                     new RouterHelper($serviceManager->get('router')),
                     new SessionHelper($serviceManager->get('session'))
-                )
+                 )
             );
         });
-
+        
         // Twig Engine
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
 
@@ -116,15 +133,16 @@ class TemplatingConfig extends Config
         // Smarty Engine
         $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) {
             $cacheDir = $serviceManager->getOption('app.cache_dir').DIRECTORY_SEPARATOR.'smarty';
-
+            $templateLocator = $serviceManager->get('templating.locator');
+            
             $smartyEngine = new SmartyEngine(
                 new \Smarty(),
-                $serviceManager->get('templating.locator'),
+                $templateLocator,
                 new TemplateNameParser(),
-                new FileSystemLoader($serviceManager->get('templating.locator')),
+                new FileSystemLoader($templateLocator),
                 array(
-                    'cache_dir'     => $cacheDir.DIRECTORY_SEPARATOR.'cache',
-                    'compile_dir'   => $cacheDir.DIRECTORY_SEPARATOR.'templates_c',
+                    'cache_dir'     => $cacheDir . DIRECTORY_SEPARATOR . 'cache',
+                    'compile_dir'   => $cacheDir . DIRECTORY_SEPARATOR . 'templates_c',
                 ),
                 $serviceManager->get('templating.globals')
             );
@@ -134,6 +152,17 @@ class TemplatingConfig extends Config
             $smartyEngine->addExtension(new SmartyRouterExtension($serviceManager->get('router')));
 
             return $smartyEngine;
+        });
+        
+        // Mustache Engine
+        $serviceManager->setFactory('templating.engine.mustache', function($serviceManager) {
+
+            $rawMustacheEngine = new \Mustache_Engine(array(
+                'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'), new TemplateNameParser()),
+                'cache'  => $serviceManager->getOption('app.cache_dir') . DIRECTORY_SEPARATOR . 'mustache'
+            ));
+
+            return new MustacheEngine($rawMustacheEngine, new TemplateNameParser());
         });
 
         // Delegating Engine
