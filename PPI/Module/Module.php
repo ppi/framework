@@ -1,20 +1,23 @@
 <?php
-
 /**
- * The base PPI module class.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module;
 
 use PPI\Module\Routing\Loader\YamlFileLoader,
     Symfony\Component\Config\FileLocator,
     Symfony\Component\Yaml\Yaml as YamlParser;
 
+/**
+ * The base PPI module class..
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class Module
 {
     /**
@@ -26,6 +29,7 @@ class Module
      * @var null
      */
     protected $_routes = null;
+
     /**
      * @var null
      */
@@ -55,6 +59,11 @@ class Module
      */
     protected $_actionName = null;
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function __construct()
     {
     }
@@ -76,7 +85,6 @@ class Module
         }
 
         return $this->_routes;
-
     }
 
     /**
@@ -162,17 +170,25 @@ class Module
         return $this->_controller !== null;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return $this
+     */
     public function setControllerName($controllerName)
     {
         $this->_controllerName = $controllerName;
-
         return $this;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return $this
+     */
     public function setActionName($actionName)
     {
         $this->_actionName = $actionName;
-
         return $this;
     }
 

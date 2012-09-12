@@ -1,22 +1,39 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\Templating;
 
 use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 
 /**
- *
  * Internal representation of a template.
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @package    PPI
+ * @subpackage Templating
  */
 class TemplateReference extends BaseTemplateReference
 {
+    /**
+     * @todo Add inline documentation.
+     */
     const APP_VIEWS_DIRECTORY = 'views';
+
+    /**
+     * @todo Add inline documentation.
+     */
     const MODULE_VIEWS_DIRECTORY = 'resources/views';
 
+    /**
+     * @todo Add inline documentation.
+     */
     public function __construct($module = null, $controller = null, $name = null, $format = null, $engine = null)
     {
         $this->parameters = array(
@@ -51,4 +68,5 @@ class TemplateReference extends BaseTemplateReference
     {
         return sprintf('%s:%s:%s.%s.%s', $this->parameters['module'], $this->parameters['controller'], $this->parameters['name'], $this->parameters['format'], $this->parameters['engine']);
     }
+
 }

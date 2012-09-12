@@ -1,13 +1,11 @@
 <?php
-
 /**
- * The PPI Template Helper for Assetic
+ * This file is part of the PPI Framework.
  *
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module\Routing;
 
 use Symfony\Component\Routing\Router as BaseRouter,
@@ -17,9 +15,16 @@ use Symfony\Component\Routing\Router as BaseRouter,
  * The PPI router
  *
  * @author Paul Dragoonis (dragoonis@php.net)
+ * @package    PPI
+ * @subpackage Module
  */
 class Router extends BaseRouter
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function __construct(RequestContext $requestContext, $collection, array $options = array())
     {
         parent::setOptions($options);
@@ -32,7 +37,8 @@ class Router extends BaseRouter
     /**
      * Set the route collection
      *
-     * @param $collection
+     * @param  $collection
+     * @return void
      */
     public function setRouteCollection($collection)
     {
@@ -61,6 +67,8 @@ class Router extends BaseRouter
 
     /**
      * Warm up the matcher and generator parts of the router
+     *
+     * @return void
      */
     public function warmUp()
     {

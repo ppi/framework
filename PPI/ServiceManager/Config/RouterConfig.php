@@ -2,28 +2,32 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Config;
 
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
-use Symfony\Component\Routing\RequestContext;
-use Symfony\Component\Routing\RouteCollection;
-use PPI\Module\Routing\Router;
+use Zend\ServiceManager\Config,
+    Zend\ServiceManager\ServiceManager,
+    Symfony\Component\Routing\RequestContext,
+    Symfony\Component\Routing\RouteCollection,
+    PPI\Module\Routing\Router;
 
 /**
  * ServiceManager configuration for the Router component.
  *
- * @author Paul Dragoonis <paul@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class RouterConfig extends Config
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         $serviceManager->setFactory('router', function($serviceManager) {
@@ -55,6 +59,6 @@ class RouterConfig extends Config
             return $router;
 
         });
-
     }
+
 }

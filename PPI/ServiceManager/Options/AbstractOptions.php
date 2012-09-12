@@ -2,13 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Options;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -19,17 +16,13 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  * An alternative implementation, instead of Symfony's ParameterBag, is to use
  * Zend\Stdlib\AbstractOptions or Symfony\Component\OptionsResolver\Options.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 abstract class AbstractOptions extends ParameterBag implements OptionsInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
-     * Equivalent to {@link has()}.
-     *
-     * @param string $option The option name.
-     *
-     * @return Boolean Whether the option exists.
-     *
      * @see \ArrayAccess::offsetExists()
      */
     public function offsetExists($option)
@@ -38,16 +31,6 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     }
 
     /**
-     * Equivalent to {@link get()}.
-     *
-     * @param string $option The option name.
-     *
-     * @return mixed The option value.
-     *
-     * @throws \OutOfBoundsException     If the option does not exist.
-     * @throws OptionDefinitionException If a cyclic dependency is detected
-     *                                   between two lazy options.
-     *
      * @see \ArrayAccess::offsetGet()
      */
     public function offsetGet($option)
@@ -56,16 +39,6 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     }
 
     /**
-     * Equivalent to {@link set()}.
-     *
-     * @param string $option The name of the option.
-     * @param mixed  $value  The value of the option. May be a closure with a
-     *                       signature as defined in DefaultOptions::add().
-     *
-     * @throws OptionDefinitionException If options have already been read.
-     *                                   Once options are read, the container
-     *                                   becomes immutable.
-     *
      * @see \ArrayAccess::offsetSet()
      */
     public function offsetSet($option, $value)
@@ -74,14 +47,6 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     }
 
     /**
-     * Equivalent to {@link remove()}.
-     *
-     * @param string $option The option name.
-     *
-     * @throws OptionDefinitionException If options have already been read.
-     *                                   Once options are read, the container
-     *                                   becomes immutable.
-     *
      * @see \ArrayAccess::offsetUnset()
      */
     public function offsetUnset($option)
@@ -89,10 +54,10 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
         $this->remove($option);
     }
 
-   /**
+    /**
      * Returns an iterator for parameters.
      *
-     * @return \ArrayIterator An \ArrayIterator instance
+     * @return \ArrayIterator
      */
     public function getIterator()
     {
@@ -102,10 +67,11 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     /**
      * Returns the number of parameters.
      *
-     * @return int The number of parameters
+     * @return integer The number of parameters
      */
     public function count()
     {
         return count($this->all());
     }
+
 }
