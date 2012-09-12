@@ -1,22 +1,37 @@
 <?php
-
 /**
- * The PPI Twig AssetsExtension
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Templating\Twig\Extension;
 
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
+/**
+ * The PPI Twig AssetsExtension
+ *
+ * @package    PPI
+ * @subpackage Templating
+ */
 class AssetsExtension extends \Twig_Extension
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     protected $assetsHelper = null;
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param AssetsHelper $assetsHelper
+     *
+     * @return void
+     */
     public function __construct(AssetsHelper $assetsHelper)
     {
         $this->assetsHelper = $assetsHelper;
@@ -55,7 +70,7 @@ class AssetsExtension extends \Twig_Extension
      *
      * @param string $packageName
      *
-     * @return int
+     * @return integer
     */
     public function getAssetsVersion($packageName = null)
     {

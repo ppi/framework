@@ -1,26 +1,32 @@
 <?php
-
 /**
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Templating;
 
-use Symfony\Component\Templating\TemplateNameParser as BaseTemplateNameParser;
-use Symfony\Component\Templating\TemplateReferenceInterface;
+use Symfony\Component\Templating\TemplateNameParser as BaseTemplateNameParser,
+    Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
  * TemplateNameParser converts template names from the short notation
  * "module:template.format.engine" to TemplateReferenceInterface instances.
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @package    PPI
+ * @subpackage Templating
  */
-
 class TemplateNameParser extends BaseTemplateNameParser
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var array
+     */
     protected $_cache = array();
 
     /**
@@ -46,11 +52,13 @@ class TemplateNameParser extends BaseTemplateNameParser
         }
 
         $parts = explode(':', $name);
+
         if (3 !== count($parts)) {
             throw new \InvalidArgumentException(sprintf('Template name "%s" is not valid (format is "module:template.format.engine").', $name));
         }
 
         $elements = explode('.', $parts[2]);
+
         if (3 > count($elements)) {
             throw new \InvalidArgumentException(sprintf('Template name "%s" is not valid (format is "module:template.format.engine").', $name));
         }

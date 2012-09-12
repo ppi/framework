@@ -2,25 +2,16 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Core
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI;
 
-use
+use 
 
     // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
-
-    // Modules
-    PPI\Module\ServiceLocator,
-    PPI\Module\Listener\ListenerOptions,
-    Zend\ModuleManager\ModuleManager,
-    PPI\Module\Listener\DefaultListenerAggregate as PPIDefaultListenerAggregate,
 
     // Services
     PPI\ServiceManager\ServiceManager,
@@ -32,15 +23,7 @@ use
     PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
-    PPI\Module\Routing\RoutingHelper,
-    PPI\Module\Routing\Loader\YamlFileLoader,
-    Symfony\Component\Routing\Generator\UrlGenerator,
-    Symfony\Component\HttpFoundation\Request as HttpRequest,
-    Symfony\Component\HttpFoundation\Response as HttpResponse,
-    Symfony\Component\Routing\Exception\ResourceNotFoundException,
-
-    // Misc
-    Zend\Stdlib\ArrayUtils;
+    PPI\Module\Routing\RoutingHelper;
 
 /**
  * The PPI App bootstrap class.
@@ -48,11 +31,18 @@ use
  * This class sets various app settings, and allows you to override clases used
  * in the bootup process.
  *
- * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage Core
  */
 class App
 {
+    /**
+     * Version string.
+     *
+     * @var string
+     */
     const VERSION = '2.0.0-DEV';
 
     /**
@@ -71,7 +61,6 @@ class App
 
     /**
      * @var null|array
-     *
      */
     protected $_matchedRoute = null;
 
@@ -121,17 +110,19 @@ class App
      * The constructor.
      *
      * @param array $options
+     *
+     * @return void
      */
     public function __construct(array $options = array())
     {
         $this->options = new AppOptions($options);
-
     }
 
     /**
      * Setter for the environment, passing in options determining how the app will behave
      *
-     * @param  array $options The options
+     * @param array $options The options
+     *
      * @return void
      */
     public function setEnv(array $options)
@@ -153,7 +144,7 @@ class App
      * Run the boot process, boot up our modules and their dependencies.
      * Decide on a route for $this->dispatch() to use.
      *
-     * @return $this Fluent interface
+     * @return $this
      */
     public function boot()
     {
@@ -199,6 +190,7 @@ class App
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
+
         foreach ($moduleServices as $serviceKey => $serviceVal) {
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
@@ -209,6 +201,7 @@ class App
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         $dsConnections = $this->options->get('datasource.connections');
+
         if ($this->options['useDataSource'] === true && $dsConnections !== null) {
              $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
@@ -219,10 +212,11 @@ class App
 
     /**
      * Lets dispatch our module's controller action
+     *
+     * @return void
      */
     public function dispatch()
     {
-
         // Lets disect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
         $actionName = $actionName . 'Action';
@@ -280,14 +274,14 @@ class App
         if ($this->getOption('app.auto_dispatch')) {
             $this->_response->send();
         }
-
     }
 
     /**
      * Match a route based on the specified $uri.
      * Set up _matchedRoute and _matchedModule too
      *
-     * @param  string $uri
+     * @param string $uri
+     *
      * @return void
      */
     protected function matchRoute($uri)
@@ -296,15 +290,15 @@ class App
         $matchedModuleName    = $this->_matchedRoute['_module'];
         $this->_matchedModule = $this->_moduleManager->getModule($matchedModuleName);
         $this->_matchedModule->setModuleName($matchedModuleName);
-
     }
 
     /**
+     * @todo Add inline documentation.
      *
+     * @return void
      */
     protected function handleRouting()
     {
-
         try {
 
             // Lets load up our router and match the appropriate route
@@ -334,16 +328,15 @@ class App
             } catch (\Exception $e) {
                 throw new \Exception('Unable to load 404 page. An internal error occured');
             }
-
         }
-
     }
 
     /**
      * Get an option
      *
-     * @param $key
-     * @param  null $default
+     * @param string $key
+     * @param null   $default
+     *
      * @return null
      */
     public function getOption($key, $default = null)
@@ -356,6 +349,8 @@ class App
      *
      * @param $key
      * @param $val
+     *
+     * @return void
      */
     public function setOption($key, $val)
     {
@@ -365,8 +360,9 @@ class App
     /**
      * Magic setter function, this is an alias of setOption
      *
-     * @param  string $option The Option
-     * @param  string $value  The Value
+     * @param string $option The Option
+     * @param string $value  The Value
+     *
      * @return void
      */
     public function __set($option, $value)
@@ -387,7 +383,7 @@ class App
     /**
      * Check if the application is in development mode.
      *
-     * @return bool
+     * @return boolean
      */
     public function isDevMode()
     {
@@ -397,7 +393,7 @@ class App
     /**
      * Checks if debug mode is enabled.
      *
-     * @return Boolean true if debug mode is enabled, false otherwise
+     * @return boolean true if debug mode is enabled, false otherwise
      *
      * @api
      */
@@ -409,7 +405,8 @@ class App
     /**
      * Magic getter function, this is an alias of getEnv()
      *
-     * @param  string $option The Option
+     * @param string $option The Option
+     *
      * @return mixed
      */
     public function __get($option)
@@ -426,4 +423,5 @@ class App
     {
         return $this->serviceManager;
     }
+
 }

@@ -2,13 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Config;
 
 use PPI\Templating\FileLocator;
@@ -47,7 +44,9 @@ use Zend\ServiceManager\ServiceManager;
 /**
  * ServiceManager configuration for the Templating component.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class TemplatingConfig extends Config
 {
@@ -56,6 +55,10 @@ class TemplatingConfig extends Config
      * * PHP
      * * Twig
      * * Smarty
+     *
+     * @param ServiceManager $serviceManager
+     *
+     * @return type
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
@@ -175,4 +178,5 @@ class TemplatingConfig extends Config
             return $delegatingEngine;
         });
     }
+
 }

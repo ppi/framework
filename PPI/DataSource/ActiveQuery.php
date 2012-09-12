@@ -1,9 +1,23 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\DataSource;
 
 use PPI\DataSource\DataSourceInterface;
 
+/**
+ * ActiveQuery class
+ *
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage DataSource
+ */
 class ActiveQuery
 {
     /**
@@ -17,7 +31,7 @@ class ActiveQuery
      * The meta data for this instantiation
      *
      * @var array
-    */
+     */
     protected $_meta = array(
         'conn'    => null,
         'table'   => null,
@@ -28,26 +42,29 @@ class ActiveQuery
      * The options for this instantiation
      *
      * @var array
-    */
+     */
     protected $_options = array();
 
     /**
      * Optionally pass in a DataSource
      *
-     * @param null|object
+     * @param null|object $dataSource
+     *
+     * @return void
      */
     public function __construct($dataSource = null)
     {
         if ($dataSource !== null) {
             $this->setDataSource($dataSource);
         }
-
     }
 
     /**
      * Set the datasource service into this class
      *
-     * @param \PPI\DataSource\DataSourceInterface $dataSource
+     * @param DataSourceInterface $dataSource
+     *
+     * @return void
      */
     public function setDataSource(DataSourceInterface $dataSource)
     {
@@ -62,14 +79,14 @@ class ActiveQuery
                 $this->_handler = $dataSource->activeQueryFactory('pdo', array('meta' => $this->_meta));
                 $this->_handler->setConn($this->_conn);
             }
-
         }
     }
 
     /**
      * Fetch all rows based on the $criteria
      *
-     * @param  null|object $criteria
+     * @param null|object $criteria
+     *
      * @return mixed
      */
     public function fetchAll($criteria = null)
@@ -80,7 +97,8 @@ class ActiveQuery
     /**
      * Find a row by its primary key
      *
-     * @param  string $id
+     * @param string $id
+     *
      * @return mixed
      */
     public function find($id)
@@ -91,8 +109,9 @@ class ActiveQuery
     /**
      * Fetch records from the datasource by a $where clause
      *
-     * @param  array $where
-     * @param  array $params
+     * @param array $where
+     * @param array $params
+     *
      * @return mixed
      */
     public function fetch(array $where, array $params = array())
@@ -103,7 +122,8 @@ class ActiveQuery
     /**
      * Insert data into the table
      *
-     * @param $data
+     * @param mixed $data
+     *
      * @return mixed
      */
     public function insert($data)
@@ -114,7 +134,8 @@ class ActiveQuery
     /**
      * Delete a record by a where clause
      *
-     * @param  array $where
+     * @param array $where
+     *
      * @return mixed
      */
     public function delete($where)
@@ -125,8 +146,9 @@ class ActiveQuery
     /**
      * Update a record by where clause
      *
-     * @param  array $data  The fields and values
-     * @param  array $where The clause
+     * @param array $data  The fields and values
+     * @param array $where The clause
+     *
      * @return mixed
      */
     public function update($data, $where)
@@ -165,10 +187,9 @@ class ActiveQuery
     }
 
     /**
-     * Get the fetch mode of the active query instance.
-     * i.e: \PDO::FETCH_ASSOC
+     * Get the fetch mode of the active query instance (i.e: \PDO::FETCH_ASSOC)
      *
-     * @return null
+     * @return mixed
      */
     protected function getFetchMode()
     {

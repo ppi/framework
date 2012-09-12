@@ -1,17 +1,21 @@
 <?php
-
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Core
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Exception;
 
+/**
+ * Log class
+ *
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage Exception
+ */
 class Log implements HandlerInterface
 {
     /**
@@ -32,6 +36,8 @@ class Log implements HandlerInterface
      * Set the log listener options
      *
      * @param array $options
+     *
+     * @return void
      */
     public function __construct(array $options = array())
     {
@@ -41,10 +47,12 @@ class Log implements HandlerInterface
     }
 
     /**
-    * Set the log file
-    *
-    * @param string $logFile
-    */
+     * Set the log file
+     *
+     * @param string $logFile
+     *
+     * @return void
+     */
     public function setLogFile($logFile)
     {
         if (is_string($logFile)) {
@@ -65,19 +73,35 @@ class Log implements HandlerInterface
     /**
      * Write the Exception to a log file
      *
-     * @param \Exception
+     * @param \Exception $e
+     *
+     * @return array
      */
     public function handle(\Exception $e)
     {
         $logFile = $this->_getLogFile();
+
         if (is_writable($logFile)) {
-            $logEntry  = '[' . date($this->_dateFormat) . '] ' . $e->getMessage();
-            $logEntry .= ' in ' . $e->getFile() . ' on line ' . $e->getLine() . PHP_EOL;
+            $logEntry = sprintf(
+                '[%s] %s in %s on line %s' . PHP_EOL,
+                date($this->_dateFormat),
+                $e->getMessage(),
+                $e->getFile(),
+                $e->getLine()
+            );
+
             if (file_put_contents($logFile, $logEntry , FILE_APPEND|LOCK_EX) > 0) {
-                return array('status' => true, 'message' => 'Written to log file ' . $logFile);
+                return array(
+                    'status'  => true,
+                    'message' => 'Written to log file ' . $logFile
+                );
             }
         }
 
-        return array('status' => false, 'message' => 'Unable to write to log file ' . $logFile);
+        return array(
+            'status'  => false,
+            'message' => 'Unable to write to log file ' . $logFile
+        );
     }
+
 }
