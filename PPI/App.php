@@ -43,9 +43,8 @@ use // Exceptions
  * This class sets various app settings, and allows you to override clases used
  * in the bootup process.
  *
- * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <vitor@ppi.io>
- *
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Core
  */
