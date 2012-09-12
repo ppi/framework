@@ -1,21 +1,44 @@
 <?php
 /**
- * The PPI Service Locator
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
 namespace PPI\Module;
 
 use PPI\Module\Service;
 
+/**
+ * The PPI Service Locator.
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class ServiceLocator
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var array
+     */
     protected $_loadedService = array();
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var array
+     */
     protected $_services = array();
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param array $services
+     *
+     * @return void
+     */
     public function __construct(array $services = array())
     {
         if (!empty($services)) {
@@ -23,19 +46,21 @@ class ServiceLocator
                 $this->_services[strtolower($key)] = $service;
             }
         }
-
     }
 
     /**
      * Get a registered service by its name
      *
-     * @param  string                               $key
+     * @param string $key
+     *
      * @return mixed
+     *
      * @throws \Exception|\InvalidArgumentException
      */
     public function get($key)
     {
         $key = strtolower($key);
+
         if (!isset($this->_services[$key])) {
             throw new \InvalidArgumentException('Service not found: ' . $key);
         }
@@ -73,29 +98,28 @@ class ServiceLocator
      *
      * @param string $key
      * @param mixed  $service
+     *
+     * @return void
      */
     public function set($key, $service)
     {
-        $key = strtolower($key);
-
-        $this->_services[$key] = $service;
+        $this->_services[strtolower($key)] = $service;
     }
 
     /**
      * Check if a service has been registered
      *
-     * @param  string $key
-     * @return bool
+     * @param string $key
+     *
+     * @return boolean
      */
     public function has($key)
     {
-        $key = strtolower($key);
-
-        return isset($this->_services[$key]);
+        return isset($this->_services[strtolower($key)]);
     }
 
     /**
-     *
+     * @todo Add inline documentation.
      *
      * @return array
      */

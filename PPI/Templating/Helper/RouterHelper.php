@@ -1,32 +1,38 @@
 <?php
-
 /**
- * The ppi router helper.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Templating\Helper;
 
-use Symfony\Component\Templating\Helper\Helper;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Templating\Helper\Helper,
+    Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * RouterHelper manages links between pages in a template context.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @package    PPI
+ * @subpackage Templating
  */
 class RouterHelper extends Helper
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var UrlGeneratorInterface
+     */
     protected $generator;
 
     /**
      * Constructor.
      *
      * @param UrlGeneratorInterface $router A Router instance
+     *
+     * @return void
      */
     public function __construct(UrlGeneratorInterface $router)
     {
@@ -38,7 +44,7 @@ class RouterHelper extends Helper
      *
      * @param string  $name       The name of the route
      * @param mixed   $parameters An array of parameters
-     * @param Boolean $absolute   Whether to generate an absolute URL
+     * @param boolean $absolute   Whether to generate an absolute URL
      *
      * @return string The generated URL
      */
@@ -56,4 +62,5 @@ class RouterHelper extends Helper
     {
         return 'router';
     }
+
 }
