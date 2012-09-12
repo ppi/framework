@@ -81,7 +81,6 @@ class MustacheEngine implements EngineInterface
      */
     public function supports($name)
     {
-        
         if ($name instanceof \Mustache_Template) {
             return true;
         }
@@ -139,4 +138,5 @@ class MustacheEngine implements EngineInterface
     public function addGlobal($key, $val) {
         return false;
     }
+    
 }
