@@ -13,6 +13,9 @@ composer.lock
 Common unintentionally generated files
 --------------------------------------
 
+# Note: In a saner world, the following rules would be in every contributors
+# global configuration. For sanity however, we'll retain the whole shebang.
+
 ### Numerous always-ignore extensions
 
 *.diff
