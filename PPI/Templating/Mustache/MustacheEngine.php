@@ -6,43 +6,36 @@
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
+ * 
  */
 
+namespace PPI\Templating\Mustache;
 
-namespace PPI\Templating\Twig;
-
-use PPI\Templating\TemplateReference;
-use PPI\Templating\EngineInterface;
-
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\Templating\TemplateNameParserInterface;
-use Symfony\Component\Templating\StreamingEngineInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Config\FileLocatorInterface;
 
 /**
- * This engine knows how to render Twig templates.
- *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
+ * This engine knows how to render Mustache templates.
+ * 
+ * @author Justin Hileman <justin@justinhileman.info>
  */
-class TwigEngine implements EngineInterface, StreamingEngineInterface
+class MustacheEngine implements EngineInterface
 {
-    protected $environment;
+    protected $mustache;
     protected $parser;
-    protected $locator;
 
     /**
      * Constructor.
      *
-     * @param \Twig_Environment           $environment A \Twig_Environment instance
-     * @param TemplateNameParserInterface $parser      A TemplateNameParserInterface instance
-     * @param FileLocatorInterface        $locator     A FileLocatorInterface instance
+     * @param Mustache_Engine             $mustache A \Mustache_Engine instance
+     * @param TemplateNameParserInterface $parser   A TemplateNameParserInterface instance
      */
-    public function __construct(\Twig_Environment $environment, TemplateNameParserInterface $parser, FileLocatorInterface $locator)
+    public function __construct(\Mustache_Engine $mustache, TemplateNameParserInterface $parser)
     {
-        $this->environment = $environment;
-        $this->parser = $parser;
-        $this->locator = $locator;
+        $this->mustache = $mustache;
+        $this->parser   = $parser;
     }
 
     /**
@@ -58,32 +51,7 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      */
     public function render($name, array $parameters = array())
     {
-        try {
-            return $this->load($name)->render($parameters);
-        } catch (\Twig_Error $e) {
-            if ($name instanceof TemplateReference) {
-                try {
-                    // try to get the real file name of the template where the error occurred
-                    $e->setTemplateFile(sprintf('%s', $this->locator->locate($this->parser->parse($e->getTemplateFile()))));
-                } catch (\Exception $ex) {
-                }
-            }
-
-            throw $e;
-        }
-    }
-
-    /**
-     * Streams a template.
-     *
-     * @param mixed $name       A template name or a TemplateReferenceInterface instance
-     * @param array $parameters An array of parameters to pass to the template
-     *
-     * @throws \RuntimeException if the template cannot be rendered
-     */
-    public function stream($name, array $parameters = array())
-    {
-        $this->load($name)->display($parameters);
+        return $this->load($name)->render($parameters);
     }
 
     /**
@@ -113,13 +81,14 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
      */
     public function supports($name)
     {
-        if ($name instanceof \Twig_Template) {
+        var_dump(__FUNCTION__, $name); exit;
+        if ($name instanceof \Mustache_Template) {
             return true;
         }
 
         $template = $this->parser->parse($name);
 
-        return 'twig' === $template->get('engine');
+        return 'mustache' === $template->get('engine');
     }
 
     /**
@@ -145,22 +114,18 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     /**
      * Loads the given template.
      *
-     * @param mixed $name A template name or an instance of Twig_Template
+     * @param mixed $name A template name or an instance of Mustache_Template
      *
-     * @return \Twig_TemplateInterface A \Twig_TemplateInterface instance
+     * @return \Mustache_Template A \Mustache_Template instance
      *
      * @throws \InvalidArgumentException if the template does not exist
      */
     protected function load($name)
     {
-        if ($name instanceof \Twig_Template) {
+        if ($name instanceof \Mustache_Template) {
             return $name;
         }
 
-        try {
-            return $this->environment->loadTemplate($name);
-        } catch (\Twig_Error_Loader $e) {
-            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
-        }
+        return $this->mustache->loadTemplate($name);
     }
 }
