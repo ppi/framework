@@ -72,7 +72,6 @@ class FileLocator extends BaseFileLocator
             throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
         }
         
-        var_dump('here'); exit;
     }
 
     /**
