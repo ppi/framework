@@ -2,13 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Config;
 
 use Zend\ServiceManager\ServiceManager;
@@ -16,7 +13,9 @@ use Zend\ServiceManager\ServiceManager;
 /**
  * ServiceManager configuration for the Session component.
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class SessionConfig extends AbstractConfig
 {
@@ -130,4 +129,5 @@ class SessionConfig extends AbstractConfig
             return $session;
         });
     }
+
 }

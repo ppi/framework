@@ -1,15 +1,15 @@
 <?php
 /**
- * The PPI Autoloader
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppiframework.com
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
 namespace PPI;
 
 /**
+ * The PPI Autoloader.
  *
  * It is able to load classes that use either:
  *
@@ -21,26 +21,46 @@ namespace PPI;
  *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
  *  PPI\Autoload::register();
  *
+ * @package    PPI
+ * @subpackage Core
  */
-
 class Autoload
 {
     /**
      * The ClassLoader object
      *
      * @var null|object
+     *
+     * @static
      */
     protected static $_loader = null;
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var array
+     *
+     * @static
+     */
     protected static $_options = array();
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var array
+     *
+     * @static
+     */
     protected static $_registeredNamespaces = array();
 
     /**
      * Add some items to the class config
      *
-     * @static
      * @param array $config
+     *
+     * @return void
+     *
+     * @static
      */
     public static function config(array $config)
     {
@@ -50,9 +70,12 @@ class Autoload
     /**
      * Add a namespace to the autoloader path
      *
-     * @static
      * @param string $key
      * @param string $path
+     *
+     * @return void
+     *
+     * @static
      */
     public static function add($key, $path)
     {
@@ -63,8 +86,9 @@ class Autoload
     /**
      * Register the autoloader namespaces or prefixes thus far.
      *
-     * @static
+     * @return void
      *
+     * @static
      */
     public static function register()
     {
@@ -75,9 +99,11 @@ class Autoload
      * Check if a namespace has been registered. This is a workaround as the default self::$_options['loader']
      * class does not have an exists() method.
      *
+     * @param string $key
+     *
+     * @return boolean
+     *
      * @static
-     * @param  string $key
-     * @return bool
      */
     public static function exists($key)
     {

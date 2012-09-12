@@ -1,42 +1,56 @@
 <?php
-
 /**
- * The base PPI module class.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module;
 
 use PPI\Module\Routing\Loader\YamlFileLoader,
     Symfony\Component\Config\FileLocator,
     Symfony\Component\Yaml\Yaml as YamlParser;
 
+/**
+ * The base PPI module class..
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class Module
 {
     /**
+     * @todo Add inline documentation.
+     *
      * @var null
      */
     protected $_config = null;
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var null
      */
     protected $_routes = null;
+
     /**
+     * @todo Add inline documentation.
+     *
      * @var null
      */
     protected $_services = null;
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var null
      */
     protected $_controller = null;
 
     /**
+     * @todo Add inline documentation.
+     *
      * @var null
      */
     protected $_moduleName = null;
@@ -55,6 +69,11 @@ class Module
      */
     protected $_actionName = null;
 
+    /**
+     * Constructor.
+     *
+     * @return void
+     */
     public function __construct()
     {
     }
@@ -62,7 +81,8 @@ class Module
     /**
      * Load up our routes
      *
-     * @param $path
+     * @param type $path
+     *
      * @return \Symfony\Component\Routing\RouteCollection
      */
     public function loadYamlRoutes($path)
@@ -76,13 +96,13 @@ class Module
         }
 
         return $this->_routes;
-
     }
 
     /**
      * Load up our config results from the specific yaml file.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return array
      */
     public function loadYamlConfig($path)
@@ -98,7 +118,8 @@ class Module
     /**
      * Set services for our module
      *
-     * @param  string $services
+     * @param string $services
+     *
      * @return Module
      */
     public function setServices($services)
@@ -121,7 +142,8 @@ class Module
     /**
      * Get a particular service
      *
-     * @param  string $serviceName
+     * @param string $serviceName
+     *
      * @return mixed
      */
     public function getService($serviceName)
@@ -142,37 +164,49 @@ class Module
     /**
      * Set the controller
      *
-     * @param  object $controller
+     * @param object $controller
+     *
      * @return Module
      */
     public function setController($controller)
     {
         $this->_controller = $controller;
-
         return $this;
     }
 
     /**
      * Check if a controller has been set
      *
-     * @return bool
+     * @return boolean
      */
     public function hasController()
     {
         return $this->_controller !== null;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param type $controllerName
+     *
+     * @return $this
+     */
     public function setControllerName($controllerName)
     {
         $this->_controllerName = $controllerName;
-
         return $this;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param type $actionName
+     *
+     * @return $this
+     */
     public function setActionName($actionName)
     {
         $this->_actionName = $actionName;
-
         return $this;
     }
 
@@ -180,14 +214,19 @@ class Module
      * Dispatch process
      *
      * @return mixed
+     *
      * @throws \Exception
      */
     public function dispatch()
     {
         if (!method_exists($this->_controller, $this->_actionName)) {
-            throw new \Exception('Unable to dispatch action: '
-                . $this->_actionName . ' does not exist in controller: ' . $this->_controllerName . ' within module: '
-                . $this->_moduleName);
+            throw new \Exception(sprintf(
+                'Unable to dispatch action: "%s" does not exist in controller '.
+                '"%s" within module "%s"',
+                $this->_actionName,
+                $this->_controllerName,
+                $this->_moduleName
+            ));
         }
 
         if (method_exists($this->_controller, 'preDispatch')) {
@@ -208,6 +247,7 @@ class Module
      * Set the module name
      *
      * @param string $moduleName
+     *
      * @return $this
      */
     public function setModuleName($moduleName)
