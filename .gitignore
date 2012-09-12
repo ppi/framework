@@ -1,8 +1,8 @@
 # gitignore - Specifies intentionally untracked files to ignore
 # http://git-scm.com/docs/gitignore
 
-Project-specific ignores
-------------------------
+# Project-specific ignores
+# ------------------------
 
 ### Composer
 
@@ -10,8 +10,8 @@ vendor
 composer.phar
 composer.lock
 
-Common unintentionally generated files
---------------------------------------
+# Common unintentionally generated files
+# --------------------------------------
 
 # Note: In a saner world, the following rules would be in every contributors
 # global configuration. For sanity however, we'll retain the whole shebang.
