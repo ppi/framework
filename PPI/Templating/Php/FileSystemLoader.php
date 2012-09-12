@@ -36,6 +36,7 @@ class FileSystemLoader implements LoaderInterface
      */
     public function load(TemplateReferenceInterface $template)
     {
+        
         try {
             $file = $this->locator->locate($template);
         } catch (\InvalidArgumentException $e) {
