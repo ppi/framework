@@ -30,7 +30,7 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
      *
      * @param \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator A \Zend\ServiceManager\ServiceLocatorInterface instance
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator);
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
     }
