@@ -19,7 +19,7 @@ use Symfony\Component\Config\FileLocatorInterface;
  * 
  * @author Justin Hileman <justin@justinhileman.info>
  */
-class FilesystemLoader extends \Mustache_Loader_FilesystemLoader
+class FileSystemLoader extends \Mustache_Loader_FilesystemLoader
 {
     protected $locator;
     protected $parser;
