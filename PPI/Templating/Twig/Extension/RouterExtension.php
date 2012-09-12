@@ -21,6 +21,8 @@ class RouterExtension extends \Twig_Extension
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     private $generator;
 
@@ -51,14 +53,25 @@ class RouterExtension extends \Twig_Extension
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param type $name
+     * @param type $parameters
+     *
+     * @return type
      */
     public function getPath($name, $parameters = array())
     {
         return $this->generator->generate($name, $parameters, false);
     }
 
+
     /**
      * @todo Add inline documentation.
+     *
+     * @param type $name
+     * @param type $parameters
+     *
+     * @return type
      */
     public function getUrl($name, $parameters = array())
     {

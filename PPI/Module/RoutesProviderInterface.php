@@ -9,6 +9,8 @@
 namespace PPI\Module;
 
 /**
+ * RoutesProviderInterface interface
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -18,6 +20,8 @@ interface RoutesProviderInterface
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @return type
      */
     public function getRoutes();
 }

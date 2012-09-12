@@ -9,6 +9,8 @@
 namespace PPI\Exception;
 
 /**
+ * HandlerInterface interface
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -24,4 +26,5 @@ interface HandlerInterface
      * @return void
      */
     public function handle(\Exception $e);
+
 }

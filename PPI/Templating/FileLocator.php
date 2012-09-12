@@ -22,17 +22,23 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
 class FileLocator extends BaseFileLocator
 {
     /**
-     * @too Add inline documentation.
+     * @todo Add inline documentation.
+     *
+     * @var type
      */
     private $modules;
 
     /**
-     * @too Add inline documentation.
+     * @todo Add inline documentation.
+     *
+     * @var type
      */
     private $path;
 
     /**
-     * @too Add inline documentation.
+     * @todo Add inline documentation.
+     *
+     * @var type
      */
     private $baseModulePath;
 
@@ -59,6 +65,15 @@ class FileLocator extends BaseFileLocator
 
     /**
      * @todo Add inline documentation.
+     *
+     * @param type $file
+     * @param type $currentPath
+     * @param type $first
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
      */
     public function locate($file, $currentPath = null, $first = true)
     {

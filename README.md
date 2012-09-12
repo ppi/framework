@@ -2,6 +2,7 @@
 
 [@website]:       http://www.ppi.io/                   "PPI Framework"
 [@documentation]: http://www.ppi.io/docs               "PPI Framework Documentation"
+[@contributing]:  http://www.ppi.io/contribute         "PPI Framework Contributing"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
 [@gitweb]:        https://github.com/ppi/framework     "ppi/framework"
 [@h5bp]:          http://html5boilerplate.com/         "HTML5 Boilerplate"
@@ -50,5 +51,5 @@ http://www.ppi.io/projects and drop it in your document root.
 ## Contributing
 
 PPI is an open source, community-driven project. If you'd like to contribute,
-please read the http://www.ppi.io/contribute page. If you're submitting a pull
-request, please do so on your own branch on [GitHub][@gitweb].
+please read the [Contributing to PPI][@contributing] page. If you're submitting
+a pull request, please do so on your own branch on [GitHub][@gitweb].

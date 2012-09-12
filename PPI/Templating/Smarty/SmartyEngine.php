@@ -26,6 +26,8 @@ class SmartyEngine extends BaseSmartyEngine
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $locator;
 

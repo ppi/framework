@@ -20,6 +20,8 @@ use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
 class DelegatingEngine extends BaseDelegatingEngine
 {
     /**
+     * @todo Add inline documentation.
+     *
      * @var array
      */
     protected $globals = array();

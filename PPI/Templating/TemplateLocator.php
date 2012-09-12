@@ -24,11 +24,15 @@ class TemplateLocator implements FileLocatorInterface
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $locator;
 
     /**
      * @todo Add inline documentation.
+     *
+     * @var type
      */
     protected $cache;
 

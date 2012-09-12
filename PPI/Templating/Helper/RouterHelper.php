@@ -22,6 +22,8 @@ class RouterHelper extends Helper
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var UrlGeneratorInterface
      */
     protected $generator;
 

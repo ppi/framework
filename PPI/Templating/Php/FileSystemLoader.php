@@ -25,6 +25,8 @@ class FileSystemLoader implements LoaderInterface
 {
     /**
      * @todo Add inline documentation.
+     *
+     * @var FileLocatorInterface
      */
     protected $locator;
 

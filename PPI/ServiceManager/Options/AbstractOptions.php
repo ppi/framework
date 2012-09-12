@@ -55,9 +55,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     }
 
     /**
-     * Returns an iterator for parameters.
-     *
-     * @return \ArrayIterator
+     * @see \Traversable::getIterator()
      */
     public function getIterator()
     {
@@ -65,9 +63,7 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
     }
 
     /**
-     * Returns the number of parameters.
-     *
-     * @return integer The number of parameters
+     * @see \Countable::count()
      */
     public function count()
     {

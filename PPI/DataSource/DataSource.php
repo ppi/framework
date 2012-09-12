@@ -9,6 +9,8 @@
 namespace PPI\DataSource;
 
 /**
+ * DataSource class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -44,10 +46,12 @@ class DataSource implements DataSourceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @static
      */
     public static function create(array $options = array())
     {
-        return new self($options);
+        return new static($options);
     }
 
     /**
@@ -89,7 +93,9 @@ class DataSource implements DataSourceInterface
 
         // Check that we asked for a valid key
         if (!isset($this->_config[$key])) {
-            throw new \Exception('Invalid DataSource Key: ' . $key);
+            throw new \Exception(sprintf(
+                'Invalid DataSource key: "%s"', $key
+            ));
         }
 
         $conn = $this->factory($this->_config[$key]);
@@ -117,8 +123,8 @@ class DataSource implements DataSourceInterface
     /**
      * Create an active query driver connection
      *
-     * @param string                    $type    The type of driver to use for the active query factory
-     * @param array                     $options Options to be passed to the active query driver
+     * @param string $type    Type of driver to use for the active query factory
+     * @param array  $options Options to be passed to the active query driver
      *
      * @return PDO\ActiveQuery
      *

@@ -11,6 +11,8 @@ namespace PPI\DataSource;
 use PPI\DataSource\DataSourceInterface;
 
 /**
+ * ActiveQuery class
+ *
  * @todo Add inline documentation.
  *
  * @package    PPI
@@ -46,7 +48,7 @@ class ActiveQuery
     /**
      * Optionally pass in a DataSource
      *
-     * @param null|object
+     * @param null|object $dataSource
      *
      * @return void
      */
@@ -60,7 +62,7 @@ class ActiveQuery
     /**
      * Set the datasource service into this class
      *
-     * @param \PPI\DataSource\DataSourceInterface $dataSource
+     * @param DataSourceInterface $dataSource
      *
      * @return void
      */
@@ -185,10 +187,9 @@ class ActiveQuery
     }
 
     /**
-     * Get the fetch mode of the active query instance.
-     * i.e: \PDO::FETCH_ASSOC
+     * Get the fetch mode of the active query instance (i.e: \PDO::FETCH_ASSOC)
      *
-     * @return null
+     * @return mixed
      */
     protected function getFetchMode()
     {
