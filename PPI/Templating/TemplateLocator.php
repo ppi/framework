@@ -89,7 +89,7 @@ class TemplateLocator implements FileLocatorInterface
      */
     public function getAppPath()
     {
-        return $this->locator->appPath.DIRECTORY_SEPARATOR.TemplateReference::APP_VIEWS_DIRECTORY;;
+        return $this->locator->appPath.DIRECTORY_SEPARATOR.TemplateReference::APP_VIEWS_DIRECTORY;
     }
 
     /**

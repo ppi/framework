@@ -33,7 +33,7 @@ use PPI\Templating\Twig\Extension\RouterExtension as TwigRouterExtension;
 
 // Mustache
 use PPI\Templating\Mustache\MustacheEngine;
-use PPI\Templating\Mustache\Loader\FilesystemLoader as MustacheFileSystemLoader;
+use PPI\Templating\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
 
 // Smarty
 use PPI\Templating\Smarty\SmartyEngine;
