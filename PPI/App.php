@@ -8,7 +8,9 @@
  */
 namespace PPI;
 
-use // Exceptions
+use 
+
+    // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
 
     // Services
