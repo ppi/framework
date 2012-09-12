@@ -1,14 +1,12 @@
 <?php
+
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Templating
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 
 namespace PPI\Templating;
 
@@ -17,14 +15,33 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
 /**
  * FileLocator is used to locate template resources
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @package    PPI
+ * @subpackage Templating
  */
 class FileLocator extends BaseFileLocator
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     private $modules;
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     private $path;
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var type
+     */
     private $baseModulePath;
 
     /**
@@ -32,7 +49,10 @@ class FileLocator extends BaseFileLocator
      *
      * @param array        $options
      * @param string       $path    The path the global resource directory
-     * @param string|array $paths   A path or an array of paths where to look for resources
+     * @param string|array $paths   A path or an array of paths where to look
+     *                              for resources
+     *
+     * @return void
      */
     public function __construct(array $options = array(), $path = null, array $paths = array())
     {
@@ -45,11 +65,22 @@ class FileLocator extends BaseFileLocator
         parent::__construct($paths);
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param type $file
+     * @param type $currentPath
+     * @param type $first
+     *
+     * @return string
+     *
+     * @throws \RuntimeException
+     * @throws \InvalidArgumentException
+     */
     public function locate($file, $currentPath = null, $first = true)
     {
         
         if ('@' === $file[0]) {
-            
            if (false !== strpos($file, '..')) {
                throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $file));
            }
@@ -61,10 +92,9 @@ class FileLocator extends BaseFileLocator
                 }
                 $files[] = $path;
             }
-
         } else {
-
             $path = $this->appPath . '/' . $file;
+
             if (file_exists($path)) {
                 return $path;
             }
@@ -92,10 +122,12 @@ class FileLocator extends BaseFileLocator
     public function getModulesPath()
     {
         $paths = array();
+
         foreach ($this->modules as $module) {
             $paths[$module] = $this->baseModulePath.DIRECTORY_SEPARATOR.$module;
         }
 
         return $paths;
     }
+
 }

@@ -1,18 +1,21 @@
 <?php
-
 /**
- * The base PPI controller class.
+ * This file is part of the PPI Framework.
  *
- * @package   Core
- * @author    Paul Dragoonis <dragoonis@php.net>
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @link      http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Module;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * The base PPI controller class
+ *
+ * @package    PPI
+ * @subpackage Module
+ */
 class Controller
 {
     /**
@@ -66,8 +69,10 @@ class Controller
     /**
      * Obtain a controller helper by its key name
      *
-     * @param  string                    $helperName
+     * @param string $helperName
+     *
      * @return mixed
+     *
      * @throws \InvalidArgumentException
      */
     protected function helper($helperName)
@@ -85,6 +90,8 @@ class Controller
      *
      * @param string $helperName
      * @param object $helper
+     *
+     * @return void
      */
     public function setHelper($helperName, $helper)
     {
@@ -94,9 +101,10 @@ class Controller
     /**
      * Returns a server parameter by name.
      *
-     * @param  string  $key     The key
-     * @param  mixed   $default The default value if the parameter key does not exist
-     * @param  boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string  $key     The key
+     * @param mixed   $default The default value if the parameter key does not exist
+     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     *
      * @return string
      */
     protected function server($key = null, $default = null, $deep = false)
@@ -107,9 +115,10 @@ class Controller
     /**
      * Returns a post parameter by name.
      *
-     * @param  string  $key     The key
-     * @param  mixed   $default The default value if the parameter key does not exist
-     * @param  boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string  $key     The key
+     * @param mixed   $default The default value if the parameter key does not exist
+     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     *
      * @return string
      */
     protected function post($key = null, $default = null, $deep = false)
@@ -120,9 +129,10 @@ class Controller
     /**
      * Returns a files parameter by name.
      *
-     * @param  string  $key     The key
-     * @param  mixed   $default The default value if the parameter key does not exist
-     * @param  boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string  $key     The key
+     * @param mixed   $default The default value if the parameter key does not exist
+     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     *
      * @return string
      */
     protected function files($key = null, $default = null, $deep = false)
@@ -133,9 +143,10 @@ class Controller
     /**
      * Returns a query string parameter by name.
      *
-     * @param  string  $key     The key
-     * @param  mixed   $default The default value if the parameter key does not exist
-     * @param  boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string  $key     The key
+     * @param mixed   $default The default value if the parameter key does not exist
+     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     *
      * @return string
      */
     protected function queryString($key = null, $default = null, $deep = false)
@@ -146,9 +157,10 @@ class Controller
     /**
      * Returns a server parameter by name.
      *
-     * @param  string  $key     The key
-     * @param  mixed   $default The default value if the parameter key does not exist
-     * @param  boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string  $key     The key
+     * @param mixed   $default The default value if the parameter key does not exist
+     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     *
      * @return string
      */
     protected function cookie($key = null, $default = null, $deep = false)
@@ -161,7 +173,8 @@ class Controller
      *
      * @param string     $key
      * @param null|mixed $default If this is not null, it enters setter mode
-     * return mixed
+     *
+     * @return mixed
      */
     protected function session($key = null, $default = null)
     {
@@ -231,8 +244,10 @@ class Controller
     /**
      * Check if a condition 'is' true.
      *
-     * @param  string                   $key
+     * @param  string $key
+     *
      * @return boolean
+     *
      * @throws InvalidArgumentException
      */
     protected function is($key)
@@ -275,7 +290,6 @@ class Controller
     /**
      * Get the remote users ip address
      *
-     * @param  mixed  $default
      * @return string
      */
     protected function getIP()
@@ -286,7 +300,8 @@ class Controller
     /**
      * Get a routing param's value
      *
-     * @param  string $param
+     * @param string $param
+     *
      * @return mixed
      */
     protected function getRouteParam($param)
@@ -297,7 +312,6 @@ class Controller
     /**
      * Get the remote users user agent
      *
-     * @param  mixed  $default
      * @return string
      */
     protected function getUserAgent()
@@ -308,7 +322,8 @@ class Controller
     /**
      * Set the service locator
      *
-     * @param  object $locator
+     * @param object $locator
+     *
      * @return void
      */
     public function setServiceLocator($locator)
@@ -329,7 +344,8 @@ class Controller
     /**
      * Get a registered service
      *
-     * @param  string $service
+     * @param string $service
+     *
      * @return mixed
      */
     protected function getService($service)
@@ -350,9 +366,10 @@ class Controller
     /**
      * Render a template
      *
-     * @param  string $template The template to render
-     * @param  array  $params   The params to pass to the renderer
-     * @param  array  $options  Extra options
+     * @param string $template The template to render
+     * @param array  $params   The params to pass to the renderer
+     * @param array  $options  Extra options
+     *
      * @return string
      */
     protected function render($template, array $params = array(), array $options = array())
@@ -376,6 +393,8 @@ class Controller
      *
      * @param string $flashType The flash type
      * @param string $message   The flash message
+     *
+     * @return void
      */
     protected function setFlash($flashType, $message)
     {
@@ -385,8 +404,9 @@ class Controller
     /**
      * Create a RedirectResponse object with your $url and $statusCode
      *
-     * @param  string $url
-     * @param  int    $statusCode
+     * @param string  $url
+     * @param integer $statusCode
+     *
      * @return void
      */
     protected function redirect($url, $statusCode = 302)
@@ -398,7 +418,8 @@ class Controller
      * Shortcut function for redirecting to a route without manually calling $this->generateUrl()
      * You just specify a route name and it goes there.
      *
-     * @param  string $route
+     * @param string $route
+     *
      * @return void
      */
     protected function redirectToRoute($route)
@@ -409,9 +430,10 @@ class Controller
     /**
      * Generate a URL from the specified route name
      *
-     * @param  string $route
-     * @param  array  $parameters
-     * @param  bool   $absolute
+     * @param string  $route
+     * @param array   $parameters
+     * @param boolean $absolute
+     *
      * @return string
      */
     protected function generateUrl($route, $parameters = array(), $absolute = false)
@@ -439,15 +461,15 @@ class Controller
     public function setOptions($options)
     {
         $this->_options = $options;
-
         return $this;
     }
 
     /**
      * Get an option from the controller
      *
-     * @param  string $option  The option name
-     * @param  null   $default The default value if the option does not exist
+     * @param string $option  The option name
+     * @param null   $default The default value if the option does not exist
+     *
      * @return mixed
      */
     public function getOption($option, $default = null)
@@ -470,6 +492,8 @@ class Controller
      *
      * @param string $param
      * @param mixed  $value
+     *
+     * @return void
      */
     protected function addTemplateGlobal($param, $value)
     {

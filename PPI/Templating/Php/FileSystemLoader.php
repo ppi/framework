@@ -1,26 +1,41 @@
 <?php
-
+/**
+ * This file is part of the PPI Framework.
+ *
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
+ */
 namespace PPI\Templating\Php;
 
-use Symfony\Component\Templating\Storage\FileStorage;
-use Symfony\Component\Templating\Loader\LoaderInterface;
-use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Templating\TemplateReferenceInterface;
+use Symfony\Component\Templating\Storage\FileStorage,
+    Symfony\Component\Templating\Loader\LoaderInterface,
+    Symfony\Component\Config\FileLocatorInterface,
+    Symfony\Component\Templating\TemplateReferenceInterface;
 
 /**
  * FilesystemLoader is a loader that read templates from the filesystem.
  *
- * @author Fabien Potencier <fabien@symfony.com>
- * @author Paul Dragoonis <paul@ppi.io>
+ * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @package    PPI
+ * @subpackage Templating
  */
 class FileSystemLoader implements LoaderInterface
 {
+    /**
+     * @todo Add inline documentation.
+     *
+     * @var FileLocatorInterface
+     */
     protected $locator;
 
     /**
      * Constructor.
      *
      * @param FileLocatorInterface $locator A FileLocatorInterface instance
+     *
+     * @return void
      */
     public function __construct(FileLocatorInterface $locator)
     {
@@ -32,7 +47,7 @@ class FileSystemLoader implements LoaderInterface
      *
      * @param TemplateReferenceInterface $template A template
      *
-     * @return Storage|Boolean false if the template cannot be loaded, a Storage instance otherwise
+     * @return Storage|boolean False if the template cannot be loaded, a Storage instance otherwise
      */
     public function load(TemplateReferenceInterface $template)
     {
@@ -51,6 +66,8 @@ class FileSystemLoader implements LoaderInterface
      *
      * @param TemplateReferenceInterface $template The template name as an array
      * @param integer                    $time     The last modification time of the cached template (timestamp)
+     *
+     * @return integer|boolean
      */
     public function isFresh(TemplateReferenceInterface $template, $time)
     {
@@ -64,4 +81,5 @@ class FileSystemLoader implements LoaderInterface
 
         return filemtime((string) $storage) < $time;
     }
+
 }

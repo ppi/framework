@@ -2,13 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     ServiceManager
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-
 namespace PPI\ServiceManager\Options;
 
 /**
@@ -16,7 +13,9 @@ namespace PPI\ServiceManager\Options;
  *
  * And remember, all options are lowercase!
  *
- * @author Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io>
+ * @package    PPI
+ * @subpackage ServiceManager
  */
 class AppOptions extends AbstractOptions
 {
@@ -26,12 +25,19 @@ class AppOptions extends AbstractOptions
      * $parameters['config'] holds user configuration defined in app.config.php.
      *
      * @param array $parameters An array of parameters
+     *
+     * @return void
      */
     public function __construct(array $parameters = array())
     {
         parent::__construct(array_merge($this->getDefaultOptions(), $parameters));
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return array
+     */
     public function getDefaultOptions()
     {
         $defaults = array(
@@ -63,4 +69,5 @@ class AppOptions extends AbstractOptions
 
         return $defaults;
     }
+
 }

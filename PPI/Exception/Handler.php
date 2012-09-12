@@ -1,17 +1,21 @@
 <?php
-
 /**
  * This file is part of the PPI Framework.
  *
- * @category    PPI
- * @package     Core
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
+ * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @license    http://opensource.org/licenses/mit-license.php MIT
+ * @link       http://www.ppi.io
  */
-
 namespace PPI\Exception;
 
+/**
+ * Handler class
+ *
+ * @todo Add inline documentation.
+ *
+ * @package    PPI
+ * @subpackage Exception
+ */
 class Handler
 {
     /**
@@ -29,14 +33,10 @@ class Handler
     protected $_handlerStatus = array();
 
     /**
-     * PPI Exception handler
-     * The try/catch block will prevent a fatal error if an exception is thrown within the handler itself
-     *
-     * @param object $e Exception object
+     * {@inheritdoc}
      */
     public function handle(\Exception $e)
     {
-
         $trace = $e->getTrace();
 
         try {
@@ -55,13 +55,23 @@ class Handler
             );
 
             require(__DIR__ . '/templates/fatal.php');
-
         } catch (\Exception $e) {
             require(__DIR__ . '/templates/fatal.php');
         }
+
         exit;
     }
 
+    /**
+     * @todo Add inline documentation.
+     *
+     * @param type $errno
+     * @param type $errstr
+     * @param type $errfile
+     * @param type $errline
+     *
+     * @return void
+     */
     public function handleError($errno = '', $errstr = '', $errfile = '', $errline = '')
     {
         $error = array(
@@ -73,7 +83,6 @@ class Handler
         try {
             throw new \Exception('');
         } catch (\Exception $e) {
-
             try {
                 // Execute each callback
                 foreach ($this->_handlers as $handler) {
@@ -82,10 +91,12 @@ class Handler
                         'response' => $handler->handle($e)
                     );
                 }
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
 
             $trace = $e->getTrace();
         }
+
         require(__DIR__ . '/templates/fatal.php');
         exit;
     }
@@ -93,10 +104,13 @@ class Handler
     /**
      * Add an Exception callback
      *
-     * @param \PPI\Exception\HandlerInterface
+     * @param HandlerInterface $handler
+     *
+     * @return void
      */
     public function addHandler(\PPI\Exception\HandlerInterface $handler)
     {
         $this->_handlers[] = $handler;
     }
+
 }
