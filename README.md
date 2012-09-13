@@ -11,7 +11,7 @@
 
 * [Official website][@website]
 * [Download][@download]
-* [Documentaiton][@documentation]
+* [Documentation][@documentation]
 
 ## What is PPI?
 
