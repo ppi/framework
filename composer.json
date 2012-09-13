@@ -20,7 +20,7 @@
         "doctrine/dbal": "2.2.*@stable",
 
         "twig/twig": ">=1.8,<2.0-dev",
-        "noiselabs/smarty-bundle": "1.0.*@beta",
+        "noiselabs/smarty-bundle": "1.0.*@stable",
         "mustache/mustache": ">=2.0.2,<2.1",
 
         "symfony/class-loader": "2.1.*@beta",
