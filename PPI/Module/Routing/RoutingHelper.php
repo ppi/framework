@@ -21,7 +21,9 @@ class RoutingHelper
      *
      * @var array
      */
-    protected $_params = array();
+    protected $params = array();
+    
+    protected $activeRouteName;
 
     /**
      * Constructor.
@@ -48,11 +50,11 @@ class RoutingHelper
      */
     public function getParam($param)
     {
-        if (!isset($this->_params[$param])) {
+        if (!isset($this->params[$param])) {
             throw new \InvalidArgumentException('Unable to find routing param: ' . $param);
         }
 
-        return $this->_params[$param];
+        return $this->params[$param];
     }
 
     /**
@@ -65,7 +67,7 @@ class RoutingHelper
      */
     public function setParam($param, $value)
     {
-        $this->_params[$param] = $value;
+        $this->params[$param] = $value;
     }
 
     /**
@@ -75,7 +77,7 @@ class RoutingHelper
      */
     public function getParams()
     {
-        return $this->_params;
+        return $this->params;
     }
 
     /**
@@ -87,7 +89,28 @@ class RoutingHelper
      */
     public function setParams(array $params)
     {
-        $this->_params = $params;
+        $this->params = $params;
     }
+
+    /**
+     * Set the active route's name key
+     * 
+     * @param $name
+     */
+    public function setActiveRouteName($name)
+    {
+        $this->activeRouteName = $name;
+    }
+
+    /**
+     * Get the active route's name key
+     * 
+     * @return mixed
+     */
+    public function getActiveRouteName()
+    {
+        return $this->activeRouteName;
+    }
+    
 
 }

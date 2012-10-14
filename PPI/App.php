@@ -217,7 +217,7 @@ class App
      */
     public function dispatch()
     {
-        // Lets disect our route
+        // Lets dissect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
         $actionName = $actionName . 'Action';
 
@@ -235,8 +235,15 @@ class App
 
         // Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
         $routeParams = $this->_matchedRoute;
+        $activeRoute = $routeParams['_route'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
-        $controller->setHelper('routing', new RoutingHelper($routeParams));
+        
+        // Pass in the routing params, set the active route key
+        $routingHelper = new RoutingHelper($routeParams);
+        $routingHelper->setActiveRouteName($activeRoute);
+        
+        // Register our routing helper into the controller
+        $controller->setHelper('routing', $routingHelper);
 
         // Prep our module for dispatch
         $this->_matchedModule
