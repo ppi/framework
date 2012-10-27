@@ -12,7 +12,8 @@ use Zend\ServiceManager\Config,
     Zend\ServiceManager\ServiceManager,
     Symfony\Component\Routing\RequestContext,
     Symfony\Component\Routing\RouteCollection,
-    PPI\Module\Routing\Router;
+    PPI\Module\Routing\Router,
+    PPI\Module\Routing\RoutingHelper;
 
 /**
  * ServiceManager configuration for the Router component.
@@ -61,6 +62,11 @@ class RouterConfig extends Config
             return $router;
 
         });
+        
+        $serviceManager->setFactory('routing.helper', function($serviceManager) {
+            return new RoutingHelper();
+        });
+        
     }
 
 }
