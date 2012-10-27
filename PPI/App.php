@@ -239,7 +239,8 @@ class App
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
         
         // Pass in the routing params, set the active route key
-        $routingHelper = new RoutingHelper($routeParams);
+        $routingHelper = $this->serviceManager->get('routing.helper');
+        $routingHelper->setParams($routeParams);
         $routingHelper->setActiveRouteName($activeRoute);
         
         // Register our routing helper into the controller
