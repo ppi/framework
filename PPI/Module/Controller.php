@@ -422,9 +422,9 @@ class Controller
      *
      * @return void
      */
-    protected function redirectToRoute($route)
+    protected function redirectToRoute($route, $parameters = array(), $absolute = false)
     {
-        $this->redirect($this->getService('router')->generate($route));
+        $this->redirect($this->getService('router')->generate($route, $parameters, $absolute));
     }
 
     /**
