@@ -56,6 +56,8 @@ class SessionConfig extends AbstractConfig
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
+        $userOptions = $serviceManager->getOptions()->has('session') ?
+            $serviceManager->getOptions()->get('session') : array();
         $serviceManager->getOptions()->add($this->getDefaultOptions());
 
         $config = $serviceManager->getOption('session');
@@ -66,7 +68,9 @@ class SessionConfig extends AbstractConfig
         $options = array();
         foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
             // @todo - the default values are null, so isset() fails, make sure this is intentional
-            if (isset($config[$key])) {
+            if (isset($userOptions[$key])) {
+                $options[$key] = $userOptions[$key];
+            } else if (isset($config[$key])) {
                 $options[$key] = $config[$key];
             }
         }
