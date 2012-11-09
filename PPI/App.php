@@ -8,7 +8,15 @@
  */
 namespace PPI;
 
-use 
+use
+
+    // Config
+    PPI\Config\FileLocator,
+    PPI\Config\Loader\DelegatingLoader,
+    PPI\Config\Loader\LoaderResolver,
+    PPI\Config\Loader\ArrayLoader,
+    PPI\Config\Loader\PhpFileLoader,
+    PPI\Config\Loader\YamlFileLoader,
 
     // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
@@ -36,7 +44,7 @@ use
  * @package    PPI
  * @subpackage Core
  */
-class App
+class App implements AppInterface
 {
     /**
      * Version string.
@@ -44,6 +52,10 @@ class App
      * @var string
      */
     const VERSION = '2.0.0-DEV';
+
+    protected $environment;
+    protected $debug;
+    protected $config;
 
     /**
      * Application Options.
@@ -100,44 +112,35 @@ class App
     protected $_matchedModule = null;
 
     /**
+     * Path to the application root dir aka the "app" directory.
+     *
+     * @var null|string
+     */
+     protected $rootDir = null;
+
+    /**
      * Service Manager (ZF2 implementation)
      *
      * @var \PPI\Module\ServiceManager\ServiceManager
      */
-     protected $serviceManager;
+     protected $serviceManager = null;
 
     /**
-     * The constructor.
+     * Constructor
      *
-     * @param array $options
-     *
-     * @return void
+     * @param string  $environment The environment
+     * @param Boolean $debug       Whether to enable debugging or not
+     * @param mixed   $config      Array with application configuration
      */
-    public function __construct(array $options = array())
+    public function __construct($environment = 'production', $debug = false, array $config = array())
     {
-        $this->options = new AppOptions($options);
-    }
+        $this->environment = $environment;
+        $this->debug = (boolean) $debug;
 
-    /**
-     * Setter for the environment, passing in options determining how the app will behave
-     *
-     * @param array $options The options
-     *
-     * @return void
-     */
-    public function setEnv(array $options)
-    {
-        // If we pass in a bad sitemode, lets just default to 'development' gracefully.
-        if (isset($options['siteMode'])) {
-            if (!in_array($options['siteMode'], array('development', 'production'))) {
-                unset($options['siteMode']);
-            }
-        }
+        $this->rootDir = $this->getRootDir();
+        $this->name = $this->getName();
 
-        // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
-        foreach ($options as $optionName => $option) {
-            $this->_envOptions[$optionName] = $option;
-        }
+        $this->config = array_merge(array('parameters' => $this->getAppParameters()), $config);
     }
 
     /**
@@ -148,6 +151,7 @@ class App
      */
     public function boot()
     {
+        $this->options = new AppOptions(array());
         if (isset($this->options['config'])) {
             $this->options->add($this->options['config']);
         }
@@ -237,12 +241,12 @@ class App
         $routeParams = $this->_matchedRoute;
         $activeRoute = $routeParams['_route'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
-        
+
         // Pass in the routing params, set the active route key
         $routingHelper = $this->serviceManager->get('routing.helper');
         $routingHelper->setParams($routeParams);
         $routingHelper->setActiveRouteName($activeRoute);
-        
+
         // Register our routing helper into the controller
         $controller->setHelper('routing', $routingHelper);
 
@@ -340,6 +344,150 @@ class App
     }
 
     /**
+     * Gets the name of the application.
+     *
+     * @return string The application name
+     *
+     * @api
+     */
+    public function getName()
+    {
+        if (null === $this->name) {
+            $this->name = preg_replace('/[^a-zA-Z0-9_]+/', '', basename($this->rootDir));
+        }
+
+        return $this->name;
+    }
+
+    /**
+     * Setter for the environment, passing in options determining how the app will behave
+     *
+     * @param array $options The options
+     *
+     * @return void
+     */
+    public function setEnv(array $options)
+    {
+        // If we pass in a bad sitemode, lets just default to 'development' gracefully.
+        if (isset($options['siteMode'])) {
+            if (!in_array($options['siteMode'], array('development', 'production'))) {
+                unset($options['siteMode']);
+            }
+        }
+
+        // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
+        foreach ($options as $optionName => $option) {
+            $this->_envOptions[$optionName] = $option;
+        }
+    }
+
+    /**
+     * Get the environment mode the application is in.
+     *
+     * @return string The current environment
+     *
+     * @api
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * Get the environment mode the application is in.
+     *
+     * @return string The current environment
+     */
+    public function getEnv()
+    {
+        return $this->getEnvironment();
+    }
+
+    /**
+     * Check if the application is in development mode.
+     *
+     * @return boolean
+     */
+    public function isDevMode()
+    {
+        return $this->getEnvironment() === 'development';
+    }
+
+    /**
+     * Checks if debug mode is enabled.
+     *
+     * @return boolean true if debug mode is enabled, false otherwise
+     *
+     * @api
+     */
+    public function isDebug()
+    {
+        return $this-debug;
+    }
+
+    /**
+     * Gets the application root dir.
+     *
+     * @return string The application root dir
+     *
+     * @api
+     */
+    public function getRootDir()
+    {
+        if (null === $this->rootDir) {
+            $this->rootDir = realpath(getcwd() . '/app');
+        }
+
+        return $this->rootDir;
+    }
+
+    /**
+     * Get the service manager
+     *
+     * @return ServiceManager\ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->serviceManager;
+    }
+
+    /**
+     * Gets the cache directory.
+     *
+     * @return string The cache directory
+     *
+     * @api
+     */
+    public function getCacheDir()
+    {
+        return $this->rootDir.'/cache/'.$this->environment;
+    }
+
+    /**
+     * Gets the log directory.
+     *
+     * @return string The log directory
+     *
+     * @api
+     */
+    public function getLogDir()
+    {
+        return $this->rootDir.'/logs';
+    }
+
+    /**
+     * Gets the charset of the application.
+     *
+     * @return string The charset
+     *
+     * @api
+     */
+    public function getCharset()
+    {
+        return 'UTF-8';
+    }
+
+    /**
      * Get an option
      *
      * @param string $key
@@ -379,38 +527,6 @@ class App
     }
 
     /**
-     * Get the environment mode the application is in.
-     *
-     * @return string
-     */
-    public function getEnv()
-    {
-        return $this->options->get('environment');
-    }
-
-    /**
-     * Check if the application is in development mode.
-     *
-     * @return boolean
-     */
-    public function isDevMode()
-    {
-        return $this->getEnv() === 'development';
-    }
-
-    /**
-     * Checks if debug mode is enabled.
-     *
-     * @return boolean true if debug mode is enabled, false otherwise
-     *
-     * @api
-     */
-    public function isDebug()
-    {
-        return $this->options->get('debug');
-    }
-
-    /**
      * Magic getter function, this is an alias of getEnv()
      *
      * @param string $option The Option
@@ -423,13 +539,79 @@ class App
     }
 
     /**
-     * Get the service manager
+     * Returns the application parameters.
      *
-     * @return ServiceManager\ServiceManager
+     * @return array An array of application parameters
      */
-    public function getServiceManager()
+    protected function getAppParameters()
     {
-        return $this->serviceManager;
+        return array_merge(
+            array(
+                'app.root_dir'        => $this->rootDir,
+                'app.environment'     => $this->environment,
+                'app.debug'           => $this->debug,
+                'app.name'            => $this->name,
+                'app.cache_dir'       => $this->getCacheDir(),
+                'app.logs_dir'        => $this->getLogDir(),
+                'app.charset'         => $this->getCharset(),
+            ),
+            $this->getEnvParameters()
+        );
     }
 
+    /**
+     * Gets the environment parameters.
+     *
+     * Only the parameters starting with "PPI__" are considered.
+     *
+     * @return array An array of parameters
+     */
+    protected function getEnvParameters()
+    {
+        $parameters = array();
+        foreach ($_SERVER as $key => $value) {
+            if (0 === strpos($key, 'PPI__')) {
+                $parameters[strtolower(str_replace('__', '.', substr($key, 5)))] = $value;
+            }
+        }
+
+        return $parameters;
+    }
+
+    /**
+     * Loads a configuration file or PHP array.
+     *
+     * @param mixed  $resource The resource
+     * @param string $type     The resource type
+     */
+    public function loadConfig($resource, $type = null)
+    {
+        $loader = $this->getConfigLoader();
+        $config = $loader->load($resource, $type);
+
+        $this->options->add($config);
+
+        return $this;
+    }
+
+    /**
+     * Returns a loader for the App configuration.
+     *
+     * @return DelegatingLoader The loader
+     */
+    protected function getConfigLoader()
+    {
+        if (null === $this->loader) {
+            $locator = new FileLocator($this->getRootDir());
+            $resolver = new LoaderResolver(array(
+                new YamlFileLoader($locator),
+                new PhpFileLoader($locator),
+                new ArrayLoader(),
+            ));
+
+            $this->loader = new DelegatingLoader($resolver);
+        }
+
+        return $this->loader;
+    }
 }
