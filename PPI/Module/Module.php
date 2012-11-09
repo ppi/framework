@@ -18,7 +18,7 @@ use PPI\Module\Routing\Loader\YamlFileLoader,
  * @package    PPI
  * @subpackage Module
  */
-class Module
+abstract class Module implements ModuleInterface
 {
     /**
      * @todo Add inline documentation.
@@ -68,15 +68,6 @@ class Module
      * @var null
      */
     protected $_actionName = null;
-
-    /**
-     * Constructor.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Load up our routes
@@ -171,6 +162,7 @@ class Module
     public function setController($controller)
     {
         $this->_controller = $controller;
+
         return $this;
     }
 
@@ -194,6 +186,7 @@ class Module
     public function setControllerName($controllerName)
     {
         $this->_controllerName = $controllerName;
+
         return $this;
     }
 
@@ -207,6 +200,7 @@ class Module
     public function setActionName($actionName)
     {
         $this->_actionName = $actionName;
+
         return $this;
     }
 
@@ -267,4 +261,35 @@ class Module
         return $this->_moduleName;
     }
 
+    /**
+     * Gets the Module namespace.
+     *
+     * @return string The Module namespace
+     *
+     * @api
+     */
+    public function getNamespace()
+    {
+        if (null === $this->reflected) {
+            $this->reflected = new \ReflectionObject($this);
+        }
+
+        return $this->reflected->getNamespaceName();
+    }
+
+    /**
+     * Gets the Module directory path.
+     *
+     * @return string The Module absolute path
+     *
+     * @api
+     */
+    public function getPath()
+    {
+        if (null === $this->reflected) {
+            $this->reflected = new \ReflectionObject($this);
+        }
+
+        return dirname($this->reflected->getFileName());
+    }
 }
