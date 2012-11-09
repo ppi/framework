@@ -66,7 +66,7 @@ class TemplatingConfig extends Config
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
-        $engineIds = $serviceManager->getOption( 'templating.engines');
+        $engineIds = $serviceManager->getOption('templating.engines');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
@@ -87,7 +87,7 @@ class TemplatingConfig extends Config
         $serviceManager->setFactory('templating.locator', function($serviceManager) {
             return new TemplateLocator($serviceManager->get('filelocator'));
         });
-        
+
         // Templating Name Parser
         $serviceManager->setFactory('templating.name.parser', function($serviceManager) {
             return new TemplateNameParser();
@@ -116,7 +116,7 @@ class TemplatingConfig extends Config
                  )
             );
         });
-        
+
         // Twig Engine
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
 
@@ -137,7 +137,7 @@ class TemplatingConfig extends Config
         $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) {
             $cacheDir = $serviceManager->getOption('app.cache_dir').DIRECTORY_SEPARATOR.'smarty';
             $templateLocator = $serviceManager->get('templating.locator');
-            
+
             $smartyEngine = new SmartyEngine(
                 new \Smarty(),
                 $templateLocator,
@@ -156,7 +156,7 @@ class TemplatingConfig extends Config
 
             return $smartyEngine;
         });
-        
+
         // Mustache Engine
         $serviceManager->setFactory('templating.engine.mustache', function($serviceManager) {
 
