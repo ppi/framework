@@ -35,20 +35,19 @@ class SessionConfig extends AbstractConfig
         'app.session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
 
         // user level configuration
-        'session'                               => array(
-            'storage_id'                        => 'session.storage.native',
-            'handler_id'                        => 'session.handler.native_file',
-            'name'                              => null,
-            'cookie_lifetime'                   => null,
-            'cookie_path'                       => null,
-            'cookie_domain'                     => null,
-            'cookie_secure'                     => null,
-            'cookie_httponly'                   => null,
-            'gc_divisor'                        => null,
-            'gc_probability'                    => null,
-            'gc_maxlifetime'                    => null,
-            'save_path'                         => '%app.cache_dir%/sessions'
-        ));
+        'session.storage_id'                        => 'session.storage.native',
+        'session.handler_id'                        => 'session.handler.native_file',
+        'session.name'                              => null,
+        'session.cookie_lifetime'                   => null,
+        'session.cookie_path'                       => null,
+        'session.cookie_domain'                     => null,
+        'session.cookie_secure'                     => null,
+        'session.cookie_httponly'                   => null,
+        'session.gc_divisor'                        => null,
+        'session.gc_probability'                    => null,
+        'session.gc_maxlifetime'                    => null,
+        'session.save_path'                         => '%app.cache_dir%/sessions'
+        );
     }
 
     /**
@@ -70,7 +69,7 @@ class SessionConfig extends AbstractConfig
             // @todo - the default values are null, so isset() fails, make sure this is intentional
             if (isset($userOptions[$key])) {
                 $options[$key] = $userOptions[$key];
-            } else if (isset($config[$key])) {
+            } elseif (isset($config[$key])) {
                 $options[$key] = $config[$key];
             }
         }
