@@ -22,7 +22,7 @@ class RoutingHelper
      * @var array
      */
     protected $params = array();
-    
+
     protected $activeRouteName;
 
     /**
@@ -94,7 +94,7 @@ class RoutingHelper
 
     /**
      * Set the active route's name key
-     * 
+     *
      * @param $name
      */
     public function setActiveRouteName($name)
@@ -104,13 +104,12 @@ class RoutingHelper
 
     /**
      * Get the active route's name key
-     * 
+     *
      * @return mixed
      */
     public function getActiveRouteName()
     {
         return $this->activeRouteName;
     }
-    
 
 }

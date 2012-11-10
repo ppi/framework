@@ -79,7 +79,7 @@ class FileLocator extends BaseFileLocator
      */
     public function locate($file, $currentPath = null, $first = true)
     {
-        
+
         if ('@' === $file[0]) {
            if (false !== strpos($file, '..')) {
                throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $file));
@@ -101,7 +101,7 @@ class FileLocator extends BaseFileLocator
 
             throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $file));
         }
-        
+
     }
 
     /**
