@@ -10,39 +10,40 @@
 namespace PPI\Config\Loader;
 
 use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Yaml\Yaml;
 
 /**
- * YamlFileLoader loads app configuration from a YAML file.
+ * IniFileLoader loads parameters from INI files.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Config
  */
-class YamlFileLoader extends FileLoader
+class IniFileLoader extends FileLoader
 {
     /**
-     * Loads a Yaml file.
+     * Loads a resource.
      *
      * @param mixed  $file The resource
      * @param string $type The resource type
+     *
+     * @throws InvalidArgumentException When ini file is not valid
      */
     public function load($file, $type = null)
     {
         $path = $this->locator->locate($file);
-        $config = Yaml::parse($path);
+        $config = array();
 
-        // empty file
-        if (null === $config) {
-            $config = array();
+        $result = parse_ini_file($path, true);
+        if (false === $result || array() === $result) {
+            throw new InvalidArgumentException(sprintf('The "%s" file is not valid.', $file));
         }
 
-        // not an array
-        if (!is_array($config)) {
-            throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
+        if (isset($result['parameters']) && is_array($result['parameters'])) {
+            $config['parameters'] = array();
+            foreach ($result['parameters'] as $key => $value) {
+                $config['parameters'][$key] = $value;
+            }
         }
-
-        return $config;
     }
 
     /**
@@ -55,6 +56,6 @@ class YamlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
+        return is_string($resource) && 'ini' === pathinfo($resource, PATHINFO_EXTENSION);
     }
 }
