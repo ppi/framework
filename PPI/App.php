@@ -135,7 +135,6 @@ class App implements AppInterface
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
 
-        $this->configLoader = new ConfigLoader($this->rootDir);
         $this->options = new AppOptions(array_merge($this->getAppParameters(), $config));
     }
 
@@ -583,6 +582,20 @@ class App implements AppInterface
     }
 
     /**
+     * Returns a ConfigLoader instance.
+     *
+     * @return \PPI\Config\ConfigLoader
+     */
+    public function getConfigLoader()
+    {
+        if (null === $this->configLoader) {
+            $this->configLoader = new ConfigLoader($this->rootDir);
+        }
+
+        return $this->configLoader;
+    }
+
+    /**
      * Loads a configuration file or PHP array.
      *
      * @param mixed  $resource The resource
@@ -590,10 +603,20 @@ class App implements AppInterface
      */
     public function loadConfig($resource, $type = null)
     {
-        $config = $this->configLoader->load($resource, $type);
+        $config = $this->getConfigLoader()->load($resource, $type);
         $this->options->add($config);
 
         return $config;
+    }
+
+    /**
+     * Returns the application configuration.
+     *
+     * @return array|AppInterface
+     */
+    public function getConfig()
+    {
+        return $this->options;
     }
 
     public function setSessionConfig($config)
