@@ -6,19 +6,18 @@
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
- * 
+ *
  */
 
 namespace PPI\Templating\Mustache;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\GlobalVariables;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * This engine knows how to render Mustache templates.
- * 
+ *
  * @author Justin Hileman <justin@justinhileman.info>
  */
 class MustacheEngine implements EngineInterface
@@ -86,6 +85,7 @@ class MustacheEngine implements EngineInterface
         }
 
         $template = $this->parser->parse($name);
+
         return 'mustache' === $template->get('engine');
     }
 
@@ -130,13 +130,14 @@ class MustacheEngine implements EngineInterface
     /**
      * Adding the addGlobal() call to keep things compliant with the existing systems relying on global vars.
      * This method will be removed as of PPI 2.1
-     * 
-     * @param string $key
-     * @param mixed $val
+     *
+     * @param  string $key
+     * @param  mixed  $val
      * @return bool
      */
-    public function addGlobal($key, $val) {
+    public function addGlobal($key, $val)
+    {
         return false;
     }
-    
+
 }
