@@ -69,6 +69,8 @@ class App implements AppInterface
      * @var null
      */
     public $session = null;
+    
+    protected $_sessionConfig = array();
 
     /**
      * @var null|array
@@ -167,7 +169,7 @@ class App implements AppInterface
         // all user and app configuration must be set up to this point
         $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
-            new SessionConfig(),
+            new SessionConfig($this->_sessionConfig),
             new ModuleConfig(),
             new RouterConfig(),
             new TemplatingConfig()
@@ -619,5 +621,10 @@ class App implements AppInterface
         }
 
         return $this->loader;
+    }
+    
+    public function setSessionConfig($config)
+    {
+        $this->_sessionConfig = $config;
     }
 }
