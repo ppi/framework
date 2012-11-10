@@ -27,8 +27,6 @@ abstract class AbstractOptions extends ParameterBag implements OptionsInterface,
      */
     public function add(array $parameters)
     {
-        $this->flatten($parameters);
-
         parent::add($parameters);
     }
 
