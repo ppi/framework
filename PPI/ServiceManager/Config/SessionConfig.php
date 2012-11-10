@@ -25,6 +25,7 @@ class SessionConfig extends AbstractConfig
     public function getDefaultOptions()
     {
         return array(
+            
             // internal configuration
             'app.session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
             'app.session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
@@ -54,7 +55,7 @@ class SessionConfig extends AbstractConfig
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        
+        parent::configureServiceManager($serviceManager);
         $smOptions = $serviceManager->getOptions();
         
         foreach($this->getDefaultOptions() as $defaultKey => $defaultVal) {
@@ -64,43 +65,53 @@ class SessionConfig extends AbstractConfig
         }
 
         // session storage
-        $serviceManager->setOption('app.session.storage', $smOptions->get('session.storage_id'));
-
-        $sessionOptions = array();
-        foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
-            $sessionOptions[$key] = $smOptions->get('session.' . $key);
+        if(!$smOptions->has('app.session.storage')) {
+            $serviceManager->setOption('app.session.storage', $smOptions->get('session.storage_id'));
+        }
+        
+        if(!$smOptions->has('app.session.storage.options')) {
+            $sessionOptions = array();
+            foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
+                $sessionOptions[$key] = $smOptions->get('session.' . $key);
+            }
+            $serviceManager->setOption('app.session.storage.options', $sessionOptions);
         }
 
-        $serviceManager->setOption('app.session.storage.options', $sessionOptions);
-
-        // session handler (the internal callback registered with PHP session management)
-        $serviceManager->setFactory('session.handler', function($serviceManager) use ($smOptions) {
-            $handlerID = $smOptions->get('session.handler_id');
-            return $handlerID === null ? null : $serviceManager->get($handlerID);
-        });
-
+        // session handler
+        if(!$serviceManager->has('session.handler')) {
+            $serviceManager->setFactory('session.handler', function($serviceManager) use ($smOptions) {
+                $handlerID = $smOptions->get('session.handler_id');
+                return $handlerID === null ? null : $serviceManager->get($handlerID);
+            });
+        }
+        
         // session storage native
-        $serviceManager->setFactory('session.storage.native', function($serviceManager) {
-            $class = $serviceManager->getOption('app.session.storage.native.class');
-
-            return new $class(
-                $serviceManager->getOption('app.session.storage.options'),
-                $serviceManager->get('session.handler')
-            );
-        });
-
+        if(!$serviceManager->has('session.storage.native')) {
+            $serviceManager->setFactory('session.storage.native', function($serviceManager) {
+                $class = $serviceManager->getOption('app.session.storage.native.class');
+                return new $class(
+                    $serviceManager->getOption('app.session.storage.options'),
+                    $serviceManager->get('session.handler')
+                );
+            });
+        }
+        
         // session flash bag
-        $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
-            $class = $serviceManager->getOption('app.session.flashbag.class');
-            return new $class();
-        });
-
+        if(!$serviceManager->has('session.flash_bag')) {
+            $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
+                $class = $serviceManager->getOption('app.session.flashbag.class');
+                return new $class();
+            });
+        }
+        
         // session attribute bag
-        $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
-            $class = $serviceManager->getOption('app.session.attribute_bag.class');
-            return new $class();
-        });
-
+        if(!$serviceManager->has('session.attribute_bag')) {
+            $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
+                $class = $serviceManager->getOption('app.session.attribute_bag.class');
+                return new $class();
+            });
+        }
+        
         // session handler native file
         $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($smOptions) {
             $class = $smOptions->get('app.session.handler.native_file.class');
@@ -109,18 +120,20 @@ class SessionConfig extends AbstractConfig
         });
 
         // session
-        $serviceManager->setFactory('session', function($serviceManager) use($smOptions) {
-            $class = $serviceManager->getOption('app.session.class');
-
-            $session = new $class(
-                $serviceManager->get($smOptions->get('app.session.storage')),
-                $serviceManager->get('session.attribute_bag'),
-                $serviceManager->get('session.flash_bag')
-            );
-            $session->start();
-
-            return $session;
-        });
+        if(!$serviceManager->has('session')) {
+            $serviceManager->setFactory('session', function($serviceManager) use($smOptions) {
+                $class = $serviceManager->getOption('app.session.class');
+    
+                $session = new $class(
+                    $serviceManager->get($smOptions->get('app.session.storage')),
+                    $serviceManager->get('session.attribute_bag'),
+                    $serviceManager->get('session.flash_bag')
+                );
+                $session->start();
+    
+                return $session;
+            });
+        }
     }
-
+    
 }
