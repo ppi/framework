@@ -6,32 +6,19 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI;
 
-use
-
-    // Config
-    PPI\Config\FileLocator,
-    PPI\Config\Loader\DelegatingLoader,
-    PPI\Config\Loader\LoaderResolver,
-    PPI\Config\Loader\ArrayLoader,
-    PPI\Config\Loader\PhpFileLoader,
-    PPI\Config\Loader\YamlFileLoader,
-
-    // Exceptions
-    PPI\Exception\Handler as ExceptionHandler,
-
-    // Services
-    PPI\ServiceManager\ServiceManager,
-    PPI\ServiceManager\Config\HttpConfig,
-    PPI\ServiceManager\Config\SessionConfig,
-    PPI\ServiceManager\Config\ModuleConfig,
-    PPI\ServiceManager\Config\RouterConfig,
-    PPI\ServiceManager\Config\TemplatingConfig,
-    PPI\ServiceManager\Options\AppOptions,
-
-    // HTTP Stuff and routing
-    PPI\Module\Routing\RoutingHelper;
+use PPI\Config\ConfigLoader;
+use PPI\Exception\Handler as ExceptionHandler;
+use PPI\ServiceManager\ServiceManager;
+use PPI\ServiceManager\Config\HttpConfig;
+use PPI\ServiceManager\Config\SessionConfig;
+use PPI\ServiceManager\Config\ModuleConfig;
+use PPI\ServiceManager\Config\RouterConfig;
+use PPI\ServiceManager\Config\TemplatingConfig;
+use PPI\ServiceManager\Options\AppOptions;
+use PPI\Module\Routing\RoutingHelper;
 
 /**
  * The PPI App bootstrap class.
@@ -57,6 +44,13 @@ class App implements AppInterface
     protected $debug;
 
     /**
+     * Configuration loader.
+     *
+     * @var \PPI\Config\ConfigLoader
+     */
+    protected $configLoader = null;
+
+    /**
      * Application Options.
      *
      * @var array
@@ -69,7 +63,7 @@ class App implements AppInterface
      * @var null
      */
     public $session = null;
-    
+
     protected $_sessionConfig = array();
 
     /**
@@ -141,6 +135,7 @@ class App implements AppInterface
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
 
+        $this->configLoader = new ConfigLoader($this->rootDir);
         $this->options = new AppOptions(array_merge($this->getAppParameters(), $config));
     }
 
@@ -152,7 +147,7 @@ class App implements AppInterface
      */
     public function boot()
     {
-        
+
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
         $exceptionHandler->addHandler(new \PPI\Exception\Log());
@@ -165,7 +160,7 @@ class App implements AppInterface
         if (!$this->options->has('moduleconfig') || empty($this->options['moduleconfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
-        
+
         // all user and app configuration must be set up to this point
         $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
@@ -509,8 +504,8 @@ class App implements AppInterface
     {
         $this->options[$key] = $val;
     }
-    
-    public function setConfig($config) 
+
+    public function setConfig($config)
     {
         $this->options->add($config);
     }
@@ -525,12 +520,13 @@ class App implements AppInterface
      */
     public function __set($option, $value)
     {
-        
-        if($option === 'config') {
+
+        if ($option === 'config') {
             $this->setConfig($value);
+
             return;
         }
-        
+
         $this->options[$option] = $value;
     }
 
@@ -594,35 +590,12 @@ class App implements AppInterface
      */
     public function loadConfig($resource, $type = null)
     {
-        $loader = $this->getConfigLoader();
-        $config = $loader->load($resource, $type);
-
+        $config = $this->configLoader->load($resource, $type);
         $this->options->add($config);
 
-        return $this;
+        return $config;
     }
 
-    /**
-     * Returns a loader for the App configuration.
-     *
-     * @return DelegatingLoader The loader
-     */
-    protected function getConfigLoader()
-    {
-        if (null === $this->loader) {
-            $locator = new FileLocator($this->getRootDir());
-            $resolver = new LoaderResolver(array(
-                new YamlFileLoader($locator),
-                new PhpFileLoader($locator),
-                new ArrayLoader(),
-            ));
-
-            $this->loader = new DelegatingLoader($resolver);
-        }
-
-        return $this->loader;
-    }
-    
     public function setSessionConfig($config)
     {
         $this->_sessionConfig = $config;
