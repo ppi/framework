@@ -55,7 +55,6 @@ class App implements AppInterface
 
     protected $environment;
     protected $debug;
-    protected $config;
 
     /**
      * Application Options.
@@ -140,7 +139,7 @@ class App implements AppInterface
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
 
-        $this->config = array_merge(array('parameters' => $this->getAppParameters()), $config);
+        $this->options = new AppOptions(array_merge($this->getAppParameters(), $config));
     }
 
     /**
@@ -151,11 +150,7 @@ class App implements AppInterface
      */
     public function boot()
     {
-        $this->options = new AppOptions(array());
-        if (isset($this->options['config'])) {
-            $this->options->add($this->options['config']);
-        }
-
+        
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
         $exceptionHandler->addHandler(new \PPI\Exception\Log());
@@ -168,7 +163,7 @@ class App implements AppInterface
         if (!$this->options->has('moduleconfig') || empty($this->options['moduleconfig']['listenerOptions'])) {
             throw new \Exception('Missing moduleConfig: listenerOptions');
         }
-
+        
         // all user and app configuration must be set up to this point
         $this->serviceManager = new ServiceManager($this->options, array(
             new HttpConfig(),
@@ -512,6 +507,11 @@ class App implements AppInterface
     {
         $this->options[$key] = $val;
     }
+    
+    public function setConfig($config) 
+    {
+        $this->options->add($config);
+    }
 
     /**
      * Magic setter function, this is an alias of setOption
@@ -523,6 +523,12 @@ class App implements AppInterface
      */
     public function __set($option, $value)
     {
+        
+        if($option === 'config') {
+            $this->setConfig($value);
+            return;
+        }
+        
         $this->options[$option] = $value;
     }
 
