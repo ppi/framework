@@ -8,9 +8,10 @@
  */
 namespace PPI\Module;
 
-use PPI\Module\Routing\Loader\YamlFileLoader,
-    Symfony\Component\Config\FileLocator,
-    Symfony\Component\Yaml\Yaml as YamlParser;
+use PPI\Config\ConfigLoader;
+use PPI\Module\Routing\Loader\YamlFileLoader;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Yaml\Yaml as YamlParser;
 
 /**
  * The base PPI module class..
@@ -26,6 +27,15 @@ abstract class Module implements ModuleInterface
      * @var null
      */
     protected $_config = null;
+
+    /**
+     * Configuration loader.
+     *
+     * @var null|\PPI\Config\ConfigLoader
+     */
+    protected $configLoader = null;
+
+    protected $reflected;
 
     /**
      * @todo Add inline documentation.
@@ -235,6 +245,31 @@ abstract class Module implements ModuleInterface
 
         return $content;
 
+    }
+
+    /**
+     * Returns a ConfigLoader instance.
+     *
+     * @return \PPI\Config\ConfigLoader
+     */
+    public function getConfigLoader()
+    {
+        if (null === $this->configLoader) {
+            $this->configLoader = new ConfigLoader($this->getPath() . '/resources/config');
+        }
+
+        return $this->configLoader;
+    }
+
+    /**
+     * Loads a configuration file or PHP array.
+     *
+     * @param mixed  $resource The resource
+     * @param string $type     The resource type
+     */
+    public function loadConfig($resource, $type = null)
+    {
+        return $this->getConfigLoader()->load($resource, $type);
     }
 
     /**
