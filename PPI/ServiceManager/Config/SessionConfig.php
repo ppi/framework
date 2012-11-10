@@ -25,7 +25,7 @@ class SessionConfig extends AbstractConfig
     public function getDefaultOptions()
     {
         return array(
-            
+
             // internal configuration
             'app.session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
             'app.session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
@@ -33,7 +33,7 @@ class SessionConfig extends AbstractConfig
             'app.session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
             'app.session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
             'app.session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
-    
+
             // user level configuration
             'session.storage_id'                        => 'session.storage.native',
             'session.handler_id'                        => 'session.handler.native_file',
@@ -57,19 +57,19 @@ class SessionConfig extends AbstractConfig
     {
         parent::configureServiceManager($serviceManager);
         $smOptions = $serviceManager->getOptions();
-        
-        foreach($this->getDefaultOptions() as $defaultKey => $defaultVal) {
-            if(!$smOptions->has($defaultKey)) {
+
+        foreach ($this->getDefaultOptions() as $defaultKey => $defaultVal) {
+            if (!$smOptions->has($defaultKey)) {
                 $smOptions->set($defaultKey, $defaultVal);
             }
         }
 
         // session storage
-        if(!$smOptions->has('app.session.storage')) {
+        if (!$smOptions->has('app.session.storage')) {
             $serviceManager->setOption('app.session.storage', $smOptions->get('session.storage_id'));
         }
-        
-        if(!$smOptions->has('app.session.storage.options')) {
+
+        if (!$smOptions->has('app.session.storage.options')) {
             $sessionOptions = array();
             foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
                 $sessionOptions[$key] = $smOptions->get('session.' . $key);
@@ -78,62 +78,67 @@ class SessionConfig extends AbstractConfig
         }
 
         // session handler
-        if(!$serviceManager->has('session.handler')) {
+        if (!$serviceManager->has('session.handler')) {
             $serviceManager->setFactory('session.handler', function($serviceManager) use ($smOptions) {
                 $handlerID = $smOptions->get('session.handler_id');
+
                 return $handlerID === null ? null : $serviceManager->get($handlerID);
             });
         }
-        
+
         // session storage native
-        if(!$serviceManager->has('session.storage.native')) {
+        if (!$serviceManager->has('session.storage.native')) {
             $serviceManager->setFactory('session.storage.native', function($serviceManager) {
                 $class = $serviceManager->getOption('app.session.storage.native.class');
+
                 return new $class(
                     $serviceManager->getOption('app.session.storage.options'),
                     $serviceManager->get('session.handler')
                 );
             });
         }
-        
+
         // session flash bag
-        if(!$serviceManager->has('session.flash_bag')) {
+        if (!$serviceManager->has('session.flash_bag')) {
             $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
                 $class = $serviceManager->getOption('app.session.flashbag.class');
+
                 return new $class();
             });
         }
-        
+
         // session attribute bag
-        if(!$serviceManager->has('session.attribute_bag')) {
+        if (!$serviceManager->has('session.attribute_bag')) {
             $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
                 $class = $serviceManager->getOption('app.session.attribute_bag.class');
+
                 return new $class();
             });
         }
-        
+
         // session handler native file
         $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($smOptions) {
             $class = $smOptions->get('app.session.handler.native_file.class');
             $storageOptions = $smOptions->get('app.session.storage.options');
+
             return new $class($storageOptions['save_path']);
         });
 
         // session
-        if(!$serviceManager->has('session')) {
-            $serviceManager->setFactory('session', function($serviceManager) use($smOptions) {
+        if (!$serviceManager->has('session')) {
+            $serviceManager->setFactory('session', function($serviceManager) use ($smOptions) {
                 $class = $serviceManager->getOption('app.session.class');
-    
+
                 $session = new $class(
                     $serviceManager->get($smOptions->get('app.session.storage')),
                     $serviceManager->get('session.attribute_bag'),
                     $serviceManager->get('session.flash_bag')
                 );
                 $session->start();
-    
+
                 return $session;
             });
         }
     }
-    
+
 }
