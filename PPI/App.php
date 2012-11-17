@@ -12,6 +12,7 @@ namespace PPI;
 use PPI\Config\ConfigLoader;
 use PPI\Exception\Handler as ExceptionHandler;
 use PPI\ServiceManager\ServiceManager;
+use PPI\ServiceManager\Config\ServiceManagerConfig;
 use PPI\ServiceManager\Config\HttpConfig;
 use PPI\ServiceManager\Config\SessionConfig;
 use PPI\ServiceManager\Config\ModuleConfig;
@@ -19,6 +20,7 @@ use PPI\ServiceManager\Config\RouterConfig;
 use PPI\ServiceManager\Config\TemplatingConfig;
 use PPI\ServiceManager\Options\AppOptions;
 use PPI\Module\Routing\RoutingHelper;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * The PPI App bootstrap class.
@@ -40,8 +42,11 @@ class App implements AppInterface
      */
     const VERSION = '2.0.0-DEV';
 
-    protected $environment;
+    protected $booted = false;
+    protected $config = array();
     protected $debug;
+    protected $environment;
+    protected $startTime;
 
     /**
      * Configuration loader.
@@ -49,13 +54,6 @@ class App implements AppInterface
      * @var \PPI\Config\ConfigLoader
      */
     protected $configLoader = null;
-
-    /**
-     * Application Options.
-     *
-     * @var array
-     */
-    protected $options;
 
     /**
      * The session object
@@ -83,7 +81,7 @@ class App implements AppInterface
      *
      * @var null
      */
-    protected $_request = null;
+    protected $request = null;
 
     /**
      * The router object
@@ -97,7 +95,7 @@ class App implements AppInterface
      *
      * @var null
      */
-    protected $_response = null;
+    protected $response = null;
 
     /**
      * The matched module from the matched route.
@@ -124,29 +122,27 @@ class App implements AppInterface
      * Constructor
      *
      * @param string  $environment The environment
-     * @param Boolean $debug       Whether to enable debugging or not
-     * @param mixed   $config      Array with application configuration
+     * @param boolean $debug       Whether to enable debugging or not
+     * @param array   $config      Application configuration
      */
-    public function __construct($environment = 'production', $debug = false, array $config = array())
+    public function __construct($environment = 'production', $debug = false)
     {
         $this->environment = $environment;
         $this->debug = (boolean) $debug;
 
+        $this->booted = false;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
 
-        $this->options = new AppOptions(array_merge($this->getAppParameters(), $config));
+        if ($this->debug) {
+            $this->startTime = microtime(true);
+        }
+
+        $this->init();
     }
 
-    /**
-     * Run the boot process, boot up our modules and their dependencies.
-     * Decide on a route for $this->dispatch() to use.
-     *
-     * @return $this
-     */
-    public function boot()
+    public function init()
     {
-
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
         $exceptionHandler->addHandler(new \PPI\Exception\Log());
@@ -155,25 +151,37 @@ class App implements AppInterface
         if ($this->getEnv() !== 'production') {
             set_error_handler(array($exceptionHandler, 'handleError'));
         }
+    }
 
-        if (!$this->options->has('moduleconfig') || empty($this->options['moduleconfig']['listenerOptions'])) {
-            throw new \Exception('Missing moduleConfig: listenerOptions');
+    public function __clone()
+    {
+        if ($this->debug) {
+            $this->startTime = microtime(true);
         }
 
-        // all user and app configuration must be set up to this point
-        $this->serviceManager = new ServiceManager($this->options, array(
-            new HttpConfig(),
-            new SessionConfig($this->_sessionConfig),
-            new ModuleConfig(),
-            new RouterConfig(),
-            new TemplatingConfig()
-        ));
+        $this->booted = false;
+        $this->serviceManager = null;
+    }
 
-        // resolve options placeholders
-        $this->serviceManager->compile();
+    /**
+     * Run the boot process, boot up our modules and their dependencies.
+     * Decide on a route for $this->dispatch() to use.
+     *
+     * This method is automatically called by dispatch(), but you can use it
+     * to build all services when not handling a request.
+     *
+     * @return $this
+     */
+    public function boot()
+    {
+        if (true === $this->booted) {
+            return;
+        }
 
-        $this->_request  = $this->serviceManager->get('request');
-        $this->_response = $this->serviceManager->get('response');
+        $this->buildServiceManager();
+
+        $this->request  = $this->serviceManager->get('request');
+        $this->response = $this->serviceManager->get('response');
 
         // Loading our Modules
         $defaultListener = $this->serviceManager->get('module.defaultListener');
@@ -195,23 +203,29 @@ class App implements AppInterface
         $this->handleRouting();
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
-        $dsConnections = $this->options->get('datasource.connections');
+        $dsConnections = $this->config['datasource.connections'];
 
-        if ($this->options['useDataSource'] === true && $dsConnections !== null) {
+        if ($this->config['useDataSource'] === true && $dsConnections !== null) {
              $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
+
+        $this->booted = true;
 
         // Fluent Interface
         return $this;
     }
 
     /**
-     * Lets dispatch our module's controller action
+     * Lets dispatch our module's controller action.
      *
      * @return void
      */
     public function dispatch()
     {
+        if (false === $this->booted) {
+            $this->boot();
+        }
+
         // Lets dissect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
         $actionName = $actionName . 'Action';
@@ -271,11 +285,11 @@ class App implements AppInterface
 
         }
 
-        $this->_response = $response;
-        $this->_response->setContent($result);
+        $this->response = $response;
+        $this->response->setContent($result);
 
         if ($this->getOption('app.auto_dispatch')) {
-            $this->_response->send();
+            $this->response->send();
         }
     }
 
@@ -306,7 +320,7 @@ class App implements AppInterface
 
             // Lets load up our router and match the appropriate route
             $this->_router->warmUp();
-            $this->matchRoute($this->_request->getPathInfo());
+            $this->matchRoute($this->request->getPathInfo());
 
         } catch (\Exception $e) {
             $this->_matchedRoute = false;
@@ -443,6 +457,38 @@ class App implements AppInterface
     }
 
     /**
+     * Get the request object
+     *
+     * @return object
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get the response object
+     *
+     * @return object
+     */
+    public function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Gets the request start time (not available if debug is disabled).
+     *
+     * @return integer The request start timestamp
+     *
+     * @api
+     */
+    public function getStartTime()
+    {
+        return $this->debug ? $this->startTime : -INF;
+    }
+
+    /**
      * Gets the cache directory.
      *
      * @return string The cache directory
@@ -479,66 +525,32 @@ class App implements AppInterface
     }
 
     /**
-     * Get an option
+     * Magic setter function.
      *
-     * @param string $key
-     * @param null   $default
+     * @deprecated since the replacement of AppOptions by ZF2 Config.
      *
-     * @return null
-     */
-    public function getOption($key, $default = null)
-    {
-        return $this->options->has($key) ? $this->options->get($key) : $default;
-    }
-
-    /**
-     * Set the option
-     *
-     * @param $key
-     * @param $val
-     *
-     * @return void
-     */
-    public function setOption($key, $val)
-    {
-        $this->options[$key] = $val;
-    }
-
-    public function setConfig($config)
-    {
-        $this->options->add($config);
-    }
-
-    /**
-     * Magic setter function, this is an alias of setOption
-     *
-     * @param string $option The Option
-     * @param string $value  The Value
+     * @param string $option The option
+     * @param string $value  The value
      *
      * @return void
      */
     public function __set($option, $value)
     {
-
-        if ($option === 'config') {
-            $this->setConfig($value);
-
-            return;
-        }
-
-        $this->options[$option] = $value;
+        // NOP
     }
 
     /**
-     * Magic getter function, this is an alias of getEnv()
+     * Magic getter function.
      *
-     * @param string $option The Option
+     * @deprecated since the replacement of AppOptions by ZF2 Config.
+     *
+     * @param string $option The option
      *
      * @return mixed
      */
     public function __get($option)
     {
-        return isset($this->options[$option]) ? $this->options[$option] : null;
+        return null;
     }
 
     /**
@@ -589,10 +601,18 @@ class App implements AppInterface
     public function getConfigLoader()
     {
         if (null === $this->configLoader) {
-            $this->configLoader = new ConfigLoader($this->rootDir);
+            $this->configLoader = new ConfigLoader($this->rootDir . '/config');
         }
 
         return $this->configLoader;
+    }
+
+    /**
+     * Merges configuration.
+     */
+    public function mergeConfig(array $config)
+    {
+        $this->config = ArrayUtils::merge($this->config, $config);
     }
 
     /**
@@ -604,7 +624,7 @@ class App implements AppInterface
     public function loadConfig($resource, $type = null)
     {
         $config = $this->getConfigLoader()->load($resource, $type);
-        $this->options->add($config);
+        $this->mergeConfig($config);
 
         return $config;
     }
@@ -612,15 +632,58 @@ class App implements AppInterface
     /**
      * Returns the application configuration.
      *
-     * @return array|AppInterface
+     * @return array|object
      */
     public function getConfig()
     {
-        return $this->options;
+        return true === $this->booted ? $this->serviceManager->get('Config') : $this->config;
     }
 
+    /**
+     * @warning This method is marked for removal in a near future.
+     */
     public function setSessionConfig($config)
     {
         $this->_sessionConfig = $config;
+    }
+
+    /**
+     * Creates and initializes a ServiceManager instance.
+     */
+    protected function buildServiceManager()
+    {
+        // Add PPI Framework module
+        $this->mergeConfig(array(
+            'modules'   => array('PPI_Framework'),
+            'module_listener_options' => array(
+                'module_paths'  => array(__DIR__ . '/Framework')
+        )));
+
+        // ServiceManager creation
+        $smConfig = isset($this->config['service_manager']) ? $this->config['service_manager'] : array();
+        $serviceManager = new ServiceManager(new ServiceManagerConfig($smConfig));
+        $serviceManager->setService('ApplicationConfig', $this->config);
+        $serviceManager->setService('Application', $this);
+
+        // 'Config' service
+        $serviceManager->setFactory('Config', function($serviceManager) {
+            $mm = $serviceManager->get('ModuleManager');
+            $mm->loadModules();
+            $moduleParams = $mm->getEvent()->getParams();
+
+            return $moduleParams['configListener']->getMergedConfig(false);
+        });
+
+        foreach(array(
+            new HttpConfig(),
+            new SessionConfig($this->_sessionConfig),
+            new ModuleConfig(),
+            new RouterConfig(),
+            new TemplatingConfig()
+        ) as $serviceConfig) {
+            $serviceConfig->configureServiceManager($serviceManager);
+        }
+
+        $this->serviceManager = $serviceManager;
     }
 }
