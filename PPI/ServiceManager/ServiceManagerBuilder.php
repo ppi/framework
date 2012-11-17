@@ -41,7 +41,6 @@ class ServiceManagerBuilder extends ServiceManager
         $this->compile();
 
         $this->setService('ApplicationConfig', $this->config);
-        $this->setService('Application', $this);
 
         // 'Config' service
         $sm = $this;
