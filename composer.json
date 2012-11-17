@@ -38,7 +38,7 @@
             "type": "package",
             "package": {
                 "name": "ppi/zendframework",
-                "version": "2.0.0-rc4",
+                "version": "2.0.3",
                 "dist": {
                     "url": "http://packages.zendframework.com/releases/ZendFramework-2.0.3/ZendFramework-minimal-2.0.3.zip",
                     "type": "zip"
