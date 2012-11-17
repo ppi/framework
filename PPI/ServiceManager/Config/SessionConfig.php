@@ -56,7 +56,7 @@ class SessionConfig extends AbstractConfig
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         parent::configureServiceManager($serviceManager);
-        $smOptions = $serviceManager->getOptions();
+        $smOptions = $serviceManager->get('Config');
 
         foreach ($this->getDefaultOptions() as $defaultKey => $defaultVal) {
             if (!$smOptions->has($defaultKey)) {
