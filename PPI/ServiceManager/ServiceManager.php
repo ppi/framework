@@ -33,9 +33,6 @@ class ServiceManager extends BaseServiceManager
     public function __construct(ConfigInterface $config = null)
     {
         parent::__construct($config);
-//         foreach ($configs as $config) {
-//             $config->configureServiceManager($this);
-//         }
 
         /**
          * @note Unfortunately we need this to allow 'response' key to be overridden.

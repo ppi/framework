@@ -20,7 +20,7 @@ namespace PPI;
  *
  * @api
  */
-interface AppInterface
+interface AppInterface extends \Serializable
 {
     /**
      * Gets the name of the application.

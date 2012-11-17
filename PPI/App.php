@@ -11,14 +11,7 @@ namespace PPI;
 
 use PPI\Config\ConfigLoader;
 use PPI\Exception\Handler as ExceptionHandler;
-use PPI\ServiceManager\ServiceManager;
-use PPI\ServiceManager\Config\ServiceManagerConfig;
-use PPI\ServiceManager\Config\HttpConfig;
-use PPI\ServiceManager\Config\SessionConfig;
-use PPI\ServiceManager\Config\ModuleConfig;
-use PPI\ServiceManager\Config\RouterConfig;
-use PPI\ServiceManager\Config\TemplatingConfig;
-use PPI\ServiceManager\Options\AppOptions;
+use PPI\ServiceManager\ServiceManagerBuilder;
 use PPI\Module\Routing\RoutingHelper;
 use Zend\Stdlib\ArrayUtils;
 
@@ -43,7 +36,7 @@ class App implements AppInterface
     const VERSION = '2.0.0-DEV';
 
     protected $booted = false;
-    protected $config;
+    protected $config = array();
     protected $debug;
     protected $environment;
     protected $startTime;
@@ -133,7 +126,6 @@ class App implements AppInterface
         $this->booted = false;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
-        $this->config = array('parameters' => $this->getAppParameters());
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -179,7 +171,7 @@ class App implements AppInterface
             return;
         }
 
-        $this->buildServiceManager();
+        $this->serviceManager = $this->buildServiceManager();
 
         $this->request  = $this->serviceManager->get('request');
         $this->response = $this->serviceManager->get('response');
@@ -650,21 +642,22 @@ class App implements AppInterface
 
     /**
      * Creates and initializes a ServiceManager instance.
+     *
+     * @return ServiceManager The compiled service manager
      */
     protected function buildServiceManager()
     {
         // Add PPI Framework module
         $this->mergeConfig(array(
-            'modules'   => array('PPI_Framework'),
+            'modules'       => array('PPI_Framework'),
             'module_listener_options' => array(
-                'module_paths'  => array(__DIR__ . '/Framework')
-        )));
+                'module_paths'  => array(__DIR__ . '/Framework')),
+            'parameters'    => $this->getAppParameters()
+        ));
 
         // ServiceManager creation
-        $smConfig = isset($this->config['service_manager']) ? $this->config['service_manager'] : array();
-        $serviceManager = new ServiceManager(new ServiceManagerConfig($smConfig));
-        $serviceManager->setService('ApplicationConfig', $this->config);
-        $serviceManager->setService('Application', $this);
+        $serviceManager = new ServiceManagerBuilder($this->config);
+        $serviceManager->build();
 
         // 'Config' service
         $serviceManager->setFactory('Config', function($serviceManager) {
@@ -675,16 +668,18 @@ class App implements AppInterface
             return $moduleParams['configListener']->getMergedConfig(false);
         });
 
-        foreach(array(
-            new HttpConfig(),
-            new SessionConfig($this->_sessionConfig),
-            new ModuleConfig(),
-            new RouterConfig(),
-            new TemplatingConfig()
-        ) as $serviceConfig) {
-            $serviceConfig->configureServiceManager($serviceManager);
-        }
+        return $serviceManager;
+    }
 
-        $this->serviceManager = $serviceManager;
+    public function serialize()
+    {
+        return serialize(array($this->environment, $this->debug));
+    }
+
+    public function unserialize($data)
+    {
+        list($environment, $debug) = unserialize($data);
+
+        $this->__construct($environment, $debug);
     }
 }
