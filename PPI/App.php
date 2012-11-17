@@ -131,7 +131,7 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        $this->init();
+        //$this->init();
     }
 
     public function init()
@@ -647,11 +647,7 @@ class App implements AppInterface
      */
     protected function buildServiceManager()
     {
-        // Add PPI Framework module
         $this->mergeConfig(array(
-            'modules'       => array('PPI_Framework'),
-            'module_listener_options' => array(
-                'module_paths'  => array(__DIR__ . '/Framework')),
             'parameters'    => $this->getAppParameters()
         ));
 
