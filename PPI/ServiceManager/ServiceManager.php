@@ -6,10 +6,11 @@
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
+
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\Options\OptionsInterface,
-    Zend\ServiceManager\ServiceManager as BaseServiceManager;
+use Zend\ServiceManager\ConfigInterface;
+use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
 /**
  * ServiceManager implements the Service Locator design pattern.
@@ -23,38 +24,18 @@ use PPI\ServiceManager\Options\OptionsInterface,
  * * http://blog.evan.pro/introduction-to-the-zend-framework-2-servicemanager
  * * https://github.com/zendframework/zf2/blob/master/library/Zend/ServiceManager/ServiceManager.php
  *
- * Options keys are case insensitive.
- *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class ServiceManager extends BaseServiceManager implements \ArrayAccess, \IteratorAggregate, \Countable
+class ServiceManager extends BaseServiceManager
 {
-    /**
-     * @todo Add inline documentation.
-     *
-     * @var type
-     */
-    protected $options;
-
-    /**
-     * ServiceManager constructor.
-     *
-     * @param OptionsInterface $options Application options
-     * @param array            $configs Array of ConfigInterface instances
-     *
-     * @return void
-     */
-    public function __construct(OptionsInterface $options, array $configs = array())
+    public function __construct(ConfigInterface $config = null)
     {
-        $this->options = $options;
-
-        foreach ($configs as $config) {
-            $config->configureServiceManager($this);
-        }
-
-        $this->set('servicemanager', $this);
+        parent::__construct($config);
+//         foreach ($configs as $config) {
+//             $config->configureServiceManager($this);
+//         }
 
         /**
          * @note Unfortunately we need this to allow 'response' key to be overridden.
@@ -69,7 +50,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * This method is an alias to $this->get().
      *
-     * @param string  $cName
+     * @param string  $name
      * @param boolean $usePeeringServiceManagers
      *
      * @return object|array
@@ -94,116 +75,4 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
     {
         return $this->setService($name, $service, $shared);
     }
-
-    /**
-     * Compiles ServiceManager options.
-     *
-     * This method does one thing:
-     *
-     *  * Parameter values are resolved;
-     *
-     * @return void
-     */
-    public function compile()
-    {
-        $this->options->resolve();
-    }
-
-    /**
-     * Returns the OptionsInterface instance used to store app parameters.
-     *
-     * @return OptionsInterface
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
-    /**
-     * Gets an option.
-     *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     */
-    public function getOption($name)
-    {
-        return $this->options->get($name);
-    }
-
-    /**
-     * Checks if an option exists.
-     *
-     * @param string $name The option name
-     *
-     * @return boolean The presence of option in container
-     */
-    public function hasOption($name)
-    {
-        return $this->options->has($name);
-    }
-
-    /**
-     * Sets an option.
-     *
-     * @param string $name  The option name
-     * @param mixed  $value The option value
-     *
-     * @return void
-     */
-    public function setOption($name, $value)
-    {
-        $this->options->set($name, $value);
-    }
-
-    // ArrayAccess, IteratorAggregate, Countable
-
-    /**
-     * @see \ArrayAccess::offsetExists()
-     */
-    public function offsetExists($option)
-    {
-        return $this->options->has($option);
-    }
-
-    /**
-     * @see \ArrayAccess::offsetGet()
-     */
-    public function offsetGet($option)
-    {
-        return $this->options->get($option);
-    }
-
-    /**
-     * @see \ArrayAccess::offsetSet()
-     */
-    public function offsetSet($option, $value)
-    {
-        $this->options->set($option, $value);
-    }
-
-    /**
-     * @see \ArrayAccess::offsetUnset()
-     */
-    public function offsetUnset($option)
-    {
-        $this->options->remove($option);
-    }
-
-    /**
-     * @see \Traversable::getIterator()
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->options->all());
-    }
-
-    /**
-     * @see \Countable::count()
-     */
-    public function count()
-    {
-        return count($this->options->all());
-    }
-
 }
