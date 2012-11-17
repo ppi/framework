@@ -43,7 +43,7 @@ class App implements AppInterface
     const VERSION = '2.0.0-DEV';
 
     protected $booted = false;
-    protected $config = array();
+    protected $config;
     protected $debug;
     protected $environment;
     protected $startTime;
@@ -133,6 +133,7 @@ class App implements AppInterface
         $this->booted = false;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
+        $this->config = array('parameters' => $this->getAppParameters());
 
         if ($this->debug) {
             $this->startTime = microtime(true);
