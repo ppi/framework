@@ -6,9 +6,10 @@
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
-namespace PPI\ServiceManager\Options;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+namespace PPI\ServiceManager;
+
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag as BaseParameterBag;
 
 /**
  * Holds parameters.
@@ -20,16 +21,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
  * @package    PPI
  * @subpackage ServiceManager
  */
-abstract class AbstractOptions extends ParameterBag implements OptionsInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function add(array $parameters)
-    {
-        parent::add($parameters);
-    }
-
     /**
      * @see \ArrayAccess::offsetExists()
      */
