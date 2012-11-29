@@ -9,4 +9,4 @@ before_install:
   - pear install pear/PHP_CodeSniffer
   - phpenv rehash
 
-script: phpcs --standard=PSR1 ./
+script: phpcs --standard=PSR1 ./ && phpunit
