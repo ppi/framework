@@ -66,7 +66,7 @@ class AssetsExtension extends BaseAssetsExtension
      *
      * @return string A public path which takes into account the base path and URL path
      */
-    public function getAssetUrl_block(array $parameters = array(), $path = null, $template, &$repeat)
+    public function getAssetUrlBlock(array $parameters = array(), $path = null, $template, &$repeat)
     {
         // only output on the closing tag
         if (!$repeat) {
@@ -89,7 +89,7 @@ class AssetsExtension extends BaseAssetsExtension
      * @return string A public path which takes into account the base path
      *                and URL path
      */
-    public function getAssetUrl_modifier($path, $package = null)
+    public function getAssetUrlModifier($path, $package = null)
     {
         return $this->assetsHelper->getUrl($path, $package);
     }
