@@ -29,6 +29,16 @@ class AssetsExtension extends BaseAssetsExtension
     protected $assetsHelper = null;
 
     /**
+     * A key/value pair of functions to remap to help comply with PSR standards
+     * 
+     * @var array
+     */
+    protected $funRemap = array(
+        'getAssetUrl_block' => 'getAssetUrlBlock',
+        'getAssetUrl_modifier' => 'getAssetUrlModifier',
+    );
+
+    /**
      * Constructor.
      *
      * @param AssetsHelper $assetsHelper
@@ -38,6 +48,21 @@ class AssetsExtension extends BaseAssetsExtension
     public function __construct(AssetsHelper $assetsHelper)
     {
         $this->assetsHelper = $assetsHelper;
+    }
+
+    /**
+     * The magic call method triggers before throwing an exception
+     *
+     * @param  string $method The method you are looking for
+     * @param  array  $params The params you wish to pass to your method
+     * 
+     * @return mixed
+     */
+    public function __call($method, array $params = array()) {
+        if(isset($this->funRemap[$method])) {
+            return call_user_func_array(array($this, $this->funRemap[$method]), $params);
+        }
+        throw new \BadMethodCallException('Method ' . $method . ' does not exist');
     }
 
     /**
