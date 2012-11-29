@@ -8,7 +8,7 @@
  */
 namespace PPI\Test;
 
-require_once(__DIR__ . '/../AutoLoad.php');
+require_once(__DIR__ . '/../Autoload.php');
 require_once(__DIR__ . '/AutoLoad.php');
 
 \PPI\Autoload::config(array(
