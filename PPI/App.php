@@ -8,7 +8,7 @@
  */
 namespace PPI;
 
-use 
+use
 
     // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
@@ -237,12 +237,12 @@ class App
         $routeParams = $this->_matchedRoute;
         $activeRoute = $routeParams['_route'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
-        
+
         // Pass in the routing params, set the active route key
         $routingHelper = $this->serviceManager->get('routing.helper');
         $routingHelper->setParams($routeParams);
         $routingHelper->setActiveRouteName($activeRoute);
-        
+
         // Register our routing helper into the controller
         $controller->setHelper('routing', $routingHelper);
 
