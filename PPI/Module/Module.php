@@ -171,6 +171,7 @@ class Module
     public function setController($controller)
     {
         $this->_controller = $controller;
+
         return $this;
     }
 
@@ -194,6 +195,7 @@ class Module
     public function setControllerName($controllerName)
     {
         $this->_controllerName = $controllerName;
+
         return $this;
     }
 
@@ -207,6 +209,7 @@ class Module
     public function setActionName($actionName)
     {
         $this->_actionName = $actionName;
+
         return $this;
     }
 
