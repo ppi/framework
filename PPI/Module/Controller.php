@@ -244,7 +244,7 @@ class Controller
     /**
      * Check if a condition 'is' true.
      *
-     * @param  string $key
+     * @param string $key
      *
      * @return boolean
      *
@@ -461,6 +461,7 @@ class Controller
     public function setOptions($options)
     {
         $this->_options = $options;
+
         return $this;
     }
 
