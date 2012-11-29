@@ -62,11 +62,11 @@ class RouterConfig extends Config
             return $router;
 
         });
-        
+
         $serviceManager->setFactory('routing.helper', function($serviceManager) {
             return new RoutingHelper();
         });
-        
+
     }
 
 }

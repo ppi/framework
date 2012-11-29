@@ -124,7 +124,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
      *
      * @param string $name The option name
      *
-     * @return mixed  The option value
+     * @return mixed The option value
      */
     public function getOption($name)
     {

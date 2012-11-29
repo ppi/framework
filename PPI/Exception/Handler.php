@@ -43,10 +43,10 @@ class Handler
                'file'    => $e->getFile(),
                'line'    => $e->getLine(),
                'message' => $e->getMessage()
-        ); 
-        
+        );
+
         try {
-            
+
             // Execute each callback
             foreach ($this->_handlers as $handler) {
                 $this->_handlerStatus[] = array(
@@ -57,7 +57,7 @@ class Handler
 
             require(__DIR__ . '/templates/fatal.php');
             exit;
-            
+
         } catch (\Exception $e) {
             require(__DIR__ . '/templates/fatal.php');
             exit;
