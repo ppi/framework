@@ -65,7 +65,7 @@ class Log implements HandlerInterface
      *
      * @return mixed
      */
-    private function _getLogFile()
+    private function getLogFile()
     {
         return (isset($this->_logFile)) ? $this->_logFile : ini_get('error_log');
     }
@@ -79,7 +79,7 @@ class Log implements HandlerInterface
      */
     public function handle(\Exception $e)
     {
-        $logFile = $this->_getLogFile();
+        $logFile = $this->getLogFile();
 
         if (is_writable($logFile)) {
             $logEntry = sprintf(

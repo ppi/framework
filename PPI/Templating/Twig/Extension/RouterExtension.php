@@ -64,7 +64,6 @@ class RouterExtension extends \Twig_Extension
         return $this->generator->generate($name, $parameters, false);
     }
 
-
     /**
      * @todo Add inline documentation.
      *
