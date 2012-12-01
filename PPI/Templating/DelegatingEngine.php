@@ -28,7 +28,7 @@ class DelegatingEngine extends BaseDelegatingEngine
 
     /**
      * Any templating helpers to be registered upon render.
-     * 
+     *
      * @var array
      */
     protected $helpers = array();
@@ -36,7 +36,7 @@ class DelegatingEngine extends BaseDelegatingEngine
     /**
      * Renders a template.
      *
-     * @param mixed $name       A template name or a TemplateReferenceInterface
+     * @param mixed $name A template name or a TemplateReferenceInterface
      *                          instance
      * @param array $parameters An array of parameters to pass to the template
      *
@@ -56,9 +56,9 @@ class DelegatingEngine extends BaseDelegatingEngine
                 $engine->addGlobal($key, $val);
             }
         }
-        
+
         // @todo - This only supports addHelper(), which is on PhpEngine, we should allow addExtension() on SmartyEngine and TwigEngine too.
-        if(!empty($this->helpers) && is_callable(array($engine, 'addHelpers'))) {
+        if (!empty($this->helpers) && is_callable(array($engine, 'addHelpers'))) {
             $engine->addHelpers($this->helpers);
         }
 
@@ -79,7 +79,7 @@ class DelegatingEngine extends BaseDelegatingEngine
     {
         $this->globals[$name] = $value;
     }
-    
+
     public function addHelper($helper)
     {
         $this->helpers[$helper->getName()] = $helper;
