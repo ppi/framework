@@ -30,27 +30,45 @@ class App implements AppInterface
 {
     /**
      * Version string.
-     *
      * @var string
      */
     const VERSION = '2.0.0-DEV';
 
+    /**
+     * @var boolean
+     */
     protected $booted = false;
+
+    /**
+     * @var array
+     */
     protected $config = array();
+
+    /**
+     * @var boolean
+     */
     protected $debug;
+
+    /**
+     * Application environment: "development" vs "production".
+     * @var string
+     */
     protected $environment;
+
+    /**
+     * Unix timestamp with microseconds.
+     * @var float
+     */
     protected $startTime;
 
     /**
      * Configuration loader.
-     *
      * @var \PPI\Config\ConfigLoader
      */
     protected $configLoader = null;
 
     /**
-     * The session object
-     *
+     * The session object.
      * @var null
      */
     public $session = null;
@@ -63,50 +81,43 @@ class App implements AppInterface
     protected $_matchedRoute = null;
 
     /**
-     * The module manager
-     *
+     * The module manager.
      * @var null
      */
     protected $_moduleManager = null;
 
     /**
-     * The request object
-     *
+     * The request object.
      * @var null
      */
     protected $request = null;
 
     /**
      * The router object
-     *
      * @var null
      */
     protected $_router = null;
 
     /**
-     * The response object
-     *
+     * The response object.
      * @var null
      */
     protected $response = null;
 
     /**
      * The matched module from the matched route.
-     *
      * @var null
      */
     protected $_matchedModule = null;
 
     /**
      * Path to the application root dir aka the "app" directory.
-     *
      * @var null|string
      */
      protected $rootDir = null;
 
     /**
-     * Service Manager (ZF2 implementation)
-     *
+     * Service Manager.
      * @var \PPI\Module\ServiceManager\ServiceManager
      */
      protected $serviceManager = null;
@@ -654,15 +665,6 @@ class App implements AppInterface
         // ServiceManager creation
         $serviceManager = new ServiceManagerBuilder($this->config);
         $serviceManager->build();
-
-        // 'Config' service
-        $serviceManager->setFactory('Config', function($serviceManager) {
-            $mm = $serviceManager->get('ModuleManager');
-            $mm->loadModules();
-            $moduleParams = $mm->getEvent()->getParams();
-
-            return $moduleParams['configListener']->getMergedConfig(false);
-        });
 
         return $serviceManager;
     }
