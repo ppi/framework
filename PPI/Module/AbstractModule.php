@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
  * @package    PPI
  * @subpackage Module
  */
-abstract class Module implements ModuleInterface
+abstract class AbstractModule implements ModuleInterface
 {
     /**
      * @todo Add inline documentation.
