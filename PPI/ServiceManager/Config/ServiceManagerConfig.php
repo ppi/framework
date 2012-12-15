@@ -37,11 +37,12 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $factories = array(
-        'Config'        => 'PPI\ServiceManager\Factory\ConfigFactory',
-        'EventManager'  => 'PPI\ServiceManager\Factory\EventManagerFactory',
-        'ModuleManager' => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
-        'Request'       => 'PPI\ServiceManager\Factory\RequestFactory',
-        'Response'      => 'PPI\ServiceManager\Factory\ResponseFactory',
+        'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
+        'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
+        'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
+        'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
+        'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
+        'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
     );
 
     /**
@@ -58,6 +59,7 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $aliases = array(
         'Configuration'                             => 'Config',
+        'module.defaultListener'                    => 'ModuleDefaultListener',
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
     );
 
