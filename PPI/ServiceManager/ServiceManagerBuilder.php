@@ -9,7 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\Config\HttpConfig;
 use PPI\ServiceManager\Config\SessionConfig;
 use PPI\ServiceManager\Config\ModuleConfig;
 use PPI\ServiceManager\Config\RouterConfig;
@@ -42,25 +41,14 @@ class ServiceManagerBuilder extends ServiceManager
 
         $this->setService('ApplicationConfig', $this->config);
 
-        // 'Config' service
-        $sm = $this;
-        $this->setFactory('Config', function($sm) {
-            $mm = $sm->get('ModuleManager');
-            $mm->loadModules();
-            $moduleParams = $mm->getEvent()->getParams();
-
-            return $moduleParams['configListener']->getMergedConfig(false);
-        });
-
-        foreach(array(
-            new HttpConfig(),
-            new SessionConfig(),
-            new ModuleConfig(),
-            new RouterConfig(),
-            new TemplatingConfig()
-        ) as $serviceConfig) {
-            $serviceConfig->configureServiceManager($this);
-        }
+//         foreach(array(
+//             //new SessionConfig(),
+//             //new ModuleConfig(),
+//             //new RouterConfig(),
+//             //new TemplatingConfig()
+//         ) as $serviceConfig) {
+//             $serviceConfig->configureServiceManager($this);
+//         }
 
         return $this;
     }
