@@ -53,7 +53,7 @@ class Controller
      */
     protected function getRequest()
     {
-        return $this->_serviceLocator->get('request');
+        return $this->_serviceLocator->get('Request');
     }
 
     /**
@@ -63,7 +63,7 @@ class Controller
      */
     protected function getResponse()
     {
-        return $this->_serviceLocator->get('response');
+        return $this->_serviceLocator->get('Response');
     }
 
     /**
@@ -188,7 +188,7 @@ class Controller
      */
     protected function getServer()
     {
-        return $this->getService('request')->server;
+        return $this->getService('Request')->server;
     }
 
     /**
@@ -198,7 +198,7 @@ class Controller
      */
     protected function getFiles()
     {
-        return $this->getService('request')->files;
+        return $this->getService('Request')->files;
     }
 
     /**
@@ -208,7 +208,7 @@ class Controller
      */
     protected function getCookie()
     {
-        return $this->getService('request')->cookies;
+        return $this->getService('Request')->cookies;
     }
 
     /**
@@ -218,7 +218,7 @@ class Controller
      */
     protected function getQueryString()
     {
-        return $this->getService('request')->query;
+        return $this->getService('Request')->query;
     }
 
     /**
@@ -228,7 +228,7 @@ class Controller
      */
     protected function getPost()
     {
-        return $this->getService('request')->request;
+        return $this->getService('Request')->request;
     }
 
     /**
@@ -256,7 +256,7 @@ class Controller
 
             case 'ajax':
                 if (!isset($this->_isCache['ajax'])) {
-                    return $this->_isCache['ajax'] = $this->getService('request')->isXmlHttpRequest();
+                    return $this->_isCache['ajax'] = $this->getService('Request')->isXmlHttpRequest();
                 }
 
                 return $this->_isCache['ajax'];
@@ -266,7 +266,7 @@ class Controller
             case 'post':
             case 'patch':
                 if (!isset($this->_isCache['requestMethod'][$key])) {
-                    $this->_isCache['requestMethod'][$key] = $this->getService('request')->getMethod() === strtoupper($key);
+                    $this->_isCache['requestMethod'][$key] = $this->getService('Request')->getMethod() === strtoupper($key);
                 }
 
                 return $this->_isCache['requestMethod'][$key];
@@ -275,7 +275,7 @@ class Controller
             case 'https':
             case 'secure':
                 if (!isset($this->_isCache['secure'])) {
-                    $this->_isCache['secure'] = $this->getService('request')->isSecure();
+                    $this->_isCache['secure'] = $this->getService('Request')->isSecure();
                 }
 
                 return $this->_isCache['secure'];
@@ -411,7 +411,7 @@ class Controller
      */
     protected function redirect($url, $statusCode = 302)
     {
-        $this->getServiceLocator()->set('http.response', new RedirectResponse($url, $statusCode));
+        $this->getServiceLocator()->set('Response', new RedirectResponse($url, $statusCode));
     }
 
     /**

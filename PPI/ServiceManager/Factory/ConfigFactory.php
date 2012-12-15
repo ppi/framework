@@ -35,10 +35,10 @@ class ConfigFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $mm           = $serviceLocator->get('ModuleManager');
+        $mm = $serviceLocator->get('ModuleManager');
         $mm->loadModules();
         $moduleParams = $mm->getEvent()->getParams();
-        $config       = $moduleParams['configListener']->getMergedConfig(false);
+        $config = $moduleParams['configListener']->getMergedConfig(false);
 
         return $config;
     }
