@@ -49,7 +49,6 @@ class ServiceManagerBuilder extends ServiceManager
 //         ) as $serviceConfig) {
 //             $serviceConfig->configureServiceManager($this);
 //         }
-
         return $this;
     }
 
