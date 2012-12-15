@@ -11,7 +11,6 @@ namespace PPI\ServiceManager\Factory;
 
 use PPI\Module\Listener\ListenerOptions;
 use PPI\Module\Listener\DefaultListenerAggregate;
-use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -48,7 +47,7 @@ class ModuleManagerFactory implements FactoryInterface
         $events = $serviceLocator->get('EventManager');
         $events->attach($defaultListeners);
 
-        $moduleEvent = new ModuleEvent;
+        $moduleEvent = $serviceLocator->get('ModuleEvent');
         $moduleEvent->setParam('ServiceManager', $serviceLocator);
 
         $moduleManager = new ModuleManager($configuration['modules'], $events);

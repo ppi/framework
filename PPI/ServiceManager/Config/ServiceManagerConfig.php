@@ -28,6 +28,7 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $invokables = array(
         'SharedEventManager' => 'Zend\EventManager\SharedEventManager',
+        'ModuleEvent'        => 'Zend\ModuleManager\ModuleEvent',
     );
 
     /**
@@ -39,8 +40,8 @@ class ServiceManagerConfig implements ConfigInterface
         'Config'        => 'PPI\ServiceManager\Factory\ConfigFactory',
         'EventManager'  => 'PPI\ServiceManager\Factory\EventManagerFactory',
         'ModuleManager' => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
-        'Request'       => 'PPI\ServiceManager\Factory\Request',
-        'Response'      => 'PPI\ServiceManager\Factory\Response',
+        'Request'       => 'PPI\ServiceManager\Factory\RequestFactory',
+        'Response'      => 'PPI\ServiceManager\Factory\ResponseFactory',
     );
 
     /**
