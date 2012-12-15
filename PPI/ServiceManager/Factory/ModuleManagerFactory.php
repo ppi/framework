@@ -9,8 +9,6 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\Module\Listener\ListenerOptions;
-use PPI\Module\Listener\DefaultListenerAggregate;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -27,10 +25,6 @@ class ModuleManagerFactory implements FactoryInterface
     /**
      * Creates and returns the module manager
      *
-     * Instantiates the default module listeners, providing them configuration
-     * from the "module_listener_options" key of the ApplicationConfig
-     * service. Also sets the default config glob path.
-     *
      * Module manager is instantiated and provided with an EventManager, to which
      * the default listener aggregate is attached. The ModuleEvent is also created
      * and attached to the module manager.
@@ -41,8 +35,7 @@ class ModuleManagerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $configuration    = $serviceLocator->get('ApplicationConfig');
-        $listenerOptions  = new ListenerOptions($configuration['module_listener_options']);
-        $defaultListeners = new DefaultListenerAggregate($listenerOptions);
+        $defaultListeners = $serviceLocator->get('ModuleDefaultListener');
 
         $events = $serviceLocator->get('EventManager');
         $events->attach($defaultListeners);
