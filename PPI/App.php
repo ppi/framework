@@ -184,16 +184,13 @@ class App implements AppInterface
 
         $this->serviceManager = $this->buildServiceManager();
 
-        $this->request  = $this->serviceManager->get('request');
-        $this->response = $this->serviceManager->get('response');
+        $this->request  = $this->serviceManager->get('Request');
+        $this->response = $this->serviceManager->get('Response');
 
         // Loading our Modules
         $defaultListener = $this->serviceManager->get('module.defaultListener');
-        $this->_moduleManager = $this->serviceManager->get('module.manager');
+        $this->_moduleManager = $this->serviceManager->get('ModuleManager');
         $this->_moduleManager->loadModules();
-
-        // CONFIG - Merge the app config with the config from all the modules
-        $this->serviceManager->set('config', $defaultListener->getConfigListener()->getMergedConfig(false));
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
@@ -274,12 +271,12 @@ class App implements AppInterface
 
             // If the controller is just returning HTML content then that becomes our body response.
             case is_string($result):
-                $response = $controller->getServiceLocator()->get('response');
+                $response = $controller->getServiceLocator()->get('Response');
                 break;
 
             // The controller action didn't bother returning a value, just grab the response object from SM
             case is_null($result):
-                $response = $controller->getServiceLocator()->get('response');
+                $response = $controller->getServiceLocator()->get('Response');
                 break;
 
             // Anything else is unpredictable so we safely rely on the SM

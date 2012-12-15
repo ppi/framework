@@ -9,7 +9,7 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use Symfony\Component\HttpFoundation\Response as HttpResponse,
+use Symfony\Component\HttpFoundation\Response;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -30,6 +30,6 @@ class ResponseFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return HttpResponse::createFromGlobals();
+        return new Response();
     }
 }
