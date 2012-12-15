@@ -56,8 +56,8 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $aliases = array(
-        'Configuration' => 'Config',
-        'Zend\EventManager\EventManagerInterface' => 'EventManager',
+        'Configuration'                             => 'Config',
+        'Zend\EventManager\EventManagerInterface'   => 'EventManager',
     );
 
     /**
@@ -150,6 +150,6 @@ class ServiceManagerConfig implements ConfigInterface
 
         $serviceManager->setService('ServiceManager', $serviceManager);
         $serviceManager->setAlias('Zend\ServiceManager\ServiceLocatorInterface', 'ServiceManager');
-        $serviceManager->setAlias('Zend\ServiceManager\ServiceManager', 'ServiceManager');
+        $serviceManager->setAlias('PPI\ServiceManager\ServiceManager', 'ServiceManager');
     }
 }

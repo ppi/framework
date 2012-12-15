@@ -9,12 +9,12 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use Symfony\Component\HttpFoundation\Request as HttpRequest,
+use Symfony\Component\HttpFoundation\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * ServiceManager configuration for the HttpRequest component.
+ * ServiceManager configuration for the Request component.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
@@ -30,6 +30,6 @@ class RequestFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new HttpRequest();
+        return Request::createFromGlobals();
     }
 }
