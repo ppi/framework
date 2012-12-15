@@ -26,7 +26,9 @@ class ServiceManagerConfig implements ConfigInterface
      *
      * @var array
      */
-    protected $invokables = array();
+    protected $invokables = array(
+        'SharedEventManager' => 'Zend\EventManager\SharedEventManager',
+    );
 
     /**
      * Service factories
@@ -34,8 +36,11 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $factories = array(
-        'ModuleManager' => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
         'Config'        => 'PPI\ServiceManager\Factory\ConfigFactory',
+        'EventManager'  => 'PPI\ServiceManager\Factory\EventManagerFactory',
+        'ModuleManager' => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
+        'Request'       => 'PPI\ServiceManager\Factory\Request',
+        'Response'      => 'PPI\ServiceManager\Factory\Response',
     );
 
     /**
@@ -50,7 +55,10 @@ class ServiceManagerConfig implements ConfigInterface
      *
      * @var array
      */
-    protected $aliases = array();
+    protected $aliases = array(
+        'Configuration' => 'Config',
+        'Zend\EventManager\EventManagerInterface' => 'EventManager',
+    );
 
     /**
      * Shared services
@@ -60,7 +68,9 @@ class ServiceManagerConfig implements ConfigInterface
      *
      * @var array
      */
-    protected $shared = array();
+    protected $shared = array(
+        'EventManager' => false,
+    );
 
     /**
      * Constructor

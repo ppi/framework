@@ -11,10 +11,11 @@ namespace PPI\Module\Listener;
 use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
 
 /**
- * ListenerOptions class
+ * ListenerOptions class.
  *
  * @todo Add inline documentation.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */
@@ -48,5 +49,4 @@ class ListenerOptions extends BaseListenerOptions
     {
         return $this->routingEnabled;
     }
-
 }
