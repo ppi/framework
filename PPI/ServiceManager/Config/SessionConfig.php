@@ -6,8 +6,10 @@
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
+
 namespace PPI\ServiceManager\Config;
 
+use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -17,7 +19,7 @@ use Zend\ServiceManager\ServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-class SessionConfig extends AbstractConfig
+class SessionConfig extends Config
 {
     /**
      * {@inheritdoc}
@@ -55,14 +57,10 @@ class SessionConfig extends AbstractConfig
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        parent::configureServiceManager($serviceManager);
+        //parent::configureServiceManager($serviceManager);
         $smOptions = $serviceManager->get('Config');
 
-        foreach ($this->getDefaultOptions() as $defaultKey => $defaultVal) {
-            if (!$smOptions->has($defaultKey)) {
-                $smOptions->set($defaultKey, $defaultVal);
-            }
-        }
+        var_dump($smOptions);die;
 
         // session storage
         if (!$smOptions->has('app.session.storage')) {

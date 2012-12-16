@@ -43,6 +43,8 @@ class ServiceManagerConfig implements ConfigInterface
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
         'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
         'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
+        'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
+        'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
     );
 
     /**
@@ -58,9 +60,11 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $aliases = array(
+        // Zend alias
         'Configuration'                             => 'Config',
-        'module.defaultListener'                    => 'ModuleDefaultListener',
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
+        // PPI alias
+        'module.defaultListener'                    => 'ModuleDefaultListener',
     );
 
     /**
@@ -103,7 +107,6 @@ class ServiceManagerConfig implements ConfigInterface
         if (isset($configuration['shared'])) {
             $this->shared = array_merge($this->shared, $configuration['shared']);
         }
-
     }
 
     /**
