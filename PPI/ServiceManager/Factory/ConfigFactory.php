@@ -11,6 +11,7 @@ namespace PPI\ServiceManager\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * Config Factory.
@@ -38,7 +39,11 @@ class ConfigFactory implements FactoryInterface
         $mm = $serviceLocator->get('ModuleManager');
         $mm->loadModules();
         $moduleParams = $mm->getEvent()->getParams();
-        $config = $moduleParams['configListener']->getMergedConfig(false);
+
+        $config = ArrayUtils::merge(
+            $moduleParams['configListener']->getMergedConfig(false),
+            $serviceLocator->get('ApplicationConfig')
+        );
 
         return $config;
     }

@@ -9,6 +9,14 @@
         {
             "name": "Paul Dragoonis",
             "email": "paul@ppi.io"
+        },
+        {
+            "name": "Vítor Brandão",
+            "email": "vitor@ppi.io"
+        },
+        {
+            "name": "PPI Community",
+            "homepage": "http://www.ppi.io/contributors"
         }
     ],
     "autoload": {
