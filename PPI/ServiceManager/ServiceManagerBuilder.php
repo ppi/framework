@@ -10,8 +10,6 @@
 namespace PPI\ServiceManager;
 
 use PPI\ServiceManager\Config\SessionConfig;
-use PPI\ServiceManager\Config\ModuleConfig;
-use PPI\ServiceManager\Config\RouterConfig;
 use PPI\ServiceManager\Config\TemplatingConfig;
 use PPI\ServiceManager\Config\ServiceManagerConfig;
 use PPI\ServiceManager\ParameterBag;
@@ -41,10 +39,7 @@ class ServiceManagerBuilder extends ServiceManager
 
         $this->setService('ApplicationConfig', $this->config);
 
-        foreach(array(
-            //new SessionConfig(),
-            //new ModuleConfig(),
-            new RouterConfig(),
+        foreach(array(new SessionConfig(),
             //new TemplatingConfig()
         ) as $serviceConfig) {
             $serviceConfig->configureServiceManager($this);
