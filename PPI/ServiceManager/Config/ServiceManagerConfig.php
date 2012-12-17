@@ -65,6 +65,7 @@ class ServiceManagerConfig implements ConfigInterface
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
         // PPI alias
         'module.defaultListener'                    => 'ModuleDefaultListener',
+        'routing.helper'                            => 'RoutingHelper',
     );
 
     /**

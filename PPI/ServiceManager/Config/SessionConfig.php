@@ -24,32 +24,18 @@ class SessionConfig extends Config
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions()
+    public function __construct($config = array())
     {
-        return array(
-
-            // internal configuration
-            'app.session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
-            'app.session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
-            'app.session.flashbag.class'            => 'Symfony\Component\HttpFoundation\Session\Flash\FlashBag',
-            'app.session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
-            'app.session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
-            'app.session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
-
-            // user level configuration
-            'session.storage_id'                        => 'session.storage.native',
-            'session.handler_id'                        => 'session.handler.native_file',
-            'session.save_path'                         => '%app.cache_dir%/sessions',
-            'session.name'                              => null,
-            'session.cookie_lifetime'                   => null,
-            'session.cookie_path'                       => null,
-            'session.cookie_domain'                     => null,
-            'session.cookie_secure'                     => null,
-            'session.cookie_httponly'                   => null,
-            'session.gc_divisor'                        => null,
-            'session.gc_probability'                    => null,
-            'session.gc_maxlifetime'                    => null
-        );
+        parent::__construct(array_merge(array(
+            'aliases' => array(
+                'session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
+                'session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
+                'session.flashbag.class'            => 'Symfony\Component\HttpFoundation\Session\Flash\FlashBag',
+                'session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
+                'session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
+                'session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
+            ),
+        ), $config));
     }
 
     /**
@@ -57,28 +43,33 @@ class SessionConfig extends Config
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        //parent::configureServiceManager($serviceManager);
-        $smOptions = $serviceManager->get('Config');
+        $config = $serviceManager->get('Config');
 
-        var_dump($smOptions);die;
+        $options =  array_merge(array(
+            'auto_start'        => false,
+            'storage_id'        => 'session.storage.native',
+            'handler_id'        => 'session.handler.native_file',
+            'name'              => null,
+            'cookie_lifetime'   => null,
+            'cookie_path'       => null,
+            'cookie_domain'     => null,
+            'cookie_secure'     => null,
+            'cookie_httponly'   => null,
+            'gc_divisor'        => null,
+            'gc_probability'    => null,
+            'gc_maxlifetime'    => null,
+            'save_path'         => $config['parameters']['app.cache_dir'] . '/sessions',
+        ), isset($config['session']) ? $config['session'] : array());
 
-        // session storage
-        if (!$smOptions->has('app.session.storage')) {
-            $serviceManager->setOption('app.session.storage', $smOptions->get('session.storage_id'));
-        }
-
-        if (!$smOptions->has('app.session.storage.options')) {
-            $sessionOptions = array();
-            foreach (array('name', 'cookie_lifetime', 'cookie_path', 'cookie_domain', 'cookie_secure', 'cookie_httponly', 'gc_maxlifetime', 'gc_probability', 'gc_divisor', 'save_path') as $key) {
-                $sessionOptions[$key] = $smOptions->get('session.' . $key);
-            }
-            $serviceManager->setOption('app.session.storage.options', $sessionOptions);
+        $storageOptions = $options;
+        foreach (array('auto_start', 'storage_id', 'handler_id') as $k) {
+            unset($storageOptions[$k]);
         }
 
         // session handler
         if (!$serviceManager->has('session.handler')) {
-            $serviceManager->setFactory('session.handler', function($serviceManager) use ($smOptions) {
-                $handlerID = $smOptions->get('session.handler_id');
+            $serviceManager->setFactory('session.handler', function($serviceManager) use ($options) {
+                $handlerID = $options['session.handler_id'];
 
                 return $handlerID === null ? null : $serviceManager->get($handlerID);
             });
@@ -86,20 +77,17 @@ class SessionConfig extends Config
 
         // session storage native
         if (!$serviceManager->has('session.storage.native')) {
-            $serviceManager->setFactory('session.storage.native', function($serviceManager) {
-                $class = $serviceManager->getOption('app.session.storage.native.class');
+            $serviceManager->setFactory('session.storage.native', function($serviceManager) use ($storageOptions) {
+                $class = $serviceManager->get('session.storage.native.class');
 
-                return new $class(
-                    $serviceManager->getOption('app.session.storage.options'),
-                    $serviceManager->get('session.handler')
-                );
+                return new $class($storageOptions, $serviceManager->get('session.handler'));
             });
         }
 
         // session flash bag
         if (!$serviceManager->has('session.flash_bag')) {
             $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
-                $class = $serviceManager->getOption('app.session.flashbag.class');
+                $class = $serviceManager->get('session.flashbag.class');
 
                 return new $class();
             });
@@ -108,27 +96,26 @@ class SessionConfig extends Config
         // session attribute bag
         if (!$serviceManager->has('session.attribute_bag')) {
             $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
-                $class = $serviceManager->getOption('app.session.attribute_bag.class');
+                $class = $serviceManager->get('session.attribute_bag.class');
 
                 return new $class();
             });
         }
 
         // session handler native file
-        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($smOptions) {
-            $class = $smOptions->get('app.session.handler.native_file.class');
-            $storageOptions = $smOptions->get('app.session.storage.options');
+        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($storageOptions) {
+            $class = $serviceManager->get('session.handler.native_file.class');
 
             return new $class($storageOptions['save_path']);
         });
 
         // session
         if (!$serviceManager->has('session')) {
-            $serviceManager->setFactory('session', function($serviceManager) use ($smOptions) {
-                $class = $serviceManager->getOption('app.session.class');
+            $serviceManager->setFactory('session', function($serviceManager) use ($options) {
+                $class = $serviceManager->get('session.class');
 
                 $session = new $class(
-                    $serviceManager->get($smOptions->get('app.session.storage')),
+                    $serviceManager->get($options['session.storage_id']),
                     $serviceManager->get('session.attribute_bag'),
                     $serviceManager->get('session.flash_bag')
                 );
@@ -138,5 +125,4 @@ class SessionConfig extends Config
             });
         }
     }
-
 }
