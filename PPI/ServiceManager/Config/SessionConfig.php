@@ -9,6 +9,11 @@
 
 namespace PPI\ServiceManager\Config;
 
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -43,6 +48,8 @@ class SessionConfig extends Config
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
+        parent::configureServiceManager($serviceManager);
+
         $config = $serviceManager->get('Config');
 
         $options =  array_merge(array(
@@ -67,62 +74,43 @@ class SessionConfig extends Config
         }
 
         // session handler
-        if (!$serviceManager->has('session.handler')) {
-            $serviceManager->setFactory('session.handler', function($serviceManager) use ($options) {
-                $handlerID = $options['session.handler_id'];
+        $serviceManager->setFactory('session.handler', function($serviceManager) use ($options) {
+            $handlerID = $options['handler_id'];
 
-                return $handlerID === null ? null : $serviceManager->get($handlerID);
-            });
-        }
+            return $handlerID === null ? null : $serviceManager->get($handlerID);
+        });
 
         // session storage native
-        if (!$serviceManager->has('session.storage.native')) {
-            $serviceManager->setFactory('session.storage.native', function($serviceManager) use ($storageOptions) {
-                $class = $serviceManager->get('session.storage.native.class');
-
-                return new $class($storageOptions, $serviceManager->get('session.handler'));
-            });
-        }
+        $serviceManager->setFactory('session.storage.native', function($serviceManager) use ($storageOptions) {
+            return new NativeSessionStorage($storageOptions, $serviceManager->get('session.handler'));
+        });
 
         // session flash bag
-        if (!$serviceManager->has('session.flash_bag')) {
-            $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
-                $class = $serviceManager->get('session.flashbag.class');
-
-                return new $class();
-            });
-        }
+        $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
+            return new FlashBag();
+        });
 
         // session attribute bag
-        if (!$serviceManager->has('session.attribute_bag')) {
-            $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
-                $class = $serviceManager->get('session.attribute_bag.class');
-
-                return new $class();
-            });
-        }
+        $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
+            return new AttributeBag();
+        });
 
         // session handler native file
         $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($storageOptions) {
-            $class = $serviceManager->get('session.handler.native_file.class');
-
-            return new $class($storageOptions['save_path']);
+            return new NativeFileSessionHandler($storageOptions['save_path']);
         });
 
         // session
-        if (!$serviceManager->has('session')) {
-            $serviceManager->setFactory('session', function($serviceManager) use ($options) {
-                $class = $serviceManager->get('session.class');
+        $serviceManager->setFactory('session', function($serviceManager) {
 
-                $session = new $class(
-                    $serviceManager->get($options['session.storage_id']),
-                    $serviceManager->get('session.attribute_bag'),
-                    $serviceManager->get('session.flash_bag')
-                );
-                $session->start();
+            $session = new Session(
+                $serviceManager->get('session.storage.native'),
+                $serviceManager->get('session.attribute_bag'),
+                $serviceManager->get('session.flash_bag')
+            );
+            //$session->start();
 
-                return $session;
-            });
-        }
+            return $session;
+        });
     }
 }
