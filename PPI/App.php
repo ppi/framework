@@ -289,7 +289,8 @@ class App implements AppInterface
         $this->response = $response;
         $this->response->setContent($result);
 
-        if ($this->getOption('app.auto_dispatch')) {
+        $config = $this->getConfig();
+        if (isset($config['app.auto_dispatch']) && true === $config['app.auto_dispatch']) {
             $this->response->send();
         }
     }
