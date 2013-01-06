@@ -52,9 +52,10 @@ class TemplatingConfig extends Config
 {
     /**
      * Templating engines currently supported:
-     * * PHP
-     * * Twig
-     * * Smarty
+     * - PHP
+     * - Twig
+     * - Smarty
+     * - Mustache
      *
      * @param ServiceManager $serviceManager
      *
@@ -62,11 +63,16 @@ class TemplatingConfig extends Config
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
+        $config = $serviceManager->get('Config');
+        $appRootDir = $config['parameters']['app.root_dir'];
+        $appCacheDir = $config['parameters']['app.cache_dir'];
+        $modulePaths = $config['module_listener_options']['module_paths'];
+
         // these are the templating engines currently supported
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
-        $engineIds = $serviceManager->getOption('templating.engines');
+        $engineIds = isset($config['templating.engines']) ? $config['templating.engines'] : array('php');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
@@ -75,11 +81,11 @@ class TemplatingConfig extends Config
         }
 
         // File locator
-        $serviceManager->setFactory('filelocator', function($serviceManager) {
+        $serviceManager->setFactory('filelocator', function($serviceManager) use ($appRootDir, $modulePaths) {
             return new FileLocator(array(
-                'modules'     => $serviceManager->get('module.manager')->getModules(),
-                'modulesPath' => realpath($serviceManager['moduleConfig']['listenerOptions']['module_paths'][0]),
-                'appPath'     => $serviceManager->getOption('app.root_dir')
+                'modules'     => $serviceManager->get('ModuleManager')->getModules(),
+                'modulesPath' => realpath($modulePaths[0]),
+                'appPath'     => $appRootDir
             ));
         });
 
@@ -134,8 +140,8 @@ class TemplatingConfig extends Config
         });
 
         // Smarty Engine
-        $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) {
-            $cacheDir = $serviceManager->getOption('app.cache_dir').DIRECTORY_SEPARATOR.'smarty';
+        $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) use ($appCacheDir) {
+            $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
             $templateLocator = $serviceManager->get('templating.locator');
 
             $smartyEngine = new SmartyEngine(
