@@ -10,12 +10,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ModuleCommand extends Command
 {
+    protected $skeletonModuleDir;
     protected $modulesDir;
 
+    public function setSkeletonModuleDir($dir)
+    {
+        $this->skeletonModuleDir = realpath($dir);
+    }
+    
+    public function setTargetModuleDir($dir)
+    {
+        $this->modulesDir = realpath($dir);
+    }
+    
     protected function configure()
     {
-
-        $this->modulesDir = realpath('./modules');
 
         $this->setName('module:create')
              ->setDescription('Create a module')
@@ -28,7 +37,7 @@ class ModuleCommand extends Command
         $name = $input->getArgument('name');
         $dir  = $this->modulesDir . '/' . $name;
 
-        $this->copyRecursively('./app/skeleton', $dir);
+        $this->copyRecursively($this->skeletonModuleDir, $dir);
         file_put_contents($dir . '/Module.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Module.php')));
         file_put_contents($dir . '/Controller/Index.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Index.php')));
         file_put_contents($dir . '/Controller/Shared.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Shared.php')));
