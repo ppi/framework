@@ -220,7 +220,7 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
             do {
                 $last = $e;
             } while ($e = $e->getPrevious());
-            throw new \Exception($last->getMessage());
+            throw $last;
         }
     }
 
