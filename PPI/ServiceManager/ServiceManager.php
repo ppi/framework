@@ -206,4 +206,22 @@ class ServiceManager extends BaseServiceManager implements \ArrayAccess, \Iterat
         return count($this->options->all());
     }
 
+    /**
+     * @param string $name The Service Name
+     * @param bool   $usePeeringServiceManagers
+     * @return array|object
+     * @throws \Exception
+     */
+    public function get($name, $usePeeringServiceManagers = true)
+    {
+        try {
+            return parent::get($name, $usePeeringServiceManagers);
+        } catch(\Exception $e) {
+            do {
+                $last = $e;
+            } while ($e = $e->getPrevious());
+            throw $last;
+        }
+    }
+
 }
