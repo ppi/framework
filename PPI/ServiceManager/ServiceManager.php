@@ -72,4 +72,37 @@ class ServiceManager extends BaseServiceManager
     {
         return $this->setService($name, $service, $shared);
     }
+
+    /**
+     * Gets a parameter.
+     *
+     * @param string $name The parameter name
+     *
+     * @return mixed The parameter value
+     *
+     * @throws InvalidArgumentException if the parameter is not defined
+     */
+    public function getParameter($name)
+    {
+        $config = $this->get('Config');
+        if (!isset($config['parameters'][$name])) {
+            throw new \InvalidArgumentException(sprintf('You have requested a non-existent parameter "%s".', $name));
+        }
+
+        return $config['parameters'][$name];
+    }
+
+    /**
+     * Sets a parameter.
+     *
+     * @param string $name  The parameter name
+     * @param mixed  $value The parameter value
+     */
+    public function setParameter($name, $value)
+    {
+        $config = $this->get('Config');
+        $config['parameters'][$name] = $value;
+
+        $this->set('Config', $config);
+    }
 }
