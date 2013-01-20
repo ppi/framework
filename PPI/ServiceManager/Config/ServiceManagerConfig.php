@@ -41,7 +41,6 @@ class ServiceManagerConfig implements ConfigInterface
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
-        'monolog.logger'        => 'PPI\ServiceManager\Factory\MonologFactory',
         'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
         'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
         'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
