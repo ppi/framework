@@ -109,7 +109,6 @@ class SessionConfig extends Config
                 $serviceManager->get('session.flash_bag')
             );
             //$session->start();
-
             return $session;
         });
     }

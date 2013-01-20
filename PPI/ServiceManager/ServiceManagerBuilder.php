@@ -2,13 +2,14 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
 
 namespace PPI\ServiceManager;
 
+use PPI\ServiceManager\Config\MonologConfig;
 use PPI\ServiceManager\Config\SessionConfig;
 use PPI\ServiceManager\Config\TemplatingConfig;
 use PPI\ServiceManager\Config\ServiceManagerConfig;
@@ -36,10 +37,10 @@ class ServiceManagerBuilder extends ServiceManager
     public function build()
     {
         $this->compile();
-
         $this->setService('ApplicationConfig', $this->config);
 
         foreach(array(
+            new MonologConfig(),
             new SessionConfig(),
             new TemplatingConfig()
         ) as $serviceConfig) {
@@ -57,9 +58,11 @@ class ServiceManagerBuilder extends ServiceManager
         if (isset($this->config['parameters'])) {
             $parameterBag = new ParameterBag($this->config['parameters']);
             $parameterBag->resolve();
+            $this->setService('config.parameter_bag', $parameterBag);
             $this->config['parameters'] = $parameterBag->all();
         } else {
             $this->config['parameters'] = array();
+            $this->setService('config.parameter_bag', new ParameterBag());
         }
     }
 }
