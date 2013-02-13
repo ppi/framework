@@ -71,6 +71,17 @@ class RoutingHelper
     }
 
     /**
+     * Check if a routing param exists
+     * 
+     * @param string $param
+     * @return bool
+     */
+    public function hasParam($param)
+    {
+        return array_key_exists($param, $this->params);
+    }
+
+    /**
      * Get all routing params
      *
      * @return array
