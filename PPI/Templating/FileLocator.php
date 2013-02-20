@@ -17,7 +17,7 @@ use Symfony\Component\Config\FileLocator as BaseFileLocator;
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @package    PPI
  * @subpackage Templating
  */

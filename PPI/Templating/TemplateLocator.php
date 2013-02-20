@@ -16,7 +16,7 @@ use PPI\Templating\TemplateReference,
  * The PPI Template Locator.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @package    PPI
  * @subpackage Templating
  */

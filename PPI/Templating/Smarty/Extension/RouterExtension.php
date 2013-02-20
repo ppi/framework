@@ -13,7 +13,7 @@
  /**
   * Provides integration of the Routing component with Smarty[Bundle].
   *
-  * @author     Vítor Brandão <noisebleed@noiselabs.org>
+  * @author     Vítor Brandão <vitor@noiselabs.org>
   * @package    PPI
   * @subpackage Templating
   */
