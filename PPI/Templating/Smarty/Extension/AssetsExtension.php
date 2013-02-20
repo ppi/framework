@@ -15,7 +15,7 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtensi
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
  *
- * @author     Vítor Brandão <noisebleed@noiselabs.org>
+ * @author     Vítor Brandão <vitor@noiselabs.org>
  * @package    PPI
  * @subpackage Templating
  */
