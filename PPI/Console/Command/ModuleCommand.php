@@ -1,11 +1,4 @@
 <?php
-/**
- * This file is part of the PPI Framework.
- *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
- * @license    http://opensource.org/licenses/mit-license.php MIT
- * @link       http://www.ppi.io
- */
 
 namespace PPI\Console\Command;
 
@@ -15,18 +8,23 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Generates modules.
- *
- * @author Paul Dragoonis <paul@ppi.io>
- */
 class ModuleCommand extends Command
 {
+    protected $skeletonModuleDir;
     protected $modulesDir;
 
+    public function setSkeletonModuleDir($dir)
+    {
+        $this->skeletonModuleDir = realpath($dir);
+    }
+    
+    public function setTargetModuleDir($dir)
+    {
+        $this->modulesDir = realpath($dir);
+    }
+    
     protected function configure()
     {
-        $this->modulesDir = realpath('./modules');
 
         $this->setName('module:create')
              ->setDescription('Create a module')
@@ -39,7 +37,7 @@ class ModuleCommand extends Command
         $name = $input->getArgument('name');
         $dir  = $this->modulesDir . '/' . $name;
 
-        $this->copyRecursively('./app/skeleton', $dir);
+        $this->copyRecursively($this->skeletonModuleDir, $dir);
         file_put_contents($dir . '/Module.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Module.php')));
         file_put_contents($dir . '/Controller/Index.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Index.php')));
         file_put_contents($dir . '/Controller/Shared.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Shared.php')));
@@ -48,6 +46,7 @@ class ModuleCommand extends Command
 
         $output->writeln("<info>Created module: {$name}</info>");
         $output->writeln("<comment>To activate it, add <info>'{$name}'</info> to your <info>'activeModules'</info> setting in <info>modules.config.php</info></comment>");
+
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
@@ -73,4 +72,5 @@ class ModuleCommand extends Command
         }
         closedir($dir);
     }
+
 }
