@@ -1,6 +1,6 @@
 {
     "name": "ppi/framework",
-    "description": "The PPI Framework - A meta-framework built using Symfony2/ZendFramework2 and Doctrine2",
+    "description": "PPI Framework - The PHP Meta Framework!",
     "homepage": "http://www.ppi.io",
     "license": "MIT",
     "keywords": ["framework"],
