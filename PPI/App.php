@@ -18,7 +18,7 @@ use Zend\Stdlib\ArrayUtils;
 /**
  * The PPI App bootstrap class.
  *
- * This class sets various app settings, and allows you to override clases used
+ * This class sets various app settings, and allows you to override classes used
  * in the bootup process.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
