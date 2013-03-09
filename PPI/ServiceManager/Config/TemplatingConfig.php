@@ -72,7 +72,7 @@ class TemplatingConfig extends Config
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
-        $engineIds = isset($config['templating.engines']) ? $config['templating.engines'] : array('php');
+        $engineIds = isset($config['templating']['engines']) ? $config['templating']['engines'] : array('php');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
