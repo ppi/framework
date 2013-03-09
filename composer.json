@@ -42,8 +42,6 @@
         "zendframework/zend-servicemanager": "2.1.3",
         "zendframework/zend-eventmanager": "2.1.3",
         "zendframework/zend-modulemanager": "2.1.3"
-
-
     },
     "extra": {
         "branch-alias": {
