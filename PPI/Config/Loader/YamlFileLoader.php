@@ -30,19 +30,56 @@ class YamlFileLoader extends FileLoader
     public function load($file, $type = null)
     {
         $path = $this->locator->locate($file);
-        $config = Yaml::parse($path);
+        $content = $this->loadFile($path);
 
         // empty file
-        if (null === $config) {
+        if (null === $content) {
             $config = array();
         }
 
+        // imports
+        $content = $this->parseImports($content, $file);
+
         // not an array
-        if (!is_array($config)) {
+        if (!is_array($content)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
-        return $config;
+        return $content;
+    }
+
+    /**
+     * Loads a YAML file.
+     *
+     * @param string $file
+     *
+     * @return array The file content
+     */
+    protected function loadFile($file)
+    {
+        return Yaml::parse($file);
+    }
+
+    /**
+     * Parses all imports
+     *
+     * @param array  $content
+     * @param string $file
+     */
+    private function parseImports($content, $file)
+    {
+        if (!isset($content['imports'])) {
+            return $content;
+        }
+
+        foreach ($content['imports'] as $import) {
+            $this->setCurrentDir(dirname($file));
+            $content = array_merge($content, $this->import($import['resource'], null, isset($import['ignore_errors']) ? (Boolean) $import['ignore_errors'] : false, $file));
+        }
+
+        unset($content['imports']);
+
+        return $content;
     }
 
     /**

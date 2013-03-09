@@ -204,9 +204,12 @@ class App implements AppInterface
         $this->handleRouting();
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
-        $dsConnections = $this->config['datasource.connections'];
+        /**
+         * @todo Move the datasource configuration to a proper ServiceManger Config class.
+         */
+        $dsConnections = $this->config['datasource']['connections'];
 
-        if ($this->config['useDataSource'] === true && $dsConnections !== null) {
+        if ($this->config['datasource'] === true && $dsConnections !== null) {
              $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
 
@@ -219,7 +222,7 @@ class App implements AppInterface
     /**
      * Lets dispatch our module's controller action.
      *
-     * @return void
+     * @return \Symfony\Component\HttpFoundation\Request
      */
     public function dispatch()
     {
@@ -289,10 +292,7 @@ class App implements AppInterface
         $this->response = $response;
         $this->response->setContent($result);
 
-        $config = $this->getConfig();
-        if (isset($config['app.auto_dispatch']) && true === $config['app.auto_dispatch']) {
-            $this->response->send();
-        }
+        return $this->response;
     }
 
     /**
