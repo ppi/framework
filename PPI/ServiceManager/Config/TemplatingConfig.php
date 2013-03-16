@@ -66,7 +66,12 @@ class TemplatingConfig extends Config
         $config = $serviceManager->get('Config');
         $appRootDir = $config['parameters']['app.root_dir'];
         $appCacheDir = $config['parameters']['app.cache_dir'];
-        $modulePaths = $config['module_listener_options']['module_paths'];
+
+        $moduleManager = $serviceManager->get('ModuleManager');
+        $modulePaths = array();
+        foreach ($moduleManager->getLoadedModules() as $module) {
+            $modulePaths[] = $module->getPath();
+        }
 
         // these are the templating engines currently supported
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
