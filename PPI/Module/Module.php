@@ -18,7 +18,4 @@ namespace PPI\Module;
  */
 abstract class Module extends AbstractModule
 {
-
-
-
 }
