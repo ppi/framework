@@ -20,11 +20,11 @@ namespace PPI\Module;
 interface ModuleInterface
 {
     /**
-     * Get the module name
+     * Returns the module name.
      *
-     * @return string
+     * @return string The Module name
      */
-    public function getModuleName();
+    public function getName();
 
     /**
      * Gets the Module namespace.
