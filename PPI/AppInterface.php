@@ -11,7 +11,7 @@ namespace PPI;
 /**
  * The PPI App interface.
  *
- * This class sets various app settings, and allows you to override clases used
+ * This class sets various app settings, and allows you to override classes used
  * in the bootup process.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
