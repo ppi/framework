@@ -30,7 +30,7 @@ class AssetsExtension extends BaseAssetsExtension
 
     /**
      * A key/value pair of functions to remap to help comply with PSR standards
-     * 
+     *
      * @var array
      */
     protected $funRemap = array(
@@ -53,13 +53,14 @@ class AssetsExtension extends BaseAssetsExtension
     /**
      * The magic call method triggers before throwing an exception
      *
-     * @param  string $method The method you are looking for
-     * @param  array  $params The params you wish to pass to your method
-     * 
+     * @param string $method The method you are looking for
+     * @param array  $params The params you wish to pass to your method
+     *
      * @return mixed
      */
-    public function __call($method, array $params = array()) {
-        if(isset($this->funRemap[$method])) {
+    public function __call($method, array $params = array())
+    {
+        if (isset($this->funRemap[$method])) {
             return call_user_func_array(array($this, $this->funRemap[$method]), $params);
         }
         throw new \BadMethodCallException('Method ' . $method . ' does not exist');
