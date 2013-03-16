@@ -6,35 +6,40 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Module\Routing;
 
-use Symfony\Component\Routing\Router as BaseRouter,
-    Symfony\Component\Routing\RequestContext;
+namespace PPI\Router;
+
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Component\Routing\RequestContext;
 
 /**
- * The PPI router
+ * The PPI Router.
  *
- * @author Paul Dragoonis (dragoonis@php.net)
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  * @package    PPI
- * @subpackage Module
+ * @subpackage Router
  */
-class Router extends BaseRouter
+class Router extends BaseRouter implements RouterInterface
 {
     /**
      * Constructor.
      *
-     * @param RequestContext $requestContext
-     * @param type           $collection
-     * @param array          $options
+     * @param RequestContext  $requestContext The context
+     * @param type            $collection
+     * @param array           $options
+     * @param LoggerInterface $logger         A logger instance
      *
      * @return void
      */
-    public function __construct(RequestContext $requestContext, $collection, array $options = array())
+    public function __construct(RequestContext $requestContext, $collection, array $options = array(), LoggerInterface $logger = null)
     {
         parent::setOptions($options);
 
         $this->collection = $collection;
         $this->context = $requestContext;
+        $this->logger = $logger;
 
     }
 
@@ -90,5 +95,4 @@ class Router extends BaseRouter
         $this->getMatcher();
         $this->getGenerator();
     }
-
 }
