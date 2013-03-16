@@ -49,7 +49,6 @@ class MonologConfig extends AbstractConfig
             "monolog.handler.native_mailer.class"   => "Monolog\Handler\NativeMailerHandler",
             "monolog.handler.socket.class"          => "Monolog\Handler\SocketHandler",
             "monolog.handler.pushover.class"        => "Monolog\Handler\PushoverHandler",
-
             "monolog.handler.fingers_crossed.class" => "Monolog\Handler\FingersCrossedHandler",
             "monolog.handler.fingers_crossed.error_level_activation_strategy.class"
                                                     => "Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy"
