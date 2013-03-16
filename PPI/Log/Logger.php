@@ -10,6 +10,7 @@
 namespace PPI\Log;
 
 use Monolog\Logger as BaseLogger;
+use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 
 /**
@@ -17,7 +18,7 @@ use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
-class Logger extends BaseLogger implements DebugLoggerInterface
+class Logger extends BaseLogger implements LoggerInterface, DebugLoggerInterface
 {
     /**
      * @see Symfony\Component\HttpKernel\Log\DebugLoggerInterface
