@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
@@ -22,7 +22,7 @@ use Zend\Stdlib\ArrayUtils;
  * in the bootup process.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  * @package    PPI
  * @subpackage Core
  */
@@ -54,6 +54,11 @@ class App implements AppInterface
      * @var string
      */
     protected $environment;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
 
     /**
      * Unix timestamp with microseconds.
@@ -111,6 +116,11 @@ class App implements AppInterface
     protected $_matchedModule = null;
 
     /**
+     * @var string
+     */
+    protected $name;
+
+    /**
      * Path to the application root dir aka the "app" directory.
      * @var null|string
      */
@@ -125,7 +135,7 @@ class App implements AppInterface
     /**
      * Constructor
      *
-     * @param string  $environment The environment
+     * @param string  $environment The environment ("development", "testing", "staging", "production")
      * @param boolean $debug       Whether to enable debugging or not
      * @param array   $config      Application configuration
      */
@@ -142,14 +152,14 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        //$this->init();
+        $this->init();
     }
 
     public function init()
     {
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
-        $exceptionHandler->addHandler(new \PPI\Exception\Log());
+        //$exceptionHandler->addHandler(new \PPI\Exception\Log());
         set_exception_handler(array($exceptionHandler, 'handle'));
 
         if ($this->getEnv() !== 'production') {
@@ -183,37 +193,39 @@ class App implements AppInterface
         }
 
         $this->serviceManager = $this->buildServiceManager();
+        $this->log('debug', sprintf('Booting %s ...', $this->name));
 
         $this->request  = $this->serviceManager->get('Request');
         $this->response = $this->serviceManager->get('Response');
 
         // Loading our Modules
-        $defaultListener = $this->serviceManager->get('module.defaultListener');
+        $defaultListener = $this->serviceManager->get('ModuleDefaultListener');
         $this->_moduleManager = $this->serviceManager->get('ModuleManager');
         $this->_moduleManager->loadModules();
+        if ($this->debug) {
+            $modules = $this->_moduleManager->getModules();
+            $this->log('debug', sprintf('All modules online (%d): "%s"', count($modules), implode('", "', $modules)));
+        }
 
         // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
-
         foreach ($moduleServices as $serviceKey => $serviceVal) {
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
-
-        // ROUTING
-        $this->_router = $this->serviceManager->get('router');
-        $this->handleRouting();
 
         // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
         /**
          * @todo Move the datasource configuration to a proper ServiceManger Config class.
          */
         $dsConnections = $this->config['datasource']['connections'];
-
         if ($this->config['datasource'] === true && $dsConnections !== null) {
              $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
         }
 
         $this->booted = true;
+        if ($this->debug) {
+            $this->log('debug', sprintf('%s has booted (in %.3f secs).', $this->name, (microtime(true) - $this->startTime)*1));
+        }
 
         // Fluent Interface
         return $this;
@@ -229,6 +241,10 @@ class App implements AppInterface
         if (false === $this->booted) {
             $this->boot();
         }
+
+        // ROUTING
+        $this->_router = $this->serviceManager->get('router');
+        $this->handleRouting();
 
         // Lets dissect our route
         list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
@@ -308,7 +324,8 @@ class App implements AppInterface
         $this->_matchedRoute  = $this->_router->match($uri);
         $matchedModuleName    = $this->_matchedRoute['_module'];
         $this->_matchedModule = $this->_moduleManager->getModule($matchedModuleName);
-        $this->_matchedModule->setModuleName($matchedModuleName);
+        $this->_matchedModule->setName($matchedModuleName);
+        $this->logger('debug', sprintf('Matched route "%s" for URI "%s"', $this->_matchedRoute, $uri));
     }
 
     /**
@@ -319,20 +336,21 @@ class App implements AppInterface
     protected function handleRouting()
     {
         try {
-
             // Lets load up our router and match the appropriate route
             $this->_router->warmUp();
             $this->matchRoute($this->request->getPathInfo());
 
         } catch (\Exception $e) {
+            if ($this->debug) {
+                $this->log('critical', $e);
+                throw ($e);
+            }
             $this->_matchedRoute = false;
         }
 
         // Lets grab the 'Framework 404' route and dispatch it.
         if ($this->_matchedRoute === false) {
-
             try {
-
                 $baseUrl  = $this->_router->getContext()->getBaseUrl();
                 $routeUri = $this->_router->generate($this->options['404RouteName']);
 
@@ -345,7 +363,7 @@ class App implements AppInterface
 
             // @todo handle a 502 here
             } catch (\Exception $e) {
-                throw new \Exception('Unable to load 404 page. An internal error occured');
+                throw new \Exception('Unable to load 404 page. An internal error occurred');
             }
         }
     }
@@ -360,7 +378,7 @@ class App implements AppInterface
     public function getName()
     {
         if (null === $this->name) {
-            $this->name = preg_replace('/[^a-zA-Z0-9_]+/', '', basename($this->rootDir));
+            $this->name = get_class($this);
         }
 
         return $this->name;
@@ -429,7 +447,7 @@ class App implements AppInterface
      */
     public function isDebug()
     {
-        return $this-debug;
+        return $this->debug;
     }
 
     /**
@@ -665,6 +683,25 @@ class App implements AppInterface
         $serviceManager->build();
 
         return $serviceManager;
+    }
+
+    /**
+     * Logs with an arbitrary level.
+     *
+     * @param  mixed  $level
+     * @param  string $message
+     * @param  array  $context
+     * @return null
+     */
+    public function log($level, $message, array $context = array())
+    {
+        if (null === $this->logger) {
+            $this->logger = $this->getServiceManager()->has('logger') ? $this->getServiceManager()->get('logger') : false;
+        }
+
+        if ($this->logger) {
+            $this->logger->log($level, $message, $context);
+        }
     }
 
     public function serialize()
