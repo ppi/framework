@@ -9,19 +9,21 @@
 namespace PPI\Tests\Exception;
 
 use PPI\Test\Unit,
-	PPI\Exception\Log;
+    PPI\Exception\Log;
 
-class LogTest extends Unit {
+class LogTest extends Unit
+{
+    public $logger;
 
-	public $logger;
+    public function setUp()
+    {
+        $this->logger = new Log();
+    }
 
-	public function setUp() {
-		$this->logger = new Log();
-	}
-
-	public function testSetLogFile() {
-		$this->logger->setLogFile('foobar');
-		$this->assertAttributeContains('foobar', '_logFile', $this->logger);
-	}
+    public function testSetLogFile()
+    {
+        $this->logger->setLogFile('foobar');
+        $this->assertAttributeContains('foobar', '_logFile', $this->logger);
+    }
 
 }

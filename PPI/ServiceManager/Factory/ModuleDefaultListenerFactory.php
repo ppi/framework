@@ -33,8 +33,29 @@ class ModuleDefaultListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $configuration    = $serviceLocator->get('ApplicationConfig');
-        $listenerOptions  = new ListenerOptions($configuration['module_listener_options']);
+        $config = $serviceLocator->get('ApplicationConfig');
+
+        if (!isset($config['module_listener_options']) ||
+            !isset($config['module_listener_options']['module_paths'])) {
+            $paths = array();
+            $cwd = getcwd() . '/';
+            foreach (array('modules', 'vendor') as $dir) {
+                if (is_dir($dir = $cwd . $dir)) {
+                    $paths[] = $dir;
+                }
+            }
+
+            $config['module_listener_options']['module_paths'] = $paths;
+        }
+
+        if (isset($config['module_listener_options']['extra_module_paths'])) {
+            $config['module_listener_options']['module_paths'] = array_merge(
+                $config['module_listener_options']['module_paths'],
+                $config['module_listener_options']['extra_module_paths']
+            );
+        }
+
+        $listenerOptions  = new ListenerOptions($config['module_listener_options']);
 
         return new DefaultListenerAggregate($listenerOptions);
 

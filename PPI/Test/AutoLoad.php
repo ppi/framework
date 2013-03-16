@@ -11,8 +11,8 @@ namespace PPI\Test;
 /**
  * Testing Autoloader
  */
-class AutoLoad {
-
+class AutoLoad
+{
     /**
      * Will autoload using PSR-0 standards
      *
@@ -38,7 +38,7 @@ class AutoLoad {
 
     /**
      * Will register the method with spl_autoload_register
-     * 
+     *
      * @return void
      */
     public static function register()
