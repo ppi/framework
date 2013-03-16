@@ -38,6 +38,7 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $factories = array(
         'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
+        'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',

@@ -207,24 +207,15 @@ class App implements AppInterface
             $this->log('debug', sprintf('All modules online (%d): "%s"', count($modules), implode('", "', $modules)));
         }
 
-        // SERVICES - Lets get all the services our of our modules and start setting them in the ServiceManager
+        // Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $defaultListener->getServices();
         foreach ($moduleServices as $serviceKey => $serviceVal) {
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
 
-        // DATASOURCE - If the user wants DataSource available in their application, lets instantiate it and set up their connections
-        /**
-         * @todo Move the datasource configuration to a proper ServiceManger Config class.
-         */
-        $dsConnections = $this->config['datasource']['connections'];
-        if ($this->config['datasource'] === true && $dsConnections !== null) {
-             $this->serviceManager->set('datasource', new \PPI\DataSource\DataSource($dsConnections));
-        }
-
         $this->booted = true;
         if ($this->debug) {
-            $this->log('debug', sprintf('%s has booted (in %.3f secs).', $this->name, (microtime(true) - $this->startTime)*1));
+            $this->log('debug', sprintf('%s has booted (in %.3f secs)', $this->name, microtime(true) - $this->startTime));
         }
 
         // Fluent Interface
