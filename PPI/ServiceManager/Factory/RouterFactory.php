@@ -9,9 +9,9 @@
 
 namespace PPI\ServiceManager\Factory;
 
+use PPI\Router\Router;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
-use PPI\Module\Routing\Router;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -37,10 +37,11 @@ class RouterFactory implements FactoryInterface
 
         $requestContext->fromRequest($serviceLocator->get('request'));
         $routerOptions = array();
+        $logger = $serviceLocator->get('logger');
 
-        $router = new Router($requestContext, $routeCollection, $routerOptions);
+        $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
 
-        $allRoutes = $serviceLocator->get('module.defaultListener')->getRoutes();
+        $allRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
         foreach ($allRoutes as $routes) {
             $routeCollection->addCollection($routes);
         }

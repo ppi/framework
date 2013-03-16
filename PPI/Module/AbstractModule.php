@@ -2,14 +2,14 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
 namespace PPI\Module;
 
 use PPI\Config\ConfigLoader;
-use PPI\Module\Routing\Loader\YamlFileLoader;
+use PPI\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 
@@ -287,12 +287,18 @@ abstract class AbstractModule implements ModuleInterface
     }
 
     /**
-     * Get the module name
+     * Returns the module name (the class short name).
      *
-     * @return string
+     * @return string The Module name
      */
     public function getModuleName()
     {
+        if (null !== $this->_moduleName) {
+            return $this->_moduleName;
+        }
+
+        $this->_moduleName = str_replace('\\', '', $this->getNamespace());
+
         return $this->_moduleName;
     }
 
