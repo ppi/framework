@@ -22,6 +22,17 @@ use Symfony\Component\Yaml\Yaml as YamlParser;
 abstract class AbstractModule implements ModuleInterface
 {
     /**
+     * @var string
+     * The Module name.
+     */
+    protected $name;
+
+    /**
+     * @var \ReflectionObject
+     */
+    protected $reflected;
+
+    /**
      * @todo Add inline documentation.
      *
      * @var null
@@ -34,8 +45,6 @@ abstract class AbstractModule implements ModuleInterface
      * @var null|\PPI\Config\ConfigLoader
      */
     protected $configLoader = null;
-
-    protected $reflected;
 
     /**
      * @todo Add inline documentation.
@@ -57,13 +66,6 @@ abstract class AbstractModule implements ModuleInterface
      * @var null
      */
     protected $_controller = null;
-
-    /**
-     * @todo Add inline documentation.
-     *
-     * @var null
-     */
-    protected $_moduleName = null;
 
     /**
      * Controller Name
@@ -90,7 +92,7 @@ abstract class AbstractModule implements ModuleInterface
     {
         if ($this->_routes === null) {
             $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
-            $loader->setDefaults(array('_module' => $this->getModuleName()));
+            $loader->setDefaults(array('_module' => $this->getName()));
 
             $routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
             $this->_routes = $routesCollection;
@@ -229,7 +231,7 @@ abstract class AbstractModule implements ModuleInterface
                 '"%s" within module "%s"',
                 $this->_actionName,
                 $this->_controllerName,
-                $this->_moduleName
+                $this->name
             ));
         }
 
@@ -275,31 +277,31 @@ abstract class AbstractModule implements ModuleInterface
     /**
      * Set the module name
      *
-     * @param string $moduleName
+     * @param string $Name
      *
      * @return $this
      */
-    public function setModuleName($moduleName)
+    public function setName($Name)
     {
-        $this->_moduleName = $moduleName;
+        $this->name = $Name;
 
         return $this;
     }
 
     /**
-     * Returns the module name (the class short name).
+     * Returns the module name.
      *
      * @return string The Module name
      */
-    public function getModuleName()
+    public function getName()
     {
-        if (null !== $this->_moduleName) {
-            return $this->_moduleName;
+        if (null !== $this->name) {
+            return $this->name;
         }
 
-        $this->_moduleName = str_replace('\\', '', $this->getNamespace());
+        $this->name = str_replace('\\', '', $this->getNamespace());
 
-        return $this->_moduleName;
+        return $this->name;
     }
 
     /**
