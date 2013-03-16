@@ -17,12 +17,12 @@ class ModuleCommand extends Command
     {
         $this->skeletonModuleDir = realpath($dir);
     }
-    
+
     public function setTargetModuleDir($dir)
     {
         $this->modulesDir = realpath($dir);
     }
-    
+
     protected function configure()
     {
 
