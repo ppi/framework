@@ -73,6 +73,12 @@ class App implements AppInterface
     protected $configLoader = null;
 
     /**
+     * The Module Manager.
+     * @var \Zend\ModuleManager\ModuleManager
+     */
+    protected $moduleManager;
+
+    /**
      * The session object.
      * @var null
      */
@@ -84,12 +90,6 @@ class App implements AppInterface
      * @var null|array
      */
     protected $_matchedRoute = null;
-
-    /**
-     * The module manager.
-     * @var null
-     */
-    protected $_moduleManager = null;
 
     /**
      * The request object.
@@ -199,16 +199,14 @@ class App implements AppInterface
         $this->response = $this->serviceManager->get('Response');
 
         // Loading our Modules
-        $defaultListener = $this->serviceManager->get('ModuleDefaultListener');
-        $this->_moduleManager = $this->serviceManager->get('ModuleManager');
-        $this->_moduleManager->loadModules();
+        $this->getModuleManager()->loadModules();
         if ($this->debug) {
-            $modules = $this->_moduleManager->getModules();
+            $modules = $this->getModuleManager()->getModules();
             $this->log('debug', sprintf('All modules online (%d): "%s"', count($modules), implode('", "', $modules)));
         }
 
         // Lets get all the services our of our modules and start setting them in the ServiceManager
-        $moduleServices = $defaultListener->getServices();
+        $moduleServices = $this->serviceManager->get('ModuleDefaultListener')->getServices();
         foreach ($moduleServices as $serviceKey => $serviceVal) {
             $this->serviceManager->setFactory($serviceKey, $serviceVal);
         }
@@ -300,63 +298,6 @@ class App implements AppInterface
         $this->response->setContent($result);
 
         return $this->response;
-    }
-
-    /**
-     * Match a route based on the specified $uri.
-     * Set up _matchedRoute and _matchedModule too
-     *
-     * @param string $uri
-     *
-     * @return void
-     */
-    protected function matchRoute($uri)
-    {
-        $this->_matchedRoute  = $this->_router->match($uri);
-        $matchedModuleName    = $this->_matchedRoute['_module'];
-        $this->_matchedModule = $this->_moduleManager->getModule($matchedModuleName);
-        $this->_matchedModule->setName($matchedModuleName);
-        $this->logger('debug', sprintf('Matched route "%s" for URI "%s"', $this->_matchedRoute, $uri));
-    }
-
-    /**
-     * @todo Add inline documentation.
-     *
-     * @return void
-     */
-    protected function handleRouting()
-    {
-        try {
-            // Lets load up our router and match the appropriate route
-            $this->_router->warmUp();
-            $this->matchRoute($this->request->getPathInfo());
-
-        } catch (\Exception $e) {
-            if ($this->debug) {
-                $this->log('critical', $e);
-                throw ($e);
-            }
-            $this->_matchedRoute = false;
-        }
-
-        // Lets grab the 'Framework 404' route and dispatch it.
-        if ($this->_matchedRoute === false) {
-            try {
-                $baseUrl  = $this->_router->getContext()->getBaseUrl();
-                $routeUri = $this->_router->generate($this->options['404RouteName']);
-
-                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
-                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
-                }
-
-                $this->matchRoute($routeUri);
-
-            // @todo handle a 502 here
-            } catch (\Exception $e) {
-                throw new \Exception('Unable to load 404 page. An internal error occurred');
-            }
-        }
     }
 
     /**
@@ -468,6 +409,20 @@ class App implements AppInterface
     }
 
     /**
+     * Returns the Module Manager.
+     *
+     * @return \Zend\ModuleManager\ModuleManager
+     */
+    public function getModuleManager()
+    {
+        if (null === $this->moduleManager) {
+            $this->moduleManager = $this->serviceManager->get('ModuleManager');
+        }
+
+        return $this->moduleManager;
+    }
+
+    /**
      * Get the request object
      *
      * @return object
@@ -565,46 +520,6 @@ class App implements AppInterface
     }
 
     /**
-     * Returns the application parameters.
-     *
-     * @return array An array of application parameters
-     */
-    protected function getAppParameters()
-    {
-        return array_merge(
-            array(
-                'app.root_dir'        => $this->rootDir,
-                'app.environment'     => $this->environment,
-                'app.debug'           => $this->debug,
-                'app.name'            => $this->name,
-                'app.cache_dir'       => $this->getCacheDir(),
-                'app.logs_dir'        => $this->getLogDir(),
-                'app.charset'         => $this->getCharset(),
-            ),
-            $this->getEnvParameters()
-        );
-    }
-
-    /**
-     * Gets the environment parameters.
-     *
-     * Only the parameters starting with "PPI__" are considered.
-     *
-     * @return array An array of parameters
-     */
-    protected function getEnvParameters()
-    {
-        $parameters = array();
-        foreach ($_SERVER as $key => $value) {
-            if (0 === strpos($key, 'PPI__')) {
-                $parameters[strtolower(str_replace('__', '.', substr($key, 5)))] = $value;
-            }
-        }
-
-        return $parameters;
-    }
-
-    /**
      * Returns a ConfigLoader instance.
      *
      * @return \PPI\Config\ConfigLoader
@@ -658,6 +573,58 @@ class App implements AppInterface
         $this->_sessionConfig = $config;
     }
 
+    public function serialize()
+    {
+        return serialize(array($this->environment, $this->debug));
+    }
+
+    public function unserialize($data)
+    {
+        list($environment, $debug) = unserialize($data);
+
+        $this->__construct($environment, $debug);
+    }
+
+    /**
+     * Returns the application parameters.
+     *
+     * @return array An array of application parameters
+     */
+    protected function getAppParameters()
+    {
+        return array_merge(
+            array(
+                'app.root_dir'        => $this->rootDir,
+                'app.environment'     => $this->environment,
+                'app.debug'           => $this->debug,
+                'app.name'            => $this->name,
+                'app.cache_dir'       => $this->getCacheDir(),
+                'app.logs_dir'        => $this->getLogDir(),
+                'app.charset'         => $this->getCharset(),
+            ),
+            $this->getEnvParameters()
+        );
+    }
+
+    /**
+     * Gets the environment parameters.
+     *
+     * Only the parameters starting with "PPI__" are considered.
+     *
+     * @return array An array of parameters
+     */
+    protected function getEnvParameters()
+    {
+        $parameters = array();
+        foreach ($_SERVER as $key => $value) {
+            if (0 === strpos($key, 'PPI__')) {
+                $parameters[strtolower(str_replace('__', '.', substr($key, 5)))] = $value;
+            }
+        }
+
+        return $parameters;
+    }
+
     /**
      * Creates and initializes a ServiceManager instance.
      *
@@ -677,6 +644,63 @@ class App implements AppInterface
     }
 
     /**
+     * Match a route based on the specified $uri.
+     * Set up _matchedRoute and _matchedModule too
+     *
+     * @param string $uri
+     *
+     * @return void
+     */
+    protected function matchRoute($uri)
+    {
+        $this->_matchedRoute  = $this->_router->match($uri);
+        $matchedModuleName    = $this->_matchedRoute['_module'];
+        $this->_matchedModule = $this->moduleManager->getModule($matchedModuleName);
+        $this->_matchedModule->setName($matchedModuleName);
+        $this->logger('debug', sprintf('Matched route "%s" for URI "%s"', $this->_matchedRoute, $uri));
+    }
+
+    /**
+     * @todo Add inline documentation.
+     *
+     * @return void
+     */
+    protected function handleRouting()
+    {
+        try {
+            // Lets load up our router and match the appropriate route
+            $this->_router->warmUp();
+            $this->matchRoute($this->request->getPathInfo());
+
+        } catch (\Exception $e) {
+            if ($this->debug) {
+                $this->log('critical', $e);
+                throw ($e);
+            }
+            $this->_matchedRoute = false;
+        }
+
+        // Lets grab the 'Framework 404' route and dispatch it.
+        if ($this->_matchedRoute === false) {
+            try {
+                $baseUrl  = $this->_router->getContext()->getBaseUrl();
+                $routeUri = $this->_router->generate($this->options['404RouteName']);
+
+                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
+                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
+                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
+                }
+
+                $this->matchRoute($routeUri);
+
+                // @todo handle a 502 here
+            } catch (\Exception $e) {
+                throw new \Exception('Unable to load 404 page. An internal error occurred');
+            }
+        }
+    }
+
+    /**
      * Logs with an arbitrary level.
      *
      * @param  mixed  $level
@@ -684,7 +708,7 @@ class App implements AppInterface
      * @param  array  $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    protected function log($level, $message, array $context = array())
     {
         if (null === $this->logger) {
             $this->logger = $this->getServiceManager()->has('logger') ? $this->getServiceManager()->get('logger') : false;
@@ -693,17 +717,5 @@ class App implements AppInterface
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
         }
-    }
-
-    public function serialize()
-    {
-        return serialize(array($this->environment, $this->debug));
-    }
-
-    public function unserialize($data)
-    {
-        list($environment, $debug) = unserialize($data);
-
-        $this->__construct($environment, $debug);
     }
 }
