@@ -2,14 +2,15 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Module\Routing\Loader;
 
-use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader,
-    Symfony\Component\Routing\RouteCollection;
+namespace PPI\Router\Loader;
+
+use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * YamlFileLoader class
