@@ -37,6 +37,9 @@ class ServiceManagerBuilder extends ServiceManager
     public function build()
     {
         $this->compile();
+        if (!isset($this->config['framework'])) {
+            $this->config['framework'] = array();
+        }
         $this->setService('ApplicationConfig', $this->config);
 
         foreach(array(

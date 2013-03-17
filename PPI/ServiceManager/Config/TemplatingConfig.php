@@ -77,7 +77,7 @@ class TemplatingConfig extends Config
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
-        $engineIds = isset($config['templating']['engines']) ? $config['templating']['engines'] : array('php');
+        $engineIds = isset($config['framework']['templating']['engines']) ? $config['framework']['templating']['engines'] : array('php');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
@@ -169,11 +169,11 @@ class TemplatingConfig extends Config
         });
 
         // Mustache Engine
-        $serviceManager->setFactory('templating.engine.mustache', function($serviceManager) {
+        $serviceManager->setFactory('templating.engine.mustache', function($serviceManager, $appCacheDir) {
 
             $rawMustacheEngine = new \Mustache_Engine(array(
                 'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'), new TemplateNameParser()),
-                'cache'  => $serviceManager->getOption('app.cache_dir') . DIRECTORY_SEPARATOR . 'mustache'
+                'cache'  => $appCacheDir . DIRECTORY_SEPARATOR . 'mustache'
             ));
 
             return new MustacheEngine($rawMustacheEngine, new TemplateNameParser());

@@ -9,29 +9,30 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\Router\RoutingHelper;
+use PPI\Module\Controller\ControllerResolver;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * RoutingHelper Factory.
+ * ControllerResolverFactory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class RoutingHelperFactory implements FactoryInterface
+class ControllerResolverFactory implements FactoryInterface
 {
     /**
-     * Create and return the routing helper.
+     * Create and return a ControllerResolver instance.
      *
-     * @param  ServiceLocatorInterface           $serviceLocator
-     * @return \PPI\Module\Routing\RoutingHelper
+     * @param  ServiceLocatorInterface                   $serviceLocator
+     * @return \PPI\Module\Controller\ControllerResolver
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $params = array();
+        $parser = $serviceLocator->get('ControllerNameParser');
+        $logger = $serviceLocator->get('Logger');
 
-        return new RoutingHelper($params);
+        return new ControllerResolver($serviceLocator, $parser, $logger);
     }
 }

@@ -30,13 +30,24 @@ class ModuleDefaultListenerFactory implements FactoryInterface
      *
      * @param  ServiceLocatorInterface  $serviceLocator
      * @return DefaultListenerAggregate
+     *
+     * @note If ListenerOptions becomes a service use "ModuleListenerOptions" or "module.listenerOptions" as the key.
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('ApplicationConfig');
+        $config = isset($config['framework']['module_listener_options']) ?
+            $config['framework']['module_listener_options'] : array();
 
-        if (!isset($config['module_listener_options']) ||
-            !isset($config['module_listener_options']['module_paths'])) {
+        /*
+         * "module_listener_options":
+         *
+         * This should be an array of paths in which modules reside.
+         * If a string key is provided, the listener will consider that a module
+         * namespace, the value of that key the specific path to that module's
+         * Module class.
+         */
+        if (!isset($config['module_paths'])) {
             $paths = array();
             $cwd = getcwd() . '/';
             foreach (array('modules', 'vendor') as $dir) {
@@ -45,19 +56,14 @@ class ModuleDefaultListenerFactory implements FactoryInterface
                 }
             }
 
-            $config['module_listener_options']['module_paths'] = $paths;
+            $config['module_paths'] = $paths;
         }
 
-        if (isset($config['module_listener_options']['extra_module_paths'])) {
-            $config['module_listener_options']['module_paths'] = array_merge(
-                $config['module_listener_options']['module_paths'],
-                $config['module_listener_options']['extra_module_paths']
-            );
+        // "extra_module_paths" is an invention of PPI (aka doesn't exist in ZF2).
+        if (isset($config['extra_module_paths'])) {
+            $config['module_paths'] = array_merge($config['module_paths'], $config['extra_module_paths']);
         }
 
-        $listenerOptions  = new ListenerOptions($config['module_listener_options']);
-
-        return new DefaultListenerAggregate($listenerOptions);
-
+        return new DefaultListenerAggregate(new ListenerOptions($config));
     }
 }
