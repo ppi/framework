@@ -9,27 +9,29 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\Http\Request;
+use PPI\Module\Controller\ControllerNameParser;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * ServiceManager configuration for the Request component.
+ * ControllerNameParserFactory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class RequestFactory implements FactoryInterface
+class ControllerNameParserFactory implements FactoryInterface
 {
     /**
-     * Create and return a request instance.
+     * Create and return a ControllerNameParser instance.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return \PPI\Http\Request
+     * @param  ServiceLocatorInterface                     $serviceLocator
+     * @return \PPI\Module\Controller\ControllerNameParser
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return Request::createFromGlobals();
+        $moduleManager = $serviceLocator->get('ModuleManager');
+
+        return new ControllerNameParser($moduleManager);
     }
 }

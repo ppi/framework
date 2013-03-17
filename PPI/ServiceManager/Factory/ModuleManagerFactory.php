@@ -9,7 +9,7 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use Zend\ModuleManager\ModuleManager;
+use PPI\Module\ModuleManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -34,8 +34,9 @@ class ModuleManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $configuration    = $serviceLocator->get('ApplicationConfig');
+        $config = $serviceLocator->get('ApplicationConfig');
         $defaultListeners = $serviceLocator->get('ModuleDefaultListener');
+        $modules = isset($config['modules']) ? $config['modules'] : array();
 
         $events = $serviceLocator->get('EventManager');
         $events->attach($defaultListeners);
@@ -43,7 +44,7 @@ class ModuleManagerFactory implements FactoryInterface
         $moduleEvent = $serviceLocator->get('ModuleEvent');
         $moduleEvent->setParam('ServiceManager', $serviceLocator);
 
-        $moduleManager = new ModuleManager($configuration['modules'], $events);
+        $moduleManager = new ModuleManager($modules, $events);
         $moduleManager->setEvent($moduleEvent);
 
         return $moduleManager;

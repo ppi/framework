@@ -13,6 +13,7 @@ use PPI\Config\ConfigLoader;
 use PPI\Exception\Handler as ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
 use PPI\Module\Routing\RoutingHelper;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -79,14 +80,6 @@ class App implements AppInterface
     protected $moduleManager;
 
     /**
-     * The session object.
-     * @var null
-     */
-    public $session = null;
-
-    protected $_sessionConfig = array();
-
-    /**
      * @var null|array
      */
     protected $_matchedRoute = null;
@@ -98,22 +91,15 @@ class App implements AppInterface
     protected $request = null;
 
     /**
-     * The router object
-     * @var null
-     */
-    protected $_router = null;
-
-    /**
      * The response object.
      * @var null
      */
     protected $response = null;
 
     /**
-     * The matched module from the matched route.
-     * @var null
+     * @var \PPI\Module\Controller\ControllerResolver
      */
-    protected $_matchedModule = null;
+    protected $resolver;
 
     /**
      * @var string
@@ -178,8 +164,7 @@ class App implements AppInterface
     }
 
     /**
-     * Run the boot process, boot up our modules and their dependencies.
-     * Decide on a route for $this->dispatch() to use.
+     * Run the boot process, load our modules and their dependencies.
      *
      * This method is automatically called by dispatch(), but you can use it
      * to build all services when not handling a request.
@@ -195,9 +180,6 @@ class App implements AppInterface
         $this->serviceManager = $this->buildServiceManager();
         $this->log('debug', sprintf('Booting %s ...', $this->name));
 
-        $this->request  = $this->serviceManager->get('Request');
-        $this->response = $this->serviceManager->get('Response');
-
         // Loading our Modules
         $this->getModuleManager()->loadModules();
         if ($this->debug) {
@@ -207,8 +189,8 @@ class App implements AppInterface
 
         // Lets get all the services our of our modules and start setting them in the ServiceManager
         $moduleServices = $this->serviceManager->get('ModuleDefaultListener')->getServices();
-        foreach ($moduleServices as $serviceKey => $serviceVal) {
-            $this->serviceManager->setFactory($serviceKey, $serviceVal);
+        foreach ($moduleServices as $key => $service) {
+            $this->serviceManager->setFactory($key, $service);
         }
 
         $this->booted = true;
@@ -216,14 +198,13 @@ class App implements AppInterface
             $this->log('debug', sprintf('%s has booted (in %.3f secs)', $this->name, microtime(true) - $this->startTime));
         }
 
-        // Fluent Interface
         return $this;
     }
 
     /**
-     * Lets dispatch our module's controller action.
+     * Decide on a route to use and dispatch our module's controller action.
      *
-     * @return \Symfony\Component\HttpFoundation\Request
+     * @return \PPI\Http\RequestInterface
      */
     public function dispatch()
     {
@@ -231,52 +212,50 @@ class App implements AppInterface
             $this->boot();
         }
 
-        // ROUTING
-        $this->_router = $this->serviceManager->get('router');
+        // Routing
         $this->handleRouting();
 
-        // Lets dissect our route
-        list($module, $controllerName, $actionName) = explode(':', $this->_matchedRoute['_controller'], 3);
-        $actionName = $actionName . 'Action';
-
-        // Instantiate our chosen controller
-        $className  = "\\{$this->_matchedModule->getModuleName()}\\Controller\\$controllerName";
-        $controller = new $className();
-
-        // Set Services for our controller
-        $controller->setServiceLocator($this->serviceManager);
+        // load controller
+        $resolver = $this->serviceManager->get('ControllerResolver');
+        $request = $this->getRequest();
+        if (false === $controller = $resolver->getController($request)) {
+            throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s". Maybe you forgot to add the matching route in your routing configuration?', $request->getPathInfo()));
+        }
 
         // Set the options for our controller
-        $controller->setOptions(array(
+        $controller[0]->setOptions(array(
             'environment' => $this->getEnv()
         ));
 
         // Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
-        $routeParams = $this->_matchedRoute;
+        $routeParams = $this->request->attributes->all();
         $activeRoute = $routeParams['_route'];
+        $moduleName = $routeParams['_module'];
+        $controllerName = $routeParams['_controller'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
 
         // Pass in the routing params, set the active route key
-        $routingHelper = $this->serviceManager->get('routing.helper');
-        $routingHelper->setParams($routeParams);
-        $routingHelper->setActiveRouteName($activeRoute);
+        $routingHelper = $this->serviceManager->get('RoutingHelper');
+        $routingHelper
+            ->setParams($routeParams)
+            ->setActiveRouteName($activeRoute);
 
         // Register our routing helper into the controller
-        $controller->setHelper('routing', $routingHelper);
+        $controller[0]->setHelper('routing', $routingHelper);
 
         // Prep our module for dispatch
-        $this->_matchedModule
+        $module = $this->getModuleManager()->getModuleByAlias($moduleName);
+        $module
             ->setControllerName($controllerName)
-            ->setActionName($actionName)
-            ->setController($controller);
+            ->setActionName($controller[1])
+            ->setController($controller[0]);
 
         // Dispatch our action, return the content from the action called.
-        $controller = $this->_matchedModule->getController();
+        $controller = $module->getController();
         $this->serviceManager = $controller->getServiceLocator();
-        $result = $this->_matchedModule->dispatch();
+        $result = $module->dispatch();
 
         switch (true) {
-
             // If the controller is just returning HTML content then that becomes our body response.
             case is_string($result):
                 $response = $controller->getServiceLocator()->get('Response');
@@ -291,7 +270,6 @@ class App implements AppInterface
             default:
                 $response = $result;
                 break;
-
         }
 
         $this->response = $response;
@@ -429,6 +407,10 @@ class App implements AppInterface
      */
     public function getRequest()
     {
+        if (null === $this->request) {
+            $this->request = $this->serviceManager->get('Request');
+        }
+
         return $this->request;
     }
 
@@ -439,6 +421,10 @@ class App implements AppInterface
      */
     public function getResponse()
     {
+        if (null === $this->response) {
+            $this->response = $this->serviceManager->get('Response');
+        }
+
         return $this->response;
     }
 
@@ -565,14 +551,6 @@ class App implements AppInterface
         return true === $this->booted ? $this->serviceManager->get('Config') : $this->config;
     }
 
-    /**
-     * @warning This method is marked for removal in a near future.
-     */
-    public function setSessionConfig($config)
-    {
-        $this->_sessionConfig = $config;
-    }
-
     public function serialize()
     {
         return serialize(array($this->environment, $this->debug));
@@ -644,47 +622,32 @@ class App implements AppInterface
     }
 
     /**
-     * Match a route based on the specified $uri.
-     * Set up _matchedRoute and _matchedModule too
-     *
-     * @param string $uri
-     *
-     * @return void
-     */
-    protected function matchRoute($uri)
-    {
-        $this->_matchedRoute  = $this->_router->match($uri);
-        $matchedModuleName    = $this->_matchedRoute['_module'];
-        $this->_matchedModule = $this->moduleManager->getModule($matchedModuleName);
-        $this->_matchedModule->setName($matchedModuleName);
-        $this->logger('debug', sprintf('Matched route "%s" for URI "%s"', $this->_matchedRoute, $uri));
-    }
-
-    /**
      * @todo Add inline documentation.
      *
      * @return void
      */
     protected function handleRouting()
     {
+        $router = $this->serviceManager->get('Router');
+        $hasMatch = false;
+
         try {
             // Lets load up our router and match the appropriate route
-            $this->_router->warmUp();
-            $this->matchRoute($this->request->getPathInfo());
-
+            $router->warmUp();
+            $this->serviceManager->get('RouterListener')->match($this->getRequest());
+            $hasMatch = true;
         } catch (\Exception $e) {
             if ($this->debug) {
                 $this->log('critical', $e);
                 throw ($e);
             }
-            $this->_matchedRoute = false;
         }
 
         // Lets grab the 'Framework 404' route and dispatch it.
-        if ($this->_matchedRoute === false) {
+        if ($this->hasMatch === false) {
             try {
-                $baseUrl  = $this->_router->getContext()->getBaseUrl();
-                $routeUri = $this->_router->generate($this->options['404RouteName']);
+                $baseUrl  = $router->getContext()->getBaseUrl();
+                $routeUri = $router->generate($this->options['404RouteName']);
 
                 // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
                 if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {

@@ -9,6 +9,8 @@
 namespace PPI\Module;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * The base PPI controller class
@@ -16,7 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * @package    PPI
  * @subpackage Module
  */
-class Controller
+class Controller implements ServiceLocatorAwareInterface
 {
     /**
      * Service Locator
@@ -320,21 +322,19 @@ class Controller
     }
 
     /**
-     * Set the service locator
+     * Set service locator
      *
-     * @param object $locator
-     *
-     * @return void
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    public function setServiceLocator($locator)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->_serviceLocator = $locator;
+        $this->_serviceLocator = $serviceLocator;
     }
 
     /**
      * Get service locator
      *
-     * @return object
+     * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
@@ -424,7 +424,7 @@ class Controller
      */
     protected function redirectToRoute($route, $parameters = array(), $absolute = false)
     {
-        $this->redirect($this->getService('router')->generate($route, $parameters, $absolute));
+        $this->redirect($this->getService('Router')->generate($route, $parameters, $absolute));
     }
 
     /**
@@ -438,7 +438,7 @@ class Controller
      */
     protected function generateUrl($route, $parameters = array(), $absolute = false)
     {
-        return $this->getService('router')->generate($route, $parameters, $absolute);
+        return $this->getService('Router')->generate($route, $parameters, $absolute);
     }
 
     /**
@@ -500,5 +500,4 @@ class Controller
     {
         $this->getService('templating')->addGlobal($param, $value);
     }
-
 }

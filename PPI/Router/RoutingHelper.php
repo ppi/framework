@@ -64,11 +64,13 @@ class RoutingHelper
      * @param string $param
      * @param string $value
      *
-     * @return void
+     * @return $this
      */
     public function setParam($param, $value)
     {
         $this->params[$param] = $value;
+
+        return $this;
     }
 
     /**
@@ -86,21 +88,26 @@ class RoutingHelper
      *
      * @param array $params
      *
-     * @return void
+     * @return $this
      */
     public function setParams(array $params)
     {
         $this->params = $params;
+
+        return $this;
     }
 
     /**
      * Set the active route's name key
      *
-     * @param $name
+     * @param  $name
+     * @return $this
      */
     public function setActiveRouteName($name)
     {
         $this->activeRouteName = $name;
+
+        return $this;
     }
 
     /**
