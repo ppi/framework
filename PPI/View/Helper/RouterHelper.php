@@ -6,7 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating\Helper;
+namespace PPI\View\Helper;
 
 use Symfony\Component\Templating\Helper\Helper,
     Symfony\Component\Routing\Generator\UrlGeneratorInterface;

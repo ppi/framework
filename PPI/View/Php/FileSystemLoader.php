@@ -6,7 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating\Php;
+namespace PPI\View\Php;
 
 use Symfony\Component\Templating\Storage\FileStorage,
     Symfony\Component\Templating\Loader\LoaderInterface,

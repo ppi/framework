@@ -8,37 +8,36 @@
  */
 namespace PPI\ServiceManager\Config;
 
-use PPI\Templating\FileLocator;
-use PPI\Templating\GlobalVariables;
-use PPI\Templating\TemplateLocator;
-use PPI\Templating\DelegatingEngine;
-use PPI\Templating\TemplateNameParser;
-use PPI\Templating\Php\FileSystemLoader;
+use PPI\View\FileLocator;
+use PPI\View\GlobalVariables;
+use PPI\View\TemplateLocator;
+use PPI\View\DelegatingEngine;
+use PPI\View\TemplateNameParser;
+use PPI\View\Php\FileSystemLoader;
 use Symfony\Component\Templating\PhpEngine;
 
 // Helpers
-use PPI\Templating\Helper\RouterHelper;
-use PPI\Templating\Helper\SessionHelper;
+use PPI\View\Helper\RouterHelper;
+use PPI\View\Helper\SessionHelper;
 use Symfony\Component\Templating\Helper\SlotsHelper;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
 // Twig
-use PPI\Templating\Twig\TwigEngine;
-use PPI\Templating\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
-use PPI\Templating\Twig\Extension\AssetsExtension as TwigAssetsExtension;
-use PPI\Templating\Twig\Extension\RouterExtension as TwigRouterExtension;
+use PPI\View\Twig\TwigEngine;
+use PPI\View\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
+use PPI\View\Twig\Extension\AssetsExtension as TwigAssetsExtension;
+use PPI\View\Twig\Extension\RouterExtension as TwigRouterExtension;
 
 // Mustache
-use PPI\Templating\Mustache\MustacheEngine;
-use PPI\Templating\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
+use PPI\View\Mustache\MustacheEngine;
+use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
 
 // Smarty
-use PPI\Templating\Smarty\SmartyEngine;
-use PPI\Templating\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
-use PPI\Templating\Smarty\Extension\RouterExtension as SmartyRouterExtension;
+use PPI\View\Smarty\SmartyEngine;
+use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
+use PPI\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
 
 // Service Manager
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
 /**
@@ -48,7 +47,7 @@ use Zend\ServiceManager\ServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-class TemplatingConfig extends Config
+class ViewConfig extends AbstractConfig
 {
     /**
      * Templating engines currently supported:
@@ -73,16 +72,19 @@ class TemplatingConfig extends Config
             $modulePaths[] = $module->getPath();
         }
 
+        // The "framework.templating" option is deprecated. Please replace it with "framework.view"
+        $config = $this->processConfiguration($config);
+
         // these are the templating engines currently supported
         $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
 
         // these are the engines selected by the user
-        $engineIds = isset($config['framework']['templating']['engines']) ? $config['framework']['templating']['engines'] : array('php');
+        $engineIds = isset($config['engines']) ? $config['engines'] : array('php');
 
         // filter templating engines
         $engineIds = array_intersect($engineIds, $knownEngineIds);
         if (empty($engineIds)) {
-            throw new \RuntimeException(sprintf('At least one templating engine should be defined in your app config (in $config[\'templating.engines\']). These are the available ones: "%s". Example: "$config[\'templating.engines\'] = array(\'%s\');"', implode('", ', $knownEngineIds), implode("', ", $knownEngineIds)));
+            throw new \RuntimeException(sprintf('At least one templating engine should be defined in your app config (in $config[\'view.engines\']). These are the available ones: "%s". Example: "$config[\'templating.engines\'] = array(\'%s\');"', implode('", ', $knownEngineIds), implode("', ", $knownEngineIds)));
         }
 
         // File locator
@@ -190,4 +192,32 @@ class TemplatingConfig extends Config
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfigurationDefaults()
+    {
+        return array('framework' => array(
+            'view'  => array(
+                'engines' => array('php')
+            )
+        ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function processConfiguration(array $config, ServiceManager $serviceManager = null)
+    {
+        $config = $config['framework'];
+        if (!isset($config['view'])) {
+            $config['view'] = array();
+        }
+
+        if (isset($config['templating'])) {
+            $config['view'] = $this->mergeConfiguration($config['templating'], $config['view']);
+        }
+
+        return $config['view'];
+    }
 }

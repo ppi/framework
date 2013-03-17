@@ -6,9 +6,9 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating;
+namespace PPI\View;
 
-use PPI\Templating\TemplateReference,
+use PPI\View\TemplateReference,
     Symfony\Component\Config\FileLocatorInterface,
     Symfony\Component\Templating\TemplateReferenceInterface;
 
