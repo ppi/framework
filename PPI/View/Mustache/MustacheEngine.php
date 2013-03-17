@@ -9,7 +9,7 @@
  *
  */
 
-namespace PPI\Templating\Mustache;
+namespace PPI\View\Mustache;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;

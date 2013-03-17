@@ -8,11 +8,11 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Templating\Twig;
+namespace PPI\View\Twig;
 
-use PPI\Templating\TemplateReference,
-    PPI\Templating\EngineInterface,
-    PPI\Templating\GlobalVariables,
+use PPI\View\TemplateReference,
+    PPI\View\EngineInterface,
+    PPI\View\GlobalVariables,
     Symfony\Component\Templating\TemplateNameParserInterface,
     Symfony\Component\Templating\StreamingEngineInterface,
     Symfony\Component\HttpFoundation\Response,

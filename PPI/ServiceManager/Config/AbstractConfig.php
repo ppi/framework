@@ -8,8 +8,10 @@
  */
 namespace PPI\ServiceManager\Config;
 
+use PPI\Config\ConfigurationProviderInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * AbstractConfig class.
@@ -18,7 +20,7 @@ use Zend\ServiceManager\ServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-abstract class AbstractConfig extends Config
+abstract class AbstractConfig extends Config implements ConfigurationProviderInterface
 {
     /**
      * Returns the mandatory prefix to use when using YAML.
@@ -60,17 +62,19 @@ abstract class AbstractConfig extends Config
     }
 
     /**
-     * Processes an array of configurations.
+     * Process an array with the application configuration.
      *
-     * @param ServiceManager $serviceManager The Service Manager
-     * @param array          $configs        An array of configuration items to process
-     *
-     * @return array The processed configuration
+     * @param  array                               $config
+     * @param  \Zend\ServiceManager\ServiceManager $serviceManager
+     * @return array
      */
-    protected function processConfiguration(ServiceManager $serviceManager, array $configs)
-    {
-        $alias = $this->getAlias();
+    abstract protected function processConfiguration(array $config, ServiceManager $serviceManager = null);
 
-        return isset($configs[$alias]) ? $configs[$alias] : array();
+    /**
+     * Merges configuration.
+     */
+    protected function mergeConfiguration(array $defaults, array $config)
+    {
+        return ArrayUtils::merge($defaults, $config);
     }
 }

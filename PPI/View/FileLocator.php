@@ -8,7 +8,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Templating;
+namespace PPI\View;
 
 use Symfony\Component\Config\FileLocator as BaseFileLocator;
 

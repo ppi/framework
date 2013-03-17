@@ -54,7 +54,7 @@ class MonologConfig extends AbstractConfig
                                                     => "Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy"
         ), $configs['parameters']);
 
-        $config = $this->processConfiguration($serviceManager, $configs);
+        $config = $this->processConfiguration($configs, $serviceManager);
         $handlersToChannels = array();
 
         if (isset($config['handlers'])) {
@@ -92,6 +92,14 @@ class MonologConfig extends AbstractConfig
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getConfigurationDefaults()
+    {
+        return array('monolog' => array());
+    }
+
     protected function buildHandler(ServiceManager $serviceManager, array $parameters, $name, array $handler)
     {
         $handlerId = $this->getHandlerId($name);
@@ -124,14 +132,14 @@ class MonologConfig extends AbstractConfig
     /**
      * {@inheritDoc}
      */
-    protected function processConfiguration(ServiceManager $serviceManager, array $configs)
+    protected function processConfiguration(array $config, ServiceManager $serviceManager = null)
     {
         $alias = $this->getAlias();
         if (!isset($configs[$alias])) {
             return array();
         }
 
-        $parameterBag = $serviceManager->get('config.parameter_bag');
+        $parameterBag = $serviceLocator->get('config.parameter_bag');
         $config = $configs[$alias];
 
         if (isset($config['handlers'])) {

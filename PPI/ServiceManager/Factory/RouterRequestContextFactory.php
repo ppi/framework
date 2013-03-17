@@ -54,7 +54,7 @@ class RouterRequestContextFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    protected function processConfiguration(array $config)
+    protected function processConfiguration(array $config, ServiceLocatorInterface $serviceLocator = null)
     {
         $defaults = $this->getConfigurationDefaults();
         $defaults = $defaults['framework']['router'];

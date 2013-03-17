@@ -11,7 +11,7 @@ namespace PPI\ServiceManager;
 
 use PPI\ServiceManager\Config\MonologConfig;
 use PPI\ServiceManager\Config\SessionConfig;
-use PPI\ServiceManager\Config\TemplatingConfig;
+use PPI\ServiceManager\Config\ViewConfig;
 use PPI\ServiceManager\Config\ServiceManagerConfig;
 use PPI\ServiceManager\ParameterBag;
 
@@ -45,7 +45,7 @@ class ServiceManagerBuilder extends ServiceManager
         foreach(array(
             new MonologConfig(),
             new SessionConfig(),
-            new TemplatingConfig()
+            new ViewConfig()
         ) as $serviceConfig) {
             $serviceConfig->configureServiceManager($this);
         }

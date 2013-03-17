@@ -6,10 +6,10 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating\Smarty;
+namespace PPI\View\Smarty;
 
-use PPI\Templating\GlobalVariables,
-    PPI\Templating\TemplateLocator,
+use PPI\View\GlobalVariables,
+    PPI\View\TemplateLocator,
     NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine,
     Symfony\Component\Templating\Loader\LoaderInterface,
     Symfony\Component\Templating\TemplateNameParserInterface;

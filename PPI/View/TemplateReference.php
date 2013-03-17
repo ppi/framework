@@ -6,7 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating;
+namespace PPI\View;
 
 use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 
