@@ -11,6 +11,7 @@ namespace PPI\ServiceManager\Factory;
 
 use PPI\Config\ConfigurationProviderInterface;
 use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -25,16 +26,17 @@ abstract class AbstractFactory implements FactoryInterface, ConfigurationProvide
     /**
      * Process an array with the application configuration.
      *
-     * @param  array $config
+     * @param  array                                        $config
+     * @param  \Zend\ServiceManager\ServiceLocatorInterface $serviceLocator
      * @return array
      */
-    abstract protected function processConfiguration(array $config);
+    abstract protected function processConfiguration(array $config, ServiceLocatorInterface $serviceLocator = null);
 
     /**
      * Merges configuration.
      */
     protected function mergeConfiguration(array $defaults, array $config)
     {
-        return ArrayUtils::merge($this->defaults, $config);
+        return ArrayUtils::merge($defaults, $config);
     }
 }

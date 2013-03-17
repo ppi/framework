@@ -6,7 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating\Twig\Loader;
+namespace PPI\View\Twig\Loader;
 
 use Symfony\Component\Templating\TemplateNameParserInterface,
     Symfony\Component\Config\FileLocatorInterface;

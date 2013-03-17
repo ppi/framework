@@ -6,7 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Templating\Smarty\Extension;
+namespace PPI\View\Smarty\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtension,
     Symfony\Component\Templating\Helper\AssetsHelper;
