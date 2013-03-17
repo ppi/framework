@@ -2,26 +2,28 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Module\Listener;
 
-use PPI\ServiceManager\ServiceManager,
-    Zend\EventManager\EventManagerInterface,
-    Zend\Loader\ModuleAutoloader,
-    Zend\ModuleManager\Listener\AutoloaderListener,
-    Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate,
-    Zend\ModuleManager\Listener\InitTrigger,
-    Zend\ModuleManager\Listener\ModuleResolverListener,
-    Zend\ModuleManager\ModuleEvent,
-    Zend\Stdlib\ArrayUtils;
+use PPI\ServiceManager\ServiceManager;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Loader\ModuleAutoloader;
+use Zend\ModuleManager\Listener\AutoloaderListener;
+use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
+use Zend\ModuleManager\Listener\InitTrigger;
+use Zend\ModuleManager\Listener\ModuleResolverListener;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\Stdlib\ArrayUtils;
 
 /**
- * DefaultListenerAggregate class
+ * DefaultListenerAggregate class.
  *
- * @todo Add inline documentation.
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  *
  * @package    PPI
  * @subpackage Module
@@ -75,6 +77,8 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $configListener   = $this->getConfigListener();
         $moduleAutoloader = new ModuleAutoloader($options->getModulePaths());
 
+        $locatorRegistrationListener = new \Zend\ModuleManager\Listener\LocatorRegistrationListener($options);
+
         // High priority, we assume module autoloading (for FooNamespace\Module classes) should be available before anything else
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES, array($moduleAutoloader, 'register'), 9000);
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE, new ModuleResolverListener);
@@ -84,12 +88,36 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $this->listeners[] = $events->attach($configListener);
 
         // This process can be expensive and affect perf if enabled. So we have
-        // the flexability to skip it.
-        if ($options->routingEnabled) {
+        // the flexibility to skip it.
+        //if ($options->routingEnabled) {
             $this->listeners[] = $events->attach('loadModule', array($this, 'routesTrigger'), 3000);
-        }
+        //}
 
         $this->listeners[] = $events->attach('loadModule', array($this, 'getServicesTrigger'), 3000);
+
+        return $this;
+    }
+
+    public function attach2(EventManagerInterface $events)
+    {
+        $options                     = $this->getOptions();
+        $configListener              = $this->getConfigListener();
+        $locatorRegistrationListener = new LocatorRegistrationListener($options);
+
+        // High priority, we assume module autoloading (for FooNamespace\Module classes) should be available before anything else
+        $this->listeners[] = $events->attach(new ModuleLoaderListener($options));
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE, new ModuleResolverListener);
+        // High priority, because most other loadModule listeners will assume the module's classes are available via autoloading
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new AutoloaderListener($options), 9000);
+
+        if ($options->getCheckDependencies()) {
+            $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new ModuleDependencyCheckerListener, 8000);
+        }
+
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new InitTrigger($options));
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new OnBootstrapListener($options));
+        $this->listeners[] = $events->attach($locatorRegistrationListener);
+        $this->listeners[] = $events->attach($configListener);
 
         return $this;
     }

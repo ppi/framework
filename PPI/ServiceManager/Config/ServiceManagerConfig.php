@@ -38,6 +38,8 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $factories = array(
         'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
+        'ControllerNameParser'  => 'PPI\ServiceManager\Factory\ControllerNameParserFactory',
+        'ControllerResolver'    => 'PPI\ServiceManager\Factory\ControllerResolverFactory',
         'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
@@ -45,6 +47,8 @@ class ServiceManagerConfig implements ConfigInterface
         'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
         'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
         'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
+        'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
+        'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
         'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
     );
 
@@ -65,9 +69,7 @@ class ServiceManagerConfig implements ConfigInterface
         'Configuration'                             => 'Config',
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
         // PPI alias
-        'logger'                                    => 'monolog.logger',
-        'module.defaultListener'                    => 'ModuleDefaultListener',
-        'routing.helper'                            => 'RoutingHelper'
+        'Logger'                                    => 'monolog.logger'
     );
 
     /**
