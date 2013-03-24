@@ -2,13 +2,16 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
 
 namespace PPI\ServiceManager;
 
+use PPI\Exception\NotImplementedException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ScopeInterface;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
@@ -28,7 +31,7 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-class ServiceManager extends BaseServiceManager
+class ServiceManager extends BaseServiceManager implements ContainerInterface
 {
     public function __construct(ConfigInterface $config = null)
     {
@@ -93,6 +96,22 @@ class ServiceManager extends BaseServiceManager
     }
 
     /**
+     * Checks if a parameter exists.
+     *
+     * @param string $name The parameter name
+     *
+     * @return Boolean The presence of parameter in container
+     *
+     * @api
+     */
+    public function hasParameter($name)
+    {
+        $config = $this->get('Config');
+
+        return isset($config['parameters'][$name]);
+    }
+
+    /**
      * Sets a parameter.
      *
      * @param string $name  The parameter name
@@ -104,5 +123,30 @@ class ServiceManager extends BaseServiceManager
         $config['parameters'][$name] = $value;
 
         $this->set('Config', $config);
+    }
+
+    public function enterScope($name)
+    {
+        throw new NotImplementedExceptionException();
+    }
+
+    public function leaveScope($name)
+    {
+        throw new NotImplementedExceptionException();
+    }
+
+    public function addScope(ScopeInterface $scope)
+    {
+        throw new NotImplementedExceptionException();
+    }
+
+    public function hasScope($name)
+    {
+        throw new NotImplementedExceptionException();
+    }
+
+    public function isScopeActive($name)
+    {
+        throw new NotImplementedExceptionException();
     }
 }
