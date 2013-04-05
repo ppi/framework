@@ -13,7 +13,7 @@ namespace PPI\Router;
  * The routing helper for the controller.
  *
  * @package    PPI
- * @subpackage Module
+ * @subpackage Router
  */
 class RoutingHelper
 {

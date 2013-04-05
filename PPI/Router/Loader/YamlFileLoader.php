@@ -15,10 +15,10 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * YamlFileLoader class
  *
- * @todo Add inline documentation.
- *
  * @package    PPI
  * @subpackage Module
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  */
 class YamlFileLoader extends BaseYamlFileLoader
 {
@@ -42,22 +42,19 @@ class YamlFileLoader extends BaseYamlFileLoader
     }
 
     /**
-     * @todo Add inline documentation.
+     * Parses a route and adds it to the RouteCollection.
      *
-     * @param RouteCollection $collection
-     * @param type            $name
-     * @param type            $config
-     * @param type            $file
-     *
-     * @return void
+     * @param RouteCollection $collection A RouteCollection instance
+     * @param string          $name       Route name
+     * @param array           $config     Route definition
+     * @param string          $path       Full path of the YAML file being processed
      */
-    protected function parseRoute(RouteCollection $collection, $name, $config, $file)
+    protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
         if (!empty($this->_defaults)) {
             $config['defaults'] = array_merge($config['defaults'], $this->_defaults);
         }
 
-        parent::parseRoute($collection, $name, $config, $file);
+        parent::parseRoute($collection, $name, $config, $path);
     }
-
 }
