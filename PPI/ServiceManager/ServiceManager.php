@@ -9,7 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use PPI\Exception\NotImplementedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ScopeInterface;
 use Zend\ServiceManager\ConfigInterface;
