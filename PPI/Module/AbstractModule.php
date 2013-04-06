@@ -10,8 +10,10 @@
 namespace PPI\Module;
 
 use PPI\Config\ConfigLoader;
+use PPI\Console\Application;
 use PPI\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 
 /**
@@ -335,5 +337,37 @@ abstract class AbstractModule implements ModuleInterface
         }
 
         return dirname($this->reflected->getFileName());
+    }
+
+    /**
+     * Finds and registers Commands.
+     *
+     * Override this method if your module commands do not follow the conventions:
+     *
+     * * Commands are in the 'Command' sub-directory
+     * * Commands extend PPI\Console\\Command\AbstractCommand
+     *
+     * @param Application $application An Application instance
+     */
+    public function registerCommands(Application $application)
+    {
+        if (!is_dir($dir = $this->getPath().'/Command')) {
+            return;
+        }
+
+        $finder = new Finder();
+        $finder->files()->name('*Command.php')->in($dir);
+
+        $prefix = $this->getNamespace().'\\Command';
+        foreach ($finder as $file) {
+            $ns = $prefix;
+            if ($relativePath = $file->getRelativePath()) {
+                $ns .= '\\'.strtr($relativePath, '/', '\\');
+            }
+            $r = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
+            if ($r->isSubclassOf('PPI\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
+                $application->add($r->newInstance());
+            }
+        }
     }
 }
