@@ -138,7 +138,7 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        $this->init();
+        //$this->init();
     }
 
     public function init()
@@ -295,6 +295,18 @@ class App implements AppInterface
     }
 
     /**
+     * Gets the version of the application.
+     *
+     * @return string The application version
+     *
+     * @api
+     */
+    public function getVersion()
+    {
+        return self::VERSION;
+    }
+
+    /**
      * Setter for the environment, passing in options determining how the app will behave
      *
      * @param array $options The options
@@ -387,6 +399,16 @@ class App implements AppInterface
     }
 
     /**
+     * @note Added for compatiblity with Symfony's HttpKernel\Kernel.
+     *
+     * @return null|Module\ServiceManager\ServiceManager
+     */
+    public function getContainer()
+    {
+        return $this->serviceManager;
+    }
+
+    /**
      * Returns the Module Manager.
      *
      * @return \Zend\ModuleManager\ModuleManager
@@ -398,6 +420,16 @@ class App implements AppInterface
         }
 
         return $this->moduleManager;
+    }
+
+    /**
+     * Get an array of the loaded modules.
+     *
+     * @return array An array of Module objects, keyed by module name
+     */
+    public function getModules()
+    {
+        return $this->getModuleManager()->getLoadedModules(true);
     }
 
     /**
