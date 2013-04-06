@@ -32,6 +32,15 @@ interface AppInterface extends \Serializable
     public function getName();
 
     /**
+     * Gets the version of the application.
+     *
+     * @return string The application version
+     *
+     * @api
+     */
+    public function getVersion();
+
+    /**
      * Get the environment mode the application is in.
      *
      * @return string The current environment
