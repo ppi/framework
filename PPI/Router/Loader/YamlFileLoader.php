@@ -15,10 +15,10 @@ use Symfony\Component\Routing\RouteCollection;
 /**
  * YamlFileLoader class
  *
- * @package    PPI
- * @subpackage Module
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @package    PPI
+ * @subpackage Module
  */
 class YamlFileLoader extends BaseYamlFileLoader
 {
