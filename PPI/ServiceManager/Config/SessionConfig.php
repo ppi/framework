@@ -29,26 +29,20 @@ class SessionConfig extends Config
     /**
      * {@inheritdoc}
      */
-    public function __construct($config = array())
-    {
-        parent::__construct(array_merge(array(
-            'aliases' => array(
-                'session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
-                'session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
-                'session.flashbag.class'            => 'Symfony\Component\HttpFoundation\Session\Flash\FlashBag',
-                'session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
-                'session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
-                'session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
-            ),
-        ), $config));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
         parent::configureServiceManager($serviceManager);
+
+        /*
+         * Parameters:
+         *
+         * 'session.class'                     => 'Symfony\Component\HttpFoundation\Session\Session',
+         * 'session.storage.class'             => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
+         * 'session.flashbag.class'            => 'Symfony\Component\HttpFoundation\Session\Flash\FlashBag',
+         * 'session.attribute_bag.class'       => 'Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag',
+         * 'session.storage.native.class'      => 'Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage',
+         * 'session.handler.native_file.class' => 'Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler',
+         */
 
         $config = $serviceManager->get('Config');
 

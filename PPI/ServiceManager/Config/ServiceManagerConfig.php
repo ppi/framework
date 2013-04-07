@@ -69,7 +69,7 @@ class ServiceManagerConfig implements ConfigInterface
         'Configuration'                             => 'Config',
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
         // PPI alias
-        'Logger'                                    => 'monolog.logger'
+        'logger'                                    => 'monolog.logger'
     );
 
     /**
