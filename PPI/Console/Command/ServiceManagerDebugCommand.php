@@ -105,7 +105,7 @@ EOF
             str_pad('Service Id', $pad['id']),
             str_pad('Type', $pad['type']),
             str_pad('Class name|type|alias', $pad['class'])));
-        $output->writeln($invoke ? '  <comment>Invokation status</comment>' : '');
+        $output->writeln($invoke ? '  <comment>Invokation status [result]</comment>' : '');
         foreach ($lines as $id => $line) {
             $output->write(sprintf('<info>%s</info> ', str_pad($id, $pad['id'])));
             $output->write(sprintf('%s ', str_pad($line['type'], $pad['type'])));
@@ -116,8 +116,8 @@ EOF
             }
             if ($invoke) {
                 try {
-                    $sm->get($id);
-                    $output->write(' <info>OK</info>');
+                    $service = $sm->get($id);
+                    $output->write(sprintf(' <info>OK</info> [%s]', is_object($service) ? get_class($service) : gettype($service)));
                 } catch (\Exception $e) {
                     $output->write(' <error>Failed</error> '.$e->getMessage());
                 }
