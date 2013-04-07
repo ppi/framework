@@ -34,12 +34,17 @@ class ServiceManagerDebugCommand extends AbstractCommand
                 'invoke',
                 null,
                 InputOption::VALUE_NONE,
-                'If set, we will actually try to invoke each service'
+                'If set, invoke each service and display the instance type returned'
             )
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command displays all configured <comment>public</comment> services:
+The <info>%command.name%</info> command displays all configured services:
 
   <info>php %command.full_name%</info>
+
+Use the <info>--invoke</info> option to call each service and display the instance type returned along
+with success of the operation:
+
+  <info>php %command.full_name% --invoke</info>
 EOF
             )
         ;
@@ -79,8 +84,19 @@ EOF
                 }
 
                 if (is_object($service)) {
-                    $r = new \ReflectionObject($service);
-                    $lines[$key]['class'] = $r->getName();
+                    // As of PHP 5.4 you can rely on Closure being a Closure: php.net/manual/en/class.closure.php
+                    if ($service instanceof \Closure) {
+                        $r = new \ReflectionFunction($service);
+                        if ($ns = $r->getNamespaceName()) {
+                            $filename = basename($r->getFileName(), '.php');
+                            $lines[$key]['class'] = $ns.'\\'.$filename.'\{closure}';
+                        } else {
+                            $lines[$key]['class'] = 'Closure in '.$r->getFileName();
+                        }
+                    } else {
+                        $r = new \ReflectionObject($service);
+                        $lines[$key]['class'] = $r->getName();
+                    }
                 } elseif (is_array($service)) {
                     $lines[$key]['class'] = 'Array';
                 } elseif (is_string($service) && ($type != 'aliases')) {
@@ -104,8 +120,8 @@ EOF
         $output->write(sprintf('<comment>%s</comment> <comment>%s</comment> <comment>%s</comment>',
             str_pad('Service Id', $pad['id']),
             str_pad('Type', $pad['type']),
-            str_pad('Class name|type|alias', $pad['class'])));
-        $output->writeln($invoke ? '  <comment>Invokation status [result]</comment>' : '');
+            str_pad('Class Name|Type|Alias', $pad['class'])));
+        $output->writeln($invoke ? '  <comment>Invokation Status [result]</comment>' : '');
         foreach ($lines as $id => $line) {
             $output->write(sprintf('<info>%s</info> ', str_pad($id, $pad['id'])));
             $output->write(sprintf('%s ', str_pad($line['type'], $pad['type'])));
@@ -119,7 +135,7 @@ EOF
                     $service = $sm->get($id);
                     $output->write(sprintf(' <info>OK</info> [%s]', is_object($service) ? get_class($service) : gettype($service)));
                 } catch (\Exception $e) {
-                    $output->write(' <error>Failed</error> '.$e->getMessage());
+                    $output->write(' <error>FAIL</error> ['.$e->getMessage().']');
                 }
             }
             $output->writeln('');
