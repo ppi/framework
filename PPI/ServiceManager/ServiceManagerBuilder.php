@@ -9,12 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\Config\MonologConfig;
-use PPI\ServiceManager\Config\SessionConfig;
-use PPI\ServiceManager\Config\ViewConfig;
-use PPI\ServiceManager\Config\ServiceManagerConfig;
-use PPI\ServiceManager\ParameterBag;
-
 /**
  * ServiceManager builder.
  *
@@ -31,7 +25,7 @@ class ServiceManagerBuilder extends ServiceManager
         $this->config = $config;
 
         $smConfig = isset($this->config['service_manager']) ? $this->config['service_manager'] : array();
-        parent::__construct(new ServiceManagerConfig($smConfig));
+        parent::__construct(new Config\ServiceManagerConfig($smConfig));
     }
 
     public function build()
@@ -43,9 +37,9 @@ class ServiceManagerBuilder extends ServiceManager
         $this->setService('ApplicationConfig', $this->config);
 
         foreach(array(
-            new MonologConfig(),
-            new SessionConfig(),
-            new ViewConfig()
+            new Config\MonologConfig(),
+            new Config\SessionConfig(),
+            new Config\TemplatingConfig()
         ) as $serviceConfig) {
             $serviceConfig->configureServiceManager($this);
         }

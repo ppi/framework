@@ -47,7 +47,7 @@ use Zend\ServiceManager\ServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-class ViewConfig extends AbstractConfig
+class TemplatingConfig extends AbstractConfig
 {
     /**
      * Templating engines currently supported:
