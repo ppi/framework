@@ -32,9 +32,9 @@ class DataSourceFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('ApplicationConfig');
 
-        if (isset($config['datasource']) &&
-            isset($config['datasource']['connections'])) {
-            return new DataSource($config['datasource']['connections']);
+        if (isset($config['framework']['datasource']) &&
+            isset($config['framework']['datasource']['connections'])) {
+            return new DataSource($config['framework']['datasource']['connections']);
         }
 
         // FIXME: is it OK to create a DataSource service with no connections?

@@ -12,7 +12,7 @@ namespace PPI\Console\Command;
 use Symfony\Bundle\FrameworkBundle\Command\RouterDebugCommand as BaseRouterDebugCommand;
 
 /**
- * A console command for retrieving information about routes
+ * A console command for retrieving information about routes.
  *
  * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  * @package     PPI
@@ -20,5 +20,4 @@ use Symfony\Bundle\FrameworkBundle\Command\RouterDebugCommand as BaseRouterDebug
  */
 class RouterDebugCommand extends BaseRouterDebugCommand
 {
-
 }
