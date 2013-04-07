@@ -9,7 +9,7 @@
 
 namespace PPI\Console\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * Base class for all commands.
@@ -18,7 +18,13 @@ use Symfony\Component\Console\Command\Command;
  * @package     PPI
  * @subpackage  Console
  */
-abstract class AbstractCommand extends Command
+abstract class AbstractCommand extends ContainerAwareCommand
 {
-    // ...
+    /**
+     * @return \Zend\ServiceManager\ServiceManagerInterface
+     */
+    protected function getServiceManager()
+    {
+        return $this->getContainer();
+    }
 }

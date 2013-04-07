@@ -36,7 +36,7 @@ class ModuleManagerFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('ApplicationConfig');
         $defaultListeners = $serviceLocator->get('ModuleDefaultListener');
-        $modules = isset($config['modules']) ? $config['modules'] : array();
+        $modules = isset($config['modules']['active_modules']) ? $config['modules']['active_modules'] : array();
 
         $events = $serviceLocator->get('EventManager');
         $events->attach($defaultListeners);

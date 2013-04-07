@@ -10,9 +10,12 @@
 namespace PPI;
 
 use PPI\Config\ConfigLoader;
-use PPI\Exception\Handler as ExceptionHandler;
+//use PPI\Exception\Handler as ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
 use PPI\Module\Routing\RoutingHelper;
+use Symfony\Component\ClassLoader\DebugClassLoader;
+use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
 
@@ -118,6 +121,8 @@ class App implements AppInterface
      */
      protected $serviceManager = null;
 
+    protected $errorReportingLevel;
+
     /**
      * Constructor
      *
@@ -138,10 +143,27 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        //$this->init();
+        $this->init();
     }
 
     public function init()
+    {
+        ini_set('display_errors', 0);
+
+        if ($this->debug) {
+            error_reporting(-1);
+
+            DebugClassLoader::enable();
+            ErrorHandler::register($this->errorReportingLevel);
+            if ('cli' !== php_sapi_name()) {
+                ExceptionHandler::register();
+            } elseif (!ini_get('log_errors') || ini_get('error_log')) {
+                ini_set('display_errors', 1);
+            }
+        }
+    }
+
+    public function __init__DEPRECATED()
     {
         // Lets setup exception handlers to catch anything that fails during boot as well.
         $exceptionHandler = new ExceptionHandler();
@@ -710,7 +732,7 @@ class App implements AppInterface
         }
 
         if ($this->logger) {
-            $this->logger->log($level, $message, $context);
+           $this->logger->log($level, $message, $context);
         }
     }
 }
