@@ -21,6 +21,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
  * @package     PPI
  * @subpackage  Console
+ *
+ * FIXME: Implement the following code previously executed in skeletonapp/app/console
+ * <code>
+ * $moduleCommand = new ModuleCommand();
+ * $moduleCommand->setSkeletonModuleDir($config['skeleton.module.path']);
+ * $moduleCommand->setTargetModuleDir($config['module_listener_options']['module_paths'][0]);
+ * </code>
  */
 class ModuleCommand extends AbstractCommand
 {

@@ -124,6 +124,21 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
         $this->set('Config', $config);
     }
 
+    /**
+     * Retrieve a keyed list of all registered services. Handy for debugging!
+     *
+     * @return array
+     */
+    public function getRegisteredServicesReal()
+    {
+        return array(
+            'invokableClasses' => $this->invokableClasses,
+            'factories' => $this->factories,
+            'aliases' => $this->aliases,
+            'instances' => $this->instances,
+        );
+    }
+
     public function enterScope($name)
     {
         throw new NotImplementedExceptionException();

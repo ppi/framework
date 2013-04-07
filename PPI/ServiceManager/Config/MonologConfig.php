@@ -139,7 +139,7 @@ class MonologConfig extends AbstractConfig
             return array();
         }
 
-        $parameterBag = $serviceLocator->get('config.parameter_bag');
+        $parameterBag = $serviceManager->get('config.parameter_bag');
         $config = $configs[$alias];
 
         if (isset($config['handlers'])) {
