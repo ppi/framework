@@ -161,6 +161,5 @@ class ServiceManagerConfig implements ConfigInterface
 
         $serviceManager->setService('ServiceManager', $serviceManager);
         $serviceManager->setAlias('Zend\ServiceManager\ServiceLocatorInterface', 'ServiceManager');
-        $serviceManager->setAlias('PPI\ServiceManager\ServiceManager', 'ServiceManager');
     }
 }
