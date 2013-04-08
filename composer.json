@@ -31,17 +31,18 @@
         "noiselabs/smarty-bundle": "1.2.*@stable",
         "symfony/class-loader": "2.2.*@stable",
         "symfony/config": "2.2.*@stable",
-        "symfony/yaml": "2.2.*@stable",
-        "symfony/http-foundation": "2.2.*@stable",
-        "symfony/templating": "2.2.*@stable",
-        "symfony/routing": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
+        "symfony/debug": "2.3.*",
+        "symfony/http-foundation": "2.2.*@stable",
+        "symfony/routing": "2.2.*@stable",
+        "symfony/templating": "2.2.*@stable",
+        "symfony/yaml": "2.2.*@stable",
         "twig/twig": ">=1.8,<2.0-dev",
-        "zendframework/zend-stdlib": "2.1.*@stable",
-        "zendframework/zend-loader": "2.1.*@stable",
-        "zendframework/zend-servicemanager": "2.1.*@stable",
         "zendframework/zend-eventmanager": "2.1.*@stable",
-        "zendframework/zend-modulemanager": "2.1.*@stable"
+        "zendframework/zend-loader": "2.1.*@stable",
+        "zendframework/zend-modulemanager": "2.1.*@stable",
+        "zendframework/zend-servicemanager": "2.1.*@stable",
+        "zendframework/zend-stdlib": "2.1.*@stable"
     },
     "extra": {
         "branch-alias": {
