@@ -23,7 +23,6 @@
         "psr-0": { "PPI": "" }
     },
     "require": {
-
         "doctrine/common": "2.3.*@stable",
         "doctrine/dbal": "2.3.*@stable",
         "monolog/monolog": "1.4.*@stable",
@@ -32,7 +31,7 @@
         "symfony/class-loader": "2.2.*@stable",
         "symfony/config": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
-        "symfony/debug": "2.3.*",
+        "symfony/debug": "2.3.*@dev",
         "symfony/http-foundation": "2.2.*@stable",
         "symfony/routing": "2.2.*@stable",
         "symfony/templating": "2.2.*@stable",
