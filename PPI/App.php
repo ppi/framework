@@ -12,18 +12,14 @@ namespace PPI;
 use PPI\Config\ConfigLoader;
 //use PPI\Exception\Handler as ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
-use PPI\Module\Routing\RoutingHelper;
-use Symfony\Component\ClassLoader\DebugClassLoader;
-use Symfony\Component\HttpKernel\Debug\ErrorHandler;
-use Symfony\Component\HttpKernel\Debug\ExceptionHandler;
+use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
 
 /**
  * The PPI App bootstrap class.
  *
- * This class sets various app settings, and allows you to override classes used
- * in the bootup process.
+ * This class sets various app settings, and allows you to override classes used in the bootup process.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
@@ -83,6 +79,11 @@ class App implements AppInterface
     protected $moduleManager;
 
     /**
+     * @param integer $errorReportingLevel The level of error reporting you want
+     */
+    protected $errorReportingLevel;
+
+    /**
      * @var null|array
      */
     protected $_matchedRoute = null;
@@ -113,15 +114,13 @@ class App implements AppInterface
      * Path to the application root dir aka the "app" directory.
      * @var null|string
      */
-     protected $rootDir = null;
+    protected $rootDir = null;
 
     /**
      * Service Manager.
      * @var \PPI\Module\ServiceManager\ServiceManager
      */
-     protected $serviceManager = null;
-
-    protected $errorReportingLevel;
+    protected $serviceManager = null;
 
     /**
      * Constructor
@@ -143,23 +142,10 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        $this->init();
-    }
-
-    public function init()
-    {
-        ini_set('display_errors', 0);
-
         if ($this->debug) {
-            error_reporting(-1);
-
-            DebugClassLoader::enable();
-            ErrorHandler::register($this->errorReportingLevel);
-            if ('cli' !== php_sapi_name()) {
-                ExceptionHandler::register();
-            } elseif (!ini_get('log_errors') || ini_get('error_log')) {
-                ini_set('display_errors', 1);
-            }
+            Debug::enable();
+        } else {
+            ini_set('display_errors', 0);
         }
     }
 
