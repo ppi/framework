@@ -10,9 +10,10 @@
 namespace PPI;
 
 use PPI\Config\ConfigLoader;
-//use PPI\Exception\Handler as ExceptionHandler;
+use PPI\Debug\ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ClassLoader\DebugClassLoader;
+use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
 
@@ -135,14 +136,14 @@ class App implements AppInterface
         $this->rootDir = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
         $this->name = isset($options['name']) ? $options['name'] : $this->getName();
 
-        $this->booted = false;
-
         if ($this->debug) {
             $this->startTime = microtime(true);
-            Debug::enable();
+            $this->enableDebug();
         } else {
             ini_set('display_errors', 0);
         }
+
+        $this->booted = false;
     }
 
     /**
@@ -758,6 +759,30 @@ class App implements AppInterface
 
         if ($this->logger) {
            $this->logger->log($level, $message, $context);
+        }
+    }
+
+    /**
+     * Enables the debug tools.
+     *
+     * This method registers an error handler and an exception handler.
+     *
+     * If the Symfony ClassLoader component is available, a special
+     * class loader is also registered.
+     */
+    protected function enableDebug()
+    {
+        error_reporting(-1);
+
+        ErrorHandler::register($this->errorReportingLevel);
+        if ('cli' !== php_sapi_name()) {
+            ExceptionHandler::register();
+        } elseif (!ini_get('log_errors') || ini_get('error_log')) {
+            ini_set('display_errors', 1);
+        }
+
+        if (class_exists('Symfony\Component\ClassLoader\DebugClassLoader')) {
+            DebugClassLoader::enable();
         }
     }
 }
