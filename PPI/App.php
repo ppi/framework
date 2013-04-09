@@ -123,30 +123,69 @@ class App implements AppInterface
     protected $serviceManager = null;
 
     /**
-     * Constructor
+     * App constructor.
      *
-     * @param string  $environment The environment ("development", "testing", "staging", "production")
-     * @param boolean $debug       Whether to enable debugging or not
-     * @param array   $config      Application configuration
+     * @param array $options
      */
-    public function __construct($environment = 'production', $debug = false)
+    public function __construct(array $options = array())
     {
-        $this->environment = $environment;
-        $this->debug = (boolean) $debug;
+        // Default options
+        $this->environment = isset($options['environment']) ? $options['environment'] : 'production';
+        $this->debug = isset($options['debug']) ? (bool) $options['debug'] : 'debug';
+        $this->rootDir = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
+        $this->name = isset($options['name']) ? $options['name'] : $this->getName();
 
         $this->booted = false;
-        $this->rootDir = $this->getRootDir();
-        $this->name = $this->getName();
 
         if ($this->debug) {
             $this->startTime = microtime(true);
-        }
-
-        if ($this->debug) {
             Debug::enable();
         } else {
             ini_set('display_errors', 0);
         }
+    }
+
+    /**
+     * Set an App option.
+     *
+     * @param $option
+     * @param $value
+     * @return $this
+     * @throws \RuntimeException
+     */
+    public function setOption($option, $value)
+    {
+        if (true === $this->booted) {
+            throw new \RuntimeException('Setting App options after boot() is now allowed');
+        }
+
+        // "root_dir" to "rootDir"
+        $property = preg_replace('/_(.?)/e',"strtoupper('$1')",$option);
+        if (!property_exists($this, $property)) {
+            throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
+        }
+
+        $this->$property = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get an App option.
+     *
+     * @param $option
+     * @return string
+     * @throws \RuntimeException
+     */
+    public function getOption($option)
+    {
+        // "root_dir" to "rootDir"
+        $property = preg_replace('/_(.?)/e',"strtoupper('$1')",$option);
+        if (!property_exists($this, $property)) {
+            throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
+        }
+
+        return $property;
     }
 
     public function __init__DEPRECATED()
