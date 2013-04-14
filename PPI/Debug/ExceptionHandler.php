@@ -286,12 +286,14 @@ $css
         <div id="footer">
             <div class="container">
                 <p class="muted credit"><a href="http://ppi.io" class="btn btn-small"><b>$appName $appVersion</b></a>&nbsp;
-                App crashed and not your fault? <a href="https://github.com/ppi/framework/issues/new">Blame us</a>. It's your fault but don't know how to fix it? <a href="http://www.ppi.io/chat">Chat with the PPI community</a>.</p>
+                App crashed and not your fault? <a href="https://github.com/ppi/framework/issues/new">Blame us</a>.
+                It's your fault but don't know how to fix it? <a href="http://www.ppi.io/chat">Chat with the PPI community</a>.
+                Don't wanna fix it? <a href="http://dynamic.xkcd.com/random/comic/">Procrastinate</a>.</p>
             </div>
         </div>
         <script>
         $baseJavascript
-        $("i").tooltip();
+        $("abbr").tooltip();
         </script>
     </body>
 </html>
@@ -463,6 +465,7 @@ EOT;
             array('Confidence, n.: The feeling you have before you understand the situation', 'Unknown'),
             array('Now I\'m a pretty lazy person and am prepared to work quite hard in order to avoid work.', 'Martin Fowler'),
             array('Get it right. Then get it fast.', 'Steve McConnell'),
+            array('Q: How many prolog programmers does it take to change a lightbulb? A: Yes', 'Unknown'),
         );
 
         return $quotes[array_rand($quotes, 1)];
