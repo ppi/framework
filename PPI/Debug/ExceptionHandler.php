@@ -102,6 +102,7 @@ class ExceptionHandler extends BaseExceptionHandler
      */
     public function handle(\Exception $exception)
     {
+        ob_clean();
         if (class_exists('PPI\Http\Response')) {
             $this->createResponse($exception)->send();
         } else {
