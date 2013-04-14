@@ -29,6 +29,7 @@ class ServiceManagerConfig implements ConfigInterface
     protected $invokables = array(
         'SharedEventManager' => 'Zend\EventManager\SharedEventManager',
         'ModuleEvent'        => 'Zend\ModuleManager\ModuleEvent',
+        'filesystem'         => 'Symfony\Component\Filesystem\Filesystem',
     );
 
     /**
@@ -42,6 +43,7 @@ class ServiceManagerConfig implements ConfigInterface
         'ControllerResolver'    => 'PPI\ServiceManager\Factory\ControllerResolverFactory',
         'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
+        'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
         'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
@@ -69,7 +71,8 @@ class ServiceManagerConfig implements ConfigInterface
         'Configuration'                             => 'Config',
         'Zend\EventManager\EventManagerInterface'   => 'EventManager',
         // PPI alias
-        'logger'                                    => 'monolog.logger'
+        'logger'                                    => 'monolog.logger',
+        'templating.loader'                         => 'templating.loader.filesystem',
     );
 
     /**

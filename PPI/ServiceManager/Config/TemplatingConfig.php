@@ -8,12 +8,13 @@
  */
 namespace PPI\ServiceManager\Config;
 
-use PPI\View\FileLocator;
 use PPI\View\GlobalVariables;
 use PPI\View\TemplateLocator;
 use PPI\View\DelegatingEngine;
 use PPI\View\TemplateNameParser;
-use PPI\View\Php\FileSystemLoader;
+//use PPI\View\Php\FileSystemLoader; @deprecated
+
+use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\PhpEngine;
 
 // Helpers
@@ -65,12 +66,7 @@ class TemplatingConfig extends AbstractConfig
         $config = $serviceManager->get('Config');
         $appRootDir = $config['parameters']['app.root_dir'];
         $appCacheDir = $config['parameters']['app.cache_dir'];
-
-        $moduleManager = $serviceManager->get('ModuleManager');
-        $modulePaths = array();
-        foreach ($moduleManager->getLoadedModules() as $module) {
-            $modulePaths[] = $module->getPath();
-        }
+        $appCharset = $config['parameters']['app.charset'];
 
         // The "framework.templating" option is deprecated. Please replace it with "framework.view"
         $config = $this->processConfiguration($config);
@@ -87,23 +83,27 @@ class TemplatingConfig extends AbstractConfig
             throw new \RuntimeException(sprintf('At least one templating engine should be defined in your app config (in $config[\'view.engines\']). These are the available ones: "%s". Example: "$config[\'templating.engines\'] = array(\'%s\');"', implode('", ', $knownEngineIds), implode("', ", $knownEngineIds)));
         }
 
-        // File locator
-        $serviceManager->setFactory('filelocator', function($serviceManager) use ($appRootDir, $modulePaths) {
-            return new FileLocator(array(
-                'modules'     => $serviceManager->get('ModuleManager')->getModules(),
-                'modulesPath' => realpath($modulePaths[0]),
-                'appPath'     => $appRootDir
-            ));
-        });
-
         // Templating locator
         $serviceManager->setFactory('templating.locator', function($serviceManager) {
-            return new TemplateLocator($serviceManager->get('filelocator'));
+            return new TemplateLocator($serviceManager->get('file_locator'));
         });
 
-        // Templating Name Parser
-        $serviceManager->setFactory('templating.name.parser', function($serviceManager) {
+        /*
+         * Templating Name Parser.
+         *
+         * "templating.name_parser"
+         */
+        $serviceManager->setFactory('templating.name_parser', function($serviceManager) {
             return new TemplateNameParser();
+        });
+
+        /*
+         * Filesystem Loader.
+         *
+         * "templating.loader.filesystem"
+         */
+        $serviceManager->setFactory('templating.loader.filesystem', function($serviceManager) {
+            return new FileSystemLoader($serviceManager->get('templating.locator'));
         });
 
         // Templating assets helper
@@ -116,11 +116,17 @@ class TemplatingConfig extends AbstractConfig
             return new GlobalVariables($serviceManager->get('servicemanager'));
         });
 
-        // PHP Engine
-        $serviceManager->setFactory('templating.engine.php', function($serviceManager) {
-            return new PhpEngine(
-                $serviceManager->get('templating.name.parser'),
-                new FileSystemLoader($serviceManager->get('templating.locator')),
+        /*
+         * PHP Engine.
+         *
+         * "templating.engine.php"
+         *
+         * TODO: Migrate to Symfony\Bundle\FrameworkBundle\Templating\PhpEngine
+         */
+        $serviceManager->setFactory('templating.engine.php', function($serviceManager) use ($appCharset) {
+            $engine = new PhpEngine(
+                $serviceManager->get('templating.name_parser'),
+                $serviceManager->get('templating.loader'),
                 array(
                     new SlotsHelper(),
                     $serviceManager->get('templating.helper.assets'),
@@ -128,9 +134,16 @@ class TemplatingConfig extends AbstractConfig
                     new SessionHelper($serviceManager->get('session'))
                  )
             );
+
+            $engine->addGlobal('app', $serviceManager->get('templating.globals'));
+            $engine->setCharset($appCharset);
+
+            return $engine;
         });
 
-        // Twig Engine
+        /*
+         * Twig Engine
+         */
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
 
             $templatingLocator = $serviceManager->get('templating.locator');
