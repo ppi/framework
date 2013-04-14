@@ -70,7 +70,7 @@ EOF
             'class' => strlen('Class name|type|alias')
         );
         $serviceTypeToColumnName = array(
-            'invokableClasses'  => 'Invokable Class',
+            'invokableClasses'  => 'Invokable',
             'factories'         => 'Factory',
             'aliases'           => 'Alias',
             'instances'         => 'Instance'
