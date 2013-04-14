@@ -776,7 +776,8 @@ class App implements AppInterface
 
         ErrorHandler::register($this->errorReportingLevel);
         if ('cli' !== php_sapi_name()) {
-            ExceptionHandler::register();
+            $handler = ExceptionHandler::register();
+            $handler->setAppVersion($this->getVersion());
         } elseif (!ini_get('log_errors') || ini_get('error_log')) {
             ini_set('display_errors', 1);
         }
