@@ -11,6 +11,7 @@ namespace PPI\Config\Loader;
 
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Yaml;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * YamlFileLoader loads app configuration from a YAML file.
@@ -74,7 +75,7 @@ class YamlFileLoader extends FileLoader
 
         foreach ($content['imports'] as $import) {
             $this->setCurrentDir(dirname($file));
-            $content = array_merge($content, $this->import($import['resource'], null, isset($import['ignore_errors']) ? (Boolean) $import['ignore_errors'] : false, $file));
+            $content = ArrayUtils::merge($content, $this->import($import['resource'], null, isset($import['ignore_errors']) ? (Boolean) $import['ignore_errors'] : false, $file));
         }
 
         unset($content['imports']);
