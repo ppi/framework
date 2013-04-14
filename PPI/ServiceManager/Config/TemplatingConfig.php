@@ -210,14 +210,14 @@ class TemplatingConfig extends AbstractConfig
     protected function processConfiguration(array $config, ServiceManager $serviceManager = null)
     {
         $config = $config['framework'];
-        if (!isset($config['view'])) {
-            $config['view'] = array();
+        if (!isset($config['templating'])) {
+            $config['templating'] = array();
         }
 
-        if (isset($config['templating'])) {
-            $config['view'] = $this->mergeConfiguration($config['templating'], $config['view']);
+        if (isset($config['view'])) {
+            $config['templating'] = $this->mergeConfiguration($config['view'], $config['templating']);
         }
 
-        return $config['view'];
+        return $config['templating'];
     }
 }
