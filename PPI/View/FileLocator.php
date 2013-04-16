@@ -13,6 +13,8 @@ namespace PPI\View;
 use Symfony\Component\Config\FileLocator as BaseFileLocator;
 
 /**
+ * @deprecated since 2.1.0. Please use PPI\Config\AppFileLocator instead.
+ *
  * FileLocator is used to locate template resources
  *
  * @author     Fabien Potencier <fabien@symfony.com>
