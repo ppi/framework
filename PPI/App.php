@@ -481,6 +481,24 @@ class App implements AppInterface
     }
 
     /**
+     * @see PPI\Module\ModuleManager::locateResource()
+     *
+     * @param string  $name  A resource name to locate
+     * @param string  $dir   A directory where to look for the resource first
+     * @param Boolean $first Whether to return the first path or paths for all matching bundles
+     *
+     * @return string|array The absolute path of the resource or an array if $first is false
+     *
+     * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
+     * @throws \RuntimeException         if the name contains invalid/unsafe
+     * @throws \RuntimeException         if a custom resource is hidden by a resource in a derived bundle
+     */
+    public function locateResource($name, $dir = null, $first = true)
+    {
+        return $this->getModuleManager()->locateResource($name, $dir, $first);
+    }
+
+    /**
      * Get the request object
      *
      * @return object
@@ -610,8 +628,9 @@ class App implements AppInterface
     /**
      * Loads a configuration file or PHP array.
      *
-     * @param mixed  $resource The resource
-     * @param string $type     The resource type
+     * @param $resource
+     * @param  null  $type
+     * @return array
      */
     public function loadConfig($resource, $type = null)
     {
@@ -697,14 +716,13 @@ class App implements AppInterface
         // ServiceManager creation
         $serviceManager = new ServiceManagerBuilder($this->config);
         $serviceManager->build();
+        $serviceManager->set('app', $this);
 
         return $serviceManager;
     }
 
     /**
-     * @todo Add inline documentation.
-     *
-     * @return void
+     * @throws \Exception
      */
     protected function handleRouting()
     {

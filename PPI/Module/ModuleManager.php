@@ -49,6 +49,21 @@ class ModuleManager extends BaseModuleManager
     }
 
     /**
+     * Returns an array of paths to modules.
+     *
+     * @return array An array of paths to each loaded module
+     */
+    public function getModulesPath()
+    {
+        $paths = array();
+        foreach ($this->getLoadedModules(true) as $module) {
+            $paths[$module->getName()] = $module->getPath();
+        }
+
+        return $paths;
+    }
+
+    /**
      * Returns the file path for a given resource.
      *
      * A Resource can be a file or a directory.
