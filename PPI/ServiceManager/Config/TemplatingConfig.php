@@ -57,9 +57,8 @@ class TemplatingConfig extends AbstractConfig
      * - Smarty
      * - Mustache
      *
-     * @param ServiceManager $serviceManager
-     *
-     * @return type
+     * @param  ServiceManager    $serviceManager
+     * @throws \RuntimeException
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
@@ -85,8 +84,6 @@ class TemplatingConfig extends AbstractConfig
 
         /*
          * Templating Locator.
-         *
-         * "templating.locator"
          */
         $serviceManager->setFactory('templating.locator', function($serviceManager) use ($appCacheDir) {
             return new TemplateLocator(
@@ -97,36 +94,34 @@ class TemplatingConfig extends AbstractConfig
 
         /*
          * Templating Name Parser.
-         *
-         * "templating.name_parser"
          */
         $serviceManager->setFactory('templating.name_parser', function($serviceManager) {
-            return new TemplateNameParser();
+            return new TemplateNameParser($serviceManager->get('modulemanager'));
         });
 
         /*
          * Filesystem Loader.
-         *
-         * "templating.loader.filesystem"
          */
         $serviceManager->setFactory('templating.loader.filesystem', function($serviceManager) {
             return new FileSystemLoader($serviceManager->get('templating.locator'));
         });
 
-        // Templating assets helper
+        /*
+         * Templating assets helper.
+         */
         $serviceManager->setFactory('templating.helper.assets', function($serviceManager) {
             return new AssetsHelper($serviceManager->get('request')->getBasePath());
         });
 
-        // Templating globals
+        /*
+         * Templating globals.
+         */
         $serviceManager->setFactory('templating.globals', function($serviceManager) {
             return new GlobalVariables($serviceManager->get('servicemanager'));
         });
 
         /*
          * PHP Engine.
-         *
-         * "templating.engine.php"
          *
          * TODO: Migrate to Symfony\Bundle\FrameworkBundle\Templating\PhpEngine
          */
@@ -152,35 +147,37 @@ class TemplatingConfig extends AbstractConfig
          * Twig Engine
          */
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
-
-            $templatingLocator = $serviceManager->get('templating.locator');
-
             $twigEnvironment = new \Twig_Environment(
-                new TwigFileSystemLoader($templatingLocator, new TemplateNameParser())
+                new TwigFileSystemLoader(
+                    $serviceManager->get('templating.locator'),
+                    $serviceManager->get('templating.name_parser'))
             );
 
             // Add some twig extension
             $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.helper.assets')));
             $twigEnvironment->addExtension(new TwigRouterExtension($serviceManager->get('router')));
 
-            return new TwigEngine($twigEnvironment, new TemplateNameParser(), $templatingLocator, $serviceManager->get('templating.globals'));
+            return new TwigEngine($twigEnvironment, $serviceManager->get('templating.name_parser'),
+                $serviceManager->get('templating.locator'), $serviceManager->get('templating.globals'));
         });
 
-        // Smarty Engine
+        /*
+         * Smarty Engine.
+         */
         $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) use ($appCacheDir) {
             $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
-            $templateLocator = $serviceManager->get('templating.locator');
 
             $smartyEngine = new SmartyEngine(
                 new \Smarty(),
-                $templateLocator,
-                new TemplateNameParser(),
-                new FileSystemLoader($templateLocator),
+                $serviceManager->get('templating.locator'),
+                $serviceManager->get('templating.name_parser'),
+                $serviceManager->get('templating.loader'),
                 array(
                     'cache_dir'     => $cacheDir . DIRECTORY_SEPARATOR . 'cache',
                     'compile_dir'   => $cacheDir . DIRECTORY_SEPARATOR . 'templates_c',
                 ),
-                $serviceManager->get('templating.globals')
+                $serviceManager->get('templating.globals'),
+                $serviceManager->get('logger')
             );
 
             // Add some SmartyBundle extensions
@@ -194,15 +191,18 @@ class TemplatingConfig extends AbstractConfig
         $serviceManager->setFactory('templating.engine.mustache', function($serviceManager, $appCacheDir) {
 
             $rawMustacheEngine = new \Mustache_Engine(array(
-                'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'), new TemplateNameParser()),
+                'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'),
+                    $serviceManager->get('templating.name_parser')),
                 'cache'  => $appCacheDir . DIRECTORY_SEPARATOR . 'mustache'
             ));
 
-            return new MustacheEngine($rawMustacheEngine, new TemplateNameParser());
+            return new MustacheEngine($rawMustacheEngine, $serviceManager->get('templating.name_parser'));
         });
 
-        // Delegating Engine
-        $serviceManager->setFactory('templating', function($serviceManager) use ($engineIds) {
+        /*
+         * Delegating Engine.
+         */
+        $serviceManager->setFactory('templating.engine.delegating', function($serviceManager) use ($engineIds) {
             $delegatingEngine = new DelegatingEngine();
             foreach ($engineIds as $id) {
                 $delegatingEngine->addEngine($serviceManager->get('templating.engine.'.$id));
@@ -210,6 +210,8 @@ class TemplatingConfig extends AbstractConfig
 
             return $delegatingEngine;
         });
+
+        $serviceManager->setAlias('templating', 'templating.engine.delegating');
     }
 
     /**
