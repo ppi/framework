@@ -2,10 +2,11 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View;
 
 use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
@@ -13,7 +14,7 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 /**
  * Internal representation of a template.
  *
- * @author     Fabien Potencier <fabien@symfony.com>
+ * @author     Victor Berchet <victor@suumit.com
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@noiselabs.org>
  * @package    PPI
@@ -22,15 +23,11 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 class TemplateReference extends BaseTemplateReference
 {
     /**
-     * @todo Add inline documentation.
-     *
      * @var string
      */
     const APP_VIEWS_DIRECTORY = 'views';
 
     /**
-     * @todo Add inline documentation.
-     *
      * @var string
      */
     const MODULE_VIEWS_DIRECTORY = 'resources/views';
@@ -38,13 +35,11 @@ class TemplateReference extends BaseTemplateReference
     /**
      * Constructor.
      *
-     * @param type $module
-     * @param type $controller
-     * @param type $name
-     * @param type $format
-     * @param type $engine
-     *
-     * @return void
+     * @param null $module
+     * @param null $controller
+     * @param null $name
+     * @param null $format
+     * @param null $engine
      */
     public function __construct($module = null, $controller = null, $name = null, $format = null, $engine = null)
     {
@@ -70,7 +65,8 @@ class TemplateReference extends BaseTemplateReference
 
         $path = (empty($controller) ? '' : $controller.'/').$this->get('name').'.'.$this->get('format').'.'.$this->get('engine');
 
-        return empty($this->parameters['module']) ? self::APP_VIEWS_DIRECTORY.'/'.$path : '@'.$this->get('module').'/'.self::MODULE_VIEWS_DIRECTORY.'/'.$path;
+        return empty($this->parameters['module']) ?
+            self::APP_VIEWS_DIRECTORY.'/'.$path : '@'.$this->get('module').'/'.self::MODULE_VIEWS_DIRECTORY.'/'.$path;
     }
 
     /**
@@ -78,7 +74,8 @@ class TemplateReference extends BaseTemplateReference
      */
     public function getLogicalName()
     {
-        return sprintf('%s:%s:%s.%s.%s', $this->parameters['module'], $this->parameters['controller'], $this->parameters['name'], $this->parameters['format'], $this->parameters['engine']);
+        return sprintf('%s:%s:%s.%s.%s', $this->parameters['module'], $this->parameters['controller'],
+            $this->parameters['name'], $this->parameters['format'], $this->parameters['engine']);
     }
 
 }

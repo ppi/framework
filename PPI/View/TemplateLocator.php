@@ -38,12 +38,10 @@ class TemplateLocator extends BaseTemplateLocator
     public function getModulesPath()
     {
         $paths = $this->locator->getModulesPath();
-
         foreach (array_keys($paths) as $module) {
             $paths[$module] .= DIRECTORY_SEPARATOR . TemplateReference::MODULE_VIEWS_DIRECTORY;
         }
 
         return $paths;
     }
-
 }
