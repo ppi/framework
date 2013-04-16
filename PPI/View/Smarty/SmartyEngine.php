@@ -2,17 +2,18 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Smarty;
 
-use PPI\View\GlobalVariables,
-    PPI\View\TemplateLocator,
-    NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine,
-    Symfony\Component\Templating\Loader\LoaderInterface,
-    Symfony\Component\Templating\TemplateNameParserInterface;
+use PPI\View\GlobalVariables;
+use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
+use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
+use Symfony\Component\Templating\Loader\LoaderInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * SmartyEngine is an engine able to render Smarty templates.
@@ -43,14 +44,8 @@ class SmartyEngine extends BaseSmartyEngine
      *
      * @return void
      */
-    public function __construct(
-        \Smarty $smarty,
-        TemplateLocator $locator,
-        TemplateNameParserInterface $parser,
-        LoaderInterface $loader,
-        array $options = array(),
-        GlobalVariables $globals = null
-    )
+    public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser,
+                                LoaderInterface $loader, array $options = array(), GlobalVariables $globals = null)
     {
         $this->smarty = $smarty;
         $this->locator = $locator;
@@ -105,5 +100,4 @@ class SmartyEngine extends BaseSmartyEngine
          */
         $smarty->muteExpectedErrors();
     }
-
 }
