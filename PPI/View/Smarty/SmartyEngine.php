@@ -9,9 +9,10 @@
 
 namespace PPI\View\Smarty;
 
+use PPI\Log\Logger;
 use PPI\View\GlobalVariables;
+use PPI\View\TemplateLocator;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
-use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
@@ -26,9 +27,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 class SmartyEngine extends BaseSmartyEngine
 {
     /**
-     * @todo Add inline documentation.
-     *
-     * @var type
+     * @var \PPI\View\TemplateLocator
      */
     protected $locator;
 
@@ -41,11 +40,11 @@ class SmartyEngine extends BaseSmartyEngine
      * @param LoaderInterface             $loader  A LoaderInterface instance
      * @param array                       $options An array of \Smarty properties
      * @param GlobalVariables|null        $globals A GlobalVariables instance or null
-     *
-     * @return void
+     * @param Logger|null                 $logger  A Logger instance or null
      */
     public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser,
-                                LoaderInterface $loader, array $options = array(), GlobalVariables $globals = null)
+                                LoaderInterface $loader, array $options = array(), GlobalVariables $globals = null,
+                                Logger $logger = null)
     {
         $this->smarty = $smarty;
         $this->locator = $locator;

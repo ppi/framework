@@ -2,14 +2,15 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Smarty\Extension;
 
-use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtension,
-    Symfony\Component\Templating\Helper\AssetsHelper;
+use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtension;
+use Symfony\Component\Templating\Helper\AssetsHelper;
 
 /**
  * Provides helper functions to link to assets (images, Javascript,
@@ -21,13 +22,6 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtensi
  */
 class AssetsExtension extends BaseAssetsExtension
 {
-    /**
-     * @todo Add inline documentation.
-     *
-     * @var AssetsHelper
-     */
-    protected $assetsHelper = null;
-
     /**
      * A key/value pair of functions to remap to help comply with PSR standards
      *
@@ -47,7 +41,7 @@ class AssetsExtension extends BaseAssetsExtension
      */
     public function __construct(AssetsHelper $assetsHelper)
     {
-        $this->assetsHelper = $assetsHelper;
+        $this->helper = $assetsHelper;
     }
 
     /**
@@ -78,7 +72,7 @@ class AssetsExtension extends BaseAssetsExtension
      */
     public function getAssetUrl($path, $packageName = null)
     {
-        return $this->assetsHelper->getUrl($path, $packageName);
+        return $this->helper->getUrl($path, $packageName);
     }
 
     /**
@@ -100,7 +94,7 @@ class AssetsExtension extends BaseAssetsExtension
                 'package' => null,
             ), $parameters);
 
-            return $this->assetsHelper->getUrl($path, $parameters['package']);
+            return $this->helper->getUrl($path, $parameters['package']);
         }
     }
 
@@ -117,7 +111,7 @@ class AssetsExtension extends BaseAssetsExtension
      */
     public function getAssetUrlModifier($path, $package = null)
     {
-        return $this->assetsHelper->getUrl($path, $package);
+        return $this->helper->getUrl($path, $package);
     }
 
     /**
@@ -134,7 +128,7 @@ class AssetsExtension extends BaseAssetsExtension
             'package' => null,
         ), $parameters);
 
-        return $this->assetsHelper->getVersion($parameters['package']);
+        return $this->helper->getVersion($parameters['package']);
     }
 
 }
