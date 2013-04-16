@@ -2,17 +2,17 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
+
 namespace PPI\ServiceManager\Config;
 
 use PPI\View\GlobalVariables;
 use PPI\View\TemplateLocator;
 use PPI\View\DelegatingEngine;
 use PPI\View\TemplateNameParser;
-//use PPI\View\Php\FileSystemLoader; @deprecated
 
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\PhpEngine;
@@ -83,9 +83,16 @@ class TemplatingConfig extends AbstractConfig
             throw new \RuntimeException(sprintf('At least one templating engine should be defined in your app config (in $config[\'view.engines\']). These are the available ones: "%s". Example: "$config[\'templating.engines\'] = array(\'%s\');"', implode('", ', $knownEngineIds), implode("', ", $knownEngineIds)));
         }
 
-        // Templating locator
-        $serviceManager->setFactory('templating.locator', function($serviceManager) {
-            return new TemplateLocator($serviceManager->get('file_locator'));
+        /*
+         * Templating Locator.
+         *
+         * "templating.locator"
+         */
+        $serviceManager->setFactory('templating.locator', function($serviceManager) use ($appCacheDir) {
+            return new TemplateLocator(
+                $serviceManager->get('file_locator'),
+                $appCacheDir
+            );
         });
 
         /*
