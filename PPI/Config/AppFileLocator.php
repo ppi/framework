@@ -27,9 +27,9 @@ class AppFileLocator extends FileLocator
     /**
      * Constructor.
      *
-     * @param ModuleManager $moduleManager  A ModuleManager instance
-     * @param null|string   $path           The path the global resource directory
-     * @param array         $paths          An array of paths where to look for resources
+     * @param ModuleManager $moduleManager A ModuleManager instance
+     * @param null|string   $path          The path the global resource directory
+     * @param array         $paths         An array of paths where to look for resources
      */
     public function __construct(ModuleManager $moduleManager, $path = null, array $paths = array())
     {
