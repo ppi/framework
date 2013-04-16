@@ -9,7 +9,7 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\View\FileLocator;
+use PPI\Config\AppFileLocator as FileLocator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -32,17 +32,7 @@ class FileLocatorFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('Config');
         $appRootDir = $config['parameters']['app.root_dir'];
-        $moduleManager = $serviceLocator->get('ModuleManager');
-        $modulePaths = array();
-        foreach ($moduleManager->getLoadedModules() as $module) {
-            $modulePaths[] = $module->getPath();
-        }
 
-        return new FileLocator(array(
-                'modules'     => $serviceLocator->get('ModuleManager')->getModules(),
-                'modulesPath' => realpath($modulePaths[0]),
-                'appPath'     => $appRootDir
-            )
-        );
+        return new FileLocator($serviceLocator->get('ModuleManager'), $appRootDir);
     }
 }
