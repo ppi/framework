@@ -38,7 +38,7 @@ class ModuleManager extends BaseModuleManager
     }
 
     /**
-     * @param  $name
+     * @param  string                  $alias
      * @return \PPI\Module\Module|null
      */
     public function getModuleByAlias($alias)
@@ -113,7 +113,7 @@ class ModuleManager extends BaseModuleManager
         $isResource = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath = substr($path, 9);
         $resourceModule = null;
-        $modules = $this->getModule($moduleName, false);
+        $modules = array($this->getModule($moduleName)); // FIXME: or $this->getModuleByAlias()?
         $files = array();
 
         foreach ($modules as $module) {
