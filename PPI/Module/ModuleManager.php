@@ -38,12 +38,16 @@ class ModuleManager extends BaseModuleManager
     }
 
     /**
-     * @param  string                  $alias
-     * @return \PPI\Module\Module|null
+     * @param $alias
+     * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function getModuleByAlias($alias)
     {
         $aliases = $this->getModulesAliases();
+        if (!isset($aliases[$alias])) {
+            throw new \InvalidArgumentException(sprintf('Module "%s" does not exist or it is not enabled. Maybe you forgot to add it your configuration file under the "modules" key?', $alias));
+        }
 
         return $this->getModule($aliases[$alias]);
     }
@@ -113,7 +117,7 @@ class ModuleManager extends BaseModuleManager
         $isResource = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath = substr($path, 9);
         $resourceModule = null;
-        $modules = array($this->getModule($moduleName)); // FIXME: or $this->getModuleByAlias()?
+        $modules = array($this->getModuleByAlias($moduleName));
         $files = array();
 
         foreach ($modules as $module) {
