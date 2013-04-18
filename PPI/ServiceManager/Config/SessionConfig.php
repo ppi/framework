@@ -45,7 +45,7 @@ class SessionConfig extends Config
          */
 
         $config = $serviceManager->get('Config');
-
+//var_dump($config); exit;
         $options =  array_merge(array(
             'auto_start'        => false,
             'storage_id'        => 'session.storage.native',
@@ -59,7 +59,7 @@ class SessionConfig extends Config
             'gc_divisor'        => null,
             'gc_probability'    => null,
             'gc_maxlifetime'    => null,
-            'save_path'         => $config['parameters']['app.cache_dir'] . '/sessions',
+            'save_path'         => null,
         ), isset($config['session']) ? $config['session'] : array());
 
         $storageOptions = $options;
@@ -88,10 +88,25 @@ class SessionConfig extends Config
         $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
             return new AttributeBag();
         });
+        
+        $that = $this;
 
         // session handler native file
-        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($storageOptions) {
+        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($that, $storageOptions) {
+            
+            // We want absolute paths if we can
+            if(null !== $storageOptions['save_path'] && !$that->isAbsolutePath($storageOptions['save_path'])) {
+                
+                $storageOptions['save_path'] = realpath($storageOptions['save_path']);
+                
+                // Basically if the realpath() failed then we revert back to null so default paths kick in
+                if($storageOptions['save_path'] === false) {
+                    $storageOptions['save_path'] = null;
+                }
+                
+            }
             return new NativeFileSessionHandler($storageOptions['save_path']);
+            
         });
 
         // session
@@ -105,5 +120,26 @@ class SessionConfig extends Config
             //$session->start();
             return $session;
         });
+    }
+
+    /**
+     * Check if a path is absolute
+     * 
+     * @param string $file
+     * @return bool
+     */
+    public function isAbsolutePath($file)
+    {
+        if ($file[0] == '/' || $file[0] == '\\'
+            || (strlen($file) > 3 && ctype_alpha($file[0])
+                && $file[1] == ':'
+                && ($file[2] == '\\' || $file[2] == '/')
+            )
+            || null !== parse_url($file, PHP_URL_SCHEME)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
