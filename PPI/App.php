@@ -575,35 +575,6 @@ class App implements AppInterface
     }
 
     /**
-     * Magic setter function.
-     *
-     * @deprecated since the replacement of AppOptions by ZF2 Config.
-     *
-     * @param string $option The option
-     * @param string $value  The value
-     *
-     * @return void
-     */
-    public function __set($option, $value)
-    {
-        // NOP
-    }
-
-    /**
-     * Magic getter function.
-     *
-     * @deprecated since the replacement of AppOptions by ZF2 Config.
-     *
-     * @param string $option The option
-     *
-     * @return mixed
-     */
-    public function __get($option)
-    {
-        return null;
-    }
-
-    /**
      * Returns a ConfigLoader instance.
      *
      * @return \PPI\Config\ConfigLoader
@@ -742,7 +713,7 @@ class App implements AppInterface
         }
 
         // Lets grab the 'Framework 404' route and dispatch it.
-        if ($this->hasMatch === false) {
+        if ($hasMatch === false) {
             try {
                 $baseUrl  = $router->getContext()->getBaseUrl();
                 $routeUri = $router->generate($this->options['404RouteName']);
