@@ -189,18 +189,6 @@ class App implements AppInterface
         return $property;
     }
 
-    public function __init__DEPRECATED()
-    {
-        // Lets setup exception handlers to catch anything that fails during boot as well.
-        $exceptionHandler = new ExceptionHandler();
-        //$exceptionHandler->addHandler(new \PPI\Exception\Log());
-        set_exception_handler(array($exceptionHandler, 'handle'));
-
-        if ($this->getEnv() !== 'production') {
-            set_error_handler(array($exceptionHandler, 'handleError'));
-        }
-    }
-
     public function __clone()
     {
         if ($this->debug) {
