@@ -49,7 +49,7 @@ class YamlFileLoader extends BaseYamlFileLoader
      * @param array           $config     Route definition
      * @param string          $path       Full path of the YAML file being processed
      */
-    protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
+    protected function parseRoute(RouteCollection $collection, $name, $config, $path)
     {
         if (!empty($this->_defaults)) {
             $config['defaults'] = array_merge($config['defaults'], $this->_defaults);
