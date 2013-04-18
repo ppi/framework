@@ -88,7 +88,7 @@ EOT
         foreach ($this->getServiceManager()->get('modulemanager')->getLoadedModules() as $module) {
             if (is_dir($originDir = $module->getPath().'/resources/public')) {
                 $modulesDir = $targetArg.'/modules/';
-                $targetDir  = $modulesDir.strtolower($module->getName());
+                $targetDir  = $modulesDir.str_replace('module', '', strtolower($module->getName()));
 
                 $output->writeln(sprintf('Installing assets for <comment>%s</comment> into <comment>%s</comment>', $module->getNamespace(), $targetDir));
 
