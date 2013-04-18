@@ -10,9 +10,6 @@
 namespace PPI\Console;
 
 use PPI\AppInterface;
-use PPI\Console\Command\ModuleCommand;
-use PPI\Console\Command\RouterDebugCommand;
-use PPI\Console\Command\ServiceManagerDebugCommand;
 use PPI\Module\AbstractModule;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
@@ -99,6 +96,7 @@ class Application extends BaseApplication
 
         // Commands from the PPI Framework
         $this->addCommands(array(
+            new Command\AssetsInstallCommand(),
             new Command\ModuleCommand(),
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
