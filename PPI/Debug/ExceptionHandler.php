@@ -181,12 +181,12 @@ class ExceptionHandler extends BaseExceptionHandler
                     $message = nl2br($e['message']);
                     $content .= sprintf(<<<EOF
                         <div>
-                            <h3 class="alert alert-error">%d/%d %s: %s</h3>
+                            <h3 class="alert alert-error">%s: %s</h3>
                         </div>
                         <div>
                             <table class="table table-bordered table-striped"><tbody>
 EOF
-                        , $ind, $total, $class, $message);
+                        , $class, $message);
                     foreach ($e['trace'] as $trace) {
                         $i++;
                         $content .= '       <tr><td>'.$i.'</td><td>';
