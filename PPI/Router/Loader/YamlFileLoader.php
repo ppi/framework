@@ -23,7 +23,7 @@ use Symfony\Component\Routing\RouteCollection;
 class YamlFileLoader extends BaseYamlFileLoader
 {
     /**
-     * @todo Add inline documentation.
+     * The loader defaults
      *
      * @var array
      */
@@ -32,7 +32,7 @@ class YamlFileLoader extends BaseYamlFileLoader
     /**
      * Constructor.
      *
-     * @param type $defaults
+     * @param array $defaults
      *
      * @return void
      */
