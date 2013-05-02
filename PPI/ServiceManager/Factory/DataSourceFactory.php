@@ -9,9 +9,12 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\DataSource\DataSource;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+
+use PPI\DS\Connection\DoctrineDBAL as DoctrineDBALConnection;
+use PPI\DS\Connection\Laravel as LaravelConnection;
+use PPI\DS\ConnectionManager;
 
 /**
  * DataSource Factory.
@@ -30,14 +33,33 @@ class DataSourceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+
         $config = $serviceLocator->get('ApplicationConfig');
+        $allConnections = $libraryToConnMap = $laravelConns = $doctrineDBALConns = array();
 
-        if (isset($config['framework']['datasource']) &&
-            isset($config['framework']['datasource']['connections'])) {
-            return new DataSource($config['framework']['datasource']['connections']);
-        }
+        if(isset($config['datasource']['connections'])) {
 
-        // FIXME: is it OK to create a DataSource service with no connections?
-        return new DataSource();
+            foreach($config['datasource']['connections'] as $name => $conn) {
+                $allConnections[$name] = $conn;
+                if($conn['library'] === 'laravel') {
+                    $laravelConns[$name] = $conn;
+                }
+                if($conn['library'] === 'doctrine_dbal') {
+                    $doctrineDBALConns[$name] = $conn;
+                }
+            }
+
+            if(!empty($laravlConns)) {
+                $libraryToConnMap['laravel'] = new LaravelConnection($laravelConns);
+            }
+
+            if(!empty($doctrineDBALConns)) {
+                $libraryToConnMap['doctrine_dbal'] = new DoctrineDBALConnection($doctrineDBALConns);
+            }
+
+        } 
+
+        return new ConnectionManager($allConnections, $libraryToConnMap);
+
     }
 }
