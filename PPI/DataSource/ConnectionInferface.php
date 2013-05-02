@@ -1,5 +1,5 @@
 <?php
-namespace PPI\DS;
+namespace PPI\DataSource;
 
 interface ConnectionInferface
 {
