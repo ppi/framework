@@ -38,7 +38,6 @@ class DataSourceFactory implements FactoryInterface
         $allConnections = $libraryToConnMap = $laravelConns = $doctrineDBALConns = array();
 
         if(isset($config['datasource']['connections'])) {
-
             foreach($config['datasource']['connections'] as $name => $conn) {
                 $allConnections[$name] = $conn;
                 if($conn['library'] === 'laravel') {
@@ -49,7 +48,7 @@ class DataSourceFactory implements FactoryInterface
                 }
             }
 
-            if(!empty($laravlConns)) {
+            if(!empty($laravelConns)) {
                 $libraryToConnMap['laravel'] = new LaravelConnection($laravelConns);
             }
 
