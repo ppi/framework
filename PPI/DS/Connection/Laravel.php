@@ -3,11 +3,7 @@
 namespace PPI\DS\Connection;
 
 use PPI\DS\ConnectionInferface;
-use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Database\ConnectionResolver;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\Capsule;
-use Illuminate\Container\Container;
 
 class Laravel implements ConnectionInferface
 {
@@ -16,6 +12,7 @@ class Laravel implements ConnectionInferface
 
     public function __construct(array $connections)
     {
+
         $useEloquent     = true;
         $fetchMode       = null;
         $defaultConnName = null;
