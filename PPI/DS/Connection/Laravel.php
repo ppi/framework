@@ -3,6 +3,8 @@
 namespace PPI\DS\Connection;
 
 use PPI\DS\ConnectionInferface;
+use Illuminate\Database\Connectors\ConnectionFactory;
+use Illuminate\Database\ConnectionResolver;
 
 class Laravel implements ConnectionInferface
 {
@@ -12,8 +14,8 @@ class Laravel implements ConnectionInferface
 
     public function __construct(array $connections)
     {
-        $connectionFactory = new Illuminate\Database\Connectors\ConnectionFactory();
-        $resolver = new Illuminate\Database\ConnectionResolver();
+        $connectionFactory = new ConnectionFactory();
+        $resolver = new ConnectionResolver();
         foreach($connections as $name => $conn) {
             $resolver->addConnection($name, $connectionFactory->make($conn));
         }
@@ -29,7 +31,7 @@ class Laravel implements ConnectionInferface
         if(!$this->resolver->hasConnection($name)) {
              throw new \Exception('No connection found named: ' . $name);
         }
-        return $this->connection($name);
+        return $this->resolver->connection($name);
     }
 
     public function supports($library)

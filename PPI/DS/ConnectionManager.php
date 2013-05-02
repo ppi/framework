@@ -20,6 +20,7 @@ class ConnectionManager
         }
 
         $library = $this->connections[$name]['library'];
+        var_dump($library, $this->libraryToConnMap); exit;
         $conn    = $this->libraryToConnMap[$library]->getConnectionByName($name);
 
         return $conn;
