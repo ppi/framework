@@ -12,9 +12,9 @@ namespace PPI\ServiceManager\Factory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-use PPI\DS\Connection\DoctrineDBAL as DoctrineDBALConnection;
-use PPI\DS\Connection\Laravel as LaravelConnection;
-use PPI\DS\ConnectionManager;
+use PPI\DataSource\Connection\DoctrineDBAL as DoctrineDBALConnection;
+use PPI\DataSource\Connection\Laravel as LaravelConnection;
+use PPI\DataSource\ConnectionManager;
 
 /**
  * DataSource Factory.
