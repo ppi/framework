@@ -1,9 +1,9 @@
 <?php
 
-namespace PPI\DS\Connection;
+namespace PPI\DataSource\Connection;
 
+use PPI\DataSource\ConnectionInferface;
 use Doctrine\DBAL\DriverManager;
-use PPI\DS\ConnectionInferface;
 
 class DoctrineDBAL implements ConnectionInferface
 {

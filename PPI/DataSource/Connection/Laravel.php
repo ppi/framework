@@ -1,8 +1,8 @@
 <?php
 
-namespace PPI\DS\Connection;
+namespace PPI\DataSource\Connection;
 
-use PPI\DS\ConnectionInferface;
+use PPI\DataSource\ConnectionInferface;
 use Illuminate\Database\Capsule;
 
 class Laravel implements ConnectionInferface

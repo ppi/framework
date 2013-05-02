@@ -1,6 +1,6 @@
 <?php
 
-namespace PPI\DS;
+namespace PPI\DataSource;
 
 class ConnectionManager
 {
