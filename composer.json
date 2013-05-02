@@ -28,7 +28,7 @@
         "monolog/monolog": "1.4.*@stable",
         "mustache/mustache": ">=2.0.2,<2.1",
         "noiselabs/smarty-bundle": "1.2.*@stable",
-        "illuminate/database": "4.0.*",
+        "illuminate/database": "4.0.*@dev",
         "symfony/class-loader": "2.2.*@stable",
         "symfony/config": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
