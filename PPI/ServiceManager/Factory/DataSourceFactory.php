@@ -33,7 +33,7 @@ class DataSourceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-
+        
         $config = $serviceLocator->get('ApplicationConfig');
         $allConnections = $libraryToConnMap = $laravelConns = $doctrineDBALConns = array();
 
