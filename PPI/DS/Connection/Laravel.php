@@ -14,7 +14,7 @@ class Laravel implements ConnectionInferface
 
     public function __construct(array $connections)
     {
-        $connectionFactory = new ConnectionFactory();
+        $connectionFactory = new ConnectionFactory(new \Illuminate\Container\Container());
         $resolver = new ConnectionResolver();
         foreach($connections as $name => $conn) {
             $resolver->addConnection($name, $connectionFactory->make($conn));
