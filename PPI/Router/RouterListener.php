@@ -23,7 +23,8 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
  * Initializes the context from the request and sets request attributes based on a matching route.
  * @see Symfony\Component\HttpKernel\EventListener\RouterListener
  *
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Paul Dragoonis <paul@ppi.io>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class RouterListener
 {

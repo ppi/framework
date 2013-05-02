@@ -17,7 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * RouterListener Factory.
  *
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */

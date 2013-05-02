@@ -16,7 +16,7 @@ use Symfony\Component\Templating\Helper\AssetsHelper;
  * Provides helper functions to link to assets (images, Javascript,
  * stylesheets, etc.).
  *
- * @author     Vítor Brandão <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Templating
  */

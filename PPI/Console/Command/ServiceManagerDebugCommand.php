@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * A console command for retrieving information about services.
  *
- * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@ppi.io>
  * @package     PPI
  * @subpackage  Console
  */

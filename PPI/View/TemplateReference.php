@@ -14,9 +14,9 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 /**
  * Internal representation of a template.
  *
- * @author     Victor Berchet <victor@suumit.com
+ * @author     Victor Berchet <victor@suumit.com>
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@noiselabs.org>
+ * @author     Vítor Brandão
  * @package    PPI
  * @subpackage Templating
  */
