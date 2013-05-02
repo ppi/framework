@@ -23,7 +23,7 @@ use Zend\Stdlib\ArrayUtils;
  * This class sets various app settings, and allows you to override classes used in the bootup process.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Core
  */

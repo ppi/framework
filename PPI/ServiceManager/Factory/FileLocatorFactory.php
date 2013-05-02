@@ -16,7 +16,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * FileLocator Factory.
  *
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */

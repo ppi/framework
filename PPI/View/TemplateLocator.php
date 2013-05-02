@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator as BaseTemp
 /**
  * The PPI Template Locator.
  *
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Templating
  */

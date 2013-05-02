@@ -14,7 +14,7 @@ namespace PPI\Router;
  *
  * This interface should be here until a PSR Router comes to existence.
  *
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 interface RouterInterface
 {

@@ -19,7 +19,8 @@ use Symfony\Component\Finder\Finder;
  * Command that places module web assets into a given directory.
  *
  * @author      Fabien Potencier <fabien@symfony.com>
- * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@ppi.io>
+ * @author      Paul Dragoonis <paul@ppi.io>
  * @package     PPI
  * @subpackage  Console
  */

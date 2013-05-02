@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Module Command.
  *
  * @author      Paul Dragoonis <paul@ppi.io>
- * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@ppi.io>
  * @package     PPI
  * @subpackage  Console
  *

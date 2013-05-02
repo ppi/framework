@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request as BaseRequest;
 /**
  * Request represents an HTTP request.
  *
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class Request extends BaseRequest implements RequestInterface
 {
