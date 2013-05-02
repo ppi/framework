@@ -17,7 +17,7 @@ use Symfony\Component\Routing\RequestContext;
  * The PPI Router.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Router
  */

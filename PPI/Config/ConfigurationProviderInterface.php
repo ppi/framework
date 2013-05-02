@@ -12,7 +12,7 @@ namespace PPI\Config;
 /**
  * Implemented by services that provide user-level configuration.
  *
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 interface ConfigurationProviderInterface
 {

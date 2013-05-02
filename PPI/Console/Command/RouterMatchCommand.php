@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Command\RouterMatchCommand as BaseRouterMatch
 /**
  * A console command to test route matching.
  *
- * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@ppi.io>
  * @package     PPI
  * @subpackage  Console
  */

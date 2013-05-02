@@ -19,7 +19,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Module
  */

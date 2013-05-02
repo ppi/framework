@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 /**
  * Base class for all commands.
  *
- * @author      Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author      Vítor Brandão <vitor@ppi.io>
  * @package     PPI
  * @subpackage  Console
  */

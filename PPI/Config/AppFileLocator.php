@@ -15,7 +15,7 @@ use PPI\Module\ModuleManager;
  * AppFileLocator uses ModuleManager to locate resources in modules.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Config
  */

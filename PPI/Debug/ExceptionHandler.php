@@ -27,7 +27,7 @@ if (!defined('ENT_SUBSTITUTE')) {
  * available, the Response content is always HTML.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class ExceptionHandler extends BaseExceptionHandler
 {

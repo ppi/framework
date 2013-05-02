@@ -17,7 +17,7 @@ use Zend\ModuleManager\ModuleManagerInterface;
  * (Module\BlogModule\Controller\PostController::indexAction).
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Module
  */

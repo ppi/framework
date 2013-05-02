@@ -23,7 +23,7 @@ use Zend\Stdlib\ArrayUtils;
  * DefaultListenerAggregate class.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author     Vítor Brandão <vitor@ppi.io>
  *
  * @package    PPI
  * @subpackage Module

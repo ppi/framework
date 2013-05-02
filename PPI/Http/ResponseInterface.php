@@ -15,7 +15,7 @@ namespace PPI\Http;
  *
  * This interface should be here until a PSR HttpResponse comes to existence.
  *
- * @author Vítor Brandão <vitor@ppi.io> <vitor@noiselabs.org>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 interface ResponseInterface
 {
