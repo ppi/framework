@@ -35,6 +35,7 @@ class ExceptionHandler extends BaseExceptionHandler
     private $charset;
     private $appName;
     private $appVersion;
+    private $showAllExceptions;
 
     /**
      * @param bool   $debug
@@ -42,12 +43,13 @@ class ExceptionHandler extends BaseExceptionHandler
      * @param string $appName
      * @param string $appVersion
      */
-    public function __construct($debug = true, $charset = 'UTF-8', $appName = 'PPI Framework', $appVersion = null)
+    public function __construct($debug = true, $charset = 'UTF-8', $appName = 'PPI Framework', $appVersion = null, $showAllExceptions = false)
     {
         $this->debug = $debug;
         $this->charset = $charset;
         $this->appName = $appName;
         $this->appVersion = $appVersion;
+        $this->showAllExceptions = $showAllExceptions;
     }
 
     /**
@@ -135,7 +137,7 @@ class ExceptionHandler extends BaseExceptionHandler
             header($name.': '.$value, false);
         }
 
-        echo $this->decorate($this->getContent($exception), $this->getStylesheet($exception));
+        echo $this->decorate($this->getContent($exception, $this->showAllExceptions), $this->getStylesheet($exception));
     }
 
     /**
@@ -151,17 +153,27 @@ class ExceptionHandler extends BaseExceptionHandler
             $exception = FlattenException::create($exception);
         }
 
-        return new Response($this->decorate($this->getContent($exception), $this->getStylesheet($exception)), $exception->getStatusCode(), $exception->getHeaders());
+        return new Response($this->decorate($this->getContent($exception, $this->showAllExceptions), $this->getStylesheet($exception)), $exception->getStatusCode(), $exception->getHeaders());
     }
 
     /**
      * Gets the HTML content associated with the given exception.
      *
-     * @param FlattenException $exception A FlattenException instance
+     * @param FlattenException  $exception A FlattenException instance
+     * @param bool              $showAll SA
      *
      * @return string The content as a string
      */
-    public function getContent(FlattenException $exception)
+
+    /**
+     * Gets the HTML content associated with the given exception.
+     *
+     * @param FlattenException  $exception  A FlattenException instance
+     * @param bool              $showAll    Show all exceptions or just the last one
+     *
+     * @return string The content as a string
+     */
+    public function getContent(FlattenException $exception, $showAll = true)
     {
         switch ($exception->getStatusCode()) {
             case 404:
@@ -171,28 +183,47 @@ class ExceptionHandler extends BaseExceptionHandler
                 $title = "Oh noes, something's broken";
         }
         
-        $allExceptions = $exception->toArray();
-        end($allExceptions);
-        $lastException = current($allExceptions);
-
         $content = '';
         if ($this->debug) {
             try {
-                $count = count($exception->toArray());
-                $total = $count + 1;
-                foreach (array($lastException) as $position => $e) {
+                $exceptions = $exception->toArray();
+                if (false === $showAll) {
+                    $exceptions = array_slice($exceptions, -1, 1);
+                    $count = 1;
+                    $total = 1;
+                } else {
+                    $count = count($exception->getAllPrevious());
+                    $total = $count + 1;
+                }
+
+                foreach ($exceptions as $position => $e) {
                     $i = 0;
-                    $ind = $count - $position + 1;
                     $class = $this->abbrClass($e['class']);
                     $message = nl2br($e['message']);
-                    $content .= sprintf(<<<EOF
+
+                    if (false === $showAll) {
+                        $content .= sprintf(<<<EOT
                         <div>
                             <h3 class="alert alert-error">%s: %s</h3>
                         </div>
+EOT
+                            , $class, $message);
+                    } else {
+                        $ind = $count - $position + 1;
+                        $content .= sprintf(<<<EOT
+                        <div>
+                            <h3 class="alert alert-error">%d/%d %s: %s</h3>
+                        </div>
+EOT
+                            , $ind, $total, $class, $message);
+                    }
+
+                    $content .= <<<EOT
                         <div>
                             <table class="table table-bordered table-striped"><tbody>
-EOF
-                        , $class, $message);
+EOT
+                        ;
+
                     foreach ($e['trace'] as $trace) {
                         $i++;
                         $content .= '       <tr><td>'.$i.'</td><td>';
