@@ -13,6 +13,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 use PPI\DataSource\Connection\DoctrineDBAL as DoctrineDBALConnection;
+use PPI\DataSource\Connection\FuelPHP as FuelPHPConnection;
 use PPI\DataSource\Connection\Laravel as LaravelConnection;
 use PPI\DataSource\ConnectionManager;
 
@@ -33,9 +34,9 @@ class DataSourceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        
+
         $config = $serviceLocator->get('ApplicationConfig');
-        $allConnections = $libraryToConnMap = $laravelConns = $doctrineDBALConns = array();
+        $allConnections = $libraryToConnMap = $laravelConns = $doctrineDBALConns = $fuelphpConns = array();
 
         if(isset($config['datasource']['connections'])) {
             foreach($config['datasource']['connections'] as $name => $conn) {
@@ -45,6 +46,9 @@ class DataSourceFactory implements FactoryInterface
                 }
                 if($conn['library'] === 'doctrine_dbal') {
                     $doctrineDBALConns[$name] = $conn;
+                }
+                if($conn['library'] === 'fuelphp') {
+                    $fuelphpConns[$name] = $conn;
                 }
             }
 
@@ -56,7 +60,11 @@ class DataSourceFactory implements FactoryInterface
                 $libraryToConnMap['doctrine_dbal'] = new DoctrineDBALConnection($doctrineDBALConns);
             }
 
-        } 
+            if(!empty($fuelphpConns)) {
+                $libraryToConnMap['fuelphp'] = new FuelPHPConnection($fuelphpConns);
+            }
+
+        }
 
         return new ConnectionManager($allConnections, $libraryToConnMap);
 
