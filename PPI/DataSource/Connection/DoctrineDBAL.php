@@ -8,22 +8,26 @@ use Doctrine\DBAL\DriverManager;
 class DoctrineDBAL implements ConnectionInferface
 {
 
-	protected $conns;
+    protected $config = array();
+	protected $conns = array();
 
-    public function __construct(array $connections)
+    public function __construct(array $config)
     {
-    	foreach($connections as $name => $config) {
-    		$conns[$name] = DriverManager::getConnection($this->normaliseConfigKeys($config));
-    	}
-		$this->conns = $conns;
+        $this->config = $config;
     }
 
     public function getConnectionByName($name)
     {
 
-    	if(!isset($this->conns[$name])) {
+    	if(!isset($this->config[$name])) {
     		throw new \Exception('No doctrine dbal connection found named: ' . $name);
     	}
+
+        if (!isset($this->conns[$name])) {
+            $config = $this->normaliseConfigKeys($this->config[$name]);
+            $this->conns[$name] = DriverManager::getConnection($config);
+        }
+
     	return $this->conns[$name];
     }
 
