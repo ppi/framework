@@ -4,6 +4,8 @@ namespace PPI\DataSource\Connection;
 
 use PPI\DataSource\ConnectionInferface;
 
+use Monga\Connection as MongaConnection;
+
 class Monga implements ConnectionInferface
 {
     protected $config = array();
@@ -21,14 +23,48 @@ class Monga implements ConnectionInferface
             throw new \Exception('No monga db connection found named: ' . $name);
         }
 
-        // @todo - todo
+        $config = $this->config[$name];
+        if(!isset($config['hostname'])) {
+            throw new \Exception('Unable to locate Monga hostname');
+        }
+
         if (!isset($this->conns[$name])) {
-            var_dump($this->config); exit;
-            $this->conns[$name] = new Monga\Connection();
+            $this->conns[$name] = new MongaConnection(
+                $this->constructDSN($config), $this->normaliseConfigKeys($config)
+            );
         }
 
         return $this->conns[$name];
     }
+
+    public function constructDSN($config)
+    {
+        if(!isset($config['hostname'])) {
+            $config['hostname'] = 'localhost';
+        }
+
+        if(!isset($config['port'])) {
+            $config['port'] = 27017;
+        }
+
+        return sprintf('mongodb://%s:%s', $config['hostname'], $config['port']);
+    }
+
+    public function normaliseConfigKeys($config)
+    {
+        $keys = array('database' => 'db');
+        foreach($keys as $findKey => $replaceKey) {
+            if(isset($config[$findKey])) {
+                $config[$replaceKey] = $config[$findKey];
+                unset($config[$findKey]);
+            }
+        }
+        unset($config['library'], $config['hostname']);
+
+        return $config;
+    }
+
+
 
     public function supports($library)
     {
