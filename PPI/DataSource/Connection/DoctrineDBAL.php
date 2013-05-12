@@ -24,7 +24,8 @@ class DoctrineDBAL implements ConnectionInferface
     	}
 
         if (!isset($this->conns[$name])) {
-            $this->conns[$name] = DriverManager::getConnection($this->normaliseConfigKeys($this->config));
+            $config = $this->normaliseConfigKeys($this->config[$name]);
+            $this->conns[$name] = DriverManager::getConnection($config);
         }
 
     	return $this->conns[$name];
