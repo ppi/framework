@@ -23,10 +23,10 @@ class DoctrineDBAL implements ConnectionInferface
     		throw new \Exception('No doctrine dbal connection found named: ' . $name);
     	}
 
-        if (!isset($this->connections[$name])) {
+        if (!isset($this->conns[$name])) {
             $this->conns[$name] = DriverManager::getConnection($this->normaliseConfigKeys($config));
         }
-        
+
     	return $this->conns[$name];
     }
 
