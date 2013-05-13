@@ -38,7 +38,7 @@ class DoctrineDBAL implements ConnectionInferface
 
     public function normaliseConfigKeys($config)
     {
-        $keys = array('database' => 'dbname', 'hostname' => 'host', 'username' => 'user', 'port');
+        $keys = array('database' => 'dbname', 'hostname' => 'host', 'username' => 'user');
         foreach($keys as $findKey => $replaceKey) {
             if(isset($config[$findKey])) {
                 $config[$replaceKey] = $config[$findKey];
