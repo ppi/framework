@@ -15,6 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use PPI\DataSource\ConnectionManager;
 
 use PPI\DataSource\Connection\DoctrineDBAL as DoctrineDBALConnection;
+use PPI\DataSource\Connection\DoctrineMongoDB as DoctrineMongoDBConnection;
 use PPI\DataSource\Connection\FuelPHP as FuelPHPConnection;
 use PPI\DataSource\Connection\Laravel as LaravelConnection;
 use PPI\DataSource\Connection\Monga as MongaConnection;
@@ -55,6 +56,10 @@ class DataSourceFactory implements FactoryInterface
                         $configMap['doctrine_dbal'][$name] = $conn;
                         break;
 
+                    case 'doctrine_mongodb':
+                        $configMap['doctrine_mongodb'][$name] = $conn;
+                        break;
+
                     case 'fuelphp':
                         $configMap['fuelphp'][$name] = $conn;
                         break;
@@ -62,6 +67,8 @@ class DataSourceFactory implements FactoryInterface
                     case 'monga':
                         $configMap['monga'][$name] = $conn;
                         break;
+
+
                 }
             }
 
@@ -70,6 +77,9 @@ class DataSourceFactory implements FactoryInterface
             }
             if(isset($configMap['doctrine_dbal']) && !empty($configMap['doctrine_dbal'])) {
                 $libraryToConnMap['doctrine_dbal'] = new DoctrineDBALConnection($configMap['doctrine_dbal']);
+            }
+            if(isset($configMap['doctrine_mongodb']) && !empty($configMap['doctrine_mongodb'])) {
+                $libraryToConnMap['doctrine_mongodb'] = new DoctrineMongoDBConnection($configMap['doctrine_mongodb']);
             }
             if(isset($configMap['fuelphp']) && !empty($configMap['fuelphp'])) {
                 $libraryToConnMap['fuelphp'] = new FuelPHPConnection($configMap['fuelphp']);
