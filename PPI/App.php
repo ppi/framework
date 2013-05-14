@@ -119,7 +119,7 @@ class App implements AppInterface
 
     /**
      * Service Manager.
-     * @var \PPI\Module\ServiceManager\ServiceManager
+     * @var \PPI\ServiceManager\ServiceManager
      */
     protected $serviceManager = null;
 
