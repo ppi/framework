@@ -33,6 +33,7 @@
         "symfony/config": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
         "symfony/debug": "2.3.*@dev",
+        "symfony/finder": "2.2.*@stable",
         "symfony/http-foundation": "2.2.*@stable",
         "symfony/routing": "2.2.*@stable",
         "symfony/templating": "2.2.*@stable",

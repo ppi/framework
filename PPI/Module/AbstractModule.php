@@ -345,7 +345,7 @@ abstract class AbstractModule implements ModuleInterface
      * Override this method if your module commands do not follow the conventions:
      *
      * * Commands are in the 'Command' sub-directory
-     * * Commands extend PPI\Console\\Command\AbstractCommand
+     * * Commands extend PPI\Console\Command\AbstractCommand
      *
      * @param Application $application An Application instance
      */
