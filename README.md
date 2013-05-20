@@ -1,12 +1,12 @@
 # PPI Framework
 
-[@website]:       http://www.ppi.io/                   "PPI Framework"
-[@documentation]: http://www.ppi.io/docs               "PPI Framework Documentation"
+[@website]:       http://www.ppi.io/                              "PPI Framework"
+[@documentation]: http://www.ppi.io/docs/2.0/getting_started.html "PPI Framework Documentation"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
-[@gitweb]:        https://github.com/ppi/framework     "ppi/framework"
-[@h5bp]:          http://html5boilerplate.com/         "HTML5 Boilerplate"
-[@twbootstrap]:   http://twitter.github.com/bootstrap/ "Twitter Bootstrap"
-[@php]:           http://php.net/                      "PHP: Hypertext Preprocessor"
+[@gitweb]:        https://github.com/ppi/framework                "ppi/framework"
+[@h5bp]:          http://html5boilerplate.com/                    "HTML5 Boilerplate"
+[@twbootstrap]:   http://twitter.github.com/bootstrap/            "Twitter Bootstrap"
+[@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 
 * [Official website][@website]
 * [Download][@download]
