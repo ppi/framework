@@ -2,8 +2,9 @@
 
 namespace PPI\DataSource\Connection;
 
+use PDO;
 use PPI\DataSource\ConnectionInferface;
-use Illuminate\Database\Capsule;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class Laravel implements ConnectionInferface
 {
@@ -17,6 +18,8 @@ class Laravel implements ConnectionInferface
         $fetchMode       = null;
         $defaultConnName = null;
 
+        $capsule = new Capsule;
+
         foreach($connections as $name => $conn) {
             if(!$useEloquent && isset($conn['eloquent'])) {
                 $useEloquent = true;
@@ -29,12 +32,15 @@ class Laravel implements ConnectionInferface
             if($defaultConnName === null && isset($conn['default']) && $conn['default'] === true) {
                 $defaultConnName = $name;
             }
+
+            $capsule->addConnection($conn, $name);
         }
 
-        // Setup the capsule
-        $capsule = new Capsule(
-            $this->prepareCapsuleConfig($connections, $fetchMode, $defaultConnName)
-        );
+        // Set the Capsule configuration options
+        $config = $capsule->getContainer()->config;
+        $config['database.fetch'] = $fetchMode ?: PDO::FETCH_ASSOC;
+        $config['database.default'] = $defaultConnName ?: 'default';
+        $capsule->getContainer()->config = $config;
 
         // If the users are using eloquent, lets boot it
         if($useEloquent) {
@@ -45,18 +51,9 @@ class Laravel implements ConnectionInferface
 
     }
 
-    public function prepareCapsuleConfig($connections, $fetchMode, $defaultConnName)
-    {
-        return array(
-            'connections' => $connections,
-            'fetch'       => $fetchMode,
-            'default'     => $defaultConnName
-        );
-    }
-
     public function getConnectionByName($name)
     {
-        return $this->capsule->connection($name);
+        return $this->capsule->getConnection($name);
     }
 
     public function supports($library)
