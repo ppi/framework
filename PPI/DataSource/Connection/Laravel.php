@@ -33,20 +33,21 @@ class Laravel implements ConnectionInferface
                 $defaultConnName = $name;
             }
 
-            $capsule->addConnection($conn, $name);
+            $capsule->addConnection($this->normaliseConfigKeys($conn), $name);
         }
 
         // Set the Capsule configuration options
-        $config = $capsule->getContainer()->config;
+        $config = $capsule->getContainer()->make('config');
         $config['database.fetch'] = $fetchMode ?: PDO::FETCH_ASSOC;
         $config['database.default'] = $defaultConnName ?: 'default';
-        $capsule->getContainer()->config = $config;
+        $capsule->getContainer()->instance('config', $config);
 
         // If the users are using eloquent, lets boot it
         if($useEloquent) {
             $capsule->bootEloquent();
         }
 
+        $capsule->setAsGlobal();
         $this->capsule = $capsule;
 
     }
@@ -56,10 +57,21 @@ class Laravel implements ConnectionInferface
         return $this->capsule->getConnection($name);
     }
 
+    public function normaliseConfigKeys($config)
+    {
+        $keys = array('hostname' => 'host');
+        foreach($keys as $findKey => $replaceKey) {
+            if(isset($config[$findKey])) {
+                $config[$replaceKey] = $config[$findKey];
+                unset($config[$findKey]);
+            }
+        }
+        return $config;
+    }
+
     public function supports($library)
     {
         return $library === 'laravel';
     }
 
 }
-
