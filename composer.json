@@ -43,7 +43,8 @@
         "zendframework/zend-loader": "2.1.*@stable",
         "zendframework/zend-modulemanager": "2.1.*@stable",
         "zendframework/zend-servicemanager": "2.1.*@stable",
-        "zendframework/zend-stdlib": "2.1.*@stable"
+        "zendframework/zend-stdlib": "2.1.*@stable",
+        "zendframework/zend-db": "2.1.*@stable"
     },
     "extra": {
         "branch-alias": {
