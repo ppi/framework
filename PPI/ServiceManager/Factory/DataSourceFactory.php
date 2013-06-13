@@ -19,6 +19,7 @@ use PPI\DataSource\Connection\DoctrineMongoDB as DoctrineMongoDBConnection;
 use PPI\DataSource\Connection\FuelPHP as FuelPHPConnection;
 use PPI\DataSource\Connection\Laravel as LaravelConnection;
 use PPI\DataSource\Connection\Monga as MongaConnection;
+use PPI\DataSource\Connection\ZendDb as ZendDbConnection;
 
 /**
  * DataSource Factory.
@@ -68,6 +69,10 @@ class DataSourceFactory implements FactoryInterface
                         $configMap['monga'][$name] = $conn;
                         break;
 
+                    case 'zend_db':
+                        $configMap['zend_db'][$name] = $conn;
+                        break;
+
 
                 }
             }
@@ -86,6 +91,9 @@ class DataSourceFactory implements FactoryInterface
             }
             if(isset($configMap['monga']) && !empty($configMap['monga'])) {
                 $libraryToConnMap['monga'] = new MongaConnection($configMap['monga']);
+            }
+            if(isset($configMap['zend_db']) && !empty($configMap['zend_db'])) {
+                $libraryToConnMap['zend_db'] = new ZendDbConnection($configMap['zend_db']);
             }
         }
 
