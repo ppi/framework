@@ -25,11 +25,22 @@ use PPI\DataSource\Connection\ZendDb as ZendDbConnection;
  * DataSource Factory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
 class DataSourceFactory implements FactoryInterface
 {
+
+    protected $connectionClassMap = array(
+        'laravel'          => 'PPI\DataSource\Connection\Laravel',
+        'doctrine_dbal'    => 'PPI\DataSource\Connection\DoctrineDBAL',
+        'doctrine_mongdb'  => 'PPI\DataSource\Connection\DoctrineMongoDB',
+        'fuelphp'          => 'PPI\DataSource\Connection\FuelPHP',
+        'monga'            => 'PPI\DataSource\Connection\Monga',
+        'zend_db'          => 'PPI\DataSource\Connection\ZendDb'
+    );
+
     /**
      * Create and return the datasource service.
      *
@@ -42,61 +53,18 @@ class DataSourceFactory implements FactoryInterface
         $config         = $serviceLocator->get('ApplicationConfig');
         $allConnections = $libraryToConnMap = $configMap = array();
 
-        if(isset($config['datasource']['connections'])) {
-            foreach($config['datasource']['connections'] as $name => $conn) {
-
-                $allConnections[$name] = $conn;
-
-                switch($conn['library']) {
-
-                    case 'laravel':
-                        $configMap['laravel'][$name] = $conn;
-                        break;
-
-                    case 'doctrine_dbal':
-                        $configMap['doctrine_dbal'][$name] = $conn;
-                        break;
-
-                    case 'doctrine_mongodb':
-                        $configMap['doctrine_mongodb'][$name] = $conn;
-                        break;
-
-                    case 'fuelphp':
-                        $configMap['fuelphp'][$name] = $conn;
-                        break;
-
-                    case 'monga':
-                        $configMap['monga'][$name] = $conn;
-                        break;
-
-                    case 'zend_db':
-                        $configMap['zend_db'][$name] = $conn;
-                        break;
-
-
-                }
-            }
-
-            if(isset($configMap['laravel']) && !empty($configMap['laravel'])) {
-                $libraryToConnMap['laravel'] = new LaravelConnection($configMap['laravel']);
-            }
-            if(isset($configMap['doctrine_dbal']) && !empty($configMap['doctrine_dbal'])) {
-                $libraryToConnMap['doctrine_dbal'] = new DoctrineDBALConnection($configMap['doctrine_dbal']);
-            }
-            if(isset($configMap['doctrine_mongodb']) && !empty($configMap['doctrine_mongodb'])) {
-                $libraryToConnMap['doctrine_mongodb'] = new DoctrineMongoDBConnection($configMap['doctrine_mongodb']);
-            }
-            if(isset($configMap['fuelphp']) && !empty($configMap['fuelphp'])) {
-                $libraryToConnMap['fuelphp'] = new FuelPHPConnection($configMap['fuelphp']);
-            }
-            if(isset($configMap['monga']) && !empty($configMap['monga'])) {
-                $libraryToConnMap['monga'] = new MongaConnection($configMap['monga']);
-            }
-            if(isset($configMap['zend_db']) && !empty($configMap['zend_db'])) {
-                $libraryToConnMap['zend_db'] = new ZendDbConnection($configMap['zend_db']);
-            }
+        // Early return
+        if(!isset($config['datasource']['connections'])) {
+            return new ConnectionManager($allConnections, $this->connectionClassMap);
         }
 
-        return new ConnectionManager($allConnections, $libraryToConnMap);
+        foreach($config['datasource']['connections'] as $name => $config) {
+
+            $allConnections[$name]                = $config;
+            $configMap[$config['library']][$name] = $config;
+        }
+
+        return new ConnectionManager($allConnections, $this->connectionClassMap);
+        
     }
 }
