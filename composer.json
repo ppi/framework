@@ -35,7 +35,8 @@
         "symfony/yaml": "2.2.*@stable",
         "zendframework/zend-eventmanager": "2.1.*@stable",
         "zendframework/zend-modulemanager": "2.1.*@stable",
-        "zendframework/zend-servicemanager": "2.1.*@stable"
+        "zendframework/zend-servicemanager": "2.1.*@stable",
+        "zendframework/zend-loader": "2.1.*@stable"
     },
     "extra": {
         "branch-alias": {
