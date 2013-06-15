@@ -24,6 +24,7 @@
     },
     "require": {
         "monolog/monolog": "1.4.*@stable",
+        "symfony/dependency-injection": "2.2.*@stable",
         "symfony/config": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
         "symfony/debug": "2.3.*@dev",

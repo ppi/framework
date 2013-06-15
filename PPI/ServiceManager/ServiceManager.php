@@ -9,8 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ScopeInterface;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
@@ -27,10 +25,11 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
  * * https://github.com/zendframework/zf2/blob/master/library/Zend/ServiceManager/ServiceManager.php
  *
  * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class ServiceManager extends BaseServiceManager implements ContainerInterface
+class ServiceManager extends BaseServiceManager
 {
     public function __construct(ConfigInterface $config = null)
     {
@@ -86,7 +85,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      */
     public function getParameter($name)
     {
-        $config = $this->get('Config');
+        $config = $this->get('config');
         if (!isset($config['parameters'][$name])) {
             throw new \InvalidArgumentException(sprintf('You have requested a non-existent parameter "%s".', $name));
         }
@@ -105,8 +104,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      */
     public function hasParameter($name)
     {
-        $config = $this->get('Config');
-
+        $config = $this->get('config');
         return isset($config['parameters'][$name]);
     }
 
@@ -118,10 +116,10 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      */
     public function setParameter($name, $value)
     {
-        $config = $this->get('Config');
+        $config = $this->get('config');
         $config['parameters'][$name] = $value;
 
-        $this->set('Config', $config);
+        $this->set('config', $config);
     }
 
     /**
@@ -139,28 +137,4 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
         );
     }
 
-    public function enterScope($name)
-    {
-        throw new NotImplementedExceptionException();
-    }
-
-    public function leaveScope($name)
-    {
-        throw new NotImplementedExceptionException();
-    }
-
-    public function addScope(ScopeInterface $scope)
-    {
-        throw new NotImplementedExceptionException();
-    }
-
-    public function hasScope($name)
-    {
-        throw new NotImplementedExceptionException();
-    }
-
-    public function isScopeActive($name)
-    {
-        throw new NotImplementedExceptionException();
-    }
 }
