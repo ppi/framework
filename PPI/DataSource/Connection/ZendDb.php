@@ -14,8 +14,12 @@ use PPI\DataSource\ConnectionInferface;
 use Zend\Db\Adapter\Adapter as DbAdapter;
 
 /**
+ * Zend Framework DB Connection.
  *
- *
+ * @author     Ralph Schindler <ralph.s@zend.com>
+ * @author     Paul Dragoonis <paul@ppi.io>
+ * @package    PPI
+ * @subpackage DataSource
  */
 class ZendDb implements ConnectionInferface
 {
