@@ -27,12 +27,12 @@ class DoctrineMongoDB implements ConnectionInferface
     public function getConnectionByName($name)
     {
 
-        if(!isset($this->config[$name])) {
+        if (!isset($this->config[$name])) {
             throw new \Exception('No doctrine mongodb connection found named: ' . $name);
         }
 
         $config = $this->config[$name];
-        if(!isset($config['hostname'])) {
+        if (!isset($config['hostname'])) {
             throw new \Exception('Unable to locate Monga hostname');
         }
 
@@ -52,11 +52,11 @@ class DoctrineMongoDB implements ConnectionInferface
 
     public function constructDSN($config)
     {
-        if(!isset($config['hostname'])) {
+        if (!isset($config['hostname'])) {
             $config['hostname'] = 'localhost';
         }
 
-        if(!isset($config['port'])) {
+        if (!isset($config['port'])) {
             $config['port'] = 27017;
         }
 
@@ -66,8 +66,8 @@ class DoctrineMongoDB implements ConnectionInferface
     public function normaliseConfigKeys($config)
     {
         $keys = array('database' => 'db');
-        foreach($keys as $findKey => $replaceKey) {
-            if(isset($config[$findKey])) {
+        foreach ($keys as $findKey => $replaceKey) {
+            if (isset($config[$findKey])) {
                 $config[$replaceKey] = $config[$findKey];
                 unset($config[$findKey]);
             }

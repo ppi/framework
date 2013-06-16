@@ -26,7 +26,7 @@ class FuelPHP implements ConnectionInferface
     public function getConnectionByName($name)
     {
 
-        if(!isset($this->config[$name])) {
+        if (!isset($this->config[$name])) {
             throw new \Exception('No fuel db connection found named: ' . $name);
         }
 

@@ -28,9 +28,6 @@ use PPI\View\Mustache\MustacheEngine;
 use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
 
 // Twig
-use PPI\View\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
-use PPI\View\Twig\Extension\AssetsExtension as TwigAssetsExtension;
-use PPI\View\Twig\Extension\RouterExtension as TwigRouterExtension;
 
 // Smarty
 use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
