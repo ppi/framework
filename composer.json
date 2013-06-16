@@ -23,7 +23,7 @@
         "psr-0": { "PPI": "" }
     },
     "require": {
-        "monolog/monolog": "1.4.*@stable",
+        "monolog/monolog": "1.5.*@stable",
         "symfony/dependency-injection": "2.2.*@stable",
         "symfony/config": "2.2.*@stable",
         "symfony/console": "2.2.*@stable",
@@ -34,7 +34,7 @@
         "symfony/templating": "2.2.*@stable",
         "symfony/yaml": "2.2.*@stable",
         "symfony/http-kernel": "2.2.*@stable",
-	"symfony/framework-bundle": "2.2.*@stable",
+	    "symfony/framework-bundle": "2.2.*@stable",
         "zendframework/zend-eventmanager": "2.1.*@stable",
         "zendframework/zend-modulemanager": "2.1.*@stable",
         "zendframework/zend-servicemanager": "2.1.*@stable",
