@@ -33,6 +33,7 @@
         "symfony/routing": "2.2.*@stable",
         "symfony/templating": "2.2.*@stable",
         "symfony/yaml": "2.2.*@stable",
+        "symfony/http-kernel": "2.2.*@stable",
         "zendframework/zend-eventmanager": "2.1.*@stable",
         "zendframework/zend-modulemanager": "2.1.*@stable",
         "zendframework/zend-servicemanager": "2.1.*@stable",
