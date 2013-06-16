@@ -23,18 +23,16 @@ use PPI\View\Helper\SessionHelper;
 use Symfony\Component\Templating\Helper\SlotsHelper;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
-// Twig
-use PPI\View\Twig\TwigEngine;
-use PPI\View\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
-use PPI\View\Twig\Extension\AssetsExtension as TwigAssetsExtension;
-use PPI\View\Twig\Extension\RouterExtension as TwigRouterExtension;
-
 // Mustache
 use PPI\View\Mustache\MustacheEngine;
 use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
 
+// Twig
+use PPI\View\Twig\Loader\FileSystemLoader as TwigFileSystemLoader;
+use PPI\View\Twig\Extension\AssetsExtension as TwigAssetsExtension;
+use PPI\View\Twig\Extension\RouterExtension as TwigRouterExtension;
+
 // Smarty
-use PPI\View\Smarty\SmartyEngine;
 use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
 use PPI\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
 
@@ -148,16 +146,16 @@ class TemplatingConfig extends AbstractConfig
          */
         $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
             $twigEnvironment = new \Twig_Environment(
-                new TwigFileSystemLoader(
+                new \PPI\View\Twig\Loader\FileSystemLoader(
                     $serviceManager->get('templating.locator'),
                     $serviceManager->get('templating.name_parser'))
             );
 
             // Add some twig extension
-            $twigEnvironment->addExtension(new TwigAssetsExtension($serviceManager->get('templating.helper.assets')));
-            $twigEnvironment->addExtension(new TwigRouterExtension($serviceManager->get('router')));
+            $twigEnvironment->addExtension(new \PPI\View\Twig\Extension\AssetsExtension($serviceManager->get('templating.helper.assets')));
+            $twigEnvironment->addExtension(new \PPI\View\Twig\Extension\RouterExtension($serviceManager->get('router')));
 
-            return new TwigEngine($twigEnvironment, $serviceManager->get('templating.name_parser'),
+            return new \PPI\View\Twig\TwigEngine($twigEnvironment, $serviceManager->get('templating.name_parser'),
                 $serviceManager->get('templating.locator'), $serviceManager->get('templating.globals'));
         });
 
@@ -167,7 +165,7 @@ class TemplatingConfig extends AbstractConfig
         $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) use ($appCacheDir) {
             $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
 
-            $smartyEngine = new SmartyEngine(
+            $smartyEngine = new \PPI\View\Smarty\SmartyEngine(
                 new \Smarty(),
                 $serviceManager->get('templating.locator'),
                 $serviceManager->get('templating.name_parser'),
@@ -204,6 +202,7 @@ class TemplatingConfig extends AbstractConfig
          */
         $serviceManager->setFactory('templating.engine.delegating', function($serviceManager) use ($engineIds) {
             $delegatingEngine = new DelegatingEngine();
+            // @todo - lazy load this
             foreach ($engineIds as $id) {
                 $delegatingEngine->addEngine($serviceManager->get('templating.engine.'.$id));
             }
