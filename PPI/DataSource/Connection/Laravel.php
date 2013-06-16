@@ -28,16 +28,16 @@ class Laravel implements ConnectionInferface
 
         $capsule = new Capsule;
 
-        foreach($connections as $name => $conn) {
-            if(!$useEloquent && isset($conn['eloquent'])) {
+        foreach ($connections as $name => $conn) {
+            if (!$useEloquent && isset($conn['eloquent'])) {
                 $useEloquent = true;
             }
 
-            if($fetchMode === null && isset($conn['fetch_mode']) && !empty($conn['fetch_mode'])) {
+            if ($fetchMode === null && isset($conn['fetch_mode']) && !empty($conn['fetch_mode'])) {
                 $fetchMode = $conn['fetch_mode'];
             }
 
-            if($defaultConnName === null && isset($conn['default']) && $conn['default'] === true) {
+            if ($defaultConnName === null && isset($conn['default']) && $conn['default'] === true) {
                 $defaultConnName = $name;
             }
 
@@ -51,7 +51,7 @@ class Laravel implements ConnectionInferface
         $capsule->getContainer()->instance('config', $config);
 
         // If the users are using eloquent, lets boot it
-        if($useEloquent) {
+        if ($useEloquent) {
             $capsule->bootEloquent();
         }
 
@@ -68,12 +68,13 @@ class Laravel implements ConnectionInferface
     public function normaliseConfigKeys($config)
     {
         $keys = array('hostname' => 'host');
-        foreach($keys as $findKey => $replaceKey) {
-            if(isset($config[$findKey])) {
+        foreach ($keys as $findKey => $replaceKey) {
+            if (isset($config[$findKey])) {
                 $config[$replaceKey] = $config[$findKey];
                 unset($config[$findKey]);
             }
         }
+
         return $config;
     }
 

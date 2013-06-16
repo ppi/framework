@@ -16,7 +16,7 @@ class ConnectionManager
 
     public function getConnection($name)
     {
-        if(!isset($this->connections[$name])) {
+        if (!isset($this->connections[$name])) {
             throw new \Exception('Unable to locate connection by name: ' . $name);
         }
 
@@ -24,7 +24,7 @@ class ConnectionManager
         $library = $this->connections[$name]['library'];
 
         // Have we been here before?
-        if(!isset($this->libraryToConnMap[$library])) {
+        if (!isset($this->libraryToConnMap[$library])) {
 
             // Identify the vendor connection classname from the classmap
             $connectionClass = $this->connectionClassMap[$library];
@@ -40,14 +40,13 @@ class ConnectionManager
     public function getConnectionsByLibrary($library)
     {
         $conns = array();
-        foreach($this->connections as $name => $config)
-        {
-            if($config['library'] === $library) {
+        foreach ($this->connections as $name => $config) {
+            if ($config['library'] === $library) {
                 $conns[$name] = $config;
             }
         }
+
         return $conns;
     }
 
 }
-

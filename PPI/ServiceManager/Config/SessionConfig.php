@@ -88,25 +88,26 @@ class SessionConfig extends Config
         $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
             return new AttributeBag();
         });
-        
+
         $that = $this;
 
         // session handler native file
         $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($that, $storageOptions) {
-            
+
             // We want absolute paths if we can
-            if(null !== $storageOptions['save_path'] && !$that->isAbsolutePath($storageOptions['save_path'])) {
-                
+            if (null !== $storageOptions['save_path'] && !$that->isAbsolutePath($storageOptions['save_path'])) {
+
                 $storageOptions['save_path'] = realpath($storageOptions['save_path']);
-                
+
                 // Basically if the realpath() failed then we revert back to null so default paths kick in
-                if($storageOptions['save_path'] === false) {
+                if ($storageOptions['save_path'] === false) {
                     $storageOptions['save_path'] = null;
                 }
-                
+
             }
+
             return new NativeFileSessionHandler($storageOptions['save_path']);
-            
+
         });
 
         // session
@@ -124,8 +125,8 @@ class SessionConfig extends Config
 
     /**
      * Check if a path is absolute
-     * 
-     * @param string $file
+     *
+     * @param  string $file
      * @return bool
      */
     public function isAbsolutePath($file)
