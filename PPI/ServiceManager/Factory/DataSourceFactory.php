@@ -14,13 +14,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 use PPI\DataSource\ConnectionManager;
 
-use PPI\DataSource\Connection\DoctrineDBAL as DoctrineDBALConnection;
-use PPI\DataSource\Connection\DoctrineMongoDB as DoctrineMongoDBConnection;
-use PPI\DataSource\Connection\FuelPHP as FuelPHPConnection;
-use PPI\DataSource\Connection\Laravel as LaravelConnection;
-use PPI\DataSource\Connection\Monga as MongaConnection;
-use PPI\DataSource\Connection\ZendDb as ZendDbConnection;
-
 /**
  * DataSource Factory.
  *
@@ -49,22 +42,21 @@ class DataSourceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-
         $config         = $serviceLocator->get('ApplicationConfig');
         $allConnections = $libraryToConnMap = $configMap = array();
 
         // Early return
-        if(!isset($config['datasource']['connections'])) {
+        if (!isset($config['datasource']['connections'])) {
             return new ConnectionManager($allConnections, $this->connectionClassMap);
         }
 
-        foreach($config['datasource']['connections'] as $name => $config) {
+        foreach ($config['datasource']['connections'] as $name => $config) {
 
             $allConnections[$name]                = $config;
             $configMap[$config['library']][$name] = $config;
         }
 
         return new ConnectionManager($allConnections, $this->connectionClassMap);
-        
+
     }
 }

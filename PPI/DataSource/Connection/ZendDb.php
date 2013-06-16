@@ -34,7 +34,7 @@ class ZendDb implements ConnectionInferface
 
     public function getConnectionByName($name)
     {
-        if(!isset($this->config[$name])) {
+        if (!isset($this->config[$name])) {
             throw new \Exception('No zend_db db connection found named: ' . $name);
         }
 
