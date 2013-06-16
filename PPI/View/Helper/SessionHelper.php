@@ -2,14 +2,15 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Helper;
 
-use Symfony\Component\Templating\Helper\Helper,
-    Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Templating\Helper\Helper;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * SessionHelper provides read-only access to the session attributes.
@@ -32,8 +33,6 @@ class SessionHelper extends Helper
      * Constructor.
      *
      * @param SessionInterface $session
-     *
-     * @return void
      */
     public function __construct(SessionInterface $session)
     {
@@ -95,7 +94,7 @@ class SessionHelper extends Helper
      */
     public function hasFlashes()
     {
-        return $this->session->getFlashBag()->count();
+        return count($this->session->getFlashBag()->peekAll()) > 0;
     }
 
     /**
