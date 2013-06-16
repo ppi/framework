@@ -9,6 +9,9 @@
 
 namespace PPI\ServiceManager;
 
+use PPI\Exception\NotImplementedException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ScopeInterface;
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceManager as BaseServiceManager;
 
@@ -29,7 +32,7 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
  * @package    PPI
  * @subpackage ServiceManager
  */
-class ServiceManager extends BaseServiceManager
+class ServiceManager extends BaseServiceManager implements ContainerInterface
 {
     public function __construct(ConfigInterface $config = null)
     {
@@ -105,6 +108,7 @@ class ServiceManager extends BaseServiceManager
     public function hasParameter($name)
     {
         $config = $this->get('config');
+
         return isset($config['parameters'][$name]);
     }
 
@@ -137,4 +141,50 @@ class ServiceManager extends BaseServiceManager
         );
     }
 
+    /**
+     * @param  string                  $name
+     * @throws NotImplementedException
+     */
+    public function enterScope($name)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param  string                  $name
+     * @throws NotImplementedException
+     */
+    public function leaveScope($name)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param  ScopeInterface          $scope
+     * @throws NotImplementedException
+     */
+    public function addScope(ScopeInterface $scope)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param  string                  $name
+     * @return bool|void
+     * @throws NotImplementedException
+     */
+    public function hasScope($name)
+    {
+        throw new NotImplementedException();
+    }
+
+    /**
+     * @param  string                  $name
+     * @return bool|void
+     * @throws NotImplementedException
+     */
+    public function isScopeActive($name)
+    {
+        throw new NotImplementedException();
+    }
 }
