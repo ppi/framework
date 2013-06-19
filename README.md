@@ -28,7 +28,7 @@ build a more pragmatic, simplistic and easier version of the wheel. It's built
 re-using the core components of other web frameworks such as Symfony2, Doctrine2
 and ZendFramework2.
 
-PPI pre-integrates third libraries for you (aka autoloading) so that you can
+PPI pre-integrates third party libraries for you (aka autoloading) so that you can
 drop their components into your Vendor folder and you're up and running
 instantly. From PPI you're able to seamlessly have plug and play, moreso play
 because that's the fun part!
