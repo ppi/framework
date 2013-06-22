@@ -435,7 +435,7 @@ class App implements AppInterface
     }
 
     /**
-     * @note Added for compatiblity with Symfony's HttpKernel\Kernel.
+     * @note Added for compatibility with Symfony's HttpKernel\Kernel.
      *
      * @return null|ServiceManager\ServiceManager
      */
