@@ -16,6 +16,8 @@ use Symfony\Component\Yaml\Dumper;
 
 /**
  * Outputs all the configuration processed by the Framework, after merging.
+ *
+ * @author      Vítor Brandão <vitor@ppi.io>
  */
 class ConfigDumpCommand extends AbstractCommand
 {
@@ -29,7 +31,6 @@ class ConfigDumpCommand extends AbstractCommand
             ->setDescription('Dumps the configuration in use')
             ->addOption('app-only', null, InputOption::VALUE_NONE, 'Show only the configuration set in the app/ directory')
             ->addOption('write-php', null, InputOption::VALUE_REQUIRED, 'Save the configuration in PHP format')
-            ->addOption('write-yml', null, InputOption::VALUE_REQUIRED, 'Save the configuration in YAML format')
             ->addOption('write-yaml', null, InputOption::VALUE_REQUIRED, 'Save the configuration in YAML format')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command dumps the configuration after being merged and processed
