@@ -64,7 +64,7 @@ EOF
 
         if (($file = $input->getOption('write-php'))) {
             $content = "<?php\n\nreturn ".var_export($config, true).";\n\n?>\n";
-        } elseif (($file = $input->getOption('write-yml')) || ($file = $input->getOption('write-yaml'))) {
+        } elseif (($file = $input->getOption('write-yaml'))) {
             $dumper = new Dumper();
             $dumper->setIndentation($indentation);
             $content = $dumper->dump($config, 6, 0, false, false);
