@@ -15,6 +15,7 @@ use PPI\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml as YamlParser;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * The base PPI module class.
@@ -267,14 +268,31 @@ abstract class AbstractModule implements ModuleInterface
     }
 
     /**
-     * Loads a configuration file or PHP array.
+     * Loads a configuration file (PHP, YAML) or PHP array.
      *
-     * @param mixed  $resource The resource
-     * @param string $type     The resource type
+     * @param  string      $resource The resource
+     * @param  null|string $type     The resource type
+     * @return array
      */
     public function loadConfig($resource, $type = null)
     {
         return $this->getConfigLoader()->load($resource, $type);
+    }
+
+    /**
+     * Loads and merges the configuration.
+     *
+     * @param  mixed $resources
+     * @return array
+     */
+    public function mergeConfig($resources)
+    {
+        $configs = array();
+        foreach (is_array($resources) ? $resources: func_get_args() as $resource) {
+            $configs = ArrayUtils::merge($configs, $this->loadConfig($resource));
+        }
+
+        return $configs;
     }
 
     /**

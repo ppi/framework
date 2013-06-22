@@ -437,7 +437,7 @@ class App implements AppInterface
     /**
      * @note Added for compatiblity with Symfony's HttpKernel\Kernel.
      *
-     * @return null|Module\ServiceManager\ServiceManager
+     * @return null|ServiceManager\ServiceManager
      */
     public function getContainer()
     {

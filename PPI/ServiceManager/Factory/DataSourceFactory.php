@@ -57,6 +57,5 @@ class DataSourceFactory implements FactoryInterface
         }
 
         return new ConnectionManager($allConnections, $this->connectionClassMap);
-
     }
 }
