@@ -668,13 +668,9 @@ class App implements AppInterface
      */
     protected function buildServiceManager()
     {
-        $this->mergeConfig(array(
-            'parameters'    => $this->getAppParameters()
-        ));
-
         // ServiceManager creation
         $serviceManager = new ServiceManagerBuilder($this->config);
-        $serviceManager->build();
+        $serviceManager->build($this->getAppParameters());
         $serviceManager->set('app', $this);
 
         return $serviceManager;
