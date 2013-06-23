@@ -72,6 +72,24 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
     }
 
     /**
+     * Replaces parameter placeholders (%name%) by their values in every string element of the $array.
+     *
+     * @param  array $data
+     * @return array
+     */
+    public function resolveArray(array $data)
+    {
+        $self = $this;
+        array_walk_recursive($data, function(&$value, $key) use ($self) {
+            if (is_string($value)) {
+                $value = $self->resolveString($value);
+            }
+        });
+
+        return $data;
+    }
+
+    /**
      * Flattens an nested array of parameters
      *
      * The scheme used is:
@@ -85,7 +103,7 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
      * @param array  $subnode Current subnode being parsed, used internally for recursive calls
      * @param string $path    Current path being parsed, used internally for recursive calls
      */
-    private function flatten(array &$parameters, array $subnode = null, $path = null)
+    protected function flatten(array &$parameters, array $subnode = null, $path = null)
     {
         if (null === $subnode) {
             $subnode =& $parameters;

@@ -39,7 +39,7 @@ by the framework:
   <info>%command.full_name%</info>
 
 If you only want to see the configuration defined in the app/ directory (excluding modules)
-use the <info>--app-only</info> option.
+use the <info>--app-only</info> option. This is the "raw" configuration, not processed by the framework.
 
   <info>%command.full_name% --app-only</info>
 EOF
@@ -55,36 +55,27 @@ EOF
         $indentation = 4;
 
         if ($input->getOption('app-only')) {
-            $message = "This is the configuration defined in the app/ directory:\n";
+            $message = "This is the configuration defined in the app/ directory (not processed):\n";
             $config = $this->getServiceManager()->get('ApplicationConfig');
         } else {
-            $message = "This is the configuration in use for your current setup:\n";
+            $message = "This is the configuration in use for your current setup (merged and processed):\n";
             $config = $this->getServiceManager()->get('Config');
         }
 
-        if (($file = $input->getOption('write-php'))) {
-            $content = "<?php\n\nreturn ".var_export($config, true).";\n\n?>\n";
-        } elseif (($file = $input->getOption('write-yaml'))) {
-            $dumper = new Dumper();
-            $dumper->setIndentation($indentation);
-            $content = $dumper->dump($config, 6, 0, false, false);
+        $files = array();
+        $contents = array();
+
+        if (($files['php'] = $input->getOption('write-php'))) {
+            $contents['php'] = "<?php\n\nreturn ".var_export($config, true).";\n\n?>\n";
         }
 
-        if ($file) {
-            if (file_exists($file)) {
-                $dialog = $this->getHelperSet()->get('dialog');
-                if (!$dialog->askConfirmation($output,
-                    '<question>File "'.$file.'" already exists. Proceed anyway?</question> ',
-                    false
-                )) {
-                    return;
-                }
-            }
+        if (($files['yaml'] = $input->getOption('write-yaml'))) {
+            $dumper = new Dumper();
+            $dumper->setIndentation($indentation);
+            $contents['yaml'] = $dumper->dump($config, 6, 0, false, false);
+        }
 
-            file_put_contents($file, $content);
-
-            return;
-        } else {
+        if (empty($contents)) {
             $dumper = new Dumper();
             $dumper->setIndentation($indentation);
             $output->writeln($message);
@@ -92,6 +83,27 @@ EOF
             foreach ($config as $rootKey => $subConfig) {
                 $output->writeln('<info>'.$rootKey.'</info>:');
                 $output->writeln($dumper->dump($subConfig, 6, $indentation, false, false));
+            }
+
+            return;
+        }
+
+        foreach ($files as $format => $file) {
+            $output->write('Saving configuration in <info>'.strtoupper($format).'</info> format...');
+            if ($fileExists = file_exists($file)) {
+                if (!isset($dialog)) {
+                    $dialog = $this->getHelperSet()->get('dialog');
+                }
+                if (!$dialog->askConfirmation($output,
+                    " <question>File \"".$file."\" already exists. Proceed anyway?</question> ", false)) {
+                    continue;
+                }
+            }
+
+            file_put_contents($file, $contents[$format]);
+
+            if (!$fileExists) {
+                $output->writeln(' OK.');
             }
         }
     }
