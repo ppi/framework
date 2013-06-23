@@ -6,6 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Module\Listener;
 
 use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
