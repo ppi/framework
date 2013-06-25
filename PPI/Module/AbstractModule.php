@@ -16,6 +16,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml as YamlParser;
 use Zend\Stdlib\ArrayUtils;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
 /**
  * The base PPI module class.
@@ -23,7 +24,7 @@ use Zend\Stdlib\ArrayUtils;
  * @package    PPI
  * @subpackage Module
  */
-abstract class AbstractModule implements ModuleInterface
+abstract class AbstractModule implements ModuleInterface, ConfigProviderInterface
 {
     /**
      * @var string
@@ -313,7 +314,7 @@ abstract class AbstractModule implements ModuleInterface
     }
 
     /**
-     * Returns the module name.
+     * Returns the module name. Defaults to the module namespace stripped of backslashes.
      *
      * @return string The Module name
      */
