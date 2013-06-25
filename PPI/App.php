@@ -23,7 +23,10 @@ use
     PPI\ServiceManager\Options\AppOptions,
 
     // HTTP Stuff and routing
-    PPI\Module\Routing\RoutingHelper;
+    PPI\Module\Routing\RoutingHelper,
+
+    Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * The PPI App bootstrap class.
@@ -255,29 +258,22 @@ class App
         // Dispatch our action, return the content from the action called.
         $controller = $this->_matchedModule->getController();
         $this->serviceManager = $controller->getServiceLocator();
+        
         $result = $this->_matchedModule->dispatch();
-
         switch (true) {
 
             // If the controller is just returning HTML content then that becomes our body response.
             case is_string($result):
-                $response = $controller->getServiceLocator()->get('response');
-                break;
-
-            // The controller action didn't bother returning a value, just grab the response object from SM
             case is_null($result):
-                $response = $controller->getServiceLocator()->get('response');
+                $this->_response = $controller->getServiceLocator()->get('response');
+                $this->_response->setContent($result);
                 break;
 
-            // Anything else is unpredictable so we safely rely on the SM
-            default:
-                $response = $result;
+            case $result instanceof Response:
+                $this->_response = $result;
                 break;
 
         }
-
-        $this->_response = $response;
-        $this->_response->setContent($result);
 
         if ($this->getOption('app.auto_dispatch')) {
             $this->_response->send();
