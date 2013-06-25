@@ -114,6 +114,9 @@ abstract class AbstractModule implements ModuleInterface
      */
     public function loadYamlConfig($path)
     {
+        throw new \BadMethodCallException(sprintf('%s::loadYamlConfig() is deprecated. Please use %s::loadConfig() instead.',
+            get_class($this), get_class($this)));
+
         if ($this->_config === null) {
             $parser = new YamlParser();
             $this->_config = $parser::parse($path);
