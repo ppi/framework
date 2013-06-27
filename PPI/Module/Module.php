@@ -12,6 +12,7 @@ namespace PPI\Module;
  * The base PPI module class.
  *
  * @note Kept for backwards compatibility. Module classes should inherit directly from AbstractModule.
+ * @deprecated since version 2.1, to be removed in 2.2. Inherit from AbstractModule instead.
  *
  * @package    PPI
  * @subpackage Module
