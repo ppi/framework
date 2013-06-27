@@ -16,7 +16,6 @@ use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
-use Zend\XmlRpc\Value\Boolean;
 
 /**
  * The PPI App bootstrap class.
@@ -133,7 +132,7 @@ class App implements AppInterface
     {
         // Default options
         $this->environment = isset($options['environment']) ? $options['environment'] : 'prod';
-        $this->debug = isset($options['debug']) ? (Boolean) $options['debug'] : false;
+        $this->debug = isset($options['debug']) ? (bool) $options['debug'] : false;
         $this->booted = false;
         $this->rootDir = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
         $this->name = isset($options['name']) ? $options['name'] : $this->getName();
