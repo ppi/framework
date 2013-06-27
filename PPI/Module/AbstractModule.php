@@ -112,18 +112,12 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * @param string $path
      *
      * @return array
+     *
+     * @deprecated since version 2.1, to be removed in 2.2. Use "loadConfig()" instead.
      */
     public function loadYamlConfig($path)
     {
-        throw new \BadMethodCallException(sprintf('%s::loadYamlConfig() is deprecated. Please use %s::loadConfig() instead.',
-            get_class($this), get_class($this)));
-
-        if ($this->_config === null) {
-            $parser = new YamlParser();
-            $this->_config = $parser::parse($path);
-        }
-
-        return $this->_config;
+        return $this->loadConfig($path);
     }
 
     /**
@@ -258,20 +252,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Returns a ConfigLoader instance.
-     *
-     * @return \PPI\Config\ConfigLoader
-     */
-    public function getConfigLoader()
-    {
-        if (null === $this->configLoader) {
-            $this->configLoader = new ConfigLoader($this->getPath() . '/resources/config');
-        }
-
-        return $this->configLoader;
-    }
-
-    /**
      * Loads a configuration file (PHP, YAML) or PHP array.
      *
      * @param  string      $resource The resource
@@ -362,6 +342,16 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
+     * Returns configuration to merge with application configuration.
+     *
+     * @return array
+     */
+    public function getConfig()
+    {
+        return array();
+    }
+
+    /**
      * Finds and registers Commands.
      *
      * Override this method if your module commands do not follow the conventions:
@@ -391,5 +381,19 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
                 $application->add($r->newInstance());
             }
         }
+    }
+
+    /**
+     * Returns a ConfigLoader instance.
+     *
+     * @return \PPI\Config\ConfigLoader
+     */
+    protected function getConfigLoader()
+    {
+        if (null === $this->configLoader) {
+            $this->configLoader = new ConfigLoader($this->getPath() . '/resources/config');
+        }
+
+        return $this->configLoader;
     }
 }
