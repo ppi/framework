@@ -16,6 +16,7 @@ use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zend\Stdlib\ArrayUtils;
+use Zend\XmlRpc\Value\Boolean;
 
 /**
  * The PPI App bootstrap class.
@@ -131,8 +132,9 @@ class App implements AppInterface
     public function __construct(array $options = array())
     {
         // Default options
-        $this->environment = isset($options['environment']) ? $options['environment'] : 'production';
-        $this->debug = isset($options['debug']) ? (bool) $options['debug'] : 'debug';
+        $this->environment = isset($options['environment']) ? $options['environment'] : 'prod';
+        $this->debug = isset($options['debug']) ? (Boolean) $options['debug'] : false;
+        $this->booted = false;
         $this->rootDir = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
         $this->name = isset($options['name']) ? $options['name'] : $this->getName();
 
@@ -142,8 +144,6 @@ class App implements AppInterface
         } else {
             ini_set('display_errors', 0);
         }
-
-        $this->booted = false;
     }
 
     /**
@@ -260,7 +260,7 @@ class App implements AppInterface
 
         // Set the options for our controller
         $controller[0]->setOptions(array(
-            'environment' => $this->getEnv()
+            'environment' => $this->getEnvironment()
         ));
 
         // Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
@@ -355,13 +355,18 @@ class App implements AppInterface
     }
 
     /**
-     * Check if the application is in development mode.
-     *
-     * @return boolean
+     * @param $env
+     * @return bool
      */
-    public function isDevMode()
+    public function isEnvironment($env)
     {
-        return $this->getEnvironment() === 'dev';
+        if ('development' == $env) {
+            $env = 'dev';
+        } elseif ('production' == $env) {
+            $env ='prod';
+        }
+
+        return $this->getEnvironment() == $env;
     }
 
     /**
