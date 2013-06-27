@@ -343,28 +343,6 @@ class App implements AppInterface
     }
 
     /**
-     * Setter for the environment, passing in options determining how the app will behave
-     *
-     * @param array $options The options
-     *
-     * @return void
-     */
-    public function setEnv(array $options)
-    {
-        // If we pass in a bad sitemode, lets just default to 'development' gracefully.
-        if (isset($options['siteMode'])) {
-            if (!in_array($options['siteMode'], array('development', 'production'))) {
-                unset($options['siteMode']);
-            }
-        }
-
-        // Any further options passed, eg: it maps; 'errorLevel' to $this->_errorLevel
-        foreach ($options as $optionName => $option) {
-            $this->_envOptions[$optionName] = $option;
-        }
-    }
-
-    /**
      * Get the environment mode the application is in.
      *
      * @return string The current environment
@@ -377,23 +355,13 @@ class App implements AppInterface
     }
 
     /**
-     * Get the environment mode the application is in.
-     *
-     * @return string The current environment
-     */
-    public function getEnv()
-    {
-        return $this->getEnvironment();
-    }
-
-    /**
      * Check if the application is in development mode.
      *
      * @return boolean
      */
     public function isDevMode()
     {
-        return $this->getEnvironment() === 'development';
+        return $this->getEnvironment() === 'dev';
     }
 
     /**
