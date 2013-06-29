@@ -9,6 +9,8 @@
 
 namespace PPI\ServiceManager;
 
+use PPI\ServiceManager\ParameterBag;
+
 /**
  * ServiceManager builder.
  *
@@ -41,8 +43,10 @@ class ServiceManagerBuilder extends ServiceManager
             $this->config['framework'] = array();
         }
 
-        $this->setService('ApplicationConfig', $this->config);
-        $this->setService('ApplicationParameters', $parameters);
+        $parametersBag = new ParameterBag($parameters);
+        $parametersBag->resolve();
+        $this->setService('ApplicationParameters', $parametersBag);
+        $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
 
         foreach(array(
             new Config\MonologConfig(),
