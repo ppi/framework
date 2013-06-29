@@ -42,8 +42,11 @@ class YamlFileLoader extends FileLoader
             return array();
         }
 
-        // imports
+        // imports (Symfony)
         $content = $this->parseImports($content, $path);
+
+        // @include (Zend)
+        $content = $this->parseIncludes($content, $path);
 
         // not an array
         if (!is_array($content)) {
@@ -91,13 +94,13 @@ class YamlFileLoader extends FileLoader
     }
 
     /**
-     * Parses all imports.
+     * Parses all imports. We support this to make Symfony users happy.
      *
      * @param  array  $content
      * @param  string $file
      * @return array
      */
-    private function parseImports($content, $file)
+    protected function parseImports($content, $file)
     {
         if (!isset($content['imports'])) {
             return $content;
@@ -110,6 +113,31 @@ class YamlFileLoader extends FileLoader
         }
 
         unset($content['imports']);
+
+        return $content;
+    }
+
+    /**
+     * Process the array for @include. We support this to make Zend users happy.
+     * @see http://framework.zend.com/manual/2.0/en/modules/zend.config.reader.html#zend-config-reader-yaml
+     *
+     * @param  array  $content
+     * @param  string $file
+     * @return array
+     */
+    protected function parseIncludes(array $content, $file)
+    {
+        foreach ($content as $key => $value) {
+            if (is_array($value)) {
+                $content[$key] = $this->parseIncludes($value, $file);
+            }
+
+            if ('@include' === trim($key)) {
+                $this->setCurrentDir(dirname($file));
+                unset($content[$key]);
+                $content = array_replace_recursive($content, $this->import($value, null, false, $file));
+            }
+        }
 
         return $content;
     }
