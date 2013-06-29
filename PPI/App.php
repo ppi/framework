@@ -323,7 +323,7 @@ class App implements AppInterface
     public function getName()
     {
         if (null === $this->name) {
-            $this->name = get_class($this);
+            $this->name = preg_replace('/[^a-zA-Z0-9_]+/', '', basename($this->rootDir));
         }
 
         return $this->name;
