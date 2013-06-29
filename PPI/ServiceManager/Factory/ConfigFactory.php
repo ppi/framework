@@ -9,7 +9,6 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\ServiceManager\ParameterBag;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\ArrayUtils;
@@ -46,15 +45,12 @@ class ConfigFactory implements FactoryInterface
             $serviceLocator->get('ApplicationConfig')
         );
 
-        $appParameters = $serviceLocator->get('ApplicationParameters');
+        $parametersBag = $serviceLocator->get('ApplicationParameters');
 
         $config['parameters'] = isset($config['parameters']) ?
-            ArrayUtils::merge($appParameters, $config['parameters']) :
-            $config['parameters'] = $appParameters;
+            ArrayUtils::merge($parametersBag->all(), $config['parameters']) :
+            $config['parameters'] = $parametersBag->all();
 
-        $parameterBag = new ParameterBag($config['parameters']);
-        $parameterBag->resolve();
-
-        return $parameterBag->resolveArray($config);
+        return $parametersBag->resolveArray($config);
     }
 }
