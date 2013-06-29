@@ -132,10 +132,10 @@ class App implements AppInterface
     {
         // Default options
         $this->environment = isset($options['environment']) ? $options['environment'] : 'prod';
-        $this->debug = isset($options['debug']) ? (bool) $options['debug'] : false;
-        $this->booted = false;
-        $this->rootDir = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
-        $this->name = isset($options['name']) ? $options['name'] : $this->getName();
+        $this->debug       = isset($options['debug']) ? (bool) $options['debug'] : false;
+        $this->rootDir     = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
+        $this->name        = isset($options['name']) ? $options['name'] : $this->getName();
+        $this->booted      = false;
 
         if ($this->debug) {
             $this->startTime = microtime(true);

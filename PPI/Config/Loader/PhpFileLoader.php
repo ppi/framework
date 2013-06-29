@@ -23,17 +23,17 @@ class PhpFileLoader extends FileLoader
     /**
      * Loads a PHP file.
      *
-     * @param mixed  $file The resource
-     * @param string $type The resource type
-     *
-     * @return array Array with configuration
+     * @param  mixed                     $file The resource
+     * @param  string                    $type The resource type
+     * @return array                     Array with configuration
+     * @throws \InvalidArgumentException
      */
     public function load($file, $type = null)
     {
         $path = $this->locator->locate($file);
         $this->setCurrentDir(dirname($path));
 
-        $config = require($path);
+        $config = require $path;
 
         // not an array
         if (!is_array($config)) {

@@ -10,7 +10,7 @@
 namespace PPI\Config\Loader;
 
 use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Parser as YamlParser;
 use Zend\Stdlib\ArrayUtils;
 
 /**
@@ -22,11 +22,15 @@ use Zend\Stdlib\ArrayUtils;
  */
 class YamlFileLoader extends FileLoader
 {
+    private $yamlParser;
+
     /**
      * Loads a Yaml file.
      *
-     * @param mixed  $file The resource
-     * @param string $type The resource type
+     * @param  mixed                     $file The resource
+     * @param  string                    $type The resource type
+     * @return array                     Array with configuration
+     * @throws \InvalidArgumentException
      */
     public function load($file, $type = null)
     {
@@ -35,50 +39,16 @@ class YamlFileLoader extends FileLoader
 
         // empty file
         if (null === $content) {
-            $config = array();
+            return array();
         }
 
         // imports
-        $content = $this->parseImports($content, $file);
+        $content = $this->parseImports($content, $path);
 
         // not an array
         if (!is_array($content)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
-
-        return $content;
-    }
-
-    /**
-     * Loads a YAML file.
-     *
-     * @param string $file
-     *
-     * @return array The file content
-     */
-    protected function loadFile($file)
-    {
-        return Yaml::parse($file);
-    }
-
-    /**
-     * Parses all imports
-     *
-     * @param array  $content
-     * @param string $file
-     */
-    private function parseImports($content, $file)
-    {
-        if (!isset($content['imports'])) {
-            return $content;
-        }
-
-        foreach ($content['imports'] as $import) {
-            $this->setCurrentDir(dirname($file));
-            $content = ArrayUtils::merge($content, $this->import($import['resource'], null, isset($import['ignore_errors']) ? (Boolean) $import['ignore_errors'] : false, $file));
-        }
-
-        unset($content['imports']);
 
         return $content;
     }
@@ -94,5 +64,53 @@ class YamlFileLoader extends FileLoader
     public function supports($resource, $type = null)
     {
         return is_string($resource) && 'yml' === pathinfo($resource, PATHINFO_EXTENSION);
+    }
+
+    /**
+     * Loads a YAML file.
+     *
+     * @param  string                   $file
+     * @return array                    The file content
+     * @throws InvalidArgumentException
+     */
+    protected function loadFile($file)
+    {
+        if (!stream_is_local($file)) {
+            throw new InvalidArgumentException(sprintf('This is not a local file "%s".', $file));
+        }
+
+        if (!file_exists($file)) {
+            throw new InvalidArgumentException(sprintf('The service file "%s" is not valid.', $file));
+        }
+
+        if (null === $this->yamlParser) {
+            $this->yamlParser = new YamlParser();
+        }
+
+        return $this->yamlParser->parse(file_get_contents($file));
+    }
+
+    /**
+     * Parses all imports.
+     *
+     * @param  array  $content
+     * @param  string $file
+     * @return array
+     */
+    private function parseImports($content, $file)
+    {
+        if (!isset($content['imports'])) {
+            return $content;
+        }
+
+        foreach ($content['imports'] as $import) {
+            $this->setCurrentDir(dirname($file));
+            $content = ArrayUtils::merge($content, $this->import($import['resource'], null, isset($import['ignore_errors'])
+                ? (Boolean) $import['ignore_errors'] : false, $file));
+        }
+
+        unset($content['imports']);
+
+        return $content;
     }
 }
