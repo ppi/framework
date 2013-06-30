@@ -97,6 +97,7 @@ class Application extends BaseApplication
         // Commands from the PPI Framework
         $this->addCommands(array(
             new Command\AssetsInstallCommand(),
+            new Command\CacheClearCommand(),
             new Command\ConfigDebugCommand(),
             new Command\ModuleCommand(),
             new Command\RouterDebugCommand(),
