@@ -19,7 +19,7 @@ use Symfony\Component\Yaml\Dumper;
  *
  * @author      Vítor Brandão <vitor@ppi.io>
  */
-class ConfigDumpCommand extends AbstractCommand
+class ConfigDebugCommand extends AbstractCommand
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class ConfigDumpCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('config:dump')
+            ->setName('config:debug')
             ->setDescription('Dumps the configuration in use')
             ->addOption('app-only', null, InputOption::VALUE_NONE, 'Show only the configuration set in the app/ directory')
             ->addOption('write-php', null, InputOption::VALUE_REQUIRED, 'Save the configuration in PHP format')
