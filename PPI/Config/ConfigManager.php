@@ -15,7 +15,7 @@ use Zend\Stdlib\ArrayUtils;
 /**
  * ConfigManager extends ConfigLoader capabilities with lazy-loading and a caching mechanism,
  *
- * @author     Vítor Brandão <vitor@ppi.io>
+ * @author Vítor Brandão <vitor@ppi.io>
  */
 class ConfigManager extends ConfigLoader
 {
