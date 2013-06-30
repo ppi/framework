@@ -108,8 +108,8 @@ class YamlFileLoader extends FileLoader
 
         foreach ($content['imports'] as $import) {
             $this->setCurrentDir(dirname($file));
-            $content = ArrayUtils::merge($content, $this->import($import['resource'], null, isset($import['ignore_errors'])
-                ? (Boolean) $import['ignore_errors'] : false, $file));
+            $content = ArrayUtils::merge($this->import($import['resource'], null, isset($import['ignore_errors'])
+                ? (Boolean) $import['ignore_errors'] : false, $file), $content);
         }
 
         unset($content['imports']);
