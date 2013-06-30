@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
@@ -11,11 +11,11 @@ namespace PPI\Config;
 
 use PPI\Config\FileLocator;
 use PPI\Config\Loader\DelegatingLoader;
-use PPI\Config\Loader\LoaderResolver;
 use PPI\Config\Loader\ArrayLoader;
 use PPI\Config\Loader\IniFileLoader;
 use PPI\Config\Loader\PhpFileLoader;
 use PPI\Config\Loader\YamlFileLoader;
+use Symfony\Component\Config\Loader\LoaderResolver;
 
 /**
  * FileLocator uses an array of pre-defined paths to find files.
@@ -26,8 +26,15 @@ use PPI\Config\Loader\YamlFileLoader;
  */
 class ConfigLoader
 {
-     protected $paths;
-     protected $loader;
+    /**
+     * @var array
+     */
+    protected $paths;
+
+    /**
+     * @var DelegatingLoader
+     */
+    protected $loader;
 
     /**
      * Constructor.
@@ -39,9 +46,16 @@ class ConfigLoader
         $this->paths = (array) $paths;
     }
 
-    public function load($resource)
+    /**
+     * Loads a resource.
+     *
+     * @param  mixed  $resource The resource
+     * @param  string $type     The resource type
+     * @return array
+     */
+    public function load($resource, $type = null)
     {
-        return $this->getConfigLoader()->load($resource);
+        return $this->getLoader()->load($resource, $type);
     }
 
     /**
@@ -49,7 +63,7 @@ class ConfigLoader
      *
      * @return DelegatingLoader The loader
      */
-    protected function getConfigLoader()
+    protected function getLoader()
     {
         if (null === $this->loader) {
             $locator = new FileLocator($this->paths);

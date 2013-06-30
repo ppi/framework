@@ -9,13 +9,12 @@
 
 namespace PPI;
 
-use PPI\Config\ConfigLoader;
+use PPI\Config\ConfigManager;
 use PPI\Debug\ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * The PPI App bootstrap class.
@@ -41,17 +40,12 @@ class App implements AppInterface
     protected $booted = false;
 
     /**
-     * @var array
-     */
-    protected $config = array();
-
-    /**
      * @var boolean
      */
     protected $debug;
 
     /**
-     * Application environment: "development" vs "production".
+     * Application environment: "dev|development" vs "prod|production".
      * @var string
      */
     protected $environment;
@@ -69,9 +63,9 @@ class App implements AppInterface
 
     /**
      * Configuration loader.
-     * @var \PPI\Config\ConfigLoader
+     * @var \PPI\Config\ConfigManager
      */
-    protected $configLoader = null;
+    protected $configManager = null;
 
     /**
      * The Module Manager.
@@ -535,50 +529,47 @@ class App implements AppInterface
     }
 
     /**
-     * Returns a ConfigLoader instance.
+     * Returns a ConfigManager instance.
      *
-     * @return \PPI\Config\ConfigLoader
+     * @return \PPI\Config\ConfigManager
      */
-    public function getConfigLoader()
+    public function getConfigManager()
     {
-        if (null === $this->configLoader) {
-            $this->configLoader = new ConfigLoader($this->rootDir . '/config');
+        if (null === $this->configManager) {
+            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
+            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
-        return $this->configLoader;
-    }
-
-    /**
-     * Merges configuration.
-     */
-    public function mergeConfig(array $config)
-    {
-        $this->config = ArrayUtils::merge($this->config, $config);
+        return $this->configManager;
     }
 
     /**
      * Loads a configuration file or PHP array.
      *
-     * @param $resource
-     * @param  null  $type
-     * @return array
+     * @param  $resource
+     * @param  null $type
+     * @return App  The current instance
      */
     public function loadConfig($resource, $type = null)
     {
-        $config = $this->getConfigLoader()->load($resource, $type);
-        $this->mergeConfig($config);
+        $this->getConfigManager()->addConfig($resource, $type);
 
-        return $config;
+        return $this;
     }
 
     /**
      * Returns the application configuration.
      *
      * @return array|object
+     * @throws \RuntimeException
      */
     public function getConfig()
     {
-        return true === $this->booted ? $this->serviceManager->get('Config') : $this->config;
+        if (!$this->booted) {
+            throw new \RuntimeException('The "Config" service is only available after the App boot()');
+        }
+
+        return $this->serviceManager->get('Config');
     }
 
     public function serialize()
@@ -641,7 +632,7 @@ class App implements AppInterface
     protected function buildServiceManager()
     {
         // ServiceManager creation
-        $serviceManager = new ServiceManagerBuilder($this->config);
+        $serviceManager = new ServiceManagerBuilder($this->getConfigManager()->getMergedConfig());
         $serviceManager->build($this->getAppParameters());
         $serviceManager->set('app', $this);
 
