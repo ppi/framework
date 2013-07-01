@@ -44,6 +44,11 @@ class AssetsExtension extends BaseAssetsExtension
         $this->helper = $assetsHelper;
     }
 
+    public function getHelper()
+    {
+        return $this->assetsHelper;
+    }
+
     /**
      * The magic call method triggers before throwing an exception
      *
