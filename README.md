@@ -1,13 +1,16 @@
+<!-- vim: set tw=79 sw=4 ts=4 et ft=markdown : -->
 # PPI Framework
 
 [@website]:       http://www.ppi.io/                              "PPI Framework"
-[@documentation]: http://www.ppi.io/docs/2.0/getting_started.html "PPI Framework Documentation"
+[@documentation]: http://www.ppi.io/docs/2.1/getting_started.html "PPI Framework Documentation"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
 [@gitweb]:        https://github.com/ppi/framework                "ppi/framework"
 [@h5bp]:          http://html5boilerplate.com/                    "HTML5 Boilerplate"
 [@twbootstrap]:   http://twitter.github.com/bootstrap/            "Twitter Bootstrap"
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 
+* Version **2.1.0-DEV**
+* [![Build Status](https://travis-ci.org/ppi/framework.png?branch=2.1)](https://travis-ci.org/ppi/framework)
 * [Official website][@website]
 * [Download][@download]
 * [Documentation][@documentation]
