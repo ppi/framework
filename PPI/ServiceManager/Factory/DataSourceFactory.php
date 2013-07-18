@@ -31,7 +31,8 @@ class DataSourceFactory implements FactoryInterface
         'doctrine_mongdb'  => 'PPI\DataSource\Connection\DoctrineMongoDB',
         'fuelphp'          => 'PPI\DataSource\Connection\FuelPHP',
         'monga'            => 'PPI\DataSource\Connection\Monga',
-        'zend_db'          => 'PPI\DataSource\Connection\ZendDb'
+        'zend_db'          => 'PPI\DataSource\Connection\ZendDb',
+        'pixie'            => 'PPI\DataSource\Connection\Pixie'
     );
 
     /**
