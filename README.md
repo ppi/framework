@@ -10,7 +10,9 @@
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 
 * Version **2.1.0-DEV**
-* [![Build Status](https://travis-ci.org/ppi/framework.png?branch=2.1)](https://travis-ci.org/ppi/framework)
+[![Build Status](https://travis-ci.org/ppi/framework.png?branch=2.1)](https://travis-ci.org/ppi/framework)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ppi/framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
 * [Official website][@website]
 * [Download][@download]
 * [Documentation][@documentation]
