@@ -397,7 +397,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function setFlash($flashType, $message)
     {
-        $this->getSession()->setFlash($flashType, $message);
+        $this->getSession()->getFlashBag()->set($flashType, $message);
     }
 
     /**
