@@ -13,6 +13,7 @@ use PPI\Module\Service;
 /**
  * The PPI Service Locator.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */
