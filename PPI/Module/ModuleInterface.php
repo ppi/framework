@@ -11,6 +11,7 @@ namespace PPI\Module;
 /**
  * ModuleInterface.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @author      Vítor Brandão <vitor@ppi.io>
  * @package     PPI
  * @subpackage  Module
