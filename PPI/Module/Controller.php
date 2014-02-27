@@ -383,8 +383,6 @@ class Controller implements ServiceLocatorAwareInterface
             }
         }
 
-        $params['view'] = $renderer;
-
         return $renderer->render($template, $params);
     }
 
