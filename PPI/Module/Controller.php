@@ -15,6 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * The base PPI controller class
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */
