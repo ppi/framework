@@ -45,7 +45,7 @@ class SessionConfig extends Config
          */
 
         $config = $serviceManager->get('Config');
-//var_dump($config); exit;
+
         $options =  array_merge(array(
             'auto_start'        => false,
             'storage_id'        => 'session.storage.native',
@@ -76,6 +76,10 @@ class SessionConfig extends Config
 
         // session storage native
         $serviceManager->setFactory('session.storage.native', function($serviceManager) use ($storageOptions) {
+
+            // We need to strip out keys with a null value so symfony doesn't try and set things with a blank value
+            $storageOptions = array_filter($storageOptions);
+
             return new NativeSessionStorage($storageOptions, $serviceManager->get('session.handler'));
         });
 
