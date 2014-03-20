@@ -6,7 +6,6 @@ php:
   - 5.4
 
 before_install:
-  - pear install pear/PHP_CodeSniffer
   - phpenv rehash
 
 script: phpcs --standard=PSR1 ./ && phpunit
