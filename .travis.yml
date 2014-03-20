@@ -8,4 +8,4 @@ php:
 before_install:
   - phpenv rehash
 
-script: phpcs --standard=PSR1 ./ && phpunit
+script: phpunit
