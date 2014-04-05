@@ -99,7 +99,7 @@ class Application extends BaseApplication
             new Command\AssetsInstallCommand(),
             new Command\CacheClearCommand(),
             new Command\ConfigDebugCommand(),
-            new Command\ModuleCommand(),
+            new Command\ModuleCreateCommand(),
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
             new Command\ServiceManagerDebugCommand(),
