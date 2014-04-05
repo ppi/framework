@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * $moduleCommand->setTargetModuleDir($config['module_listener_options']['module_paths'][0]);
  * </code>
  */
-class ModuleCommand extends AbstractCommand
+class ModuleCreateCommand extends AbstractCommand
 {
     protected $skeletonModuleDir;
     protected $modulesDir;
