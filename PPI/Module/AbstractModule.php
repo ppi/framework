@@ -14,7 +14,6 @@ use PPI\Console\Application;
 use PPI\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Yaml\Yaml as YamlParser;
 use Zend\Stdlib\ArrayUtils;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
@@ -345,7 +344,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Returns configuration to merge with application configuration.
      *
-     * @return array
+     * @return array|\Traversable
      */
     public function getConfig()
     {
