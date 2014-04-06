@@ -23,22 +23,25 @@
         "psr-0": { "PPI": "" }
     },
     "require": {
-        "monolog/monolog": "1.7.*@stable",
-        "symfony/dependency-injection": "2.3.*@dev",
-        "symfony/config": "2.3.*@dev",
-        "symfony/console": "2.3.*@dev",
-        "symfony/debug": "2.3.*@dev",
-        "symfony/finder": "2.3.*@dev",
-        "symfony/http-foundation": "2.2.*@dev",
-        "symfony/routing": "2.3.*@dev",
-        "symfony/templating": "2.3.*@dev",
-        "symfony/yaml": "2.3.*@dev",
-        "symfony/http-kernel": "2.3.*@dev",
-        "symfony/framework-bundle": "2.3.*@dev",
+        "psr/log": "~1.0",
+        "symfony/dependency-injection": "2.4.*@stable",
+        "symfony/config": "2.4.*@stable",
+        "symfony/console": "2.4.*@stable",
+        "symfony/debug": "2.4.*@stable",
+        "symfony/finder": "2.4.*@stable",
+        "symfony/http-foundation": "2.4.*@stable",
+        "symfony/routing": "2.4.*@stable",
+        "symfony/templating": "2.4.*@stable",
+        "symfony/yaml": "2.4.*@stable",
+        "symfony/http-kernel": "2.4.*@stable",
+        "symfony/framework-bundle": "2.4.*@stable",
         "zendframework/zend-eventmanager": "2.3.*@dev",
         "zendframework/zend-modulemanager": "2.3.*@dev",
         "zendframework/zend-servicemanager": "2.3.*@dev",
         "zendframework/zend-loader": "2.3.*@dev"
+    },
+    "require-dev": {
+        "ppi/composer-module": "dev-master"
     },
     "extra": {
         "branch-alias": {
