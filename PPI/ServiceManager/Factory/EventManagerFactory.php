@@ -23,7 +23,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class EventManagerFactory implements FactoryInterface
 {
     /**
-     * Create an EventManager instance
+     * Create an EventManager instance.
      *
      * Creates a new EventManager instance, seeding it with a shared instance
      * of SharedEventManager.

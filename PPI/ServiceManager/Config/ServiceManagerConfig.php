@@ -28,8 +28,6 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $invokables = array(
         'SharedEventManager' => 'Zend\EventManager\SharedEventManager',
-        'ModuleEvent'        => 'Zend\ModuleManager\ModuleEvent',
-        'filesystem'         => 'Symfony\Component\Filesystem\Filesystem',
     );
 
     /**
@@ -39,19 +37,9 @@ class ServiceManagerConfig implements ConfigInterface
      */
     protected $factories = array(
         'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
-        'ControllerNameParser'  => 'PPI\ServiceManager\Factory\ControllerNameParserFactory',
-        'ControllerResolver'    => 'PPI\ServiceManager\Factory\ControllerResolverFactory',
-        'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
-        'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
-        'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
-        'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
-        'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
-        'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
-        'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
-        'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
     );
 
     /**
@@ -67,12 +55,7 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $aliases = array(
-        // Zend alias
-        'Configuration'                             => 'Config',
-        'Zend\EventManager\EventManagerInterface'   => 'EventManager',
-        // PPI alias
-        'logger'                                    => 'monolog.logger',
-        'templating.loader'                         => 'templating.loader.filesystem',
+        'Zend\EventManager\EventManagerInterface' => 'EventManager',
     );
 
     /**
@@ -115,6 +98,7 @@ class ServiceManagerConfig implements ConfigInterface
         if (isset($configuration['shared'])) {
             $this->shared = array_merge($this->shared, $configuration['shared']);
         }
+
     }
 
     /**
@@ -151,6 +135,18 @@ class ServiceManagerConfig implements ConfigInterface
         }
 
         $serviceManager->addInitializer(function ($instance) use ($serviceManager) {
+            if ($instance instanceof EventManagerAwareInterface) {
+                if ($instance->getEventManager() instanceof EventManagerInterface) {
+                    $instance->getEventManager()->setSharedManager(
+                        $serviceManager->get('SharedEventManager')
+                    );
+                } else {
+                    $instance->setEventManager($serviceManager->get('EventManager'));
+                }
+            }
+        });
+
+        $serviceManager->addInitializer(function ($instance) use ($serviceManager) {
             if ($instance instanceof ServiceManagerAwareInterface) {
                 $instance->setServiceManager($serviceManager);
             }
@@ -164,5 +160,6 @@ class ServiceManagerConfig implements ConfigInterface
 
         $serviceManager->setService('ServiceManager', $serviceManager);
         $serviceManager->setAlias('Zend\ServiceManager\ServiceLocatorInterface', 'ServiceManager');
+        $serviceManager->setAlias('Zend\ServiceManager\ServiceManager', 'ServiceManager');
     }
 }

@@ -100,6 +100,7 @@ class Application extends BaseApplication
             new Command\CacheClearCommand(),
             new Command\ConfigDebugCommand(),
             new Command\ModuleCreateCommand(),
+            new Command\ModuleDebugCommand(),
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
             new Command\ServiceManagerDebugCommand(),
