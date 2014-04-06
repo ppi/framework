@@ -84,7 +84,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * @return mixed The parameter value
      *
-     * @throws InvalidArgumentException if the parameter is not defined
+     * @throws \InvalidArgumentException if the parameter is not defined
      */
     public function getParameter($name)
     {
