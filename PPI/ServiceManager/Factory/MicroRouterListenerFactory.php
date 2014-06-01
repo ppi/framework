@@ -10,7 +10,6 @@
 namespace PPI\ServiceManager\Factory;
 
 use PPI\Router\RouterListener;
-use Symfony\Component\Routing\RequestContext;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -18,11 +17,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * RouterListener Factory.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class RouterListenerFactory implements FactoryInterface
+class MicroRouterListenerFactory implements FactoryInterface
 {
     /**
      * Create and return the router.
@@ -33,7 +31,7 @@ class RouterListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
 
-        $router = $serviceLocator->get('Router');
+        $router = $serviceLocator->get('MicroRouter');
         $requestContext = $serviceLocator->get('RouterRequestContext');
         $logger = $serviceLocator->get('Logger');
 

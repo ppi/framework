@@ -49,6 +49,7 @@ class ServiceManagerConfig implements ConfigInterface
         'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
         'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
         'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
+        'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
         'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
         'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
         'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
