@@ -259,6 +259,7 @@ class App implements AppInterface
         // Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
         $routeParams = $this->request->attributes->all();
         $activeRoute = $routeParams['_route'];
+
         $moduleName = $routeParams['_module'];
         $controllerName = $routeParams['_controller'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
@@ -646,9 +647,9 @@ class App implements AppInterface
     {
         $router = $this->serviceManager->get('Router');
         $hasMatch = false;
-
         try {
             // Lets load up our router and match the appropriate route
+
             $router->warmUp();
             $this->serviceManager->get('RouterListener')->match($this->getRequest());
             $hasMatch = true;
@@ -670,6 +671,7 @@ class App implements AppInterface
                     $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
                 }
 
+                // @todo - look into why is this here? the method doesn't exist
                 $this->matchRoute($routeUri);
 
                 // @todo handle a 502 here
