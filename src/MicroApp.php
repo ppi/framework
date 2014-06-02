@@ -81,8 +81,6 @@ class MicroApp extends BaseApp
         $requestContext = $this->getServiceManager()->get('RouterRequestContext');
         $requestContext->fromRequest($request);
 
-//        $router = new Router($requestContext, $routeCollection, array(), $this->getServiceManager()->get('Logger'));
-
         $matcher = new UrlMatcher($routeCollection, $requestContext);
         // @todo - try catch this
         $routeAttributes = $matcher->match($request->getPathInfo());
@@ -90,31 +88,9 @@ class MicroApp extends BaseApp
 
         $this->routes[$matchedRouteKey]['callback']($this->getServiceManager());
 
-        // @todo - run matching against the $request and this $collection
-die('dispatch');
+        // @todo - handle when the callback returns a Response object and send that to the client.
+
         return $this;
-
-    }
-
-    public function handleRouting()
-    {
-        $hasMatch = false;
-        try {
-            $this->serviceManager->get('MicroRouterListener')->match($this->getRequest());
-//            $route = ;
-//            $method = ;
-            $this->callbacks[$method.$route]($this->getServiceManager);
-            $hasMatch = true;
-        } catch (\Exception $e) {
-            if ($this->debug) {
-                $this->log('critical', $e);
-                throw ($e);
-            }
-        }
-
-        if ($hasMatch === false) {
-        }
-
 
     }
 
