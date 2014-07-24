@@ -7,10 +7,9 @@ php:
   - 5.5
 
 before_install:
-  - pear install pear/PHP_CodeSniffer
   - phpenv rehash
   - echo '' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
   - sh -c 'if [ $(php -r "echo PHP_MINOR_VERSION;") -le 4 ]; then echo "extension = apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini; fi;'
   - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
 
-script: phpcs --standard=PSR1 ./ && phpunit
+script: phpunit
