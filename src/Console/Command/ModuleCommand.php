@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2011-2014 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
@@ -29,7 +29,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * $moduleCommand->setTargetModuleDir($config['module_listener_options']['module_paths'][0]);
  * </code>
  */
-class ModuleCreateCommand extends AbstractCommand
+class ModuleCommand extends AbstractCommand
 {
     protected $skeletonModuleDir;
     protected $modulesDir;
