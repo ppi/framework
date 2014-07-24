@@ -17,6 +17,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * RouterListener Factory.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
@@ -31,6 +32,7 @@ class RouterListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+
         $router = $serviceLocator->get('Router');
         $requestContext = $serviceLocator->get('RouterRequestContext');
         $logger = $serviceLocator->get('Logger');
