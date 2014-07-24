@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2011-2014 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
@@ -18,11 +18,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Router Factory.
  *
- * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis (paul@ppi.io)
  * @package    PPI
  * @subpackage ServiceManager
  */
-class RouterFactory implements FactoryInterface
+class MicroRouterFactory implements FactoryInterface
 {
     /**
      * Create and return the router.
@@ -39,12 +39,10 @@ class RouterFactory implements FactoryInterface
 
         $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
 
-        $allRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
-        foreach ($allRoutes as $routes) {
-            $routeCollection->addCollection($routes);
-        }
-        $router->setRouteCollection($routeCollection);
+        // @todo - consider making a base router class, and then have a ModuleRouterFactory to pull module routes
+        // @todo - find a way to set routes on this after we instantiate this factory
 
+        // @todo - let you add new routes on demand and call $router->setRouteCollection()
         return $router;
     }
 }
