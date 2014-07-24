@@ -40,6 +40,7 @@ class ServiceManagerConfig implements ConfigInterface
         'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
         'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
         'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
+        'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
     );
 
     /**
