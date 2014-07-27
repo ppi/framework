@@ -36,7 +36,7 @@ class DelegatingEngine extends BaseDelegatingEngine
     /**
      * Renders a template.
      *
-     * @param mixed $name A template name or a TemplateReferenceInterface
+     * @param mixed $name       A template name or a TemplateReferenceInterface
      *                          instance
      * @param array $parameters An array of parameters to pass to the template
      *

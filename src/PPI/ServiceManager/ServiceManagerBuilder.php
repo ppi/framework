@@ -9,8 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\ParameterBag;
-
 /**
  * ServiceManager builder.
  *
@@ -34,7 +32,7 @@ class ServiceManagerBuilder extends ServiceManager
     }
 
     /**
-     * @param array $parameters
+     * @param  array $parameters
      * @return $this
      */
     public function build(array $parameters = array())

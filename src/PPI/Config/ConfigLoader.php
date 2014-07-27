@@ -9,7 +9,6 @@
 
 namespace PPI\Config;
 
-use PPI\Config\FileLocator;
 use PPI\Config\Loader\DelegatingLoader;
 use PPI\Config\Loader\ArrayLoader;
 use PPI\Config\Loader\IniFileLoader;

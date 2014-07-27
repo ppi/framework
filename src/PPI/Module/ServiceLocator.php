@@ -8,8 +8,6 @@
  */
 namespace PPI\Module;
 
-use PPI\Module\Service;
-
 /**
  * The PPI Service Locator.
  *
