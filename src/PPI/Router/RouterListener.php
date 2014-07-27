@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
 
-
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
  * @see Symfony\Component\HttpKernel\EventListener\RouterListener
