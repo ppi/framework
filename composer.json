@@ -43,13 +43,13 @@
     "require-dev": {
         "ppi/composer-module": "dev-master"
     },
+    "autoload": {
+        "psr-4": { "PPI\\": "src/" }
+    },
+    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
             "dev-master": "2.1-dev"
         }
-    },
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-4": { "PPI\\": "src/" }
     }
 }

@@ -68,14 +68,14 @@ class SessionConfig extends Config
         }
 
         // session handler
-        $serviceManager->setFactory('session.handler', function($serviceManager) use ($options) {
+        $serviceManager->setFactory('session.handler', function ($serviceManager) use ($options) {
             $handlerID = $options['handler_id'];
 
             return $handlerID === null ? null : $serviceManager->get($handlerID);
         });
 
         // session storage native
-        $serviceManager->setFactory('session.storage.native', function($serviceManager) use ($storageOptions) {
+        $serviceManager->setFactory('session.storage.native', function ($serviceManager) use ($storageOptions) {
 
             // We need to strip out keys with a null value so symfony doesn't try and set things with a blank value
             $storageOptions = array_filter($storageOptions);
@@ -84,19 +84,19 @@ class SessionConfig extends Config
         });
 
         // session flash bag
-        $serviceManager->setFactory('session.flash_bag', function($serviceManager) {
+        $serviceManager->setFactory('session.flash_bag', function ($serviceManager) {
             return new FlashBag();
         });
 
         // session attribute bag
-        $serviceManager->setFactory('session.attribute_bag', function($serviceManager) {
+        $serviceManager->setFactory('session.attribute_bag', function ($serviceManager) {
             return new AttributeBag();
         });
 
         $that = $this;
 
         // session handler native file
-        $serviceManager->setFactory('session.handler.native_file', function($serviceManager) use ($that, $storageOptions) {
+        $serviceManager->setFactory('session.handler.native_file', function ($serviceManager) use ($that, $storageOptions) {
 
             // We want absolute paths if we can
             if (null !== $storageOptions['save_path'] && !$that->isAbsolutePath($storageOptions['save_path'])) {
@@ -115,7 +115,7 @@ class SessionConfig extends Config
         });
 
         // session
-        $serviceManager->setFactory('session', function($serviceManager) {
+        $serviceManager->setFactory('session', function ($serviceManager) {
 
             $session = new Session(
                 $serviceManager->get('session.storage.native'),

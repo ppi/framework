@@ -80,7 +80,7 @@ class TemplatingConfig extends AbstractConfig
         /*
          * Templating Locator.
          */
-        $serviceManager->setFactory('templating.locator', function($serviceManager) use ($appCacheDir) {
+        $serviceManager->setFactory('templating.locator', function ($serviceManager) use ($appCacheDir) {
             return new TemplateLocator(
                 $serviceManager->get('file_locator'),
                 $appCacheDir
@@ -90,28 +90,28 @@ class TemplatingConfig extends AbstractConfig
         /*
          * Templating Name Parser.
          */
-        $serviceManager->setFactory('templating.name_parser', function($serviceManager) {
+        $serviceManager->setFactory('templating.name_parser', function ($serviceManager) {
             return new TemplateNameParser($serviceManager->get('modulemanager'));
         });
 
         /*
          * Filesystem Loader.
          */
-        $serviceManager->setFactory('templating.loader.filesystem', function($serviceManager) {
+        $serviceManager->setFactory('templating.loader.filesystem', function ($serviceManager) {
             return new FileSystemLoader($serviceManager->get('templating.locator'));
         });
 
         /*
          * Templating assets helper.
          */
-        $serviceManager->setFactory('templating.helper.assets', function($serviceManager) {
+        $serviceManager->setFactory('templating.helper.assets', function ($serviceManager) {
             return new AssetsHelper($serviceManager->get('request')->getBasePath());
         });
 
         /*
          * Templating globals.
          */
-        $serviceManager->setFactory('templating.globals', function($serviceManager) {
+        $serviceManager->setFactory('templating.globals', function ($serviceManager) {
             return new GlobalVariables($serviceManager->get('servicemanager'));
         });
 
@@ -120,7 +120,7 @@ class TemplatingConfig extends AbstractConfig
          *
          * TODO: Migrate to Symfony\Bundle\FrameworkBundle\Templating\PhpEngine
          */
-        $serviceManager->setFactory('templating.engine.php', function($serviceManager) use ($appCharset) {
+        $serviceManager->setFactory('templating.engine.php', function ($serviceManager) use ($appCharset) {
             $engine = new PhpEngine(
                 $serviceManager->get('templating.name_parser'),
                 $serviceManager->get('templating.loader'),
@@ -141,7 +141,7 @@ class TemplatingConfig extends AbstractConfig
         /*
          * Twig Engine
          */
-        $serviceManager->setFactory('templating.engine.twig', function($serviceManager) {
+        $serviceManager->setFactory('templating.engine.twig', function ($serviceManager) {
             $twigEnvironment = new \Twig_Environment(
                 new \PPI\View\Twig\Loader\FileSystemLoader(
                     $serviceManager->get('templating.locator'),
@@ -159,7 +159,7 @@ class TemplatingConfig extends AbstractConfig
         /*
          * Smarty Engine.
          */
-        $serviceManager->setFactory('templating.engine.smarty', function($serviceManager) use ($appCacheDir) {
+        $serviceManager->setFactory('templating.engine.smarty', function ($serviceManager) use ($appCacheDir) {
             $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
 
             $smartyEngine = new \PPI\View\Smarty\SmartyEngine(
@@ -183,7 +183,7 @@ class TemplatingConfig extends AbstractConfig
         });
 
         // Mustache Engine
-        $serviceManager->setFactory('templating.engine.mustache', function($serviceManager, $appCacheDir) {
+        $serviceManager->setFactory('templating.engine.mustache', function ($serviceManager, $appCacheDir) {
 
             $rawMustacheEngine = new \Mustache_Engine(array(
                 'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'),
@@ -197,7 +197,7 @@ class TemplatingConfig extends AbstractConfig
         /*
          * Delegating Engine.
          */
-        $serviceManager->setFactory('templating.engine.delegating', function($serviceManager) use ($engineIds) {
+        $serviceManager->setFactory('templating.engine.delegating', function ($serviceManager) use ($engineIds) {
             $delegatingEngine = new DelegatingEngine();
             // @todo - lazy load this
             foreach ($engineIds as $id) {
