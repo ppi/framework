@@ -19,9 +19,6 @@
             "homepage": "http://www.ppi.io/contributors"
         }
     ],
-    "autoload": {
-        "psr-0": { "PPI": "" }
-    },
     "require": {
         "psr/log": "~1.0",
         "symfony/dependency-injection": "2.5.*@stable",
