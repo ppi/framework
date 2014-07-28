@@ -44,7 +44,10 @@
         "ppi/composer-module": "dev-master"
     },
     "autoload": {
-        "psr-4": { "PPI\\": "src/" }
+        "psr-4": {
+            "PPI\\": "src/",
+            "PPI\\Tests": "tests"
+        }
     },
     "minimum-stability": "dev",
     "extra": {
