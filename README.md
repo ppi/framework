@@ -11,10 +11,11 @@
 
 Version **2.1.0-DEV**
 
-[![Total Downloads](https://poser.pugx.org/ppi/framework/downloads.png)](https://packagist.org/packages/ppi/framework)
 [![Latest Stable Version](https://poser.pugx.org/ppi/framework/v/stable.png)](https://packagist.org/packages/ppi/framework)
 [![Latest Unstable Version](https://poser.pugx.org/ppi/framework/v/unstable.png)](https://packagist.org/packages/ppi/framework)
 [![Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=develop)](http://travis-ci.org/ppi/framework)
+[![Coverage Status](https://coveralls.io/repos/ppi/framework/badge.png?branch=develop)](https://coveralls.io/r/ppi/framework)
+[![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-develop/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-develop)
 [![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
 
 [PPI][@website] is the the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
