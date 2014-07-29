@@ -120,16 +120,15 @@ class App implements AppInterface
     /**
      * App constructor.
      *
-     * @param array $options
+     * @param array         $options     Application options
      */
     public function __construct(array $options = array())
     {
         // Default options
         $this->environment = isset($options['environment']) ? $options['environment'] : 'prod';
-        $this->debug       = isset($options['debug']) ? (bool) $options['debug'] : false;
-        $this->rootDir     = isset($options['root_dir']) ? $options['root_dir'] : $this->getRootDir();
+        $this->debug       = isset($options['debug']) ? (Boolean) $options['debug'] : false;
+        $this->rootDir     = isset($options['rootDir']) ? $options['rootDir'] : $this->getRootDir();
         $this->name        = isset($options['name']) ? $options['name'] : $this->getName();
-        $this->booted      = false;
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -137,6 +136,30 @@ class App implements AppInterface
         } else {
             ini_set('display_errors', 0);
         }
+    }
+
+    /**
+     * @param string  $environment The environment
+     * @param Boolean $debug       Whether to enable debugging or not
+     * @param string  $rootDir     The application root dir
+     * @param string  $name        The application name
+     */
+    public static function create($environment = 'prod', $debug = false, $rootDir = null, $name = null)
+    {
+        $options = array(
+            'environment'   => $environment,
+            'debug'         => $debug,
+        );
+
+        if (null !== $rootDir) {
+            $options['rootDir'] = $rootDir;
+        }
+
+        if (null !== $name) {
+            $options['name'] = $name;
+        }
+
+        return new static($options);
     }
 
     /**
