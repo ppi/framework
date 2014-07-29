@@ -10,22 +10,24 @@
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 
 Version **2.1.0-DEV**
-[![Build Status](https://travis-ci.org/ppi/framework.png?branch=2.1)](https://travis-ci.org/ppi/framework)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ppi/framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
-* [Official website][@website]
-* [Download][@download]
-* [Documentation][@documentation]
-
-## What is PPI?
+[![Total Downloads](https://poser.pugx.org/ppi/framework/downloads.png)](https://packagist.org/packages/ppi/framework)
+[![Latest Stable Version](https://poser.pugx.org/ppi/framework/v/stable.png)](https://packagist.org/packages/ppi/framework)
+[![Latest Unstable Version](https://poser.pugx.org/ppi/framework/v/unstable.png)](https://packagist.org/packages/ppi/framework)
+[![Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=develop)](http://travis-ci.org/ppi/framework)
+[![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
 
 [PPI][@website] is the the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
 
 PPI bootstraps framework components for you from the top frameworks such as ZendFrameworks2, Symfony2, Laravel4, FuelPHP, Doctrine2
 
+* [Official website][@website]
+* [Download][@download]
+* [Documentation][@documentation]
+
 ## Requirements
 
-* [PHP][@php] 5.3.3 or above
+* [PHP][@php] 5.3.23 or above
 
 ## Installation
 
