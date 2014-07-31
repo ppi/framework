@@ -29,9 +29,10 @@ class RouterRequestContextFactory extends AbstractFactory
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $this->processConfiguration($serviceLocator->get('ApplicationConfig'));
+        $context = new RequestContext();
+        $context->fromRequest($serviceLocator->get('Request'));
 
-        return new RequestContext('', 'GET', $config['host'], $config['scheme'], $config['http_port'], $config['https_port']);
+        return $context;
     }
 
     /**

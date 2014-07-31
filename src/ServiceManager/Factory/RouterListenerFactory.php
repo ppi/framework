@@ -33,10 +33,11 @@ class RouterListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
 
-        $router = $serviceLocator->get('Router');
+        $router         = $serviceLocator->get('Router');
         $requestContext = $serviceLocator->get('RouterRequestContext');
-        $logger = $serviceLocator->get('Logger');
+        $logger         = $serviceLocator->get('Logger');
+        $requestStack   = $serviceLocator->get('RequestStack');
 
-        return new RouterListener($router, $requestContext, $logger);
+        return new RouterListener($router, $requestContext, $logger, $requestStack);
     }
 }
