@@ -54,6 +54,7 @@ class ServiceListenerFactory implements FactoryInterface
             'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
             'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
             'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
+            'RequestStack'          => 'PPI\ServiceManager\Factory\RequestStackFactory',
             'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
             'RoutePluginManager'    => 'PPI\ServiceManager\Factory\RoutePluginManagerFactory',
             'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',

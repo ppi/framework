@@ -135,9 +135,9 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     {
         return array(
             'invokableClasses' => $this->invokableClasses,
-            'factories' => $this->factories,
-            'aliases' => $this->aliases,
-            'instances' => $this->instances,
+            'factories'        => $this->factories,
+            'aliases'          => $this->aliases,
+            'instances'        => $this->instances,
         );
     }
 
