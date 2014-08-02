@@ -39,7 +39,7 @@ class RouterFactory implements FactoryInterface
         $logger = $serviceLocator->get('Logger');
 
         $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
-        
+
         $allRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
         foreach ($allRoutes as $routes) {
             $routeCollection->addCollection($routes);
