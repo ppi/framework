@@ -120,15 +120,15 @@ class App implements AppInterface
     /**
      * App constructor.
      *
-     * @param array         $options     Application options
+     * @param array $options
      */
     public function __construct(array $options = array())
     {
         // Default options
-        $this->environment = isset($options['environment']) ? $options['environment'] : 'prod';
-        $this->debug       = isset($options['debug']) ? (Boolean) $options['debug'] : false;
-        $this->rootDir     = isset($options['rootDir']) ? $options['rootDir'] : $this->getRootDir();
-        $this->name        = isset($options['name']) ? $options['name'] : $this->getName();
+        $this->environment = isset($options['environment']) && $options['environment'] ? (string) $options['environment'] : 'prod';
+        $this->debug       = isset($options['debug']) && null !== $options['debug'] ? (Boolean) $options['debug'] : false;
+        $this->rootDir     = isset($options['rootDir']) && $options['rootDir'] ? (string) $options['rootDir'] : $this->getRootDir();
+        $this->name        = isset($options['name']) && $options['name'] ? (string) $options['name'] : $this->getName();
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -136,30 +136,6 @@ class App implements AppInterface
         } else {
             ini_set('display_errors', 0);
         }
-    }
-
-    /**
-     * @param string  $environment The environment
-     * @param Boolean $debug       Whether to enable debugging or not
-     * @param string  $rootDir     The application root dir
-     * @param string  $name        The application name
-     */
-    public static function create($environment = 'prod', $debug = false, $rootDir = null, $name = null)
-    {
-        $options = array(
-            'environment'   => $environment,
-            'debug'         => $debug,
-        );
-
-        if (null !== $rootDir) {
-            $options['rootDir'] = $rootDir;
-        }
-
-        if (null !== $name) {
-            $options['name'] = $name;
-        }
-
-        return new static($options);
     }
 
     /**
@@ -714,8 +690,8 @@ class App implements AppInterface
      */
     protected function log($level, $message, array $context = array())
     {
-        if (null === $this->logger) {
-            $this->logger = $this->getServiceManager()->has('logger') ? $this->getServiceManager()->get('logger') : false;
+        if (null === $this->logger && $this->getServiceManager()->has('logger')) {
+            $this->logger = $this->getServiceManager()->get('logger');
         }
 
         if ($this->logger) {

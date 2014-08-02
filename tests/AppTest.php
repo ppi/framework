@@ -42,29 +42,11 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($app->getContainer());
     }
 
-    public function testCreate()
-    {
-        $env     = 'test_env';
-        $debug   = true;
-        $rootDir = __DIR__;
-        $name    = 'testName';
-        $app     = AppForTest::create($env, $debug, __DIR__, 'testName');
-
-        $this->assertEquals($env, $app->getEnvironment());
-        $this->assertEquals($debug, $app->isDebug());
-        $this->assertEquals($rootDir, $app->getRootDir());
-        $this->assertEquals($name, $app->getName());
-        $this->assertFalse($app->isBooted());
-        $this->assertLessThanOrEqual(microtime(true), $app->getStartTime());
-        $this->assertNull($app->getServiceManager());
-        $this->assertNull($app->getContainer());
-    }
-
     public function testClone()
     {
         $env   = 'test_env';
         $debug = true;
-        $app   = AppForTest::create($env, $debug);
+        $app   = new AppForTest(array('environment' => $env, 'debug' => $debug));
 
         $clone = clone $app;
 
@@ -77,21 +59,34 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRootDir()
     {
-        $app = AppForTest::create('test', true, __DIR__);
+        $app = new AppForTest(array(
+            'environment'   => 'test',
+            'debug'         => true,
+            'rootDir'       => __DIR__
+        ));
 
         $this->assertEquals(__DIR__, realpath($app->getRootDir()));
 
         chdir(__DIR__);
-        $app = AppForTest::create('test', true);
+        $app = new AppForTest(array('environment' => 'test', 'debug' => true));
         $this->assertEquals(__DIR__, realpath($app->getRootDir()));
     }
 
     public function testGetName()
     {
-        $app = AppForTest::create('test', true, __DIR__);
+        $app = new AppForTest(array(
+            'environment'   => 'test',
+            'debug'         => true,
+            'rootDir'       => __DIR__
+        ));
         $this->assertEquals(basename(__DIR__), $app->getName());
 
-        $app = AppForTest::create('test', true, __DIR__, 'testName');
+        $app = new AppForTest(array(
+            'environment'   => 'test',
+            'debug'         => true,
+            'rootDir'       => __DIR__,
+            'name'          => 'testName'
+        ));
         $this->assertEquals('testName', $app->getName());
     }
 }
