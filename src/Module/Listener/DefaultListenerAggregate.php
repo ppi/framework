@@ -21,6 +21,8 @@ use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Stdlib\ArrayUtils;
 
+$x = 0;
+
 /**
  * DefaultListenerAggregate class.
  *

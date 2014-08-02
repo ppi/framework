@@ -14,6 +14,7 @@ use PPI\Debug\ExceptionHandler;
 use PPI\ServiceManager\ServiceManagerBuilder;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -230,9 +231,31 @@ class App implements AppInterface
     }
 
     /**
+     * Run the application and send the response.
+     *
+     * @param Request|null $request
+     * @return $this
+     */
+    public function run(Request $request = null)
+    {
+        if (false === $this->booted) {
+            $this->boot();
+        }
+
+        if (null !== $request) {
+            $this->request = $request;
+        }
+
+        $response = $this->dispatch();
+        $response->send();
+
+        return $this;
+    }
+
+    /**
      * Decide on a route to use and dispatch our module's controller action.
      *
-     * @return \PPI\Http\RequestInterface
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dispatch()
     {
@@ -648,7 +671,6 @@ class App implements AppInterface
         $hasMatch = false;
         try {
             // Lets load up our router and match the appropriate route
-
             $router->warmUp();
             $this->serviceManager->get('RouterListener')->match($this->getRequest());
             $hasMatch = true;
