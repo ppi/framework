@@ -19,7 +19,7 @@ Version **2.1.0-DEV**
 
 [PPI][@website] is the the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
 
-PPI bootstraps framework components for you from the top frameworks such as ZendFrameworks2, Symfony2, Laravel4, FuelPHP, Doctrine2
+PPI bootstraps framework components for you from the top frameworks such as ZendFramework2, Symfony2, Laravel4 and FuelPHP.
 
 * [Official website][@website]
 * [Download][@download]
