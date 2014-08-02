@@ -54,7 +54,6 @@ class ServiceListenerFactory implements FactoryInterface
             'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
             'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
             'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
-            'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
             'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
             'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
             'RoutePluginManager'    => 'PPI\ServiceManager\Factory\RoutePluginManagerFactory',
