@@ -43,6 +43,7 @@ class ServiceListenerFactory implements FactoryInterface
             'SharedEventManager' => 'Zend\EventManager\SharedEventManager',
             'ModuleEvent'        => 'Zend\ModuleManager\ModuleEvent',
             'filesystem'         => 'Symfony\Component\Filesystem\Filesystem',
+            'RequestStack'       => 'Symfony\Component\HttpFoundation\RequestStack',
         ),
         'factories'     => array(
             'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
@@ -51,10 +52,10 @@ class ServiceListenerFactory implements FactoryInterface
             'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
             'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
             'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
+            'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
             'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
             'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
             'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
-            'RequestStack'          => 'PPI\ServiceManager\Factory\RequestStackFactory',
             'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
             'RoutePluginManager'    => 'PPI\ServiceManager\Factory\RoutePluginManagerFactory',
             'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
@@ -63,15 +64,9 @@ class ServiceListenerFactory implements FactoryInterface
             'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
         ),
         'aliases'       => array(
-            // Zend alias
             'Configuration'                             => 'Config',
-            'Zend\EventManager\EventManagerInterface'   => 'EventManager',
-            // PPI alias
             'config.parameter_bag'                      => 'ApplicationParameters',
             'templating.loader'                         => 'templating.loader.filesystem',
-        ),
-        'shared'        => array(
-            'EventManager' => false
         )
     );
 
