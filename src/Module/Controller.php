@@ -26,28 +26,28 @@ class Controller implements ServiceLocatorAwareInterface
      *
      * @var null|object
      */
-    protected $_serviceLocator = null;
+    protected $serviceLocator = null;
 
     /**
      * Caching the results of results from $this->is() lookups.
      *
      * @var array
      */
-    protected $_isCache = array();
+    protected $isCache = array();
 
     /**
      * The options for this controller
      *
      * @var array
      */
-    protected $_options = array();
+    protected $options = array();
 
     /**
      * Controller helpers
      *
      * @var array
      */
-    protected $_helpers = array();
+    protected $helpers = array();
 
     /**
      * Get the request object
@@ -56,7 +56,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function getRequest()
     {
-        return $this->_serviceLocator->get('Request');
+        return $this->serviceLocator->get('Request');
     }
 
     /**
@@ -66,7 +66,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function getResponse()
     {
-        return $this->_serviceLocator->get('Response');
+        return $this->serviceLocator->get('Response');
     }
 
     /**
@@ -80,11 +80,11 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function helper($helperName)
     {
-        if (!isset($this->_helpers[$helperName])) {
+        if (!isset($this->helpers[$helperName])) {
             throw new \InvalidArgumentException('Unable to locate controller helper: ' . $helperName);
         }
 
-        return $this->_helpers[$helperName];
+        return $this->helpers[$helperName];
 
     }
 
@@ -98,7 +98,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setHelper($helperName, $helper)
     {
-        $this->_helpers[$helperName] = $helper;
+        $this->helpers[$helperName] = $helper;
     }
 
     /**
@@ -258,30 +258,30 @@ class Controller implements ServiceLocatorAwareInterface
         switch ($key = strtolower($key)) {
 
             case 'ajax':
-                if (!isset($this->_isCache['ajax'])) {
-                    return $this->_isCache['ajax'] = $this->getService('Request')->isXmlHttpRequest();
+                if (!isset($this->isCache['ajax'])) {
+                    return $this->isCache['ajax'] = $this->getService('Request')->isXmlHttpRequest();
                 }
 
-                return $this->_isCache['ajax'];
+                return $this->isCache['ajax'];
 
             case 'put':
             case 'delete':
             case 'post':
             case 'patch':
-                if (!isset($this->_isCache['requestMethod'][$key])) {
-                    $this->_isCache['requestMethod'][$key] = $this->getService('Request')->getMethod() === strtoupper($key);
+                if (!isset($this->isCache['requestMethod'][$key])) {
+                    $this->isCache['requestMethod'][$key] = $this->getService('Request')->getMethod() === strtoupper($key);
                 }
 
-                return $this->_isCache['requestMethod'][$key];
+                return $this->isCache['requestMethod'][$key];
 
             case 'ssl':
             case 'https':
             case 'secure':
-                if (!isset($this->_isCache['secure'])) {
-                    $this->_isCache['secure'] = $this->getService('Request')->isSecure();
+                if (!isset($this->isCache['secure'])) {
+                    $this->isCache['secure'] = $this->getService('Request')->isSecure();
                 }
 
-                return $this->_isCache['secure'];
+                return $this->isCache['secure'];
 
             default:
                 throw new \InvalidArgumentException("Invalid 'is' key supplied: {$key}");
@@ -329,7 +329,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->_serviceLocator = $serviceLocator;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -339,7 +339,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function getServiceLocator()
     {
-        return $this->_serviceLocator;
+        return $this->serviceLocator;
     }
 
     /**
@@ -375,7 +375,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function render($template, array $params = array(), array $options = array())
     {
-        $renderer = $this->_serviceLocator->get('templating');
+        $renderer = $this->serviceLocator->get('templating');
 
         // Helpers
         if (isset($options['helpers'])) {
@@ -459,7 +459,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setOptions($options)
     {
-        $this->_options = $options;
+        $this->options = $options;
 
         return $this;
     }
@@ -474,7 +474,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function getOption($option, $default = null)
     {
-        return isset($this->_options[$option]) ? $this->_options[$option] : $default;
+        return isset($this->options[$option]) ? $this->options[$option] : $default;
     }
 
     /**
