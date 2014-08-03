@@ -66,7 +66,7 @@ class App implements AppInterface
      * Configuration loader.
      * @var \PPI\Config\ConfigManager
      */
-    protected $configManager = null;
+    protected $configManager;
 
     /**
      * The Module Manager.
@@ -82,19 +82,19 @@ class App implements AppInterface
     /**
      * @var null|array
      */
-    protected $_matchedRoute = null;
+    protected $matchedRoute;
 
     /**
      * The request object.
      * @var null
      */
-    protected $request = null;
+    protected $request;
 
     /**
      * The response object.
      * @var null
      */
-    protected $response = null;
+    protected $response;
 
     /**
      * @var \PPI\Module\Controller\ControllerResolver
@@ -110,13 +110,13 @@ class App implements AppInterface
      * Path to the application root dir aka the "app" directory.
      * @var null|string
      */
-    protected $rootDir = null;
+    protected $rootDir;
 
     /**
      * Service Manager.
      * @var \PPI\ServiceManager\ServiceManager
      */
-    protected $serviceManager = null;
+    protected $serviceManager;
 
     /**
      * App constructor.

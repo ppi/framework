@@ -39,21 +39,21 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
      *
      * @var array
      */
-    protected $_routes = array();
+    protected $routes = array();
 
     /**
      * Services for the ServiceLocator
      *
      * @var array
      */
-    protected $_services = array();
+    protected $services = array();
 
     /**
      * The Service Manager
      *
      * @var type
      */
-    protected $_serviceManager;
+    protected $serviceManager;
 
     /**
      * Set the service manager
@@ -64,7 +64,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
      */
     public function setServiceManager(ServiceManager $sm)
     {
-        $this->_serviceManager = $sm;
+        $this->serviceManager = $sm;
     }
 
     /**
@@ -118,7 +118,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $module = $e->getModule();
 
         if (is_callable(array($module, 'getRoutes'))) {
-            $this->_routes[$e->getModuleName()] = $module->getRoutes();
+            $this->routes[$e->getModuleName()] = $module->getRoutes();
         }
 
         return $this;
@@ -138,7 +138,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         if (is_callable(array($module, 'getServiceConfig'))) {
             $services = $module->getServiceConfig();
             if (is_array($services) && isset($services['factories'])) {
-                $this->_services[$e->getModuleName()] = $services['factories'];
+                $this->services[$e->getModuleName()] = $services['factories'];
             }
         }
 
@@ -152,7 +152,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
      */
     public function getRoutes()
     {
-        return $this->_routes;
+        return $this->routes;
     }
 
     /**
@@ -164,7 +164,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     {
         $mergedModuleServices = array();
 
-        foreach ($this->_services as $services) {
+        foreach ($this->services as $services) {
             $mergedModuleServices = ArrayUtils::merge($mergedModuleServices, $services);
         }
 

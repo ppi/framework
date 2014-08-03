@@ -42,7 +42,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      *
      * @var null
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
      * Configuration loader.
@@ -56,35 +56,35 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      *
      * @var null
      */
-    protected $_routes = null;
+    protected $routes = null;
 
     /**
      * @todo Add inline documentation.
      *
      * @var null
      */
-    protected $_services = null;
+    protected $services = null;
 
     /**
      * @todo Add inline documentation.
      *
      * @var null
      */
-    protected $_controller = null;
+    protected $controller = null;
 
     /**
      * Controller Name
      *
      * @var null
      */
-    protected $_controllerName = null;
+    protected $controllerName = null;
 
     /**
      * Action Name
      *
      * @var null
      */
-    protected $_actionName = null;
+    protected $actionName = null;
 
     /**
      * Load up our routes
@@ -95,15 +95,15 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function loadYamlRoutes($path)
     {
-        if ($this->_routes === null) {
+        if ($this->routes === null) {
             $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
             $loader->setDefaults(array('_module' => $this->getName()));
 
             $routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
-            $this->_routes = $routesCollection;
+            $this->routes = $routesCollection;
         }
 
-        return $this->_routes;
+        return $this->routes;
     }
 
     /**
@@ -129,7 +129,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function setServices($services)
     {
-        $this->_services = $services;
+        $this->services = $services;
 
         return $this;
     }
@@ -141,7 +141,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function getServices()
     {
-        return $this->_services;
+        return $this->services;
     }
 
     /**
@@ -153,7 +153,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function getService($serviceName)
     {
-        return isset($this->_services[$serviceName]) ? $this->_services : null;
+        return isset($this->services[$serviceName]) ? $this->services : null;
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function getController()
     {
-        return $this->_controller;
+        return $this->controller;
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function setController($controller)
     {
-        $this->_controller = $controller;
+        $this->controller = $controller;
 
         return $this;
     }
@@ -187,7 +187,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function hasController()
     {
-        return $this->_controller !== null;
+        return $this->controller !== null;
     }
 
     /**
@@ -199,7 +199,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function setControllerName($controllerName)
     {
-        $this->_controllerName = $controllerName;
+        $this->controllerName = $controllerName;
 
         return $this;
     }
@@ -213,7 +213,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function setActionName($actionName)
     {
-        $this->_actionName = $actionName;
+        $this->actionName = $actionName;
 
         return $this;
     }
@@ -227,24 +227,24 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function dispatch()
     {
-        if (!method_exists($this->_controller, $this->_actionName)) {
+        if (!method_exists($this->controller, $this->actionName)) {
             throw new \Exception(sprintf(
                 'Unable to dispatch action: "%s" does not exist in controller '.
                 '"%s" within module "%s"',
-                $this->_actionName,
-                $this->_controllerName,
+                $this->actionName,
+                $this->controllerName,
                 $this->name
             ));
         }
 
-        if (method_exists($this->_controller, 'preDispatch')) {
-            $this->_controller->preDispatch();
+        if (method_exists($this->controller, 'preDispatch')) {
+            $this->controller->preDispatch();
         }
 
-        $content = $this->_controller->{$this->_actionName}();
+        $content = $this->controller->{$this->actionName}();
 
-        if (method_exists($this->_controller, 'postDispatch')) {
-            $this->_controller->postDispatch();
+        if (method_exists($this->controller, 'postDispatch')) {
+            $this->controller->postDispatch();
         }
 
         return $content;
