@@ -104,9 +104,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -118,9 +118,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a post parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -132,9 +132,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a files parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -146,9 +146,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a query string parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -160,9 +160,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -174,7 +174,7 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Get/Set a session value
      *
-     * @param string     $key
+     * @param string $key
      * @param null|mixed $default If this is not null, it enters setter mode
      *
      * @return mixed
@@ -368,8 +368,8 @@ class Controller implements ServiceLocatorAwareInterface
      * Render a template
      *
      * @param string $template The template to render
-     * @param array  $params   The params to pass to the renderer
-     * @param array  $options  Extra options
+     * @param array $params The params to pass to the renderer
+     * @param array $options Extra options
      *
      * @return string
      */
@@ -391,7 +391,7 @@ class Controller implements ServiceLocatorAwareInterface
      * Set Flash Message
      *
      * @param string $flashType The flash type
-     * @param string $message   The flash message
+     * @param string $message The flash message
      *
      * @return void
      */
@@ -403,7 +403,7 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Create a RedirectResponse object with your $url and $statusCode
      *
-     * @param string  $url
+     * @param string $url
      * @param integer $statusCode
      *
      * @return void
@@ -429,8 +429,8 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Generate a URL from the specified route name
      *
-     * @param string  $route
-     * @param array   $parameters
+     * @param string $route
+     * @param array $parameters
      * @param boolean $absolute
      *
      * @return string
@@ -467,8 +467,8 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Get an option from the controller
      *
-     * @param string $option  The option name
-     * @param null   $default The default value if the option does not exist
+     * @param string $option The option name
+     * @param null $default The default value if the option does not exist
      *
      * @return mixed
      */
@@ -491,7 +491,7 @@ class Controller implements ServiceLocatorAwareInterface
      * Add a template global variable
      *
      * @param string $param
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return void
      */
