@@ -126,10 +126,10 @@ class App implements AppInterface
     public function __construct(array $options = array())
     {
         // Default options
-        $this->environment = isset($options['environment']) && $options['environment'] ? (string) $options['environment'] : 'prod';
-        $this->debug       = isset($options['debug']) && null !== $options['debug'] ? (Boolean) $options['debug'] : false;
-        $this->rootDir     = isset($options['rootDir']) && $options['rootDir'] ? (string) $options['rootDir'] : $this->getRootDir();
-        $this->name        = isset($options['name']) && $options['name'] ? (string) $options['name'] : $this->getName();
+        $this->environment = isset($options['environment']) && $options['environment'] ? (string)$options['environment'] : 'prod';
+        $this->debug = isset($options['debug']) && null !== $options['debug'] ? (boolean)$options['debug'] : false;
+        $this->rootDir = isset($options['rootDir']) && $options['rootDir'] ? (string)$options['rootDir'] : $this->getRootDir();
+        $this->name = isset($options['name']) && $options['name'] ? (string)$options['name'] : $this->getName();
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -154,7 +154,7 @@ class App implements AppInterface
         }
 
         // "root_dir" to "rootDir"
-        $property = preg_replace('/_(.?)/e',"strtoupper('$1')",$option);
+        $property = preg_replace('/_(.?)/e', "strtoupper('$1')", $option);
         if (!property_exists($this, $property)) {
             throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
         }
@@ -174,7 +174,7 @@ class App implements AppInterface
     public function getOption($option)
     {
         // "root_dir" to "rootDir"
-        $property = preg_replace('/_(.?)/e',"strtoupper('$1')",$option);
+        $property = preg_replace('/_(.?)/e', "strtoupper('$1')", $option);
         if (!property_exists($this, $property)) {
             throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
         }
@@ -379,7 +379,7 @@ class App implements AppInterface
         if ('development' == $env) {
             $env = 'dev';
         } elseif ('production' == $env) {
-            $env ='prod';
+            $env = 'prod';
         }
 
         return $this->getEnvironment() == $env;
@@ -460,8 +460,8 @@ class App implements AppInterface
     /**
      * @see PPI\Module\ModuleManager::locateResource()
      *
-     * @param string  $name  A resource name to locate
-     * @param string  $dir   A directory where to look for the resource first
+     * @param string $name A resource name to locate
+     * @param string $dir A directory where to look for the resource first
      * @param Boolean $first Whether to return the first path or paths for all matching bundles
      *
      * @return string|array The absolute path of the resource or an array if $first is false
@@ -524,7 +524,7 @@ class App implements AppInterface
      */
     public function getCacheDir()
     {
-        return $this->rootDir.'/cache/'.$this->environment;
+        return $this->rootDir . '/cache/' . $this->environment;
     }
 
     /**
@@ -536,7 +536,7 @@ class App implements AppInterface
      */
     public function getLogDir()
     {
-        return $this->rootDir.'/logs';
+        return $this->rootDir . '/logs';
     }
 
     /**
@@ -559,7 +559,7 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
+            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
             $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
@@ -616,13 +616,13 @@ class App implements AppInterface
     {
         return array_merge(
             array(
-                'app.root_dir'        => $this->rootDir,
-                'app.environment'     => $this->environment,
-                'app.debug'           => $this->debug,
-                'app.name'            => $this->name,
-                'app.cache_dir'       => $this->getCacheDir(),
-                'app.logs_dir'        => $this->getLogDir(),
-                'app.charset'         => $this->getCharset(),
+                'app.root_dir' => $this->rootDir,
+                'app.environment' => $this->environment,
+                'app.debug' => $this->debug,
+                'app.name' => $this->name,
+                'app.cache_dir' => $this->getCacheDir(),
+                'app.logs_dir' => $this->getLogDir(),
+                'app.charset' => $this->getCharset(),
             ),
             $this->getEnvParameters()
         );
@@ -684,11 +684,11 @@ class App implements AppInterface
         // Lets grab the 'Framework 404' route and dispatch it.
         if ($hasMatch === false) {
             try {
-                $baseUrl  = $router->getContext()->getBaseUrl();
+                $baseUrl = $router->getContext()->getBaseUrl();
                 $routeUri = $router->generate($this->options['404RouteName']);
 
                 // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false ) {
+                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
                     $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
                 }
 
@@ -705,9 +705,9 @@ class App implements AppInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param  mixed  $level
+     * @param  mixed $level
      * @param  string $message
-     * @param  array  $context
+     * @param  array $context
      * @return null
      */
     protected function log($level, $message, array $context = array())
@@ -717,7 +717,7 @@ class App implements AppInterface
         }
 
         if ($this->logger) {
-           $this->logger->log($level, $message, $context);
+            $this->logger->log($level, $message, $context);
         }
     }
 
