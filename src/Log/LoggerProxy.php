@@ -16,7 +16,7 @@ class LoggerProxy implements LoggerInterface
 {
 
     /**
-     * @var Psr\Log\LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
