@@ -90,6 +90,8 @@ class MonologConfig extends AbstractConfig
 
             return $logger;
         });
+
+        $serviceManager->setAlias('Logger', 'monolog.logger');
     }
 
     /**

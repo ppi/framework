@@ -50,6 +50,7 @@ class ServiceManagerBuilder extends ServiceManager
         $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
 
         foreach(array(
+            new Config\MonologConfig(),
             new Config\SessionConfig(),
             new Config\TemplatingConfig()
         ) as $serviceConfig) {
