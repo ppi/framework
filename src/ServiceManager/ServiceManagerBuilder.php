@@ -8,6 +8,7 @@
  */
 
 namespace PPI\ServiceManager;
+use PPI\Log\LoggerProxy;
 
 /**
  * ServiceManager builder.
@@ -48,6 +49,13 @@ class ServiceManagerBuilder extends ServiceManager
 
         // Settings provided by the application itself on App boot, config provided by modules is not included
         $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
+
+        $loggerProxy = new LoggerProxy();
+        if($this->has('Logger')) {
+            $loggerProxy->setLogger($this->get('Logger'));
+        }
+
+        $this->setService('Logger', $loggerProxy);
 
         foreach(array(
             new Config\SessionConfig(),
