@@ -132,14 +132,14 @@ class MonologConfig extends AbstractConfig
     /**
      * {@inheritDoc}
      */
-    protected function processConfiguration(array $config, ServiceManager $serviceManager = null)
+    protected function processConfiguration(array $configs, ServiceManager $serviceManager = null)
     {
         $alias = $this->getAlias();
         if (!isset($configs[$alias])) {
             return array();
         }
 
-        $parameterBag = $serviceManager->get('config.parameter_bag');
+        $parameterBag = $serviceManager->get('application_parameters');
         $config = $configs[$alias];
 
         if (isset($config['handlers'])) {
