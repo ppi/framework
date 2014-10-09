@@ -5,7 +5,14 @@ namespace PPI\Log;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
-class LoggerProxy
+/**
+ * This is a class which wraps around Psr\Log to provide a proxy to an underlying Logger implementation. This enables us
+ * to boot up the PPI framework without actually setting a logger in the ServiceManager.
+ *
+ * @package PPI
+ * @author Gary Tierney
+ */
+class LoggerProxy implements LoggerInterface
 {
 
     /**
@@ -38,5 +45,77 @@ class LoggerProxy
 
         //@todo - should we really return from here?
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function emergency($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function alert($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function critical($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function error($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function warning($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function notice($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function info($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function debug($message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function log($level, $message, array $context = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
     }
 }
