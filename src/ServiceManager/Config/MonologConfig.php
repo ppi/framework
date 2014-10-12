@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2014 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
@@ -82,7 +82,7 @@ class MonologConfig extends AbstractConfig
         }
 
         $loggerClass = $configs['parameters']['monolog.logger.class'];
-        $serviceManager->setFactory('monolog.logger', function($serviceManager) use ($loggerClass, $handlersToChannels) {
+        $serviceManager->setFactory('monolog.logger', function ($serviceManager) use ($loggerClass, $handlersToChannels) {
             $logger = new $loggerClass('app');
             foreach ($handlersToChannels as $handler => $channels) {
                    $logger->pushHandler($serviceManager->get($handler));
@@ -106,7 +106,7 @@ class MonologConfig extends AbstractConfig
         $class = $parameters[sprintf('monolog.handler.%s.class', $handler['type'])];
         $handler['level'] = is_int($handler['level']) ? $handler['level'] : constant('Monolog\Logger::'.strtoupper($handler['level']));
 
-        $serviceManager->setFactory($handlerId, function($serviceManager) use ($class, $handler) {
+        $serviceManager->setFactory($handlerId, function ($serviceManager) use ($class, $handler) {
             switch ($handler['type']) {
             case 'stream':
                 return new $class($handler['path'], $handler['level'], $handler['bubble']);

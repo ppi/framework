@@ -9,8 +9,6 @@
 
 namespace PPI\ServiceManager;
 
-use PPI\ServiceManager\ParameterBag;
-
 /**
  * ServiceManager builder.
  *
@@ -34,7 +32,7 @@ class ServiceManagerBuilder extends ServiceManager
     }
 
     /**
-     * @param array $parameters
+     * @param  array $parameters
      * @return $this
      */
     public function build(array $parameters = array())
@@ -43,13 +41,15 @@ class ServiceManagerBuilder extends ServiceManager
             $this->config['framework'] = array();
         }
 
+        // Core parameters set by PPI\App
         $parametersBag = new ParameterBag($parameters);
         $parametersBag->resolve();
         $this->setService('ApplicationParameters', $parametersBag);
+
+        // Settings provided by the application itself on App boot, config provided by modules is not included
         $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
 
         foreach(array(
-            new Config\MonologConfig(),
             new Config\SessionConfig(),
             new Config\TemplatingConfig()
         ) as $serviceConfig) {

@@ -10,42 +10,24 @@
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 
 Version **2.1.0-DEV**
-[![Build Status](https://travis-ci.org/ppi/framework.png?branch=2.1)](https://travis-ci.org/ppi/framework)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ppi/framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
+[![Latest Stable Version](https://poser.pugx.org/ppi/framework/v/stable.png)](https://packagist.org/packages/ppi/framework)
+[![Latest Unstable Version](https://poser.pugx.org/ppi/framework/v/unstable.png)](https://packagist.org/packages/ppi/framework)
+[![Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=develop)](http://travis-ci.org/ppi/framework)
+[![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-develop/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-develop)
+[![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
+
+[PPI][@website] is the the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
+
+PPI bootstraps framework components for you from the top frameworks such as ZendFramework2, Symfony2, Laravel4 and FuelPHP.
 
 * [Official website][@website]
 * [Download][@download]
 * [Documentation][@documentation]
 
-## What is PPI?
-
-The [PPI Framework][@website] is a micro to light full-stack web framework. It
-focuses on having a light footprint, convenient and minimalistic. It allows
-developers to rapidly develop web applications and utilize features from 3rd
-party libraries without the tedious integration of them into your project. It
-also allows developers to build better and easy to maintain websites/web
-applications.
-
-### Why is PPI different?
-
-PPI is not another framework to re-invent the wheel. The idea behind it is to
-build a more pragmatic, simplistic and easier version of the wheel. It's built
-re-using the core components of other web frameworks such as Symfony2, Doctrine2
-and ZendFramework2.
-
-PPI pre-integrates third libraries for you (aka autoloading) so that you can
-drop their components into your Vendor folder and you're up and running
-instantly. From PPI you're able to seamlessly have plug and play, moreso play
-because that's the fun part!
-
-PPI doesn't just stop at the PHP side of things, the skeleton application comes
-pre-bundled with the latest and greatest trending libraries for frontend
-development such as [HTML5 Boilerplate][@h5bp] and [Twitter
-Bootstrap][@twbootstrap].
-
 ## Requirements
 
-* [PHP][@php] 5.3.3 or above
+* [PHP][@php] 5.3.23 or above
 
 ## Installation
 

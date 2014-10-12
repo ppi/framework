@@ -26,28 +26,28 @@ class Controller implements ServiceLocatorAwareInterface
      *
      * @var null|object
      */
-    protected $_serviceLocator = null;
+    protected $serviceLocator = null;
 
     /**
      * Caching the results of results from $this->is() lookups.
      *
      * @var array
      */
-    protected $_isCache = array();
+    protected $isCache = array();
 
     /**
      * The options for this controller
      *
      * @var array
      */
-    protected $_options = array();
+    protected $options = array();
 
     /**
      * Controller helpers
      *
      * @var array
      */
-    protected $_helpers = array();
+    protected $helpers = array();
 
     /**
      * Get the request object
@@ -56,7 +56,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function getRequest()
     {
-        return $this->_serviceLocator->get('Request');
+        return $this->serviceLocator->get('Request');
     }
 
     /**
@@ -66,7 +66,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function getResponse()
     {
-        return $this->_serviceLocator->get('Response');
+        return $this->serviceLocator->get('Response');
     }
 
     /**
@@ -80,11 +80,11 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function helper($helperName)
     {
-        if (!isset($this->_helpers[$helperName])) {
+        if (!isset($this->helpers[$helperName])) {
             throw new \InvalidArgumentException('Unable to locate controller helper: ' . $helperName);
         }
 
-        return $this->_helpers[$helperName];
+        return $this->helpers[$helperName];
 
     }
 
@@ -98,15 +98,15 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setHelper($helperName, $helper)
     {
-        $this->_helpers[$helperName] = $helper;
+        $this->helpers[$helperName] = $helper;
     }
 
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -118,9 +118,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a post parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -132,9 +132,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a files parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -146,9 +146,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a query string parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -160,9 +160,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key The key
+     * @param mixed $default The default value if the parameter key does not exist
+     * @param boolean $deep If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -174,7 +174,7 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Get/Set a session value
      *
-     * @param string     $key
+     * @param string $key
      * @param null|mixed $default If this is not null, it enters setter mode
      *
      * @return mixed
@@ -258,30 +258,30 @@ class Controller implements ServiceLocatorAwareInterface
         switch ($key = strtolower($key)) {
 
             case 'ajax':
-                if (!isset($this->_isCache['ajax'])) {
-                    return $this->_isCache['ajax'] = $this->getService('Request')->isXmlHttpRequest();
+                if (!isset($this->isCache['ajax'])) {
+                    return $this->isCache['ajax'] = $this->getService('Request')->isXmlHttpRequest();
                 }
 
-                return $this->_isCache['ajax'];
+                return $this->isCache['ajax'];
 
             case 'put':
             case 'delete':
             case 'post':
             case 'patch':
-                if (!isset($this->_isCache['requestMethod'][$key])) {
-                    $this->_isCache['requestMethod'][$key] = $this->getService('Request')->getMethod() === strtoupper($key);
+                if (!isset($this->isCache['requestMethod'][$key])) {
+                    $this->isCache['requestMethod'][$key] = $this->getService('Request')->getMethod() === strtoupper($key);
                 }
 
-                return $this->_isCache['requestMethod'][$key];
+                return $this->isCache['requestMethod'][$key];
 
             case 'ssl':
             case 'https':
             case 'secure':
-                if (!isset($this->_isCache['secure'])) {
-                    $this->_isCache['secure'] = $this->getService('Request')->isSecure();
+                if (!isset($this->isCache['secure'])) {
+                    $this->isCache['secure'] = $this->getService('Request')->isSecure();
                 }
 
-                return $this->_isCache['secure'];
+                return $this->isCache['secure'];
 
             default:
                 throw new \InvalidArgumentException("Invalid 'is' key supplied: {$key}");
@@ -329,7 +329,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->_serviceLocator = $serviceLocator;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -339,7 +339,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function getServiceLocator()
     {
-        return $this->_serviceLocator;
+        return $this->serviceLocator;
     }
 
     /**
@@ -368,14 +368,14 @@ class Controller implements ServiceLocatorAwareInterface
      * Render a template
      *
      * @param string $template The template to render
-     * @param array  $params   The params to pass to the renderer
-     * @param array  $options  Extra options
+     * @param array $params The params to pass to the renderer
+     * @param array $options Extra options
      *
      * @return string
      */
     protected function render($template, array $params = array(), array $options = array())
     {
-        $renderer = $this->_serviceLocator->get('templating');
+        $renderer = $this->serviceLocator->get('templating');
 
         // Helpers
         if (isset($options['helpers'])) {
@@ -391,7 +391,7 @@ class Controller implements ServiceLocatorAwareInterface
      * Set Flash Message
      *
      * @param string $flashType The flash type
-     * @param string $message   The flash message
+     * @param string $message The flash message
      *
      * @return void
      */
@@ -403,7 +403,7 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Create a RedirectResponse object with your $url and $statusCode
      *
-     * @param string  $url
+     * @param string $url
      * @param integer $statusCode
      *
      * @return void
@@ -429,8 +429,8 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Generate a URL from the specified route name
      *
-     * @param string  $route
-     * @param array   $parameters
+     * @param string $route
+     * @param array $parameters
      * @param boolean $absolute
      *
      * @return string
@@ -459,7 +459,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     public function setOptions($options)
     {
-        $this->_options = $options;
+        $this->options = $options;
 
         return $this;
     }
@@ -467,14 +467,14 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Get an option from the controller
      *
-     * @param string $option  The option name
-     * @param null   $default The default value if the option does not exist
+     * @param string $option The option name
+     * @param null $default The default value if the option does not exist
      *
      * @return mixed
      */
     public function getOption($option, $default = null)
     {
-        return isset($this->_options[$option]) ? $this->_options[$option] : $default;
+        return isset($this->options[$option]) ? $this->options[$option] : $default;
     }
 
     /**
@@ -491,7 +491,7 @@ class Controller implements ServiceLocatorAwareInterface
      * Add a template global variable
      *
      * @param string $param
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return void
      */

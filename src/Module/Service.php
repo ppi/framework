@@ -23,14 +23,14 @@ class Service
      *
      * @var null|string
      */
-    protected $_className = null;
+    protected $className = null;
 
     /**
      * Get the factory method name for this service
      *
      * @var null|string
      */
-    protected $_factoryMethod = null;
+    protected $factoryMethod = null;
 
     /**
      * Constructor.
@@ -41,7 +41,7 @@ class Service
      */
     public function __construct($className = null)
     {
-        $this->_className = $className;
+        $this->className = $className;
     }
 
     /**
@@ -51,7 +51,7 @@ class Service
      */
     public function getClassName()
     {
-        return $this->_className;
+        return $this->className;
     }
 
     /**
@@ -61,7 +61,7 @@ class Service
      */
     public function hasClassName()
     {
-        return $this->_className !== null;
+        return $this->className !== null;
     }
 
     /**
@@ -73,7 +73,7 @@ class Service
      */
     public function setFactoryMethod($method)
     {
-        $this->_factoryMethod = $method;
+        $this->factoryMethod = $method;
     }
 
     /**
@@ -83,7 +83,7 @@ class Service
      */
     public function getFactoryMethod()
     {
-        return $this->_factoryMethod;
+        return $this->factoryMethod;
     }
 
     /**
@@ -93,7 +93,7 @@ class Service
      */
     public function hasFactoryMethod()
     {
-        return $this->_factoryMethod !== null;
+        return $this->factoryMethod !== null;
     }
 
 }

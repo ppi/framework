@@ -62,6 +62,17 @@ abstract class AbstractConfig extends Config implements ConfigurationProviderInt
     }
 
     /**
+     * @param  ServiceManager $serviceManager
+     * @return array
+     */
+    public function getParameters(ServiceManager $serviceManager)
+    {
+        $config = $serviceManager->get('Config');
+
+        return isset($config['parameters']) ? $config['parameters'] : array();
+    }
+
+    /**
      * Process an array with the application configuration.
      *
      * @param  array                               $config

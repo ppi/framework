@@ -21,21 +21,21 @@ use Zend\ModuleManager\ModuleManager as BaseModuleManager;
  */
 class ModuleManager extends BaseModuleManager
 {
-    protected $_aliases;
+    protected $aliases;
 
     /**
      * @return array
      */
     public function getModulesAliases()
     {
-        if (null == $this->_aliases) {
-            $this->_aliases = array();
+        if (null == $this->aliases) {
+            $this->aliases = array();
             foreach ($this->getLoadedModules() as $k => $module) {
-                $this->_aliases[$module->getName()] = $k;
+                $this->aliases[$module->getName()] = $k;
             }
         }
 
-        return $this->_aliases;
+        return $this->aliases;
     }
 
     /**

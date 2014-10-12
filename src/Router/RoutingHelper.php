@@ -75,8 +75,8 @@ class RoutingHelper
 
     /**
      * Check if a routing param exists
-     * 
-     * @param string $param
+     *
+     * @param  string $param
      * @return bool
      */
     public function hasParam($param)

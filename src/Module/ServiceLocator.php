@@ -8,8 +8,6 @@
  */
 namespace PPI\Module;
 
-use PPI\Module\Service;
-
 /**
  * The PPI Service Locator.
  *
@@ -24,14 +22,14 @@ class ServiceLocator
      *
      * @var array
      */
-    protected $_loadedService = array();
+    protected $loadedService = array();
 
     /**
      * @todo Add inline documentation.
      *
      * @var array
      */
-    protected $_services = array();
+    protected $services = array();
 
     /**
      * @todo Add inline documentation.
@@ -44,7 +42,7 @@ class ServiceLocator
     {
         if (!empty($services)) {
             foreach ($services as $key => $service) {
-                $this->_services[strtolower($key)] = $service;
+                $this->services[strtolower($key)] = $service;
             }
         }
     }
@@ -62,36 +60,36 @@ class ServiceLocator
     {
         $key = strtolower($key);
 
-        if (!isset($this->_services[$key])) {
+        if (!isset($this->services[$key])) {
             throw new \InvalidArgumentException('Service not found: ' . $key);
         }
 
         // Have we been here before?
-        if (isset($this->_loadedService[$key])) {
-            return $this->_loadedService[$key];
+        if (isset($this->loadedService[$key])) {
+            return $this->loadedService[$key];
         }
 
-        if (!$this->_services[$key] instanceof Service) {
-            $this->_loadedService[$key] = $this->_services[$key];
+        if (!$this->services[$key] instanceof Service) {
+            $this->loadedService[$key] = $this->services[$key];
 
-            return $this->_loadedService[$key];
+            return $this->loadedService[$key];
         }
 
         // It's a Service instance, lets do some extra stuff.
-        if (!$this->_services[$key]->hasClassName()) {
+        if (!$this->services[$key]->hasClassName()) {
             throw new \Exception('Unable to find class name from definition: ' . $key);
         }
 
-        $className = $this->_services[$key]->getClassName();
+        $className = $this->services[$key]->getClassName();
         $instance = new $className;
 
-        if ($this->_services[$key]->hasFactoryMethod()) {
-            call_user_func($instance, $this->_services[$key]->getFactoryMethod());
+        if ($this->services[$key]->hasFactoryMethod()) {
+            call_user_func($instance, $this->services[$key]->getFactoryMethod());
         }
 
-        $this->_loadedService[$key] = $instance;
+        $this->loadedService[$key] = $instance;
 
-        return $this->_loadedService[$key];
+        return $this->loadedService[$key];
     }
 
     /**
@@ -104,7 +102,7 @@ class ServiceLocator
      */
     public function set($key, $service)
     {
-        $this->_services[strtolower($key)] = $service;
+        $this->services[strtolower($key)] = $service;
     }
 
     /**
@@ -116,7 +114,7 @@ class ServiceLocator
      */
     public function has($key)
     {
-        return isset($this->_services[strtolower($key)]);
+        return isset($this->services[strtolower($key)]);
     }
 
     /**
@@ -126,7 +124,7 @@ class ServiceLocator
      */
     public function getKeys()
     {
-        return array_keys($this->_services);
+        return array_keys($this->services);
     }
 
 }

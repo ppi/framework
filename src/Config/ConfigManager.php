@@ -65,8 +65,8 @@ class ConfigManager extends ConfigLoader
     }
 
     /**
-     * @param mixed  $resource The resource
-     * @param string $type     The resource type
+     * @param  mixed  $resource The resource
+     * @param  string $type     The resource type
      * @return $this
      */
     public function addConfig($resource, $type)
