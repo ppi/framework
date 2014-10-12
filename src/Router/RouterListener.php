@@ -12,12 +12,13 @@ namespace PPI\Router;
 use PPI\Http\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException as MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
+
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -87,8 +88,7 @@ class RouterListener
             throw new NotFoundHttpException($message, $e);
         } catch (MethodNotAllowedException $e) {
             $message = sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(), $request->getPathInfo(), strtoupper(implode(', ', $e->getAllowedMethods())));
-
-            throw new MethodNotAllowedHttpException($e->getAllowedMethods(), $message, $e);
+            throw new MethodNotAllowedException($e->getAllowedMethods(), $message);
         }
     }
 

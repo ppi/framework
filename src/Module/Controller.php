@@ -15,6 +15,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * The base PPI controller class
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */
@@ -383,8 +384,6 @@ class Controller implements ServiceLocatorAwareInterface
             }
         }
 
-        $params['view'] = $renderer;
-
         return $renderer->render($template, $params);
     }
 
@@ -398,7 +397,7 @@ class Controller implements ServiceLocatorAwareInterface
      */
     protected function setFlash($flashType, $message)
     {
-        $this->getSession()->setFlash($flashType, $message);
+        $this->getSession()->getFlashBag()->set($flashType, $message);
     }
 
     /**
