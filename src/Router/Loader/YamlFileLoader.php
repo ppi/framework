@@ -27,7 +27,7 @@ class YamlFileLoader extends BaseYamlFileLoader
      *
      * @var array
      */
-    protected $_defaults = array();
+    protected $defaults = array();
 
     /**
      * Constructor.
@@ -38,7 +38,7 @@ class YamlFileLoader extends BaseYamlFileLoader
      */
     public function setDefaults($defaults)
     {
-        $this->_defaults = $defaults;
+        $this->defaults = $defaults;
     }
 
     /**
@@ -51,8 +51,8 @@ class YamlFileLoader extends BaseYamlFileLoader
      */
     protected function parseRoute(RouteCollection $collection, $name, array $config, $path)
     {
-        if (!empty($this->_defaults)) {
-            $config['defaults'] = array_merge($config['defaults'], $this->_defaults);
+        if (!empty($this->defaults)) {
+            $config['defaults'] = array_merge($config['defaults'], $this->defaults);
         }
 
         parent::parseRoute($collection, $name, $config, $path);

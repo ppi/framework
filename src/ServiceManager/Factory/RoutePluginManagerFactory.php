@@ -7,14 +7,14 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Log;
-
-use Monolog\Logger as BaseLogger;
+namespace PPI\ServiceManager\Factory;
 
 /**
- * Logger is PSR-3 compliant logger based on Monolog\Logger.
+ * RouterPluginManagerFactory.
  *
  * @author Vítor Brandão <vitor@ppi.io>
- * @author Paul Dragooni <paul@ppi.io>
  */
-class Logger extends BaseLogger {}
+class RoutePluginManagerFactory extends AbstractPluginManagerFactory
+{
+    const PLUGIN_MANAGER_CLASS = 'PPI\Router\RoutePluginManager';
+}

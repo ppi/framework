@@ -11,6 +11,7 @@ namespace PPI\Router;
 
 use PPI\Http\RequestInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException as MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -18,7 +19,6 @@ use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
-
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -32,6 +32,7 @@ class RouterListener
     protected $matcher;
     protected $context;
     protected $logger;
+    protected $requestStack;
 
     /**
      * Constructor.
@@ -39,8 +40,9 @@ class RouterListener
      * @param UrlMatcherInterface|RequestMatcherInterface $matcher The Url or Request matcher
      * @param RequestContext|null                         $context The RequestContext (can be null when $matcher implements RequestContextAwareInterface)
      * @param LoggerInterface|null                        $logger  The logger
+     * @param RequestStack|null                           $requestStack A RequestStack instance
      */
-    public function __construct($matcher, RequestContext $context = null, LoggerInterface $logger = null)
+    public function __construct($matcher, RequestContext $context = null, LoggerInterface $logger = null, RequestStack $requestStack = null)
     {
         if (!$matcher instanceof UrlMatcherInterface && !$matcher instanceof RequestMatcherInterface) {
             throw new \InvalidArgumentException('Matcher must either implement UrlMatcherInterface or RequestMatcherInterface.');
@@ -52,6 +54,7 @@ class RouterListener
 
         $this->matcher = $matcher;
         $this->context = $context ?: $matcher->getContext();
+        $this->requestStack = $requestStack;
         $this->logger = $logger;
     }
 

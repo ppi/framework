@@ -9,12 +9,11 @@
 
 namespace PPI\Log;
 
-use Monolog\Logger as BaseLogger;
+use Psr\Log\LoggerInterface as PsrLoggerInterface;
 
 /**
- * Logger is PSR-3 compliant logger based on Monolog\Logger.
+ * LoggerInterface.
  *
  * @author Vítor Brandão <vitor@ppi.io>
- * @author Paul Dragooni <paul@ppi.io>
  */
-class Logger extends BaseLogger {}
+interface LoggerInterface extends PsrLoggerInterface {}
