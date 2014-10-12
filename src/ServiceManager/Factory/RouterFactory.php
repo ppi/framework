@@ -36,7 +36,8 @@ class RouterFactory implements FactoryInterface
         $routeCollection = new RouteCollection();
         $requestContext  = $serviceLocator->get('RouterRequestContext');
         $routerOptions = array();
-        $logger = $serviceLocator->get('Logger');
+
+        $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
         $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
 
