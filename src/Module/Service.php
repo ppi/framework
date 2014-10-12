@@ -12,6 +12,7 @@ namespace PPI\Module;
  * The PPI Server class. These instances can be registered into the
  * ServiceLocator.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */

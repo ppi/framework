@@ -14,6 +14,7 @@ use Zend\ModuleManager\ModuleManager as BaseModuleManager;
 /**
  * ModuleManager.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage Module

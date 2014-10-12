@@ -21,6 +21,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 /**
  * The base PPI module class.
  *
+ * @author     Paul Dragoonis <paul@ppi.io>
  * @package    PPI
  * @subpackage Module
  */
