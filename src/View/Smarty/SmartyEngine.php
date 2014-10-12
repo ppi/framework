@@ -9,7 +9,7 @@
 
 namespace PPI\View\Smarty;
 
-use PPI\Log\Logger;
+use PPI\Log\LoggerInterface;
 use PPI\View\GlobalVariables;
 use PPI\View\TemplateLocator;
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
@@ -40,11 +40,11 @@ class SmartyEngine extends BaseSmartyEngine
      * @param LoaderInterface             $loader  A LoaderInterface instance
      * @param array                       $options An array of \Smarty properties
      * @param GlobalVariables|null        $globals A GlobalVariables instance or null
-     * @param Logger|null                 $logger  A Logger instance or null
+     * @param LoggerInterface|null        $logger  A LoggerInterface instance or null
      */
     public function __construct(\Smarty $smarty, TemplateLocator $locator, TemplateNameParserInterface $parser,
                                 LoaderInterface $loader, array $options = array(), GlobalVariables $globals = null,
-                                Logger $logger = null)
+                                LoggerInterface $logger = null)
     {
         $this->smarty = $smarty;
         $this->locator = $locator;

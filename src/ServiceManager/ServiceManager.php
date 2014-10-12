@@ -84,7 +84,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * @return mixed The parameter value
      *
-     * @throws InvalidArgumentException if the parameter is not defined
+     * @throws \InvalidArgumentException if the parameter is not defined
      */
     public function getParameter($name)
     {
@@ -135,9 +135,9 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     {
         return array(
             'invokableClasses' => $this->invokableClasses,
-            'factories' => $this->factories,
-            'aliases' => $this->aliases,
-            'instances' => $this->instances,
+            'factories'        => $this->factories,
+            'aliases'          => $this->aliases,
+            'instances'        => $this->instances,
         );
     }
 

@@ -80,7 +80,7 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
     public function resolveArray(array $data)
     {
         $self = $this;
-        array_walk_recursive($data, function(&$value, $key) use ($self) {
+        array_walk_recursive($data, function (&$value, $key) use ($self) {
             if (is_string($value)) {
                 $value = $self->resolveString($value);
             }
@@ -99,9 +99,9 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
      *
      * This function takes an array by reference and will modify it
      *
-     * @param array  &$parameters   The array that will be flattened
-     * @param array  $subnode Current subnode being parsed, used internally for recursive calls
-     * @param string $path    Current path being parsed, used internally for recursive calls
+     * @param array  &$parameters The array that will be flattened
+     * @param array  $subnode     Current subnode being parsed, used internally for recursive calls
+     * @param string $path        Current path being parsed, used internally for recursive calls
      */
     protected function flatten(array &$parameters, array $subnode = null, $path = null)
     {

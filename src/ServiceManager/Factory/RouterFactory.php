@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2014 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
@@ -33,11 +33,11 @@ class RouterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-
         $routeCollection = new RouteCollection();
         $requestContext  = $serviceLocator->get('RouterRequestContext');
         $routerOptions = array();
-        $logger = $serviceLocator->get('Logger');
+
+        $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
         $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
 

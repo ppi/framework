@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Matcher\UrlMatcher as UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Router;
 
-
 /**
  * The PPI MicroApp bootstrap class.
  *
@@ -69,7 +68,7 @@ class MicroApp extends BaseApp
         $this->router = $this->serviceManager->get('MicroRouter');
 
         $routeCollection = new RouteCollection();
-        foreach($this->routes as $routeKey => $r) {
+        foreach ($this->routes as $routeKey => $r) {
             $route = new Route($r['uri']);
             $route->setMethods($r['method']);
 
@@ -89,7 +88,6 @@ class MicroApp extends BaseApp
         $this->routes[$matchedRouteKey]['callback']($this->getServiceManager());
 
         // @todo - handle when the callback returns a Response object and send that to the client.
-
         return $this;
 
     }

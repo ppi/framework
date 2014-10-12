@@ -7,19 +7,20 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Tests\Fixtures;
+
+use PPI\App;
 
 /**
- * Implemented by services that provide user-level configuration.
+ * Class AppForTest
+ * @package PPI\Fixtures
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
-interface ConfigurationProviderInterface
+class AppForTest extends App
 {
-    /**
-     * Configuration defaults for a given service.
-     *
-     * @return array
-     */
-    public function getConfigurationDefaults();
+    public function isBooted()
+    {
+        return $this->booted;
+    }
 }

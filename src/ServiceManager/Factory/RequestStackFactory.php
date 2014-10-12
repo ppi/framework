@@ -9,33 +9,27 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use Zend\EventManager\EventManager;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * EventManager Factory.
+ * RequestStackFactory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @package    PPI
  * @subpackage ServiceManager
  */
-class EventManagerFactory implements FactoryInterface
+class RequestStackFactory implements FactoryInterface
 {
     /**
-     * Create an EventManager instance.
+     * Create and return a RequestStack instance.
      *
-     * Creates a new EventManager instance, seeding it with a shared instance
-     * of SharedEventManager.
-     *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return EventManager
+     * @param  ServiceLocatorInterface                        $serviceLocator
+     * @return \Symfony\Component\HttpFoundation\RequestStack
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $em = new EventManager();
-        $em->setSharedManager($serviceLocator->get('SharedEventManager'));
-
-        return $em;
+        return new RequestStack();
     }
 }
