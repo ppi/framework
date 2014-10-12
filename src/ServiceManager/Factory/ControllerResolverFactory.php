@@ -31,7 +31,7 @@ class ControllerResolverFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parser = $serviceLocator->get('ControllerNameParser');
-        $logger = $serviceLocator->get('Logger');
+        $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
         return new ControllerResolver($serviceLocator, $parser, $logger);
     }
