@@ -48,15 +48,15 @@ class ModuleCreateCommand extends AbstractCommand
     {
 
         $this->setName('module:create')
-             ->setDescription('Create a module')
-             ->addArgument('name', InputArgument::REQUIRED, 'What is your module name?')
-             ->addOption('dir', null, InputOption::VALUE_NONE, 'Specify the modules directory');
+            ->setDescription('Create a module')
+            ->addArgument('name', InputArgument::REQUIRED, 'What is your module name?')
+            ->addOption('dir', null, InputOption::VALUE_NONE, 'Specify the modules directory');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $dir  = $this->modulesDir . '/' . $name;
+        $dir = $this->modulesDir . '/' . $name;
 
         $this->copyRecursively($this->skeletonModuleDir, $dir);
         file_put_contents($dir . '/Module.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Module.php')));
@@ -80,14 +80,29 @@ class ModuleCreateCommand extends AbstractCommand
 
     protected function copyRecursively($src, $dst)
     {
+
+
+        if (empty($src)) {
+            throw new \Exception('Unable to locate source path: ' . $src);
+        }
+
+        if (empty($dst)) {
+            throw new \Exception('Unable to locate dst path: ' . $dst);
+        }
+
         $dir = opendir($src);
         @mkdir($dst);
-        while (false !== ( $file = readdir($dir)) ) {
-            if (( $file != '.' ) && ( $file != '..' )) {
-                if ( is_dir($src . '/' . $file) ) {
-                    $this->copyRecursively($src . '/' . $file,$dst . '/' . $file);
+
+        if($dir === false) {
+            throw new \Exception('Unable to open dir: ' . $src);
+        }
+
+        while (false !== ($file = readdir($dir))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->copyRecursively($src . '/' . $file, $dst . '/' . $file);
                 } else {
-                    copy($src . '/' . $file,$dst . '/' . $file);
+                    copy($src . '/' . $file, $dst . '/' . $file);
                 }
             }
         }

@@ -93,18 +93,31 @@ class Application extends BaseApplication
     protected function registerCommands()
     {
         $this->app->boot();
+        $config = $this->app->getConfig();
 
-        // Commands from the PPI Framework
-        $this->addCommands(array(
+        $commands = array(
             new Command\AssetsInstallCommand(),
             new Command\CacheClearCommand(),
             new Command\ConfigDebugCommand(),
-            new Command\ModuleCreateCommand(),
             new Command\ModuleDebugCommand(),
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
-            new Command\ServiceManagerDebugCommand(),
-        ));
+            new Command\ServiceManagerDebugCommand()
+        );
+
+        if(isset(
+            $config['modules']['module_listener_options']['module_paths'][0],
+            $config['framework']['skeleton_module']['path']
+        )) {
+
+            $moduleCreateCommand = new Command\ModuleCreateCommand();
+            $moduleCreateCommand->setTargetModuleDir($config['modules']['module_listener_options']['module_paths'][0]);
+            $moduleCreateCommand->setSkeletonModuleDir($config['framework']['skeleton_module']['path']);
+            $commands[] = $moduleCreateCommand;
+        }
+
+        // Commands from the PPI Framework
+        $this->addCommands($commands);
 
         // Commands found in active Modules
         foreach ($this->app->getModules() as $module) {
