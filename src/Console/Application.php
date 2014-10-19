@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Application.
  *
  * @author      Vítor Brandão <vitor@ppi.io>
+ * @author      Paul Dragoonis <paul@ppi.io>
  * @package     PPI
  * @subpackage  Console
  */
@@ -36,7 +37,6 @@ class Application extends BaseApplication
     public function __construct(AppInterface $app)
     {
         $this->app = $app;
-
         parent::__construct('PPI', $app->getVersion().' - '.$app->getEnvironment().($app->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
@@ -77,8 +77,8 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->registerCommands();
 
+        $this->registerCommands();
         if (true === $input->hasParameterOption(array('--shell', '-s'))) {
             $shell = new Shell($this);
             $shell->setProcessIsolation($input->hasParameterOption(array('--process-isolation')));
@@ -93,6 +93,7 @@ class Application extends BaseApplication
     protected function registerCommands()
     {
         $this->app->boot();
+
         $config = $this->app->getConfig();
 
         $commands = array(
@@ -116,7 +117,6 @@ class Application extends BaseApplication
             $commands[] = $moduleCreateCommand;
         }
 
-        // Commands from the PPI Framework
         $this->addCommands($commands);
 
         // Commands found in active Modules
