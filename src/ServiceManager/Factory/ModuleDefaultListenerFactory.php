@@ -65,6 +65,9 @@ class ModuleDefaultListenerFactory implements FactoryInterface
             $config['module_paths'] = array_merge($config['module_paths'], $config['extra_module_paths']);
         }
 
-        return new DefaultListenerAggregate(new ListenerOptions($config));
+        $listenerOptions = new ListenerOptions($config);
+
+        $defaultListeners = new DefaultListenerAggregate($listenerOptions);
+        return $defaultListeners;
     }
 }

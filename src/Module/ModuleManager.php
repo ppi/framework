@@ -108,7 +108,6 @@ class ModuleManager extends BaseModuleManager
         if (false !== strpos($name, '..')) {
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
         }
-
         $moduleName = substr($name, 1);
         $path = '';
         if (false !== strpos($moduleName, '/')) {
@@ -122,6 +121,7 @@ class ModuleManager extends BaseModuleManager
         $files = array();
 
         foreach ($modules as $module) {
+
             if ($isResource && file_exists($file = $dir.'/'.$module->getName().$overridePath)) {
                 if (null !== $resourceModule) {
                     throw new \RuntimeException(sprintf('"%s" resource is hidden by a resource from the "%s" derived module. Create a "%s" file to override the module resource.',

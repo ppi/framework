@@ -79,10 +79,8 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     {
         $options                     = $this->getOptions();
         $configListener              = $this->getConfigListener();
-        $moduleAutoloader            = new ModuleAutoloader($options->getModulePaths());
 
         // High priority, we assume module autoloading (for FooNamespace\Module classes) should be available before anything else
-        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULES, array($moduleAutoloader, 'register'), 9000);
         $this->listeners[] = $events->attach(new ModuleLoaderListener($options));
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE, new ModuleResolverListener());
         // High priority, because most other loadModule listeners will assume the module's classes are available via autoloading
@@ -101,6 +99,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
             $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'routesTrigger'), 3000);
         //}
 
+        // @todo - this could be moved to a ZF event, so no need to make this ourselves.
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'getServicesTrigger'), 3000);
 
         return $this;
