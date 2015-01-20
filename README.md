@@ -25,10 +25,11 @@ PPI bootstraps framework components for you from the top frameworks such as Zend
 ## Installation
 
 There is no actual "installation" of PPI, you can download it from
-http://www.ppi.io/projects and drop it in your document root.
+http://www.ppi.io/downloads and drop it in your document root.
 
 ## Contributing
 
 PPI is an open source, community-driven project. If you'd like to contribute, check out our issues list.
 You can find us on IRC, Google Plus or Twitter (@ppi_framework)
 If you're submitting a pull request, please do so on your own branch on [GitHub][@gitweb].
+
