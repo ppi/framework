@@ -142,6 +142,11 @@ class TemplatingConfig extends AbstractConfig
          * Twig Engine
          */
         $serviceManager->setFactory('templating.engine.twig', function ($serviceManager) {
+
+            if(!class_exists('Twig_Environment')) {
+                throw new \Exception('PPI\TwigModule not found. Composer require: ppi/twig-module');
+            }
+
             $twigEnvironment = new \Twig_Environment(
                 new \PPI\View\Twig\Loader\FileSystemLoader(
                     $serviceManager->get('templating.locator'),
@@ -160,6 +165,11 @@ class TemplatingConfig extends AbstractConfig
          * Smarty Engine.
          */
         $serviceManager->setFactory('templating.engine.smarty', function ($serviceManager) use ($appCacheDir) {
+
+            if(!class_exists('NoiseLabs\Bundle\SmartyBundle\SmartyEngine')) {
+                throw new \Exception('PPI\SmartyModule not found. Composer require: ppi/smarty-module');
+            }
+
             $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
 
             $smartyEngine = new \PPI\View\Smarty\SmartyEngine(
@@ -184,6 +194,10 @@ class TemplatingConfig extends AbstractConfig
 
         // Mustache Engine
         $serviceManager->setFactory('templating.engine.mustache', function ($serviceManager, $appCacheDir) {
+
+            if(!class_exists('Mustache_Engine')) {
+                throw new \Exception('PPI\MustacheModule not found. Composer require: ppi/mustache-module');
+            }
 
             $rawMustacheEngine = new \Mustache_Engine(array(
                 'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'),
