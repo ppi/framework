@@ -26,7 +26,6 @@ $config = Config::create()
             'namespace_no_leading_whitespace',
             'new_with_braces',
             'no_blank_lines_after_class_opening',
-            'no_empty_lines_after_phpdocs',
             'object_operator',
             'operators_spaces',
             'ordered_use',
