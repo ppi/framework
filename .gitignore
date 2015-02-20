@@ -70,3 +70,7 @@ dwsync.xml
 intermediate
 publish
 .idea
+
+### PHP-CS-Fixer
+
+.php_cs.cache
