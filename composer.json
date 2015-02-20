@@ -37,6 +37,9 @@
         "zendframework/zend-servicemanager": "2.3.*@dev",
         "zendframework/zend-loader": "2.3.*@dev"
     },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "~1.5"
+    },
     "autoload": {
         "psr-4": {
             "PPI\\": "src/",
