@@ -46,8 +46,7 @@ with success of the operation:
 
   <info>php %command.full_name% --invoke</info>
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -58,22 +57,22 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $verbose = OutputInterface::VERBOSITY_VERBOSE === $output->getVerbosity();
-        $invoke = $input->getOption('invoke');
+        $invoke  = $input->getOption('invoke');
 
-        $sm = $this->getServiceManager()->get('ServiceManager');
+        $sm                 = $this->getServiceManager()->get('ServiceManager');
         $registeredServices = $sm->getRegisteredServicesReal();
 
         $lines = array();
-        $pad = array(
+        $pad   = array(
             'id'    => 0,
             'type'  => strlen('Instance  '),
-            'class' => strlen('Class name|type|alias')
+            'class' => strlen('Class name|type|alias'),
         );
         $serviceTypeToColumnName = array(
             'invokableClasses'  => 'Invokable',
             'factories'         => 'Factory',
             'aliases'           => 'Alias',
-            'instances'         => 'Instance'
+            'instances'         => 'Instance',
         );
 
         foreach ($registeredServices as $type => $services) {
@@ -88,19 +87,19 @@ EOF
                     if ($service instanceof \Closure) {
                         $r = new \ReflectionFunction($service);
                         if ($ns = $r->getNamespaceName()) {
-                            $filename = basename($r->getFileName(), '.php');
-                            $lines[$key]['class'] = $ns.'\\'.$filename.'\{closure}';
+                            $filename             = basename($r->getFileName(), '.php');
+                            $lines[$key]['class'] = $ns . '\\' . $filename . '\{closure}';
                         } else {
-                            $lines[$key]['class'] = 'Closure in '.$r->getFileName();
+                            $lines[$key]['class'] = 'Closure in ' . $r->getFileName();
                         }
                     } else {
-                        $r = new \ReflectionObject($service);
+                        $r                    = new \ReflectionObject($service);
                         $lines[$key]['class'] = $r->getName();
                     }
                 } elseif (is_array($service)) {
                     $lines[$key]['class'] = 'Array';
                 } elseif (is_string($service) && ($type != 'aliases')) {
-                    $r = new \ReflectionClass($service);
+                    $r                    = new \ReflectionClass($service);
                     $lines[$key]['class'] = $r->getName();
                 } else { // Alias
                     $lines[$key]['class'] = $service;
@@ -135,7 +134,7 @@ EOF
                     $service = $sm->get($id);
                     $output->write(sprintf(' <info>OK</info> [%s]', is_object($service) ? get_class($service) : gettype($service)));
                 } catch (\Exception $e) {
-                    $output->write(' <error>FAIL</error> ['.$e->getMessage().']');
+                    $output->write(' <error>FAIL</error> [' . $e->getMessage() . ']');
                 }
             }
             $output->writeln('');

@@ -34,8 +34,7 @@ and debug mode:
 <info>php %command.full_name% --env=dev</info>
 <info>php %command.full_name% --env=prod --no-debug</info>
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -56,6 +55,6 @@ EOF
             return;
         }
 
-        $filesystem->remove(glob($cacheDir.'/*'));
+        $filesystem->remove(glob($cacheDir . '/*'));
     }
 }

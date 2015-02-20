@@ -35,7 +35,7 @@ class ControllerResolver extends BaseControllerResolver
     public function __construct(ServiceLocatorInterface $serviceManager, ControllerNameParser $parser, LoggerInterface $logger = null)
     {
         $this->serviceManager = $serviceManager;
-        $this->parser = $parser;
+        $this->parser         = $parser;
 
         parent::__construct($logger);
     }

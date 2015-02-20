@@ -36,7 +36,7 @@ class AppFileLocator extends FileLocator
         $this->moduleManager = $moduleManager;
         if (null !== $path) {
             $this->path = $path;
-            $paths[] = $path;
+            $paths[]    = $path;
         }
 
         parent::__construct($paths);

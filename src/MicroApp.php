@@ -10,10 +10,10 @@
 namespace PPI;
 
 use PPI\App as BaseApp;
-use Symfony\Component\Routing\Route as Route;
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Matcher\UrlMatcher as UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Route as Route;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router;
 
 /**
@@ -44,10 +44,10 @@ class MicroApp extends BaseApp
 
     public function add($uri, $method, $callback)
     {
-        $this->routes[md5($uri.$method)] = array(
+        $this->routes[md5($uri . $method)] = array(
             'method'   => $method,
             'uri'      => $uri,
-            'callback' => $callback
+            'callback' => $callback,
         );
     }
 
@@ -56,7 +56,6 @@ class MicroApp extends BaseApp
         parent::boot();
 
         return $this;
-
     }
 
     public function dispatch()
@@ -89,7 +88,5 @@ class MicroApp extends BaseApp
 
         // @todo - handle when the callback returns a Response object and send that to the client.
         return $this;
-
     }
-
 }

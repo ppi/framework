@@ -8,6 +8,7 @@
  */
 
 namespace PPI\ServiceManager;
+
 use PPI\Log\LoggerProxy;
 
 /**
@@ -51,15 +52,15 @@ class ServiceManagerBuilder extends ServiceManager
         $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
 
         $loggerProxy = new LoggerProxy();
-        if($this->has('Logger')) {
+        if ($this->has('Logger')) {
             $loggerProxy->setLogger($this->get('Logger'));
         }
 
         $this->setService('Logger', $loggerProxy);
 
-        foreach(array(
+        foreach (array(
             new Config\SessionConfig(),
-            new Config\TemplatingConfig()
+            new Config\TemplatingConfig(),
         ) as $serviceConfig) {
             $serviceConfig->configureServiceManager($this);
         }

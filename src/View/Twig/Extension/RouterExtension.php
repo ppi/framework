@@ -6,6 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Twig\Extension;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -86,5 +87,4 @@ class RouterExtension extends \Twig_Extension
     {
         return 'routing';
     }
-
 }

@@ -37,7 +37,7 @@ class Application extends BaseApplication
     public function __construct(AppInterface $app)
     {
         $this->app = $app;
-        parent::__construct('PPI', $app->getVersion().' - '.$app->getEnvironment().($app->isDebug() ? '/debug' : ''));
+        parent::__construct('PPI', $app->getVersion() . ' - ' . $app->getEnvironment() . ($app->isDebug() ? '/debug' : ''));
 
         $this->getDefinition()->addOption(new InputOption('--shell', '-s', InputOption::VALUE_NONE, 'Launch the shell.'));
         $this->getDefinition()->addOption(new InputOption('--process-isolation', null, InputOption::VALUE_NONE, 'Launch commands from shell as a separate process.'));
@@ -77,7 +77,6 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-
         $this->registerCommands();
         if (true === $input->hasParameterOption(array('--shell', '-s'))) {
             $shell = new Shell($this);
@@ -103,14 +102,13 @@ class Application extends BaseApplication
             new Command\ModuleDebugCommand(),
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
-            new Command\ServiceManagerDebugCommand()
+            new Command\ServiceManagerDebugCommand(),
         );
 
-        if(isset(
+        if (isset(
             $config['modules']['module_listener_options']['module_paths'][0],
             $config['framework']['skeleton_module']['path']
         )) {
-
             $moduleCreateCommand = new Command\ModuleCreateCommand();
             $moduleCreateCommand->setTargetModuleDir($config['modules']['module_listener_options']['module_paths'][0]);
             $moduleCreateCommand->setSkeletonModuleDir($config['framework']['skeleton_module']['path']);

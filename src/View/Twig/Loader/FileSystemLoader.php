@@ -6,10 +6,11 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Twig\Loader;
 
-use Symfony\Component\Templating\TemplateNameParserInterface,
-    Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * FilesystemLoader extends the default Twig filesystem loader
@@ -48,8 +49,8 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
         parent::__construct(array());
 
         $this->locator = $locator;
-        $this->parser = $parser;
-        $this->cache = array();
+        $this->parser  = $parser;
+        $this->cache   = array();
     }
 
     /**
@@ -73,7 +74,7 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
             return $this->cache[$logicalName];
         }
 
-        $file = null;
+        $file     = null;
         $previous = null;
         try {
             $template = $this->parser->parse($template);
@@ -96,5 +97,4 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
 
         return $this->cache[$logicalName] = $file;
     }
-
 }

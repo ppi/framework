@@ -63,10 +63,10 @@ class TemplateReference extends BaseTemplateReference
     {
         $controller = str_replace('\\', '/', $this->get('controller'));
 
-        $path = (empty($controller) ? '' : $controller.'/').$this->get('name').'.'.$this->get('format').'.'.$this->get('engine');
+        $path = (empty($controller) ? '' : $controller . '/') . $this->get('name') . '.' . $this->get('format') . '.' . $this->get('engine');
 
         return empty($this->parameters['module']) ?
-            self::APP_VIEWS_DIRECTORY.'/'.$path : '@'.$this->get('module').'/'.self::MODULE_VIEWS_DIRECTORY.'/'.$path;
+            self::APP_VIEWS_DIRECTORY . '/' . $path : '@' . $this->get('module') . '/' . self::MODULE_VIEWS_DIRECTORY . '/' . $path;
     }
 
     /**
@@ -77,5 +77,4 @@ class TemplateReference extends BaseTemplateReference
         return sprintf('%s:%s:%s.%s.%s', $this->parameters['module'], $this->parameters['controller'],
             $this->parameters['name'], $this->parameters['format'], $this->parameters['engine']);
     }
-
 }

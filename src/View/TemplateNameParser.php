@@ -38,7 +38,7 @@ class TemplateNameParser extends BaseTemplateNameParser
     public function __construct(ModuleManager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
-        $this->cache = array();
+        $this->cache         = array();
     }
 
     /**
