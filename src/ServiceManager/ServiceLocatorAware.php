@@ -6,6 +6,7 @@
  * @license     http://opensource.org/licenses/mit-license.php MIT
  * @link        http://www.ppi.io
  */
+
 namespace PPI\ServiceManager;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -47,5 +48,4 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
     {
         return $this->serviceLocator;
     }
-
 }

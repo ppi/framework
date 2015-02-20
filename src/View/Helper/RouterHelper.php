@@ -6,10 +6,11 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Helper;
 
-use Symfony\Component\Templating\Helper\Helper,
-    Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * RouterHelper manages links between pages in a template context.
@@ -62,5 +63,4 @@ class RouterHelper extends Helper
     {
         return 'router';
     }
-
 }

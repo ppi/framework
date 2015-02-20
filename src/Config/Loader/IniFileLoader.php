@@ -30,7 +30,7 @@ class IniFileLoader extends FileLoader
      */
     public function load($file, $type = null)
     {
-        $path = $this->locator->locate($file);
+        $path   = $this->locator->locate($file);
         $config = array();
 
         $result = parse_ini_file($path, true);

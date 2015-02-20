@@ -3,7 +3,6 @@
 
 namespace PPI\ServiceManager\Config;
 
-
-class LoggerProxyConfig extends AbstractConfig{
-
-} 
+class LoggerProxyConfig extends AbstractConfig
+{
+}

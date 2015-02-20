@@ -6,6 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View;
 
 use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
@@ -84,5 +85,4 @@ class DelegatingEngine extends BaseDelegatingEngine
     {
         $this->helpers[$helper->getName()] = $helper;
     }
-
 }

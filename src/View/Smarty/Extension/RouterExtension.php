@@ -6,9 +6,10 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View\Smarty\Extension;
 
- use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension as BaseRoutingExtension;
+use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension as BaseRoutingExtension;
 
  /**
   * Provides integration of the Routing component with Smarty[Bundle].

@@ -10,13 +10,13 @@
 
 namespace PPI\View\Twig;
 
-use PPI\View\TemplateReference,
-    PPI\View\EngineInterface,
-    PPI\View\GlobalVariables,
-    Symfony\Component\Templating\TemplateNameParserInterface,
-    Symfony\Component\Templating\StreamingEngineInterface,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\Config\FileLocatorInterface;
+use PPI\View\EngineInterface;
+use PPI\View\GlobalVariables;
+use PPI\View\TemplateReference;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\StreamingEngineInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * This engine knows how to render Twig templates.
@@ -62,8 +62,8 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
     public function __construct(\Twig_Environment $environment, TemplateNameParserInterface $parser, FileLocatorInterface $locator, GlobalVariables $globals = null)
     {
         $this->environment = $environment;
-        $this->parser = $parser;
-        $this->locator = $locator;
+        $this->parser      = $parser;
+        $this->locator     = $locator;
 
         if (null !== $globals) {
             $environment->addGlobal('app', $globals);
@@ -214,5 +214,4 @@ class TwigEngine implements EngineInterface, StreamingEngineInterface
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
     }
-
 }

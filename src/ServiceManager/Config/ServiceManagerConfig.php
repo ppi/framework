@@ -100,7 +100,6 @@ class ServiceManagerConfig implements ConfigInterface
         if (isset($configuration['shared'])) {
             $this->shared = array_merge($this->shared, $configuration['shared']);
         }
-
     }
 
     /**

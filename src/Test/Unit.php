@@ -6,6 +6,9 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Test;
 
-abstract class Unit extends \PHPUnit_Framework_TestCase {}
+abstract class Unit extends \PHPUnit_Framework_TestCase
+{
+}

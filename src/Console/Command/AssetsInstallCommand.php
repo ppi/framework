@@ -10,8 +10,8 @@
 namespace PPI\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
@@ -58,8 +58,7 @@ To make symlink relative, add the <info>--relative</info> option:
 <info>php %command.full_name% public --symlink --relative</info>
 
 EOT
-            )
-        ;
+            );
     }
 
     /**
@@ -82,14 +81,14 @@ EOT
         $filesystem = $this->getServiceManager()->get('filesystem');
 
         // Create the modules directory otherwise symlink will fail.
-        $filesystem->mkdir($targetArg.'/modules/', 0777);
+        $filesystem->mkdir($targetArg . '/modules/', 0777);
 
         $output->writeln(sprintf("Installing assets using the <comment>%s</comment> option", $input->getOption('symlink') ? 'symlink' : 'hard copy'));
 
         foreach ($this->getServiceManager()->get('modulemanager')->getLoadedModules() as $module) {
-            if (is_dir($originDir = $module->getPath().'/resources/public')) {
-                $modulesDir = $targetArg.'/modules/';
-                $targetDir  = $modulesDir.str_replace('module', '', strtolower($module->getName()));
+            if (is_dir($originDir = $module->getPath() . '/resources/public')) {
+                $modulesDir = $targetArg . '/modules/';
+                $targetDir  = $modulesDir . str_replace('module', '', strtolower($module->getName()));
 
                 $output->writeln(sprintf('Installing assets for <comment>%s</comment> into <comment>%s</comment>', $module->getNamespace(), $targetDir));
 

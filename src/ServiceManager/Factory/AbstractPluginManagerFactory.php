@@ -34,7 +34,7 @@ abstract class AbstractPluginManagerFactory implements FactoryInterface
     {
         $pluginManagerClass = static::PLUGIN_MANAGER_CLASS;
         /* @var $plugins \Zend\ServiceManager\AbstractPluginManager */
-        $plugins = new $pluginManagerClass;
+        $plugins = new $pluginManagerClass();
         $plugins->setServiceLocator($serviceLocator);
 
         return $plugins;

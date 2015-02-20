@@ -130,5 +130,4 @@ class RoutingHelper
     {
         return $this->activeRouteName;
     }
-
 }

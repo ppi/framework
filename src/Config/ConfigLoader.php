@@ -9,8 +9,8 @@
 
 namespace PPI\Config;
 
-use PPI\Config\Loader\DelegatingLoader;
 use PPI\Config\Loader\ArrayLoader;
+use PPI\Config\Loader\DelegatingLoader;
 use PPI\Config\Loader\IniFileLoader;
 use PPI\Config\Loader\PhpFileLoader;
 use PPI\Config\Loader\YamlFileLoader;
@@ -65,7 +65,7 @@ class ConfigLoader
     protected function getLoader()
     {
         if (null === $this->loader) {
-            $locator = new FileLocator($this->paths);
+            $locator  = new FileLocator($this->paths);
             $resolver = new LoaderResolver(array(
                 new YamlFileLoader($locator),
                 new PhpFileLoader($locator),

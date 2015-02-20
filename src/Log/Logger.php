@@ -17,4 +17,6 @@ use Monolog\Logger as BaseLogger;
  * @author Vítor Brandão <vitor@ppi.io>
  * @author Paul Dragooni <paul@ppi.io>
  */
-class Logger extends BaseLogger {}
+class Logger extends BaseLogger
+{
+}

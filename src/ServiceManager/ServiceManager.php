@@ -120,7 +120,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      */
     public function setParameter($name, $value)
     {
-        $config = $this->get('config');
+        $config                      = $this->get('config');
         $config['parameters'][$name] = $value;
 
         $this->set('config', $config);

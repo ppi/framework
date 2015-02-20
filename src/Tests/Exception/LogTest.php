@@ -6,10 +6,11 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Tests\Exception;
 
-use PPI\Test\Unit,
-    PPI\Exception\Log;
+use PPI\Exception\Log;
+use PPI\Test\Unit;
 
 class LogTest extends Unit
 {
@@ -25,5 +26,4 @@ class LogTest extends Unit
         $this->logger->setLogFile('foobar');
         $this->assertAttributeContains('foobar', '_logFile', $this->logger);
     }
-
 }

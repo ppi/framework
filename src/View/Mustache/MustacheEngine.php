@@ -12,8 +12,8 @@
 namespace PPI\View\Mustache;
 
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * This engine knows how to render Mustache templates.
@@ -139,5 +139,4 @@ class MustacheEngine implements EngineInterface
     {
         return false;
     }
-
 }

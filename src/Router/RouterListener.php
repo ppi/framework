@@ -15,8 +15,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException as MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RequestContextAwareInterface;
 
@@ -37,9 +37,9 @@ class RouterListener
     /**
      * Constructor.
      *
-     * @param UrlMatcherInterface|RequestMatcherInterface $matcher The Url or Request matcher
-     * @param RequestContext|null                         $context The RequestContext (can be null when $matcher implements RequestContextAwareInterface)
-     * @param LoggerInterface|null                        $logger  The logger
+     * @param UrlMatcherInterface|RequestMatcherInterface $matcher      The Url or Request matcher
+     * @param RequestContext|null                         $context      The RequestContext (can be null when $matcher implements RequestContextAwareInterface)
+     * @param LoggerInterface|null                        $logger       The logger
      * @param RequestStack|null                           $requestStack A RequestStack instance
      */
     public function __construct($matcher, RequestContext $context = null, LoggerInterface $logger = null, RequestStack $requestStack = null)
@@ -52,10 +52,10 @@ class RouterListener
             throw new \InvalidArgumentException('You must either pass a RequestContext or the matcher must implement RequestContextAwareInterface.');
         }
 
-        $this->matcher = $matcher;
-        $this->context = $context ?: $matcher->getContext();
+        $this->matcher      = $matcher;
+        $this->context      = $context ?: $matcher->getContext();
         $this->requestStack = $requestStack;
-        $this->logger = $logger;
+        $this->logger       = $logger;
     }
 
     public function match(RequestInterface $request)

@@ -30,7 +30,7 @@ class FileLocatorFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        $config     = $serviceLocator->get('Config');
         $appRootDir = $config['parameters']['app.root_dir'];
 
         return new FileLocator($serviceLocator->get('ModuleManager'), $appRootDir);

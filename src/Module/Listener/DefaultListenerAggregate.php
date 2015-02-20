@@ -11,7 +11,6 @@ namespace PPI\Module\Listener;
 
 use PPI\ServiceManager\ServiceManager;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Loader\ModuleAutoloader;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
 use Zend\ModuleManager\Listener\InitTrigger;
@@ -87,7 +86,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new AutoloaderListener($options), 9000);
 
         if ($options->getCheckDependencies()) {
-            $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new ModuleDependencyCheckerListener, 8000);
+            $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new ModuleDependencyCheckerListener(), 8000);
         }
 
         $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, new InitTrigger($options));
@@ -169,5 +168,4 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 
         return $mergedModuleServices;
     }
-
 }

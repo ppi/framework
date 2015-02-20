@@ -9,8 +9,8 @@
 
 namespace PPI\View\Helper;
 
-use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * SessionHelper provides read-only access to the session attributes.
@@ -106,5 +106,4 @@ class SessionHelper extends Helper
     {
         return 'session';
     }
-
 }

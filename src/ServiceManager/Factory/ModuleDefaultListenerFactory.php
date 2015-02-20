@@ -9,8 +9,8 @@
 
 namespace PPI\ServiceManager\Factory;
 
-use PPI\Module\Listener\ListenerOptions;
 use PPI\Module\Listener\DefaultListenerAggregate;
+use PPI\Module\Listener\ListenerOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -35,7 +35,6 @@ class ModuleDefaultListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-
         $config = $serviceLocator->get('ApplicationConfig');
         $config = isset($config['modules']['module_listener_options']) ?
             $config['modules']['module_listener_options'] : array();
@@ -50,7 +49,7 @@ class ModuleDefaultListenerFactory implements FactoryInterface
          */
         if (!isset($config['module_paths'])) {
             $paths = array();
-            $cwd = getcwd() . '/';
+            $cwd   = getcwd() . '/';
             foreach (array('modules', 'vendor') as $dir) {
                 if (is_dir($dir = $cwd . $dir)) {
                     $paths[] = $dir;
@@ -68,6 +67,7 @@ class ModuleDefaultListenerFactory implements FactoryInterface
         $listenerOptions = new ListenerOptions($config);
 
         $defaultListeners = new DefaultListenerAggregate($listenerOptions);
+
         return $defaultListeners;
     }
 }

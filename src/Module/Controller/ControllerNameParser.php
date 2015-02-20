@@ -52,16 +52,16 @@ class ControllerNameParser
         }
 
         list($moduleAlias, $controller, $action) = $parts;
-        $controller = str_replace('/', '\\', $controller);
-        $module = $this->moduleManager->getModuleByAlias($moduleAlias);
+        $controller                              = str_replace('/', '\\', $controller);
+        $module                                  = $this->moduleManager->getModuleByAlias($moduleAlias);
 
         if (null === $module) {
             // this throws an exception if there is no such module
             $msg = sprintf('Unable to find controller "%s:%s" - module alias "%s" does not exist.', $moduleAlias, $controller, $moduleAlias);
         } else {
-            $class = $module->getNamespace().'\\Controller\\'.$controller;
+            $class = $module->getNamespace() . '\\Controller\\' . $controller;
             if (class_exists($class)) {
-                return $class.'::'.$action.'Action';
+                return $class . '::' . $action . 'Action';
             }
 
             $msg = sprintf('Unable to find controller "%s:%s" - class "%s" does not exist.', $moduleAlias, $controller, $class);

@@ -6,7 +6,6 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-
 namespace PPI;
 
 use PPI\Tests\Fixtures\AppForTest;
@@ -29,7 +28,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
             'environment'   => $env,
             'debug'         => $debug,
             'rootDir'       => $rootDir,
-            'name'          => $name
+            'name'          => $name,
         ));
 
         $this->assertEquals($env, $app->getEnvironment());
@@ -62,7 +61,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $app = new AppForTest(array(
             'environment'   => 'test',
             'debug'         => true,
-            'rootDir'       => __DIR__
+            'rootDir'       => __DIR__,
         ));
 
         $this->assertEquals(__DIR__, realpath($app->getRootDir()));
@@ -77,7 +76,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $app = new AppForTest(array(
             'environment'   => 'test',
             'debug'         => true,
-            'rootDir'       => __DIR__
+            'rootDir'       => __DIR__,
         ));
         $this->assertEquals(basename(__DIR__), $app->getName());
 
@@ -85,7 +84,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
             'environment'   => 'test',
             'debug'         => true,
             'rootDir'       => __DIR__,
-            'name'          => 'testName'
+            'name'          => 'testName',
         ));
         $this->assertEquals('testName', $app->getName());
     }

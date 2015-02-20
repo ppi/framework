@@ -44,7 +44,7 @@ class LoggerProxy implements LoggerInterface
         }
 
         //@todo - should we really return from here?
-        return null;
+        return;
     }
 
     /**

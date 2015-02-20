@@ -30,31 +30,30 @@ class MonologConfig extends AbstractConfig
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        $configs = $serviceManager->get('Config');
+        $configs               = $serviceManager->get('Config');
         $configs['parameters'] = array_merge(array(
-            "monolog.logger.class"                  => "PPI\Log\Logger",
-            "monolog.gelf.publisher.class"          => "Gelf\MessagePublisher",
-            "monolog.handler.stream.class"          => "Monolog\Handler\StreamHandler",
-            "monolog.handler.group.class"           => "Monolog\Handler\GroupHandler",
-            "monolog.handler.buffer.class"          => "Monolog\Handler\BufferHandler",
-            "monolog.handler.rotating_file.class"   => "Monolog\Handler\RotatingFileHandler",
-            "monolog.handler.syslog.class"          => "Monolog\Handler\SyslogHandler",
-            "monolog.handler.null.class"            => "Monolog\Handler\NullHandler",
-            "monolog.handler.test.class"            => "Monolog\Handler\TestHandler",
-            "monolog.handler.gelf.class"            => "Monolog\Handler\GelfHandler",
-            "monolog.handler.firephp.class"         => "Symfony\Bridge\Monolog\Handler\FirePHPHandler",
-            "monolog.handler.chromephp.class"       => "Symfony\Bridge\Monolog\Handler\ChromePhpHandler",
-            "monolog.handler.debug.class"           => "Symfony\Bridge\Monolog\Handler\DebugHandler",
-            "monolog.handler.swift_mailer.class"    => "Monolog\Handler\SwiftMailerHandler",
-            "monolog.handler.native_mailer.class"   => "Monolog\Handler\NativeMailerHandler",
-            "monolog.handler.socket.class"          => "Monolog\Handler\SocketHandler",
-            "monolog.handler.pushover.class"        => "Monolog\Handler\PushoverHandler",
-            "monolog.handler.fingers_crossed.class" => "Monolog\Handler\FingersCrossedHandler",
-            "monolog.handler.fingers_crossed.error_level_activation_strategy.class"
-                                                    => "Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy"
+            "monolog.logger.class"                                                  => "PPI\Log\Logger",
+            "monolog.gelf.publisher.class"                                          => "Gelf\MessagePublisher",
+            "monolog.handler.stream.class"                                          => "Monolog\Handler\StreamHandler",
+            "monolog.handler.group.class"                                           => "Monolog\Handler\GroupHandler",
+            "monolog.handler.buffer.class"                                          => "Monolog\Handler\BufferHandler",
+            "monolog.handler.rotating_file.class"                                   => "Monolog\Handler\RotatingFileHandler",
+            "monolog.handler.syslog.class"                                          => "Monolog\Handler\SyslogHandler",
+            "monolog.handler.null.class"                                            => "Monolog\Handler\NullHandler",
+            "monolog.handler.test.class"                                            => "Monolog\Handler\TestHandler",
+            "monolog.handler.gelf.class"                                            => "Monolog\Handler\GelfHandler",
+            "monolog.handler.firephp.class"                                         => "Symfony\Bridge\Monolog\Handler\FirePHPHandler",
+            "monolog.handler.chromephp.class"                                       => "Symfony\Bridge\Monolog\Handler\ChromePhpHandler",
+            "monolog.handler.debug.class"                                           => "Symfony\Bridge\Monolog\Handler\DebugHandler",
+            "monolog.handler.swift_mailer.class"                                    => "Monolog\Handler\SwiftMailerHandler",
+            "monolog.handler.native_mailer.class"                                   => "Monolog\Handler\NativeMailerHandler",
+            "monolog.handler.socket.class"                                          => "Monolog\Handler\SocketHandler",
+            "monolog.handler.pushover.class"                                        => "Monolog\Handler\PushoverHandler",
+            "monolog.handler.fingers_crossed.class"                                 => "Monolog\Handler\FingersCrossedHandler",
+            "monolog.handler.fingers_crossed.error_level_activation_strategy.class" => "Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy",
         ), $configs['parameters']);
 
-        $config = $this->processConfiguration($configs, $serviceManager);
+        $config             = $this->processConfiguration($configs, $serviceManager);
         $handlersToChannels = array();
 
         if (isset($config['handlers'])) {
@@ -63,7 +62,7 @@ class MonologConfig extends AbstractConfig
             foreach ($config['handlers'] as $name => $handler) {
                 $handlers[$handler['priority']][] = array(
                     'id'       => $this->buildHandler($serviceManager, $configs['parameters'], $name, $handler),
-                    'channels' => isset($handler['channels']) ? $handler['channels'] : null
+                    'channels' => isset($handler['channels']) ? $handler['channels'] : null,
                 );
             }
 
@@ -85,7 +84,7 @@ class MonologConfig extends AbstractConfig
         $serviceManager->setFactory('monolog.logger', function ($serviceManager) use ($loggerClass, $handlersToChannels) {
             $logger = new $loggerClass('app');
             foreach ($handlersToChannels as $handler => $channels) {
-                   $logger->pushHandler($serviceManager->get($handler));
+                $logger->pushHandler($serviceManager->get($handler));
             }
 
             return $logger;
@@ -102,9 +101,9 @@ class MonologConfig extends AbstractConfig
 
     protected function buildHandler(ServiceManager $serviceManager, array $parameters, $name, array $handler)
     {
-        $handlerId = $this->getHandlerId($name);
-        $class = $parameters[sprintf('monolog.handler.%s.class', $handler['type'])];
-        $handler['level'] = is_int($handler['level']) ? $handler['level'] : constant('Monolog\Logger::'.strtoupper($handler['level']));
+        $handlerId        = $this->getHandlerId($name);
+        $class            = $parameters[sprintf('monolog.handler.%s.class', $handler['type'])];
+        $handler['level'] = is_int($handler['level']) ? $handler['level'] : constant('Monolog\Logger::' . strtoupper($handler['level']));
 
         $serviceManager->setFactory($handlerId, function ($serviceManager) use ($class, $handler) {
             switch ($handler['type']) {
@@ -140,7 +139,7 @@ class MonologConfig extends AbstractConfig
         }
 
         $parameterBag = $serviceManager->get('application_parameters');
-        $config = $configs[$alias];
+        $config       = $configs[$alias];
 
         if (isset($config['handlers'])) {
             foreach (array_keys($config['handlers']) as $k) {

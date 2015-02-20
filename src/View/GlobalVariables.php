@@ -6,6 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\View;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -88,7 +89,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function offsetExists($property)
     {
-        return method_exists($this, 'get'.ucfirst($property));
+        return method_exists($this, 'get' . ucfirst($property));
     }
 
     /**
@@ -96,7 +97,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function offsetGet($property)
     {
-        return call_user_func(array($this, 'get'.ucfirst($property)));
+        return call_user_func(array($this, 'get' . ucfirst($property)));
     }
 
     /**
@@ -104,7 +105,7 @@ class GlobalVariables implements \ArrayAccess
      */
     public function offsetSet($property, $value)
     {
-        throw new \RuntimeException('Usage of '.__METHOD__.' is not allowed');
+        throw new \RuntimeException('Usage of ' . __METHOD__ . ' is not allowed');
     }
 
     /**
@@ -112,7 +113,6 @@ class GlobalVariables implements \ArrayAccess
      */
     public function offsetUnset($property)
     {
-        throw new \RuntimeException('Usage of '.__METHOD__.' is not allowed');
+        throw new \RuntimeException('Usage of ' . __METHOD__ . ' is not allowed');
     }
-
 }
