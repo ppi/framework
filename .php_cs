@@ -5,6 +5,7 @@ use Symfony\CS\Finder\DefaultFinder;
 use Symfony\CS\FixerInterface;
 
 $finder = DefaultFinder::create()
+    ->notPath('src/Debug/ExceptionHandler.php')
     ->in(array('src', 'tests'));
 
 $config = Config::create()
