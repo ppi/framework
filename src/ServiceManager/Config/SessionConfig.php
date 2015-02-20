@@ -12,8 +12,8 @@ namespace PPI\ServiceManager\Config;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 
@@ -100,14 +100,12 @@ class SessionConfig extends Config
 
             // We want absolute paths if we can
             if (null !== $storageOptions['save_path'] && !$that->isAbsolutePath($storageOptions['save_path'])) {
-
                 $storageOptions['save_path'] = realpath($storageOptions['save_path']);
 
                 // Basically if the realpath() failed then we revert back to null so default paths kick in
                 if ($storageOptions['save_path'] === false) {
                     $storageOptions['save_path'] = null;
                 }
-
             }
 
             return new NativeFileSessionHandler($storageOptions['save_path']);

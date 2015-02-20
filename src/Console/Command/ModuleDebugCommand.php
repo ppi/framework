@@ -35,8 +35,7 @@ The <info>%command.name%</info> command dumps information about the currently lo
   <info>php %command.full_name%</info>
 
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -45,7 +44,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $appName = 'PPI';
-        $mm = $this->getServiceManager()->get('ModuleManager');
+        $mm      = $this->getServiceManager()->get('ModuleManager');
         $modules = $mm->getLoadedModules(true);
 
         $output->writeln(sprintf('%s is running with <info>%d</info> modules loaded.', $appName, count($modules)));
@@ -55,6 +54,5 @@ EOF
             $output->writeln(' - <comment>namespace:</comment> ' . $module->getNamespace());
             $output->writeln(' - <comment>path:</comment>      ' . $module->getPath());
         }
-
     }
 }

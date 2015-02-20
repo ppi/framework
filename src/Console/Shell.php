@@ -38,6 +38,6 @@ class Shell extends BaseShell
 
 </info>
 EOF
-        .parent::getHeader();
+        . parent::getHeader();
     }
 }

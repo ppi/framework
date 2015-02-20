@@ -10,8 +10,8 @@
 namespace PPI\Router;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Routing\Router as BaseRouter;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Routing\Router as BaseRouter;
 
 /**
  * The PPI Router.
@@ -38,8 +38,8 @@ class Router extends BaseRouter implements RouterInterface
         parent::setOptions($options);
 
         $this->collection = $collection;
-        $this->context = $requestContext;
-        $this->logger = $logger;
+        $this->context    = $requestContext;
+        $this->logger     = $logger;
     }
 
     /**
@@ -62,9 +62,9 @@ class Router extends BaseRouter implements RouterInterface
     public function isMatcherCached()
     {
         return file_exists(
-            $this->options['cache_dir'].
-            DIRECTORY_SEPARATOR.
-            $this->options['matcher_cache_class'].
+            $this->options['cache_dir'] .
+            DIRECTORY_SEPARATOR .
+            $this->options['matcher_cache_class'] .
             '.php'
         );
     }
@@ -77,9 +77,9 @@ class Router extends BaseRouter implements RouterInterface
     public function isGeneratorCached()
     {
         return file_exists(
-            $this->options['cache_dir'].
-            DIRECTORY_SEPARATOR.
-            $this->options['generator_cache_class'].
+            $this->options['cache_dir'] .
+            DIRECTORY_SEPARATOR .
+            $this->options['generator_cache_class'] .
             '.php'
         );
     }

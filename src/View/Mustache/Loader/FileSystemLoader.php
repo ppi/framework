@@ -11,8 +11,8 @@
 
 namespace PPI\View\Mustache\Loader;
 
-use Symfony\Component\Templating\TemplateNameParserInterface;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Templating\TemplateNameParserInterface;
 
 /**
  * This engine knows how to render Mustache templates.
@@ -33,8 +33,8 @@ class FileSystemLoader extends \Mustache_Loader_FilesystemLoader
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
         $this->locator = $locator;
-        $this->parser = $parser;
-        $this->cache = array();
+        $this->parser  = $parser;
+        $this->cache   = array();
     }
 
     /**
@@ -50,7 +50,7 @@ class FileSystemLoader extends \Mustache_Loader_FilesystemLoader
 
         try {
             $template = $this->parser->parse($name);
-            $file = $this->locator->locate($template);
+            $file     = $this->locator->locate($template);
         } catch (\Exception $e) {
             throw new \InvalidArgumentException(sprintf('Unable to find template "%s".', $name));
         }

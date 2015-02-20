@@ -43,7 +43,7 @@ class ModuleManagerFactory implements FactoryInterface
             $serviceLocator->setFactory('ServiceListener', 'PPI\ServiceManager\Factory\ServiceListenerFactory');
         }
 
-        $config = $serviceLocator->get('ApplicationConfig');
+        $config           = $serviceLocator->get('ApplicationConfig');
         $defaultListeners = $serviceLocator->get('ModuleDefaultListener');
         $serviceListener  = $serviceLocator->get('ServiceListener');
 

@@ -6,6 +6,7 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Module;
 
 /**
@@ -81,7 +82,7 @@ class ServiceLocator
         }
 
         $className = $this->services[$key]->getClassName();
-        $instance = new $className;
+        $instance  = new $className();
 
         if ($this->services[$key]->hasFactoryMethod()) {
             call_user_func($instance, $this->services[$key]->getFactoryMethod());
@@ -126,5 +127,4 @@ class ServiceLocator
     {
         return array_keys($this->services);
     }
-
 }

@@ -34,7 +34,7 @@ class MicroRouterFactory implements FactoryInterface
     {
         $routeCollection = new RouteCollection();
         $requestContext  = $serviceLocator->get('RouterRequestContext');
-        $routerOptions = array();
+        $routerOptions   = array();
 
         $logger = $serviceLocator->has('logger') ? $serviceLocator->get('Logger') : null;
 

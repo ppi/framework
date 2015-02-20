@@ -109,25 +109,24 @@ class ModuleManager extends BaseModuleManager
             throw new \RuntimeException(sprintf('File name "%s" contains invalid characters (..).', $name));
         }
         $moduleName = substr($name, 1);
-        $path = '';
+        $path       = '';
         if (false !== strpos($moduleName, '/')) {
             list($moduleName, $path) = explode('/', $moduleName, 2);
         }
 
-        $isResource = 0 === strpos($path, 'Resources') && null !== $dir;
-        $overridePath = substr($path, 9);
+        $isResource     = 0 === strpos($path, 'Resources') && null !== $dir;
+        $overridePath   = substr($path, 9);
         $resourceModule = null;
-        $modules = array($this->getModuleByAlias($moduleName));
-        $files = array();
+        $modules        = array($this->getModuleByAlias($moduleName));
+        $files          = array();
 
         foreach ($modules as $module) {
-
-            if ($isResource && file_exists($file = $dir.'/'.$module->getName().$overridePath)) {
+            if ($isResource && file_exists($file = $dir . '/' . $module->getName() . $overridePath)) {
                 if (null !== $resourceModule) {
                     throw new \RuntimeException(sprintf('"%s" resource is hidden by a resource from the "%s" derived module. Create a "%s" file to override the module resource.',
                         $file,
                         $resourceModule,
-                        $dir.'/'.$modules[0]->getName().$overridePath
+                        $dir . '/' . $modules[0]->getName() . $overridePath
                     ));
                 }
 
@@ -137,11 +136,11 @@ class ModuleManager extends BaseModuleManager
                 $files[] = $file;
             }
 
-            if (file_exists($file = $module->getPath().'/'.$path)) {
+            if (file_exists($file = $module->getPath() . '/' . $path)) {
                 if ($first && !$isResource) {
                     return $file;
                 }
-                $files[] = $file;
+                $files[]        = $file;
                 $resourceModule = $module->getName();
             }
         }

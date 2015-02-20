@@ -106,17 +106,17 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
     protected function flatten(array &$parameters, array $subnode = null, $path = null)
     {
         if (null === $subnode) {
-            $subnode =& $parameters;
+            $subnode = & $parameters;
         }
         foreach ($subnode as $key => $value) {
             if (is_array($value)) {
-                $nodePath = $path ? $path.'.'.$key : $key;
+                $nodePath = $path ? $path . '.' . $key : $key;
                 $this->flatten($parameters, $value, $nodePath);
                 if (null === $path) {
                     unset($parameters[$key]);
                 }
             } elseif (null !== $path) {
-                $parameters[$path.'.'.$key] = $value;
+                $parameters[$path . '.' . $key] = $value;
             }
         }
     }

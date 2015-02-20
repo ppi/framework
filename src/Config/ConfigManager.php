@@ -53,11 +53,11 @@ class ConfigManager extends ConfigLoader
      */
     public function __construct($cachePath, $cacheEnabled, $paths = array())
     {
-        $this->cachePath = $cachePath;
+        $this->cachePath    = $cachePath;
         $this->cacheEnabled = (bool) $cacheEnabled;
 
         if ((true === $this->cacheEnabled) && file_exists($this->cachePath)) {
-            $this->skipConfig = true;
+            $this->skipConfig   = true;
             $this->mergedConfig = require $this->cachePath;
         }
 
@@ -74,7 +74,7 @@ class ConfigManager extends ConfigLoader
         if (!$this->skipConfig) {
             $this->configs[] = array(
                 'resource'  => $resource,
-                'type'      => $type
+                'type'      => $type,
             );
         }
 
@@ -91,8 +91,8 @@ class ConfigManager extends ConfigLoader
             }
 
             if ($this->cacheEnabled) {
-                $mode = 0666 & ~umask();
-                $content = "<?php\nreturn " . var_export($this->mergedConfig, 1) . ';';
+                $mode       = 0666 & ~umask();
+                $content    = "<?php\nreturn " . var_export($this->mergedConfig, 1) . ';';
                 $filesystem = new Filesystem();
                 $filesystem->dumpFile($this->cachePath, $content, $mode);
             }

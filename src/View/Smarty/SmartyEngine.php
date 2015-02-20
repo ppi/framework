@@ -9,10 +9,10 @@
 
 namespace PPI\View\Smarty;
 
+use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
 use PPI\Log\LoggerInterface;
 use PPI\View\GlobalVariables;
 use PPI\View\TemplateLocator;
-use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
@@ -46,12 +46,12 @@ class SmartyEngine extends BaseSmartyEngine
                                 LoaderInterface $loader, array $options = array(), GlobalVariables $globals = null,
                                 LoggerInterface $logger = null)
     {
-        $this->smarty = $smarty;
+        $this->smarty  = $smarty;
         $this->locator = $locator;
-        $this->parser = $parser;
-        $this->loader = $loader;
+        $this->parser  = $parser;
+        $this->loader  = $loader;
         $this->globals = array();
-        $this->logger = null;
+        $this->logger  = null;
 
         // There are no default extensions.
         $this->extensions = array();
@@ -92,7 +92,7 @@ class SmartyEngine extends BaseSmartyEngine
          * of your custom error handler, please call muteExpectedErrors() after
          * you've registered your custom error handler.
          *
-        * muteExpectedErrors() registers a custom error handler using
+         * muteExpectedErrors() registers a custom error handler using
          * set_error_handler(). The error handler merely inspects $errno and
          * $errfile to determine if the given error was produced deliberately
          * and must be ignored, or should be passed on to the next error handler.

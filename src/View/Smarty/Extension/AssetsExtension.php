@@ -28,7 +28,7 @@ class AssetsExtension extends BaseAssetsExtension
      * @var array
      */
     protected $funRemap = array(
-        'getAssetUrl_block' => 'getAssetUrlBlock',
+        'getAssetUrl_block'    => 'getAssetUrlBlock',
         'getAssetUrl_modifier' => 'getAssetUrlModifier',
     );
 
@@ -135,5 +135,4 @@ class AssetsExtension extends BaseAssetsExtension
 
         return $this->helper->getVersion($parameters['package']);
     }
-
 }

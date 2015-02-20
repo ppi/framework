@@ -59,13 +59,13 @@ class ServiceListenerFactory implements FactoryInterface
             'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
             'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
             'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
-            'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory'
+            'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory',
         ),
         'aliases'       => array(
             'Configuration'                             => 'Config',
             'config.parameter_bag'                      => 'ApplicationParameters',
             'templating.loader'                         => 'templating.loader.filesystem',
-        )
+        ),
     );
 
     /**

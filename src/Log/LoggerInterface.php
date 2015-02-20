@@ -16,4 +16,6 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
-interface LoggerInterface extends PsrLoggerInterface {}
+interface LoggerInterface extends PsrLoggerInterface
+{
+}

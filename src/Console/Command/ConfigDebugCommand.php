@@ -43,8 +43,7 @@ use the <info>--app-only</info> option. This is the "raw" configuration, not pro
 
   <info>%command.full_name% --app-only</info>
 EOF
-            )
-        ;
+            );
     }
 
     /**
@@ -56,17 +55,17 @@ EOF
 
         if ($input->getOption('app-only')) {
             $message = "This is the configuration defined in the app/ directory (not processed):\n";
-            $config = $this->getServiceManager()->get('ApplicationConfig');
+            $config  = $this->getServiceManager()->get('ApplicationConfig');
         } else {
             $message = "This is the configuration in use for your current setup (merged and processed):\n";
-            $config = $this->getServiceManager()->get('Config');
+            $config  = $this->getServiceManager()->get('Config');
         }
 
-        $files = array();
+        $files    = array();
         $contents = array();
 
         if (($files['php'] = $input->getOption('write-php'))) {
-            $contents['php'] = "<?php\n\nreturn ".var_export($config, true).";\n\n?>\n";
+            $contents['php'] = "<?php\n\nreturn " . var_export($config, true) . ";\n\n?>\n";
         }
 
         if (($files['yaml'] = $input->getOption('write-yaml'))) {
@@ -81,7 +80,7 @@ EOF
             $output->writeln($message);
 
             foreach ($config as $rootKey => $subConfig) {
-                $output->writeln('<info>'.$rootKey.'</info>:');
+                $output->writeln('<info>' . $rootKey . '</info>:');
                 $output->writeln($dumper->dump($subConfig, 6, $indentation, false, false));
             }
 
@@ -89,13 +88,13 @@ EOF
         }
 
         foreach ($files as $format => $file) {
-            $output->write('Saving configuration in <info>'.strtoupper($format).'</info> format...');
+            $output->write('Saving configuration in <info>' . strtoupper($format) . '</info> format...');
             if ($fileExists = file_exists($file)) {
                 if (!isset($dialog)) {
                     $dialog = $this->getHelperSet()->get('dialog');
                 }
                 if (!$dialog->askConfirmation($output,
-                    " <question>File \"".$file."\" already exists. Proceed anyway?</question> ", false)) {
+                    " <question>File \"" . $file . "\" already exists. Proceed anyway?</question> ", false)) {
                     continue;
                 }
             }

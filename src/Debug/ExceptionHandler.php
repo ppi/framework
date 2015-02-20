@@ -10,8 +10,8 @@
 namespace PPI\Debug;
 
 use PPI\Http\Response;
-use Symfony\Component\Debug\ExceptionHandler as BaseExceptionHandler;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\Debug\ExceptionHandler as BaseExceptionHandler;
 
 if (!defined('ENT_SUBSTITUTE')) {
     define('ENT_SUBSTITUTE', 8);
@@ -46,10 +46,10 @@ class ExceptionHandler extends BaseExceptionHandler
      */
     public function __construct($debug = true, $charset = 'UTF-8', $appName = 'PPI Framework', $appVersion = null, $showAllExceptions = false)
     {
-        $this->debug = $debug;
-        $this->charset = $charset;
-        $this->appName = $appName;
-        $this->appVersion = $appVersion;
+        $this->debug             = $debug;
+        $this->charset           = $charset;
+        $this->appName           = $appName;
+        $this->appVersion        = $appVersion;
         $this->showAllExceptions = $showAllExceptions;
     }
 
@@ -78,7 +78,7 @@ class ExceptionHandler extends BaseExceptionHandler
     /**
      * Registers the exception handler.
      *
-     * @param bool   $debug
+     * @param bool $debug
      *
      * @return ExceptionHandler The registered exception handler
      */
@@ -108,10 +108,10 @@ class ExceptionHandler extends BaseExceptionHandler
 
         // We need to make sure there are output buffers before we try to clean
         $status = ob_get_status();
-        if(!empty($status)) {
+        if (!empty($status)) {
             ob_clean();
         }
-        
+
         if (class_exists('PPI\Http\Response')) {
             $this->createResponse($exception)->send();
         } else {
@@ -135,7 +135,7 @@ class ExceptionHandler extends BaseExceptionHandler
 
         header(sprintf('HTTP/1.0 %s', $exception->getStatusCode()));
         foreach ($exception->getHeaders() as $name => $value) {
-            header($name.': '.$value, false);
+            header($name . ': ' . $value, false);
         }
 
         echo $this->decorate($this->getContent($exception, $this->showAllExceptions), $this->getStylesheet($exception));
@@ -160,8 +160,8 @@ class ExceptionHandler extends BaseExceptionHandler
     /**
      * Gets the HTML content associated with the given exception.
      *
-     * @param FlattenException  $exception A FlattenException instance
-     * @param bool              $showAll SA
+     * @param FlattenException $exception A FlattenException instance
+     * @param bool             $showAll   SA
      *
      * @return string The content as a string
      */
@@ -169,8 +169,8 @@ class ExceptionHandler extends BaseExceptionHandler
     /**
      * Gets the HTML content associated with the given exception.
      *
-     * @param FlattenException  $exception  A FlattenException instance
-     * @param bool              $showAll    Show all exceptions or just the last one
+     * @param FlattenException $exception A FlattenException instance
+     * @param bool             $showAll   Show all exceptions or just the last one
      *
      * @return string The content as a string
      */
@@ -183,23 +183,23 @@ class ExceptionHandler extends BaseExceptionHandler
             default:
                 $title = "Oh noes, something's broken";
         }
-        
+
         $content = '';
         if ($this->debug) {
             try {
                 $exceptions = $exception->toArray();
                 if (false === $showAll) {
                     $exceptions = array_slice($exceptions, -1, 1);
-                    $count = 1;
-                    $total = 1;
+                    $count      = 1;
+                    $total      = 1;
                 } else {
                     $count = count($exception->getAllPrevious());
                     $total = $count + 1;
                 }
 
                 foreach ($exceptions as $position => $e) {
-                    $i = 0;
-                    $class = $this->abbrClass($e['class']);
+                    $i       = 0;
+                    $class   = $this->abbrClass($e['class']);
                     $message = nl2br($e['message']);
 
                     if (false === $showAll) {
@@ -222,12 +222,11 @@ EOT
                     $content .= <<<EOT
                         <div>
                             <table class="table table-bordered table-striped"><tbody>
-EOT
-                        ;
+EOT;
 
                     foreach ($e['trace'] as $trace) {
                         $i++;
-                        $content .= '       <tr><td>'.$i.'</td><td>';
+                        $content .= '       <tr><td>' . $i . '</td><td>';
                         if ($trace['function']) {
                             $content .= sprintf('at %s%s%s(%s)', $this->abbrClass($trace['class']), $trace['type'], $trace['function'], $this->formatArgs($trace['args']));
                         }
@@ -255,8 +254,8 @@ EOT
         }
 
         list($quote, $author) = $this->getQuote();
-        $statusCode = $exception->getStatusCode();
-        $ppiLogo = $this->getPpiLogo();
+        $statusCode           = $exception->getStatusCode();
+        $ppiLogo              = $this->getPpiLogo();
 
         return <<<EOF
             <div class="page-header well">
@@ -301,8 +300,8 @@ EOT;
     {
         $baseStylesheet = $this->getBaseStylesheet();
         $baseJavascript = $this->getBaseJavascript();
-        $appName = $this->appName;
-        $appVersion = $this->appVersion ? $this->appVersion : '2';
+        $appName        = $this->appName;
+        $appVersion     = $this->appVersion ? $this->appVersion : '2';
 
         return <<<EOF
 <!DOCTYPE html>
@@ -370,7 +369,7 @@ EOF;
             } elseif ('null' === $item[0]) {
                 $formattedValue = '<em>null</em>';
             } elseif ('boolean' === $item[0]) {
-                $formattedValue = '<em>'.strtolower(var_export($item[1], true)).'</em>';
+                $formattedValue = '<em>' . strtolower(var_export($item[1], true)) . '</em>';
             } elseif ('resource' === $item[0]) {
                 $formattedValue = '<em>resource</em>';
             } else {

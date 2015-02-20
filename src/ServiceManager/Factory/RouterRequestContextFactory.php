@@ -47,8 +47,8 @@ class RouterRequestContextFactory extends AbstractFactory
                 'scheme'        => 'http',
                 // request_listener
                 'http_port'     => '80',
-                'https_port'    => '443'
-            )
+                'https_port'    => '443',
+            ),
         ));
     }
 

@@ -46,7 +46,6 @@ class ModuleCreateCommand extends AbstractCommand
 
     protected function configure()
     {
-
         $this->setName('module:create')
             ->setDescription('Create a module')
             ->addArgument('name', InputArgument::REQUIRED, 'What is your module name?')
@@ -56,7 +55,7 @@ class ModuleCreateCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $dir = $this->modulesDir . '/' . $name;
+        $dir  = $this->modulesDir . '/' . $name;
 
         $this->copyRecursively($this->skeletonModuleDir, $dir);
         file_put_contents($dir . '/Module.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Module.php')));
@@ -67,21 +66,18 @@ class ModuleCreateCommand extends AbstractCommand
 
         $output->writeln("<info>Created module: {$name}</info>");
         $output->writeln("<comment>To activate it, add <info>'{$name}'</info> to your <info>'activeModules'</info> setting in <info>modules.config.php</info></comment>");
-
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if ($input->getOption('dir') === false) {
-            $dialog = $this->getHelper('dialog');
+            $dialog           = $this->getHelper('dialog');
             $this->modulesDir = $dialog->ask($output, 'Where\'s the modules dir? [' . $this->modulesDir . ']: ', $this->modulesDir);
         }
     }
 
     protected function copyRecursively($src, $dst)
     {
-
-
         if (empty($src)) {
             throw new \Exception('Unable to locate source path: ' . $src);
         }
@@ -93,7 +89,7 @@ class ModuleCreateCommand extends AbstractCommand
         $dir = opendir($src);
         @mkdir($dst);
 
-        if($dir === false) {
+        if ($dir === false) {
             throw new \Exception('Unable to open dir: ' . $src);
         }
 
@@ -108,5 +104,4 @@ class ModuleCreateCommand extends AbstractCommand
         }
         closedir($dir);
     }
-
 }

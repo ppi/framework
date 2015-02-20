@@ -30,10 +30,9 @@ class MicroRouterListenerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-
-        $router = $serviceLocator->get('MicroRouter');
+        $router         = $serviceLocator->get('MicroRouter');
         $requestContext = $serviceLocator->get('RouterRequestContext');
-        $logger = $serviceLocator->get('Logger');
+        $logger         = $serviceLocator->get('Logger');
 
         return new RouterListener($router, $requestContext, $logger);
     }

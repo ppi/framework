@@ -14,8 +14,8 @@ use PPI\Console\Application;
 use PPI\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
-use Zend\Stdlib\ArrayUtils;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * The base PPI module class.
@@ -28,7 +28,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 {
     /**
      * @var string
-     * The Module name.
+     *             The Module name.
      */
     protected $name;
 
@@ -100,7 +100,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
             $loader->setDefaults(array('_module' => $this->getName()));
 
             $routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
-            $this->routes = $routesCollection;
+            $this->routes     = $routesCollection;
         }
 
         return $this->routes;
@@ -229,7 +229,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     {
         if (!method_exists($this->controller, $this->actionName)) {
             throw new \Exception(sprintf(
-                'Unable to dispatch action: "%s" does not exist in controller '.
+                'Unable to dispatch action: "%s" does not exist in controller ' .
                 '"%s" within module "%s"',
                 $this->actionName,
                 $this->controllerName,
@@ -248,7 +248,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         }
 
         return $content;
-
     }
 
     /**
@@ -272,7 +271,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     public function mergeConfig($resources)
     {
         $configs = array();
-        foreach (is_array($resources) ? $resources: func_get_args() as $resource) {
+        foreach (is_array($resources) ? $resources : func_get_args() as $resource) {
             $configs = ArrayUtils::merge($configs, $this->loadConfig($resource));
         }
 
@@ -363,20 +362,20 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function registerCommands(Application $application)
     {
-        if (!is_dir($dir = $this->getPath().'/Command')) {
+        if (!is_dir($dir = $this->getPath() . '/Command')) {
             return;
         }
 
         $finder = new Finder();
         $finder->files()->name('*Command.php')->in($dir);
 
-        $prefix = $this->getNamespace().'\\Command';
+        $prefix = $this->getNamespace() . '\\Command';
         foreach ($finder as $file) {
             $ns = $prefix;
             if ($relativePath = $file->getRelativePath()) {
-                $ns .= '\\'.strtr($relativePath, '/', '\\');
+                $ns .= '\\' . strtr($relativePath, '/', '\\');
             }
-            $r = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
+            $r = new \ReflectionClass($ns . '\\' . $file->getBasename('.php'));
             if ($r->isSubclassOf('PPI\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
                 $application->add($r->newInstance());
             }

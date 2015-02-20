@@ -9,10 +9,9 @@
 
 namespace PPI\ServiceManager\Factory;
 
+use PPI\DataSource\ConnectionManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-
-use PPI\DataSource\ConnectionManager;
 
 /**
  * DataSource Factory.
@@ -31,7 +30,7 @@ class DataSourceFactory implements FactoryInterface
         'doctrine_mongdb'  => 'PPI\DataSource\Connection\DoctrineMongoDB',
         'fuelphp'          => 'PPI\DataSource\Connection\FuelPHP',
         'monga'            => 'PPI\DataSource\Connection\Monga',
-        'zend_db'          => 'PPI\DataSource\Connection\ZendDb'
+        'zend_db'          => 'PPI\DataSource\Connection\ZendDb',
     );
 
     /**
@@ -51,7 +50,6 @@ class DataSourceFactory implements FactoryInterface
         }
 
         foreach ($config['datasource']['connections'] as $name => $config) {
-
             $allConnections[$name]                = $config;
             $configMap[$config['library']][$name] = $config;
         }

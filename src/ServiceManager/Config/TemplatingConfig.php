@@ -9,29 +9,28 @@
 
 namespace PPI\ServiceManager\Config;
 
-use PPI\View\GlobalVariables;
-use PPI\View\TemplateLocator;
 use PPI\View\DelegatingEngine;
-use PPI\View\TemplateNameParser;
-
-use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
-use Symfony\Component\Templating\PhpEngine;
-
-// Helpers
+use PPI\View\GlobalVariables;
 use PPI\View\Helper\RouterHelper;
 use PPI\View\Helper\SessionHelper;
-use Symfony\Component\Templating\Helper\SlotsHelper;
-use Symfony\Component\Templating\Helper\AssetsHelper;
+use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
+use PPI\View\Mustache\MustacheEngine;
+
+// Helpers
+use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
+use PPI\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
+use PPI\View\TemplateLocator;
+use PPI\View\TemplateNameParser;
 
 // Mustache
-use PPI\View\Mustache\MustacheEngine;
-use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
+use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
+use Symfony\Component\Templating\Helper\AssetsHelper;
 
 // Twig
 
 // Smarty
-use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
-use PPI\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
+use Symfony\Component\Templating\Helper\SlotsHelper;
+use Symfony\Component\Templating\PhpEngine;
 
 // Service Manager
 use Zend\ServiceManager\ServiceManager;
@@ -57,10 +56,10 @@ class TemplatingConfig extends AbstractConfig
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {
-        $config = $serviceManager->get('Config');
-        $appRootDir = $config['parameters']['app.root_dir'];
+        $config      = $serviceManager->get('Config');
+        $appRootDir  = $config['parameters']['app.root_dir'];
         $appCacheDir = $config['parameters']['app.cache_dir'];
-        $appCharset = $config['parameters']['app.charset'];
+        $appCharset  = $config['parameters']['app.charset'];
 
         // The "framework.templating" option is deprecated. Please replace it with "framework.view"
         $config = $this->processConfiguration($config);
@@ -128,7 +127,7 @@ class TemplatingConfig extends AbstractConfig
                     new SlotsHelper(),
                     $serviceManager->get('templating.helper.assets'),
                     new RouterHelper($serviceManager->get('router')),
-                    new SessionHelper($serviceManager->get('session'))
+                    new SessionHelper($serviceManager->get('session')),
                  )
             );
 
@@ -143,7 +142,7 @@ class TemplatingConfig extends AbstractConfig
          */
         $serviceManager->setFactory('templating.engine.twig', function ($serviceManager) {
 
-            if(!class_exists('Twig_Environment')) {
+            if (!class_exists('Twig_Environment')) {
                 throw new \Exception('PPI\TwigModule not found. Composer require: ppi/twig-module');
             }
 
@@ -166,7 +165,7 @@ class TemplatingConfig extends AbstractConfig
          */
         $serviceManager->setFactory('templating.engine.smarty', function ($serviceManager) use ($appCacheDir) {
 
-            if(!class_exists('NoiseLabs\Bundle\SmartyBundle\SmartyEngine')) {
+            if (!class_exists('NoiseLabs\Bundle\SmartyBundle\SmartyEngine')) {
                 throw new \Exception('PPI\SmartyModule not found. Composer require: ppi/smarty-module');
             }
 
@@ -195,14 +194,14 @@ class TemplatingConfig extends AbstractConfig
         // Mustache Engine
         $serviceManager->setFactory('templating.engine.mustache', function ($serviceManager, $appCacheDir) {
 
-            if(!class_exists('Mustache_Engine')) {
+            if (!class_exists('Mustache_Engine')) {
                 throw new \Exception('PPI\MustacheModule not found. Composer require: ppi/mustache-module');
             }
 
             $rawMustacheEngine = new \Mustache_Engine(array(
                 'loader' => new MustacheFileSystemLoader($serviceManager->get('templating.locator'),
                     $serviceManager->get('templating.name_parser')),
-                'cache'  => $appCacheDir . DIRECTORY_SEPARATOR . 'mustache'
+                'cache'  => $appCacheDir . DIRECTORY_SEPARATOR . 'mustache',
             ));
 
             return new MustacheEngine($rawMustacheEngine, $serviceManager->get('templating.name_parser'));
@@ -215,7 +214,7 @@ class TemplatingConfig extends AbstractConfig
             $delegatingEngine = new DelegatingEngine();
             // @todo - lazy load this
             foreach ($engineIds as $id) {
-                $delegatingEngine->addEngine($serviceManager->get('templating.engine.'.$id));
+                $delegatingEngine->addEngine($serviceManager->get('templating.engine.' . $id));
             }
 
             return $delegatingEngine;
@@ -231,8 +230,8 @@ class TemplatingConfig extends AbstractConfig
     {
         return array('framework' => array(
             'view'  => array(
-                'engines' => array('php')
-            )
+                'engines' => array('php'),
+            ),
         ));
     }
 
