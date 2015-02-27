@@ -1,6 +1,8 @@
 <!-- vim: set tw=79 sw=4 ts=4 et ft=markdown : -->
 # PPI Framework
 
+[![Join the chat at https://gitter.im/ppi/framework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ppi/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [@website]:       http://www.ppi.io/                              "PPI Framework"
 [@documentation]: http://www.ppi.io/docs/2.1/getting_started.html "PPI Framework Documentation"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
