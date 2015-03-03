@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -20,8 +21,6 @@ use Symfony\Component\Config\Loader\LoaderResolver;
  * FileLocator uses an array of pre-defined paths to find files.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class ConfigLoader
 {
@@ -48,8 +47,9 @@ class ConfigLoader
     /**
      * Loads a resource.
      *
-     * @param  mixed  $resource The resource
-     * @param  string $type     The resource type
+     * @param mixed  $resource The resource
+     * @param string $type     The resource type
+     *
      * @return array
      */
     public function load($resource, $type = null)

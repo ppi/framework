@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -14,20 +15,18 @@ namespace PPI\Framework\Module;
  * ServiceLocator.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class Service
 {
     /**
-     * The class name for this service
+     * The class name for this service.
      *
      * @var null|string
      */
     protected $className = null;
 
     /**
-     * Get the factory method name for this service
+     * Get the factory method name for this service.
      *
      * @var null|string
      */
@@ -37,8 +36,6 @@ class Service
      * Constructor.
      *
      * @param type $className
-     *
-     * @return void
      */
     public function __construct($className = null)
     {
@@ -46,7 +43,7 @@ class Service
     }
 
     /**
-     * Get the class name for this service
+     * Get the class name for this service.
      *
      * @return null|string
      */
@@ -56,7 +53,7 @@ class Service
     }
 
     /**
-     * Check if we have a class name for this service
+     * Check if we have a class name for this service.
      *
      * @return boolean
      */
@@ -66,11 +63,9 @@ class Service
     }
 
     /**
-     * Set the factory method name
+     * Set the factory method name.
      *
      * @param string $method
-     *
-     * @return void
      */
     public function setFactoryMethod($method)
     {
@@ -78,7 +73,7 @@ class Service
     }
 
     /**
-     * Get the factory method name
+     * Get the factory method name.
      *
      * @return null|string
      */
@@ -88,7 +83,7 @@ class Service
     }
 
     /**
-     * Check if we have a factory method name
+     * Check if we have a factory method name.
      *
      * @return boolean
      */

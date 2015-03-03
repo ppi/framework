@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -20,8 +21,6 @@ use Symfony\Component\Templating\TemplateReferenceInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Templating
  */
 class TemplateNameParser extends BaseTemplateNameParser
 {

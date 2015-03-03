@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -55,6 +56,7 @@ class ExceptionHandler extends BaseExceptionHandler
 
     /**
      * @param $appName
+     *
      * @return $this
      */
     public function setAppName($appName)
@@ -66,6 +68,7 @@ class ExceptionHandler extends BaseExceptionHandler
 
     /**
      * @param $appVersion
+     *
      * @return $this
      */
     public function setAppVersion($appVersion)

@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -18,8 +19,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * ServiceListener Factory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ServiceListenerFactory implements FactoryInterface
 {
@@ -69,7 +68,7 @@ class ServiceListenerFactory implements FactoryInterface
     );
 
     /**
-     * Create the service listener service
+     * Create the service listener service.
      *
      * Tries to get a service named ServiceListenerInterface from the service
      * locator, otherwise creates a Zend\ModuleManager\Listener\ServiceListener
@@ -85,10 +84,12 @@ class ServiceListenerFactory implements FactoryInterface
      *   - interface: the name of the interface that modules can implement as string
      *   - method: the name of the method that modules have to implement as string
      *
-     * @param  ServiceLocatorInterface   $serviceLocator
-     * @return ServiceListener
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @throws \InvalidArgumentException For invalid configurations.
      * @throws \RuntimeException
+     *
+     * @return ServiceListener
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

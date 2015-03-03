@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -20,15 +21,14 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class RouterFactory implements FactoryInterface
 {
     /**
      * Create and return the router.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return \PPI\Framework\Router\Router
      */
     public function createService(ServiceLocatorInterface $serviceLocator)

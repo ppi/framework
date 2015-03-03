@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -18,8 +19,6 @@ use Symfony\Component\Config\Loader\DelegatingLoader as BaseDelegatingLoader;
  * a chance to load a given resource (handled by the resolver)
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class DelegatingLoader extends BaseDelegatingLoader
 {

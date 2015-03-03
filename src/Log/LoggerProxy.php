@@ -1,6 +1,5 @@
 <?php
 
-
 namespace PPI\Framework\Log;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
@@ -9,12 +8,10 @@ use Psr\Log\LoggerInterface as PsrLoggerInterface;
  * This is a class which wraps around Psr\Log to provide a proxy to an underlying Logger implementation. This enables us
  * to boot up the PPI framework without actually setting a logger in the ServiceManager.
  *
- * @package PPI
  * @author Gary Tierney
  */
 class LoggerProxy implements LoggerInterface
 {
-
     /**
      * @var \Psr\Log\LoggerInterface
      */

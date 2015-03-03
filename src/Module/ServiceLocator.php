@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -13,8 +14,6 @@ namespace PPI\Framework\Module;
  * The PPI Service Locator.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class ServiceLocator
 {
@@ -36,8 +35,6 @@ class ServiceLocator
      * @todo Add inline documentation.
      *
      * @param array $services
-     *
-     * @return void
      */
     public function __construct(array $services = array())
     {
@@ -49,13 +46,13 @@ class ServiceLocator
     }
 
     /**
-     * Get a registered service by its name
+     * Get a registered service by its name.
      *
      * @param string $key
      *
-     * @return mixed
-     *
      * @throws \Exception|\InvalidArgumentException
+     *
+     * @return mixed
      */
     public function get($key)
     {
@@ -94,12 +91,10 @@ class ServiceLocator
     }
 
     /**
-     * Set a service
+     * Set a service.
      *
      * @param string $key
      * @param mixed  $service
-     *
-     * @return void
      */
     public function set($key, $service)
     {
@@ -107,7 +102,7 @@ class ServiceLocator
     }
 
     /**
-     * Check if a service has been registered
+     * Check if a service has been registered.
      *
      * @param string $key
      *

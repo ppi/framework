@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -11,14 +12,11 @@ namespace PPI\Framework\Router;
 
 /**
  * The routing helper for the controller.
- *
- * @package    PPI
- * @subpackage Router
  */
 class RoutingHelper
 {
     /**
-     * The routing params
+     * The routing params.
      *
      * @var array
      */
@@ -30,8 +28,6 @@ class RoutingHelper
      * Constructor.
      *
      * @param array $params
-     *
-     * @return void
      */
     public function __construct(array $params = array())
     {
@@ -41,13 +37,13 @@ class RoutingHelper
     }
 
     /**
-     * Obtain a param's value
+     * Obtain a param's value.
      *
      * @param string $param The param name
      *
-     * @return type
-     *
      * @throws \InvalidArgumentException When the param does not exist
+     *
+     * @return type
      */
     public function getParam($param)
     {
@@ -59,7 +55,7 @@ class RoutingHelper
     }
 
     /**
-     * Set a routing param's value
+     * Set a routing param's value.
      *
      * @param string $param
      * @param string $value
@@ -74,9 +70,10 @@ class RoutingHelper
     }
 
     /**
-     * Check if a routing param exists
+     * Check if a routing param exists.
      *
-     * @param  string $param
+     * @param string $param
+     *
      * @return bool
      */
     public function hasParam($param)
@@ -85,7 +82,7 @@ class RoutingHelper
     }
 
     /**
-     * Get all routing params
+     * Get all routing params.
      *
      * @return array
      */
@@ -95,7 +92,7 @@ class RoutingHelper
     }
 
     /**
-     * Set the routing params
+     * Set the routing params.
      *
      * @param array $params
      *
@@ -109,9 +106,10 @@ class RoutingHelper
     }
 
     /**
-     * Set the active route's name key
+     * Set the active route's name key.
      *
      * @param  $name
+     *
      * @return $this
      */
     public function setActiveRouteName($name)
@@ -122,7 +120,7 @@ class RoutingHelper
     }
 
     /**
-     * Get the active route's name key
+     * Get the active route's name key.
      *
      * @return mixed
      */

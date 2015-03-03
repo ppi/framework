@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -17,8 +18,6 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  * to work with the Symfony2 paths.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @package    PPI
- * @subpackage Templating
  */
 class FileSystemLoader extends \Twig_Loader_Filesystem
 {
@@ -41,8 +40,6 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
      *
      * @param FileLocatorInterface        $locator A FileLocatorInterface instance
      * @param TemplateNameParserInterface $parser  A TemplateNameParserInterface instance
-     *
-     * @return void
      */
     public function __construct(FileLocatorInterface $locator, TemplateNameParserInterface $parser)
     {
@@ -62,9 +59,9 @@ class FileSystemLoader extends \Twig_Loader_Filesystem
      *
      * @param string|TemplateReferenceInterface $template The template
      *
-     * @return string The path to the template file
-     *
      * @throws \Twig_Error_Loader if the template could not be found
+     *
+     * @return string The path to the template file
      */
     protected function findTemplate($template)
     {

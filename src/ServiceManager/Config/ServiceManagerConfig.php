@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -16,13 +17,11 @@ use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 /**
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ServiceManagerConfig implements ConfigInterface
 {
     /**
-     * Services that can be instantiated without factories
+     * Services that can be instantiated without factories.
      *
      * @var array
      */
@@ -31,7 +30,7 @@ class ServiceManagerConfig implements ConfigInterface
     );
 
     /**
-     * Service factories
+     * Service factories.
      *
      * @var array
      */
@@ -43,14 +42,14 @@ class ServiceManagerConfig implements ConfigInterface
     );
 
     /**
-     * Abstract factories
+     * Abstract factories.
      *
      * @var array
      */
     protected $abstractFactories = array();
 
     /**
-     * Aliases
+     * Aliases.
      *
      * @var array
      */
@@ -61,7 +60,7 @@ class ServiceManagerConfig implements ConfigInterface
     );
 
     /**
-     * Shared services
+     * Shared services.
      *
      * Services are shared by default; this is primarily to indicate services
      * that should NOT be shared
@@ -73,7 +72,7 @@ class ServiceManagerConfig implements ConfigInterface
     );
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Merges internal arrays with those passed via configuration
      *
@@ -110,8 +109,7 @@ class ServiceManagerConfig implements ConfigInterface
      * service manager, also adds an initializer to inject ServiceManagerAware
      * and ServiceLocatorAware classes with the service manager.
      *
-     * @param  ServiceManager $serviceManager
-     * @return void
+     * @param ServiceManager $serviceManager
      */
     public function configureServiceManager(ServiceManager $serviceManager)
     {

@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -18,8 +19,6 @@ use Zend\Stdlib\ArrayUtils;
  * AbstractConfig class.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 abstract class AbstractConfig extends Config implements ConfigurationProviderInterface
 {
@@ -37,9 +36,9 @@ abstract class AbstractConfig extends Config implements ConfigurationProviderInt
      *
      * This can be overridden in a sub-class to specify the alias manually.
      *
-     * @return string The alias
-     *
      * @throws \BadMethodCallException When the extension name does not follow conventions
+     *
+     * @return string The alias
      */
     public function getAlias()
     {
@@ -63,7 +62,8 @@ abstract class AbstractConfig extends Config implements ConfigurationProviderInt
     }
 
     /**
-     * @param  ServiceManager $serviceManager
+     * @param ServiceManager $serviceManager
+     *
      * @return array
      */
     public function getParameters(ServiceManager $serviceManager)
@@ -76,8 +76,9 @@ abstract class AbstractConfig extends Config implements ConfigurationProviderInt
     /**
      * Process an array with the application configuration.
      *
-     * @param  array                               $config
-     * @param  \Zend\ServiceManager\ServiceManager $serviceManager
+     * @param array                               $config
+     * @param \Zend\ServiceManager\ServiceManager $serviceManager
+     *
      * @return array
      */
     abstract protected function processConfiguration(array $config, ServiceManager $serviceManager = null);

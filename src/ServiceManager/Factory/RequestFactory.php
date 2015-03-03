@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -17,15 +18,14 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * ServiceManager configuration for the Request component.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class RequestFactory implements FactoryInterface
 {
     /**
      * Create and return a request instance.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return \PPI\Framework\Http\Request
      */
     public function createService(ServiceLocatorInterface $serviceLocator)

@@ -2,11 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @package     Templating
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
  *
+ * @link        http://www.ppi.io
  */
 
 namespace PPI\Framework\View\Mustache;
@@ -43,10 +42,10 @@ class MustacheEngine implements EngineInterface
      * @param mixed $name       A template name
      * @param array $parameters An array of parameters to pass to the template
      *
-     * @return string The evaluated template as a string
-     *
      * @throws \InvalidArgumentException if the template does not exist
      * @throws \RuntimeException         if the template cannot be rendered
+     *
+     * @return string The evaluated template as a string
      */
     public function render($name, array $parameters = array())
     {
@@ -114,9 +113,9 @@ class MustacheEngine implements EngineInterface
      *
      * @param mixed $name A template name or an instance of Mustache_Template
      *
-     * @return \Mustache_Template A \Mustache_Template instance
-     *
      * @throws \InvalidArgumentException if the template does not exist
+     *
+     * @return \Mustache_Template A \Mustache_Template instance
      */
     protected function load($name)
     {
@@ -129,10 +128,11 @@ class MustacheEngine implements EngineInterface
 
     /**
      * Adding the addGlobal() call to keep things compliant with the existing systems relying on global vars.
-     * This method will be removed as of PPI 2.1
+     * This method will be removed as of PPI 2.1.
      *
-     * @param  string $key
-     * @param  mixed  $val
+     * @param string $key
+     * @param mixed  $val
+     *
      * @return bool
      */
     public function addGlobal($key, $val)
