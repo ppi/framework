@@ -7,13 +7,13 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
-use PPI\Config\Loader\ArrayLoader;
-use PPI\Config\Loader\DelegatingLoader;
-use PPI\Config\Loader\IniFileLoader;
-use PPI\Config\Loader\PhpFileLoader;
-use PPI\Config\Loader\YamlFileLoader;
+use PPI\Framework\Config\Loader\ArrayLoader;
+use PPI\Framework\Config\Loader\DelegatingLoader;
+use PPI\Framework\Config\Loader\IniFileLoader;
+use PPI\Framework\Config\Loader\PhpFileLoader;
+use PPI\Framework\Config\Loader\YamlFileLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 
 /**

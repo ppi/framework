@@ -7,9 +7,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
-use PPI\Module\ModuleManager;
+use PPI\Framework\Module\ModuleManager;
 
 /**
  * AppFileLocator uses ModuleManager to locate resources in modules.

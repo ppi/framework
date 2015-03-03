@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Module\Controller\ControllerNameParser;
+use PPI\Framework\Module\Controller\ControllerNameParser;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class ControllerNameParserFactory implements FactoryInterface
      * Create and return a ControllerNameParser instance.
      *
      * @param  ServiceLocatorInterface                     $serviceLocator
-     * @return \PPI\Module\Controller\ControllerNameParser
+     * @return \PPI\Framework\Module\Controller\ControllerNameParser
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

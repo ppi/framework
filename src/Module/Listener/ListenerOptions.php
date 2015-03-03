@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module\Listener;
+namespace PPI\Framework\Module\Listener;
 
 use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
 

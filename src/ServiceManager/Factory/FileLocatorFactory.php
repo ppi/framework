@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Config\AppFileLocator as FileLocator;
+use PPI\Framework\Config\AppFileLocator as FileLocator;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class FileLocatorFactory implements FactoryInterface
      * Create and return the datasource service.
      *
      * @param  ServiceLocatorInterface     $serviceLocator
-     * @return \PPI\DataSource\DataSource;
+     * @return \PPI\Framework\DataSource\DataSource;
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

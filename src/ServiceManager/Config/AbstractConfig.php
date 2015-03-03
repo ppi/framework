@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Config;
+namespace PPI\Framework\ServiceManager\Config;
 
-use PPI\Config\ConfigurationProviderInterface;
+use PPI\Framework\Config\ConfigurationProviderInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ArrayUtils;

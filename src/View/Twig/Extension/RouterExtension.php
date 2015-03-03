@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Twig\Extension;
+namespace PPI\Framework\View\Twig\Extension;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

@@ -7,9 +7,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Debug;
+namespace PPI\Framework\Debug;
 
-use PPI\Http\Response;
+use PPI\Framework\Http\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ExceptionHandler as BaseExceptionHandler;
 
@@ -112,7 +112,7 @@ class ExceptionHandler extends BaseExceptionHandler
             ob_clean();
         }
 
-        if (class_exists('PPI\Http\Response')) {
+        if (class_exists('PPI\Framework\Http\Response')) {
             $this->createResponse($exception)->send();
         } else {
             $this->sendPhpResponse($exception);

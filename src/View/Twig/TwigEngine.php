@@ -8,11 +8,11 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Twig;
+namespace PPI\Framework\View\Twig;
 
-use PPI\View\EngineInterface;
-use PPI\View\GlobalVariables;
-use PPI\View\TemplateReference;
+use PPI\Framework\View\EngineInterface;
+use PPI\Framework\View\GlobalVariables;
+use PPI\Framework\View\TemplateReference;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\StreamingEngineInterface;

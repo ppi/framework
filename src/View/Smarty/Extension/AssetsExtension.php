@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Smarty\Extension;
+namespace PPI\Framework\View\Smarty\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\AssetsExtension as BaseAssetsExtension;
 use Symfony\Component\Templating\Helper\AssetsHelper;

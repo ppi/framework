@@ -7,11 +7,11 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI;
+namespace PPI\Framework;
 
-use PPI\Config\ConfigManager;
-use PPI\Debug\ExceptionHandler;
-use PPI\ServiceManager\ServiceManagerBuilder;
+use PPI\Framework\Config\ConfigManager;
+use PPI\Framework\Debug\ExceptionHandler;
+use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -64,7 +64,7 @@ class App implements AppInterface
 
     /**
      * Configuration loader.
-     * @var \PPI\Config\ConfigManager
+     * @var \PPI\Framework\Config\ConfigManager
      */
     protected $configManager;
 
@@ -97,7 +97,7 @@ class App implements AppInterface
     protected $response;
 
     /**
-     * @var \PPI\Module\Controller\ControllerResolver
+     * @var \PPI\Framework\Module\Controller\ControllerResolver
      */
     protected $resolver;
 
@@ -114,7 +114,7 @@ class App implements AppInterface
 
     /**
      * Service Manager.
-     * @var \PPI\ServiceManager\ServiceManager
+     * @var \PPI\Framework\ServiceManager\ServiceManager
      */
     protected $serviceManager;
 
@@ -458,7 +458,7 @@ class App implements AppInterface
     }
 
     /**
-     * @see PPI\Module\ModuleManager::locateResource()
+     * @see PPI\Framework\Module\ModuleManager::locateResource()
      *
      * @param string  $name  A resource name to locate
      * @param string  $dir   A directory where to look for the resource first
@@ -554,7 +554,7 @@ class App implements AppInterface
     /**
      * Returns a ConfigManager instance.
      *
-     * @return \PPI\Config\ConfigManager
+     * @return \PPI\Framework\Config\ConfigManager
      */
     public function getConfigManager()
     {

@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Router\Router;
+use PPI\Framework\Router\Router;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Zend\ServiceManager\FactoryInterface;
@@ -28,7 +28,7 @@ class MicroRouterFactory implements FactoryInterface
      * Create and return the router.
      *
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return \PPI\Router\Router
+     * @return \PPI\Framework\Router\Router
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

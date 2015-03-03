@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ModuleManager\Listener\ServiceListenerInterface;
@@ -46,20 +46,20 @@ class ServiceListenerFactory implements FactoryInterface
             'RequestStack'       => 'Symfony\Component\HttpFoundation\RequestStack',
         ),
         'factories'     => array(
-            'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
-            'ControllerNameParser'  => 'PPI\ServiceManager\Factory\ControllerNameParserFactory',
-            'ControllerResolver'    => 'PPI\ServiceManager\Factory\ControllerResolverFactory',
-            'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
-            'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
-            'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
-            'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
-            'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
-            'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
-            'RoutePluginManager'    => 'PPI\ServiceManager\Factory\RoutePluginManagerFactory',
-            'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
-            'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
-            'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
-            'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory',
+            'Config'                => 'PPI\Framework\ServiceManager\Factory\ConfigFactory',
+            'ControllerNameParser'  => 'PPI\Framework\ServiceManager\Factory\ControllerNameParserFactory',
+            'ControllerResolver'    => 'PPI\Framework\ServiceManager\Factory\ControllerResolverFactory',
+            'DataSource'            => 'PPI\Framework\ServiceManager\Factory\DataSourceFactory',
+            'EventManager'          => 'PPI\Framework\ServiceManager\Factory\EventManagerFactory',
+            'FileLocator'           => 'PPI\Framework\ServiceManager\Factory\FileLocatorFactory',
+            'MicroRouter'           => 'PPI\Framework\ServiceManager\Factory\MicroRouterFactory',
+            'Request'               => 'PPI\Framework\ServiceManager\Factory\RequestFactory',
+            'Response'              => 'PPI\Framework\ServiceManager\Factory\ResponseFactory',
+            'RoutePluginManager'    => 'PPI\Framework\ServiceManager\Factory\RoutePluginManagerFactory',
+            'Router'                => 'PPI\Framework\ServiceManager\Factory\RouterFactory',
+            'RouterListener'        => 'PPI\Framework\ServiceManager\Factory\RouterListenerFactory',
+            'RouterRequestContext'  => 'PPI\Framework\ServiceManager\Factory\RouterRequestContextFactory',
+            'RoutingHelper'         => 'PPI\Framework\ServiceManager\Factory\RoutingHelperFactory',
         ),
         'aliases'       => array(
             'Configuration'                             => 'Config',

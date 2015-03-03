@@ -8,7 +8,7 @@
  */
 namespace PPI;
 
-use PPI\Tests\Fixtures\AppForTest;
+use PPI\Framework\Tests\Fixtures\AppForTest;
 
 /**
  * Class AppTest

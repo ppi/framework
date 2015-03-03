@@ -7,12 +7,12 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Smarty;
+namespace PPI\Framework\View\Smarty;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
-use PPI\Log\LoggerInterface;
-use PPI\View\GlobalVariables;
-use PPI\View\TemplateLocator;
+use PPI\Framework\Log\LoggerInterface;
+use PPI\Framework\View\GlobalVariables;
+use PPI\Framework\View\TemplateLocator;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
@@ -27,7 +27,7 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
 class SmartyEngine extends BaseSmartyEngine
 {
     /**
-     * @var \PPI\View\TemplateLocator
+     * @var \PPI\Framework\View\TemplateLocator
      */
     protected $locator;
 

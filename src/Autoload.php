@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI;
+namespace PPI\Framework;
 
 /**
  * The PPI Autoloader.
@@ -19,8 +19,8 @@ namespace PPI;
  *
  *  Example usage:
  *
- *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
- *  PPI\Autoload::register();
+ *  PPI\Framework\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
+ *  PPI\Framework\Autoload::register();
  *
  * @package    PPI
  * @subpackage Core

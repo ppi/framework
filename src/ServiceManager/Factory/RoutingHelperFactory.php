@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Router\RoutingHelper;
+use PPI\Framework\Router\RoutingHelper;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class RoutingHelperFactory implements FactoryInterface
      * Create and return the routing helper.
      *
      * @param  ServiceLocatorInterface           $serviceLocator
-     * @return \PPI\Module\Routing\RoutingHelper
+     * @return \PPI\Framework\Module\Routing\RoutingHelper
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

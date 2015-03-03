@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Http;
+namespace PPI\Framework\Http;
 
 /**
  * RequestInterface is the interface that all Request classes must implement.

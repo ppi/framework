@@ -7,10 +7,10 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Console;
+namespace PPI\Framework\Console;
 
-use PPI\AppInterface;
-use PPI\Module\AbstractModule;
+use PPI\Framework\AppInterface;
+use PPI\Framework\Module\AbstractModule;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -27,7 +27,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application extends BaseApplication
 {
     /**
-     * @var PPI\AppInterface
+     * @var PPI\Framework\AppInterface
      */
     protected $app;
 

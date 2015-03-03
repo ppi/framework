@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Log;
+namespace PPI\Framework\Log;
 
 use Monolog\Logger as BaseLogger;
 

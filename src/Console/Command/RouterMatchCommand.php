@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Console\Command;
+namespace PPI\Framework\Console\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\RouterMatchCommand as BaseRouterMatchCommand;
 
