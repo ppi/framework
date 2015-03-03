@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Console\Command;
+namespace PPI\Framework\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

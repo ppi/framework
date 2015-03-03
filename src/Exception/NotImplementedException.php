@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Exception;
+namespace PPI\Framework\Exception;
 
 /**
  * NotImplementedException.

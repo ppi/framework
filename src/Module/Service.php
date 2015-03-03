@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module;
+namespace PPI\Framework\Module;
 
 /**
  * The PPI Server class. These instances can be registered into the

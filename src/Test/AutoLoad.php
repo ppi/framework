@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Test;
+namespace PPI\Framework\Test;
 
 /**
  * Testing Autoloader
@@ -44,6 +44,6 @@ class AutoLoad
      */
     public static function register()
     {
-        spl_autoload_register('\PPI\Test\AutoLoad::autoload');
+        spl_autoload_register('\PPI\Framework\Test\AutoLoad::autoload');
     }
 }

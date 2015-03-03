@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 /**
  * RouterPluginManagerFactory.
@@ -16,5 +16,5 @@ namespace PPI\ServiceManager\Factory;
  */
 class RoutePluginManagerFactory extends AbstractPluginManagerFactory
 {
-    const PLUGIN_MANAGER_CLASS = 'PPI\Router\RoutePluginManager';
+    const PLUGIN_MANAGER_CLASS = 'PPI\Framework\Router\RoutePluginManager';
 }

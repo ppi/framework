@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Router;
+namespace PPI\Framework\Router;
 
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Exception\RuntimeException;

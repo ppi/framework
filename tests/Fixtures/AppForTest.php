@@ -6,13 +6,13 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
-namespace PPI\Tests\Fixtures;
+namespace PPI\Framework\Tests\Fixtures;
 
-use PPI\App;
+use PPI\Framework\App;
 
 /**
  * Class AppForTest
- * @package PPI\Fixtures
+ * @package PPI\Framework\Fixtures
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */

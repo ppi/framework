@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Stdlib\ArrayUtils;

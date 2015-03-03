@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Router\Loader;
+namespace PPI\Framework\Router\Loader;
 
 use Symfony\Component\Routing\Loader\YamlFileLoader as BaseYamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;

@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module;
+namespace PPI\Framework\Module;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;

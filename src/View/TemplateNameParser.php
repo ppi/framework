@@ -7,9 +7,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View;
+namespace PPI\Framework\View;
 
-use PPI\Module\ModuleManager;
+use PPI\Framework\Module\ModuleManager;
 use Symfony\Bundle\FrameworkBundle\Templating\TemplateNameParser as BaseTemplateNameParser;
 use Symfony\Component\Templating\TemplateReferenceInterface;
 

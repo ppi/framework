@@ -42,8 +42,8 @@
     },
     "autoload": {
         "psr-4": {
-            "PPI\\": "src/",
-            "PPI\\Tests\\": "tests"
+            "PPI\\Framework\\": "src/",
+            "PPI\\Framework\\Tests\\": "tests"
         }
     },
     "minimum-stability": "dev"

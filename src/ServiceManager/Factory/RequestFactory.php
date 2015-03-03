@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Http\Request;
+use PPI\Framework\Http\Request;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class RequestFactory implements FactoryInterface
      * Create and return a request instance.
      *
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return \PPI\Http\Request
+     * @return \PPI\Framework\Http\Request
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

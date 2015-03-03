@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Http;
+namespace PPI\Framework\Http;
 
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 

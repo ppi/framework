@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 use Symfony\Component\HttpFoundation\RequestStack;
 use Zend\ServiceManager\FactoryInterface;

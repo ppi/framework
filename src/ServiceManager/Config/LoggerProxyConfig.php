@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PPI\ServiceManager\Config;
+namespace PPI\Framework\ServiceManager\Config;
 
 class LoggerProxyConfig extends AbstractConfig
 {

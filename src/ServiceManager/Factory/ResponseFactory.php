@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Http\Response;
+use PPI\Framework\Http\Response;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class ResponseFactory implements FactoryInterface
      * Create and return a response instance.
      *
      * @param  ServiceLocatorInterface     $serviceLocator
-     * @return \PPI\Http\Response\Response
+     * @return \PPI\Framework\Http\Response\Response
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

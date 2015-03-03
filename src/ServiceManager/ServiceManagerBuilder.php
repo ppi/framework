@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager;
+namespace PPI\Framework\ServiceManager;
 
-use PPI\Log\LoggerProxy;
+use PPI\Framework\Log\LoggerProxy;
 
 /**
  * ServiceManager builder.
@@ -43,7 +43,7 @@ class ServiceManagerBuilder extends ServiceManager
             $this->config['framework'] = array();
         }
 
-        // Core parameters set by PPI\App
+        // Core parameters set by PPI\Framework\App
         $parametersBag = new ParameterBag($parameters);
         $parametersBag->resolve();
         $this->setService('ApplicationParameters', $parametersBag);

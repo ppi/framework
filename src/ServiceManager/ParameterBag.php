@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager;
+namespace PPI\Framework\ServiceManager;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag as BaseParameterBag;
 

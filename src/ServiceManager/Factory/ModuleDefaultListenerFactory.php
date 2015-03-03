@@ -7,10 +7,10 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Module\Listener\DefaultListenerAggregate;
-use PPI\Module\Listener\ListenerOptions;
+use PPI\Framework\Module\Listener\DefaultListenerAggregate;
+use PPI\Framework\Module\Listener\ListenerOptions;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

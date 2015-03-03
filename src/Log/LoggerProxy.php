@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PPI\Log;
+namespace PPI\Framework\Log;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 

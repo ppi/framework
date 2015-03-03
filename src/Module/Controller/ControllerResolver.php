@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Module\Controller;
+namespace PPI\Framework\Module\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;

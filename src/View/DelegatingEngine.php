@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View;
+namespace PPI\Framework\View;
 
 use Symfony\Component\Templating\DelegatingEngine as BaseDelegatingEngine;
 

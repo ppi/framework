@@ -9,7 +9,7 @@
  *
  */
 
-namespace PPI\View\Mustache\Loader;
+namespace PPI\Framework\View\Mustache\Loader;
 
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;

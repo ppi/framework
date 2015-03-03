@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Log;
+namespace PPI\Framework\Log;
 
 use Psr\Log\LoggerInterface as PsrLoggerInterface;
 

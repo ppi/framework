@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
 /**
  * Implemented by services that provide user-level configuration.

@@ -7,9 +7,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module\Listener;
+namespace PPI\Framework\Module\Listener;
 
-use PPI\ServiceManager\ServiceManager;
+use PPI\Framework\ServiceManager\ServiceManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
