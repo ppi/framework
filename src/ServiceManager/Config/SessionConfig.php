@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -21,8 +22,6 @@ use Zend\ServiceManager\ServiceManager;
  * ServiceManager configuration for the Session component.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class SessionConfig extends Config
 {
@@ -126,9 +125,10 @@ class SessionConfig extends Config
     }
 
     /**
-     * Check if a path is absolute
+     * Check if a path is absolute.
      *
-     * @param  string $file
+     * @param string $file
+     *
      * @return bool
      */
     public function isAbsolutePath($file)

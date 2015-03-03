@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -15,23 +16,19 @@ use PPI\Framework\View\Helper\RouterHelper;
 use PPI\Framework\View\Helper\SessionHelper;
 use PPI\Framework\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
 use PPI\Framework\View\Mustache\MustacheEngine;
-
 // Helpers
 use PPI\Framework\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
 use PPI\Framework\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
 use PPI\Framework\View\TemplateLocator;
 use PPI\Framework\View\TemplateNameParser;
-
 // Mustache
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
 use Symfony\Component\Templating\Helper\AssetsHelper;
-
 // Twig
 
 // Smarty
 use Symfony\Component\Templating\Helper\SlotsHelper;
 use Symfony\Component\Templating\PhpEngine;
-
 // Service Manager
 use Zend\ServiceManager\ServiceManager;
 
@@ -39,8 +36,6 @@ use Zend\ServiceManager\ServiceManager;
  * ServiceManager configuration for the Templating component.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class TemplatingConfig extends AbstractConfig
 {
@@ -49,9 +44,10 @@ class TemplatingConfig extends AbstractConfig
      * - PHP
      * - Twig
      * - Smarty
-     * - Mustache
+     * - Mustache.
      *
-     * @param  ServiceManager    $serviceManager
+     * @param ServiceManager $serviceManager
+     *
      * @throws \RuntimeException
      */
     public function configureServiceManager(ServiceManager $serviceManager)

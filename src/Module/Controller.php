@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -14,16 +15,14 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * The base PPI controller class
+ * The base PPI controller class.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class Controller implements ServiceLocatorAwareInterface
 {
     /**
-     * Service Locator
+     * Service Locator.
      *
      * @var null|object
      */
@@ -37,21 +36,21 @@ class Controller implements ServiceLocatorAwareInterface
     protected $isCache = array();
 
     /**
-     * The options for this controller
+     * The options for this controller.
      *
      * @var array
      */
     protected $options = array();
 
     /**
-     * Controller helpers
+     * Controller helpers.
      *
      * @var array
      */
     protected $helpers = array();
 
     /**
-     * Get the request object
+     * Get the request object.
      *
      * @return object
      */
@@ -61,7 +60,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the response object
+     * Get the response object.
      *
      * @return object
      */
@@ -71,13 +70,13 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Obtain a controller helper by its key name
+     * Obtain a controller helper by its key name.
      *
      * @param string $helperName
      *
-     * @return mixed
-     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     protected function helper($helperName)
     {
@@ -89,12 +88,10 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Set a helper object
+     * Set a helper object.
      *
      * @param string $helperName
      * @param object $helper
-     *
-     * @return void
      */
     public function setHelper($helperName, $helper)
     {
@@ -172,7 +169,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get/Set a session value
+     * Get/Set a session value.
      *
      * @param string     $key
      * @param null|mixed $default If this is not null, it enters setter mode
@@ -185,7 +182,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the server object
+     * Shortcut for getting the server object.
      *
      * @return object
      */
@@ -195,7 +192,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the files object
+     * Shortcut for getting the files object.
      *
      * @return object
      */
@@ -205,7 +202,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the cookie object
+     * Shortcut for getting the cookie object.
      *
      * @return object
      */
@@ -215,7 +212,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the query string object
+     * Shortcut for getting the query string object.
      *
      * @return object
      */
@@ -225,7 +222,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the post object
+     * Shortcut for getting the post object.
      *
      * @return object
      */
@@ -235,7 +232,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Shortcut for getting the session object
+     * Shortcut for getting the session object.
      *
      * @return mixed
      */
@@ -249,9 +246,9 @@ class Controller implements ServiceLocatorAwareInterface
      *
      * @param string $key
      *
-     * @return boolean
-     *
      * @throws InvalidArgumentException
+     *
+     * @return boolean
      */
     protected function is($key)
     {
@@ -290,7 +287,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the remote users ip address
+     * Get the remote users ip address.
      *
      * @return string
      */
@@ -300,7 +297,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get a routing param's value
+     * Get a routing param's value.
      *
      * @param string $param
      *
@@ -312,7 +309,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the remote users user agent
+     * Get the remote users user agent.
      *
      * @return string
      */
@@ -322,7 +319,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Set service locator
+     * Set service locator.
      *
      * @param ServiceLocatorInterface $serviceLocator
      */
@@ -332,7 +329,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get service locator
+     * Get service locator.
      *
      * @return ServiceLocatorInterface
      */
@@ -342,7 +339,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get a registered service
+     * Get a registered service.
      *
      * @param string $service
      *
@@ -354,7 +351,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the data source service
+     * Get the data source service.
      *
      * @return mixed
      */
@@ -364,7 +361,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Render a template
+     * Render a template.
      *
      * @param string $template The template to render
      * @param array  $params   The params to pass to the renderer
@@ -387,12 +384,10 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Set Flash Message
+     * Set Flash Message.
      *
      * @param string $flashType The flash type
      * @param string $message   The flash message
-     *
-     * @return void
      */
     protected function setFlash($flashType, $message)
     {
@@ -400,12 +395,10 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Create a RedirectResponse object with your $url and $statusCode
+     * Create a RedirectResponse object with your $url and $statusCode.
      *
      * @param string  $url
      * @param integer $statusCode
-     *
-     * @return void
      */
     protected function redirect($url, $statusCode = 302)
     {
@@ -417,8 +410,6 @@ class Controller implements ServiceLocatorAwareInterface
      * You just specify a route name and it goes there.
      *
      * @param string $route
-     *
-     * @return void
      */
     protected function redirectToRoute($route, $parameters = array(), $absolute = false)
     {
@@ -426,7 +417,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Generate a URL from the specified route name
+     * Generate a URL from the specified route name.
      *
      * @param string  $route
      * @param array   $parameters
@@ -440,7 +431,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the app's global configuration
+     * Get the app's global configuration.
      *
      * @return mixed
      */
@@ -450,7 +441,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Set the options for this controller
+     * Set the options for this controller.
      *
      * @param array $options
      *
@@ -464,7 +455,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get an option from the controller
+     * Get an option from the controller.
      *
      * @param string $option  The option name
      * @param null   $default The default value if the option does not exist
@@ -477,7 +468,7 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Get the environment type, defaulting to 'development' if it has not been set
+     * Get the environment type, defaulting to 'development' if it has not been set.
      *
      * @return string
      */
@@ -487,12 +478,10 @@ class Controller implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Add a template global variable
+     * Add a template global variable.
      *
      * @param string $param
      * @param mixed  $value
-     *
-     * @return void
      */
     protected function addTemplateGlobal($param, $value)
     {

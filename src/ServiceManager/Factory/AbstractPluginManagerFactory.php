@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -27,7 +28,8 @@ abstract class AbstractPluginManagerFactory implements FactoryInterface
      * Classes that extend this should provide a valid class for
      * the PLUGIN_MANGER_CLASS constant.
      *
-     * @param  ServiceLocatorInterface                    $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return \Zend\ServiceManager\AbstractPluginManager
      */
     public function createService(ServiceLocatorInterface $serviceLocator)

@@ -2,11 +2,10 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @package     Templating
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
- * @link        http://www.ppi.io
  *
+ * @link        http://www.ppi.io
  */
 
 namespace PPI\Framework\View\Mustache\Loader;

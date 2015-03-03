@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -12,10 +13,7 @@ namespace PPI\Framework\View\Twig\Extension;
 use Symfony\Component\Templating\Helper\AssetsHelper;
 
 /**
- * The PPI Twig AssetsExtension
- *
- * @package    PPI
- * @subpackage Templating
+ * The PPI Twig AssetsExtension.
  */
 class AssetsExtension extends \Twig_Extension
 {
@@ -30,8 +28,6 @@ class AssetsExtension extends \Twig_Extension
      * @todo Add inline documentation.
      *
      * @param AssetsHelper $assetsHelper
-     *
-     * @return void
      */
     public function __construct(AssetsHelper $assetsHelper)
     {

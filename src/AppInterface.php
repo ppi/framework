@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -16,8 +17,6 @@ namespace PPI\Framework;
  * in the bootup process.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Core
  *
  * @api
  */
@@ -69,7 +68,7 @@ interface AppInterface extends \Serializable
     public function getRootDir();
 
     /**
-     * Get the locator object
+     * Get the locator object.
      *
      * @return \Zend\ServiceManager\ServiceLocatorInterface
      *

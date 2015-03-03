@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -18,8 +19,6 @@ use Symfony\Component\Routing\Router as BaseRouter;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Router
  */
 class Router extends BaseRouter implements RouterInterface
 {
@@ -30,8 +29,6 @@ class Router extends BaseRouter implements RouterInterface
      * @param type            $collection
      * @param array           $options
      * @param LoggerInterface $logger         A logger instance
-     *
-     * @return void
      */
     public function __construct(RequestContext $requestContext, $collection, array $options = array(), LoggerInterface $logger = null)
     {
@@ -43,11 +40,9 @@ class Router extends BaseRouter implements RouterInterface
     }
 
     /**
-     * Set the route collection
+     * Set the route collection.
      *
      * @param type $collection
-     *
-     * @return void
      */
     public function setRouteCollection($collection)
     {
@@ -55,7 +50,7 @@ class Router extends BaseRouter implements RouterInterface
     }
 
     /**
-     * Has the cache matcher class been generated
+     * Has the cache matcher class been generated.
      *
      * @return boolean
      */
@@ -70,7 +65,7 @@ class Router extends BaseRouter implements RouterInterface
     }
 
     /**
-     * Has the cache url generator class been generated
+     * Has the cache url generator class been generated.
      *
      * @return boolean
      */
@@ -85,9 +80,7 @@ class Router extends BaseRouter implements RouterInterface
     }
 
     /**
-     * Warm up the matcher and generator parts of the router
-     *
-     * @return void
+     * Warm up the matcher and generator parts of the router.
      */
     public function warmUp()
     {

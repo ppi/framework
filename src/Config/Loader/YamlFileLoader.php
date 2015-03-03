@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -17,8 +18,6 @@ use Zend\Stdlib\ArrayUtils;
  * YamlFileLoader loads app configuration from a YAML file.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class YamlFileLoader extends FileLoader
 {
@@ -27,10 +26,12 @@ class YamlFileLoader extends FileLoader
     /**
      * Loads a Yaml file.
      *
-     * @param  mixed                     $file The resource
-     * @param  string                    $type The resource type
-     * @return array                     Array with configuration
+     * @param mixed  $file The resource
+     * @param string $type The resource type
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return array Array with configuration
      */
     public function load($file, $type = null)
     {
@@ -72,9 +73,11 @@ class YamlFileLoader extends FileLoader
     /**
      * Loads a YAML file.
      *
-     * @param  string                   $file
-     * @return array                    The file content
+     * @param string $file
+     *
      * @throws InvalidArgumentException
+     *
+     * @return array The file content
      */
     protected function loadFile($file)
     {
@@ -96,8 +99,9 @@ class YamlFileLoader extends FileLoader
     /**
      * Parses all imports. We support this to make Symfony users happy.
      *
-     * @param  array  $content
-     * @param  string $file
+     * @param array  $content
+     * @param string $file
+     *
      * @return array
      */
     protected function parseImports($content, $file)
@@ -119,10 +123,12 @@ class YamlFileLoader extends FileLoader
 
     /**
      * Process the array for @include. We support this to make Zend users happy.
+     *
      * @see http://framework.zend.com/manual/2.0/en/modules/zend.config.reader.html#zend-config-reader-yaml
      *
-     * @param  array  $content
-     * @param  string $file
+     * @param array  $content
+     * @param string $file
+     *
      * @return array
      */
     protected function parseIncludes(array $content, $file)

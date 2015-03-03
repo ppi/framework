@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -21,8 +22,6 @@ use Zend\Stdlib\ArrayUtils;
  * The base PPI module class.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 abstract class AbstractModule implements ModuleInterface, ConfigProviderInterface
 {
@@ -73,21 +72,21 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     protected $controller = null;
 
     /**
-     * Controller Name
+     * Controller Name.
      *
      * @var null
      */
     protected $controllerName = null;
 
     /**
-     * Action Name
+     * Action Name.
      *
      * @var null
      */
     protected $actionName = null;
 
     /**
-     * Load up our routes
+     * Load up our routes.
      *
      * @param type $path
      *
@@ -121,7 +120,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set services for our module
+     * Set services for our module.
      *
      * @param string $services
      *
@@ -135,7 +134,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get the services
+     * Get the services.
      *
      * @return array
      */
@@ -145,7 +144,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get a particular service
+     * Get a particular service.
      *
      * @param string $serviceName
      *
@@ -157,7 +156,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get the controller
+     * Get the controller.
      *
      * @return object
      */
@@ -167,7 +166,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set the controller
+     * Set the controller.
      *
      * @param object $controller
      *
@@ -181,7 +180,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Check if a controller has been set
+     * Check if a controller has been set.
      *
      * @return boolean
      */
@@ -219,11 +218,11 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Dispatch process
-     *
-     * @return mixed
+     * Dispatch process.
      *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function dispatch()
     {
@@ -253,8 +252,9 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Loads a configuration file (PHP, YAML) or PHP array.
      *
-     * @param  string      $resource The resource
-     * @param  null|string $type     The resource type
+     * @param string      $resource The resource
+     * @param null|string $type     The resource type
+     *
      * @return array
      */
     public function loadConfig($resource, $type = null)
@@ -265,7 +265,8 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Loads and merges the configuration.
      *
-     * @param  mixed $resources
+     * @param mixed $resources
+     *
      * @return array
      */
     public function mergeConfig($resources)
@@ -279,7 +280,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set the module name
+     * Set the module name.
      *
      * @param string $Name
      *

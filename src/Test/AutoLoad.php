@@ -4,23 +4,24 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
 namespace PPI\Framework\Test;
 
 /**
- * Testing Autoloader
+ * Testing Autoloader.
  */
 class AutoLoad
 {
     /**
-     * Will autoload using PSR-0 standards
+     * Will autoload using PSR-0 standards.
      *
      * @link http://phpmaster.com/autoloading-and-the-psr-0-standard/
      * @link https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
-     * @param  string $className
-     * @return void
+     *
+     * @param string $className
      */
     public static function autoload($className)
     {
@@ -38,9 +39,7 @@ class AutoLoad
     }
 
     /**
-     * Will register the method with spl_autoload_register
-     *
-     * @return void
+     * Will register the method with spl_autoload_register.
      */
     public static function register()
     {
