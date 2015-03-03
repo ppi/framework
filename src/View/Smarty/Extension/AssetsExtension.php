@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -17,13 +18,11 @@ use Symfony\Component\Templating\Helper\AssetsHelper;
  * stylesheets, etc.).
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Templating
  */
 class AssetsExtension extends BaseAssetsExtension
 {
     /**
-     * A key/value pair of functions to remap to help comply with PSR standards
+     * A key/value pair of functions to remap to help comply with PSR standards.
      *
      * @var array
      */
@@ -36,8 +35,6 @@ class AssetsExtension extends BaseAssetsExtension
      * Constructor.
      *
      * @param AssetsHelper $assetsHelper
-     *
-     * @return void
      */
     public function __construct(AssetsHelper $assetsHelper)
     {
@@ -50,7 +47,7 @@ class AssetsExtension extends BaseAssetsExtension
     }
 
     /**
-     * The magic call method triggers before throwing an exception
+     * The magic call method triggers before throwing an exception.
      *
      * @param string $method The method you are looking for
      * @param array  $params The params you wish to pass to your method
@@ -104,7 +101,7 @@ class AssetsExtension extends BaseAssetsExtension
     }
 
     /**
-     * Returns the public path of an asset
+     * Returns the public path of an asset.
      *
      * Absolute paths (i.e. http://...) are returned unmodified.
      *

@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -22,12 +23,9 @@ use Symfony\Component\Routing\Router;
  * This class sets various app settings, and allows you to override classes used in the bootup process.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Core
  */
 class MicroApp extends BaseApp
 {
-
     protected $router;
     protected $routes = array();
     protected $routeCollection;

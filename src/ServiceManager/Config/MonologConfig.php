@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -15,8 +16,6 @@ use Zend\ServiceManager\ServiceManager;
  * ServiceManager configuration for Monolog services.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class MonologConfig extends AbstractConfig
 {
@@ -24,6 +23,7 @@ class MonologConfig extends AbstractConfig
 
     /**
      * Create and return the logger.
+     *
      * @see https://github.com/symfony/MonologBundle/blob/master/DependencyInjection/MonologExtension.php
      *
      * {@inheritdoc}

@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -18,8 +19,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag as BaseParam
  * Zend\Stdlib\AbstractOptions or Symfony\Component\OptionsResolver\Options.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAggregate, \Countable
 {
@@ -74,7 +73,8 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
     /**
      * Replaces parameter placeholders (%name%) by their values in every string element of the $array.
      *
-     * @param  array $data
+     * @param array $data
+     *
      * @return array
      */
     public function resolveArray(array $data)
@@ -90,7 +90,7 @@ class ParameterBag extends BaseParameterBag implements \ArrayAccess, \IteratorAg
     }
 
     /**
-     * Flattens an nested array of parameters
+     * Flattens an nested array of parameters.
      *
      * The scheme used is:
      *   'key' => array('key2' => array('key3' => 'value'))

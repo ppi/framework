@@ -4,6 +4,7 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
@@ -15,8 +16,6 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
  * A simple implementation of ServiceLocatorAwareInterface.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
 {
@@ -31,8 +30,6 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
      * Set serviceManager instance.
      *
      * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return void
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -40,7 +37,7 @@ abstract class ServiceLocatorAware implements ServiceLocatorAwareInterface
     }
 
     /**
-     * Retrieve serviceManager instance
+     * Retrieve serviceManager instance.
      *
      * @return ServiceLocatorInterface
      */

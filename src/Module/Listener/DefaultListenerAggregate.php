@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -27,39 +28,34 @@ $x = 0;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- *
- * @package    PPI
- * @subpackage Module
  */
 class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 {
     /**
-     * The routes registered for our
+     * The routes registered for our.
      *
      * @var array
      */
     protected $routes = array();
 
     /**
-     * Services for the ServiceLocator
+     * Services for the ServiceLocator.
      *
      * @var array
      */
     protected $services = array();
 
     /**
-     * The Service Manager
+     * The Service Manager.
      *
      * @var type
      */
     protected $serviceManager;
 
     /**
-     * Set the service manager
+     * Set the service manager.
      *
      * @param ServiceManager $sm
-     *
-     * @return void
      */
     public function setServiceManager(ServiceManager $sm)
     {
@@ -105,7 +101,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Event callback for 'routesTrigger'
+     * Event callback for 'routesTrigger'.
      *
      * @param ModuleEvent $e
      *
@@ -123,7 +119,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Event callback for 'initServicesTrigger'
+     * Event callback for 'initServicesTrigger'.
      *
      * @param ModuleEvent $e
      *
@@ -144,7 +140,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Get the registered routes
+     * Get the registered routes.
      *
      * @return array
      */
@@ -154,7 +150,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Get the registered services
+     * Get the registered services.
      *
      * @return mixed
      */

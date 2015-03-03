@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -24,13 +25,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Core
  */
 class App implements AppInterface
 {
     /**
      * Version string.
+     *
      * @var string
      */
     const VERSION = '2.1.0-DEV';
@@ -47,6 +47,7 @@ class App implements AppInterface
 
     /**
      * Application environment: "dev|development" vs "prod|production".
+     *
      * @var string
      */
     protected $environment;
@@ -58,18 +59,21 @@ class App implements AppInterface
 
     /**
      * Unix timestamp with microseconds.
+     *
      * @var float
      */
     protected $startTime;
 
     /**
      * Configuration loader.
+     *
      * @var \PPI\Framework\Config\ConfigManager
      */
     protected $configManager;
 
     /**
      * The Module Manager.
+     *
      * @var \Zend\ModuleManager\ModuleManager
      */
     protected $moduleManager;
@@ -86,12 +90,14 @@ class App implements AppInterface
 
     /**
      * The request object.
+     *
      * @var null
      */
     protected $request;
 
     /**
      * The response object.
+     *
      * @var null
      */
     protected $response;
@@ -108,12 +114,14 @@ class App implements AppInterface
 
     /**
      * Path to the application root dir aka the "app" directory.
+     *
      * @var null|string
      */
     protected $rootDir;
 
     /**
      * Service Manager.
+     *
      * @var \PPI\Framework\ServiceManager\ServiceManager
      */
     protected $serviceManager;
@@ -144,8 +152,10 @@ class App implements AppInterface
      *
      * @param $option
      * @param $value
-     * @return $this
+     *
      * @throws \RuntimeException
+     *
+     * @return $this
      */
     public function setOption($option, $value)
     {
@@ -168,8 +178,10 @@ class App implements AppInterface
      * Get an App option.
      *
      * @param $option
-     * @return string
+     *
      * @throws \RuntimeException
+     *
+     * @return string
      */
     public function getOption($option)
     {
@@ -233,7 +245,8 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
-     * @param  Request|null $request
+     * @param Request|null $request
+     *
      * @return $this
      */
     public function run(Request $request = null)
@@ -372,6 +385,7 @@ class App implements AppInterface
 
     /**
      * @param $env
+     *
      * @return bool
      */
     public function isEnvironment($env)
@@ -414,7 +428,7 @@ class App implements AppInterface
     }
 
     /**
-     * Get the service manager
+     * Get the service manager.
      *
      * @return ServiceManager\ServiceManager
      */
@@ -464,11 +478,11 @@ class App implements AppInterface
      * @param string  $dir   A directory where to look for the resource first
      * @param Boolean $first Whether to return the first path or paths for all matching bundles
      *
-     * @return string|array The absolute path of the resource or an array if $first is false
-     *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe
      * @throws \RuntimeException         if a custom resource is hidden by a resource in a derived bundle
+     *
+     * @return string|array The absolute path of the resource or an array if $first is false
      */
     public function locateResource($name, $dir = null, $first = true)
     {
@@ -476,7 +490,7 @@ class App implements AppInterface
     }
 
     /**
-     * Get the request object
+     * Get the request object.
      *
      * @return object
      */
@@ -490,7 +504,7 @@ class App implements AppInterface
     }
 
     /**
-     * Get the response object
+     * Get the response object.
      *
      * @return object
      */
@@ -570,8 +584,9 @@ class App implements AppInterface
      * Loads a configuration file or PHP array.
      *
      * @param  $resource
-     * @param  null $type
-     * @return App  The current instance
+     * @param null $type
+     *
+     * @return App The current instance
      */
     public function loadConfig($resource, $type = null)
     {
@@ -583,8 +598,9 @@ class App implements AppInterface
     /**
      * Returns the application configuration.
      *
-     * @return array|object
      * @throws \RuntimeException
+     *
+     * @return array|object
      */
     public function getConfig()
     {
@@ -705,10 +721,9 @@ class App implements AppInterface
     /**
      * Logs with an arbitrary level.
      *
-     * @param  mixed  $level
-     * @param  string $message
-     * @param  array  $context
-     * @return null
+     * @param mixed  $level
+     * @param string $message
+     * @param array  $context
      */
     protected function log($level, $message, array $context = array())
     {
