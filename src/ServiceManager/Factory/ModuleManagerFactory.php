@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Module\ModuleManager;
+use PPI\Framework\Module\ModuleManager;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -40,7 +40,7 @@ class ModuleManagerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         if (!$serviceLocator->has('ServiceListener')) {
-            $serviceLocator->setFactory('ServiceListener', 'PPI\ServiceManager\Factory\ServiceListenerFactory');
+            $serviceLocator->setFactory('ServiceListener', 'PPI\Framework\ServiceManager\Factory\ServiceListenerFactory');
         }
 
         $config           = $serviceLocator->get('ApplicationConfig');

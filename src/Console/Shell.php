@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Console;
+namespace PPI\Framework\Console;
 
 use Symfony\Component\Console\Shell as BaseShell;
 

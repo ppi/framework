@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Config;
+namespace PPI\Framework\ServiceManager\Config;
 
 use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -36,10 +36,10 @@ class ServiceManagerConfig implements ConfigInterface
      * @var array
      */
     protected $factories = array(
-        'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
-        'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
-        'ModuleDefaultListener' => 'PPI\ServiceManager\Factory\ModuleDefaultListenerFactory',
-        'ModuleManager'         => 'PPI\ServiceManager\Factory\ModuleManagerFactory',
+        'Config'                => 'PPI\Framework\ServiceManager\Factory\ConfigFactory',
+        'EventManager'          => 'PPI\Framework\ServiceManager\Factory\EventManagerFactory',
+        'ModuleDefaultListener' => 'PPI\Framework\ServiceManager\Factory\ModuleDefaultListenerFactory',
+        'ModuleManager'         => 'PPI\Framework\ServiceManager\Factory\ModuleManagerFactory',
     );
 
     /**

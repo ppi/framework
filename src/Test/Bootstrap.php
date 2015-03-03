@@ -7,12 +7,12 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Test;
+namespace PPI\Framework\Test;
 
 require_once __DIR__ . '/../Autoload.php';
 require_once __DIR__ . '/AutoLoad.php';
 
-\PPI\Autoload::config(array(
+\PPI\Framework\Autoload::config(array(
     'loader'    => new Autoload(),
 ));
-\PPI\Autoload::register();
+\PPI\Framework\Autoload::register();

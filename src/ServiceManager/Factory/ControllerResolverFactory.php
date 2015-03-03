@@ -7,9 +7,9 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Module\Controller\ControllerResolver;
+use PPI\Framework\Module\Controller\ControllerResolver;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +26,7 @@ class ControllerResolverFactory implements FactoryInterface
      * Create and return a ControllerResolver instance.
      *
      * @param  ServiceLocatorInterface                   $serviceLocator
-     * @return \PPI\Module\Controller\ControllerResolver
+     * @return \PPI\Framework\Module\Controller\ControllerResolver
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

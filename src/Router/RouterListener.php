@@ -7,9 +7,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Router;
+namespace PPI\Framework\Router;
 
-use PPI\Http\RequestInterface;
+use PPI\Framework\Http\RequestInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

@@ -7,10 +7,10 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Tests\Exception;
+namespace PPI\Framework\Tests\Exception;
 
-use PPI\Exception\Log;
-use PPI\Test\Unit;
+use PPI\Framework\Exception\Log;
+use PPI\Framework\Test\Unit;
 
 class LogTest extends Unit
 {

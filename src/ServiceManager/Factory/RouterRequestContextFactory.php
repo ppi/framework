@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 use Symfony\Component\Routing\RequestContext;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -25,7 +25,7 @@ class RouterRequestContextFactory extends AbstractFactory
      * Create and return the router.
      *
      * @param  ServiceLocatorInterface    $serviceLocator
-     * @return \PPI\Router\RouterListener
+     * @return \PPI\Framework\Router\RouterListener
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Router;
+namespace PPI\Framework\Router;
 
 /**
  * The routing helper for the controller.

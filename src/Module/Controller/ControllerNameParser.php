@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Module\Controller;
+namespace PPI\Framework\Module\Controller;
 
 use Zend\ModuleManager\ModuleManagerInterface;
 

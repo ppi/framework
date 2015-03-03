@@ -7,7 +7,7 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Config;
+namespace PPI\Framework\ServiceManager\Config;
 
 use Zend\ServiceManager\ServiceManager;
 
@@ -32,7 +32,7 @@ class MonologConfig extends AbstractConfig
     {
         $configs               = $serviceManager->get('Config');
         $configs['parameters'] = array_merge(array(
-            "monolog.logger.class"                                                  => "PPI\Log\Logger",
+            "monolog.logger.class"                                                  => "PPI\Framework\Log\Logger",
             "monolog.gelf.publisher.class"                                          => "Gelf\MessagePublisher",
             "monolog.handler.stream.class"                                          => "Monolog\Handler\StreamHandler",
             "monolog.handler.group.class"                                           => "Monolog\Handler\GroupHandler",

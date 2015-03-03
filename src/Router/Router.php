@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Router;
+namespace PPI\Framework\Router;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\RequestContext;

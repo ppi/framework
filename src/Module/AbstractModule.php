@@ -7,11 +7,11 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module;
+namespace PPI\Framework\Module;
 
-use PPI\Config\ConfigLoader;
-use PPI\Console\Application;
-use PPI\Router\Loader\YamlFileLoader;
+use PPI\Framework\Config\ConfigLoader;
+use PPI\Framework\Console\Application;
+use PPI\Framework\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -47,7 +47,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Configuration loader.
      *
-     * @var null|\PPI\Config\ConfigLoader
+     * @var null|\PPI\Framework\Config\ConfigLoader
      */
     protected $configLoader = null;
 
@@ -356,7 +356,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * Override this method if your module commands do not follow the conventions:
      *
      * * Commands are in the 'Command' sub-directory
-     * * Commands extend PPI\Console\Command\AbstractCommand
+     * * Commands extend PPI\Framework\Console\Command\AbstractCommand
      *
      * @param Application $application An Application instance
      */
@@ -376,7 +376,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
                 $ns .= '\\' . strtr($relativePath, '/', '\\');
             }
             $r = new \ReflectionClass($ns . '\\' . $file->getBasename('.php'));
-            if ($r->isSubclassOf('PPI\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
+            if ($r->isSubclassOf('PPI\Framework\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
                 $application->add($r->newInstance());
             }
         }
@@ -385,7 +385,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Returns a ConfigLoader instance.
      *
-     * @return \PPI\Config\ConfigLoader
+     * @return \PPI\Framework\Config\ConfigLoader
      */
     protected function getConfigLoader()
     {

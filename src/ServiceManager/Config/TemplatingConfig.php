@@ -7,20 +7,20 @@
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Config;
+namespace PPI\Framework\ServiceManager\Config;
 
-use PPI\View\DelegatingEngine;
-use PPI\View\GlobalVariables;
-use PPI\View\Helper\RouterHelper;
-use PPI\View\Helper\SessionHelper;
-use PPI\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
-use PPI\View\Mustache\MustacheEngine;
+use PPI\Framework\View\DelegatingEngine;
+use PPI\Framework\View\GlobalVariables;
+use PPI\Framework\View\Helper\RouterHelper;
+use PPI\Framework\View\Helper\SessionHelper;
+use PPI\Framework\View\Mustache\Loader\FileSystemLoader as MustacheFileSystemLoader;
+use PPI\Framework\View\Mustache\MustacheEngine;
 
 // Helpers
-use PPI\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
-use PPI\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
-use PPI\View\TemplateLocator;
-use PPI\View\TemplateNameParser;
+use PPI\Framework\View\Smarty\Extension\AssetsExtension as SmartyAssetsExtension;
+use PPI\Framework\View\Smarty\Extension\RouterExtension as SmartyRouterExtension;
+use PPI\Framework\View\TemplateLocator;
+use PPI\Framework\View\TemplateNameParser;
 
 // Mustache
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\FilesystemLoader;
@@ -143,20 +143,20 @@ class TemplatingConfig extends AbstractConfig
         $serviceManager->setFactory('templating.engine.twig', function ($serviceManager) {
 
             if (!class_exists('Twig_Environment')) {
-                throw new \Exception('PPI\TwigModule not found. Composer require: ppi/twig-module');
+                throw new \Exception('PPI\Framework\TwigModule not found. Composer require: ppi/twig-module');
             }
 
             $twigEnvironment = new \Twig_Environment(
-                new \PPI\View\Twig\Loader\FileSystemLoader(
+                new \PPI\Framework\View\Twig\Loader\FileSystemLoader(
                     $serviceManager->get('templating.locator'),
                     $serviceManager->get('templating.name_parser'))
             );
 
             // Add some twig extension
-            $twigEnvironment->addExtension(new \PPI\View\Twig\Extension\AssetsExtension($serviceManager->get('templating.helper.assets')));
-            $twigEnvironment->addExtension(new \PPI\View\Twig\Extension\RouterExtension($serviceManager->get('router')));
+            $twigEnvironment->addExtension(new \PPI\Framework\View\Twig\Extension\AssetsExtension($serviceManager->get('templating.helper.assets')));
+            $twigEnvironment->addExtension(new \PPI\Framework\View\Twig\Extension\RouterExtension($serviceManager->get('router')));
 
-            return new \PPI\View\Twig\TwigEngine($twigEnvironment, $serviceManager->get('templating.name_parser'),
+            return new \PPI\Framework\View\Twig\TwigEngine($twigEnvironment, $serviceManager->get('templating.name_parser'),
                 $serviceManager->get('templating.locator'), $serviceManager->get('templating.globals'));
         });
 
@@ -166,12 +166,12 @@ class TemplatingConfig extends AbstractConfig
         $serviceManager->setFactory('templating.engine.smarty', function ($serviceManager) use ($appCacheDir) {
 
             if (!class_exists('NoiseLabs\Bundle\SmartyBundle\SmartyEngine')) {
-                throw new \Exception('PPI\SmartyModule not found. Composer require: ppi/smarty-module');
+                throw new \Exception('PPI\Framework\SmartyModule not found. Composer require: ppi/smarty-module');
             }
 
             $cacheDir = $appCacheDir . DIRECTORY_SEPARATOR . 'smarty';
 
-            $smartyEngine = new \PPI\View\Smarty\SmartyEngine(
+            $smartyEngine = new \PPI\Framework\View\Smarty\SmartyEngine(
                 new \Smarty(),
                 $serviceManager->get('templating.locator'),
                 $serviceManager->get('templating.name_parser'),
@@ -195,7 +195,7 @@ class TemplatingConfig extends AbstractConfig
         $serviceManager->setFactory('templating.engine.mustache', function ($serviceManager, $appCacheDir) {
 
             if (!class_exists('Mustache_Engine')) {
-                throw new \Exception('PPI\MustacheModule not found. Composer require: ppi/mustache-module');
+                throw new \Exception('PPI\Framework\MustacheModule not found. Composer require: ppi/mustache-module');
             }
 
             $rawMustacheEngine = new \Mustache_Engine(array(

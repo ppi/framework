@@ -7,7 +7,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Http;
+namespace PPI\Framework\Http;
 
 /**
  * ResponseInterface is the interface that all Response classes must implement.
