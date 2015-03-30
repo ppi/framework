@@ -28,6 +28,7 @@ composer.lock
 *.vi
 *~
 *.sass-cache
+*.php_cs.cache
 
 ### OS or Editor folders
 
