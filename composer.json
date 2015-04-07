@@ -38,12 +38,13 @@
         "zendframework/zend-loader": "2.3.*@dev"
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "~1.5"
+        "fabpot/php-cs-fixer": "~1.5",
+        "phpunit/phpunit": "4.6.*"
     },
     "autoload": {
         "psr-4": {
             "PPI\\Framework\\": "src/",
-            "PPI\\Framework\\Tests\\": "tests"
+            "PPI\\FrameworkTest\\": "tests/"
         }
     },
     "minimum-stability": "dev"
