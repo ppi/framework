@@ -8,9 +8,9 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI;
+namespace PPI\FrameworkTest;
 
-use PPI\Framework\Tests\Fixtures\AppForTest;
+use PPI\FrameworkTest\Fixtures\AppForTest;
 
 /**
  * Class AppTest.

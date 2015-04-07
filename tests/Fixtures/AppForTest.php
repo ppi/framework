@@ -4,11 +4,10 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
- *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Framework\Tests\Fixtures;
+namespace PPI\FrameworkTest\Fixtures;
 
 use PPI\Framework\App;
 
