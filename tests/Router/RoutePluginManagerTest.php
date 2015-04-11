@@ -29,6 +29,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
      * @var ServiceManager
      */
     protected $serviceManager;
+
     /**
      * @var RoutePluginManagerForTest
      */
