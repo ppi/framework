@@ -2,7 +2,7 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
+ * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
  *
  * @link       http://www.ppi.io
@@ -10,8 +10,8 @@
 
 namespace PPI\Framework\Router;
 
-use PPI\Framework\Http\RequestInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException as MethodNotAllowedException;
@@ -31,9 +31,24 @@ use Symfony\Component\Routing\RequestContextAwareInterface;
  */
 class RouterListener
 {
+    /**
+     * @var UrlMatcherInterface|RequestMatcherInterface
+     */
     protected $matcher;
+
+    /**
+     * @var RequestContext
+     */
     protected $context;
+
+    /**
+     * @var LoggerInterface|null
+     */
     protected $logger;
+
+    /**
+     * @var RequestStack|null
+     */
     protected $requestStack;
 
     /**
@@ -44,7 +59,8 @@ class RouterListener
      * @param LoggerInterface|null                        $logger       The logger
      * @param RequestStack|null                           $requestStack A RequestStack instance
      */
-    public function __construct($matcher, RequestContext $context = null, LoggerInterface $logger = null, RequestStack $requestStack = null)
+    public function __construct($matcher, RequestContext $context = null, LoggerInterface $logger = null,
+                                RequestStack $requestStack = null)
     {
         if (!$matcher instanceof UrlMatcherInterface && !$matcher instanceof RequestMatcherInterface) {
             throw new \InvalidArgumentException('Matcher must either implement UrlMatcherInterface or RequestMatcherInterface.');
@@ -60,19 +76,23 @@ class RouterListener
         $this->logger       = $logger;
     }
 
-    public function match(RequestInterface $request)
+    /**
+     * @param Request $request
+     */
+    public function match(Request $request)
     {
-        // initialize the context that is also used by the generator (assuming matcher and generator share the same context instance)
+        // Initialize the context that is also used by the generator (assuming matcher and generator share the same
+        // context instance).
         $this->context->fromRequest($request);
 
         if ($request->attributes->has('_controller')) {
-            // routing is already done
+            // Routing is already done.
             return;
         }
 
-        // add attributes based on the request (routing)
+        // Add attributes based on the request (routing).
         try {
-            // matching a request is more powerful than matching a URL path + context, so try that first
+            // Matching a request is more powerful than matching a URL path + context, so try that first.
             if ($this->matcher instanceof RequestMatcherInterface) {
                 $parameters = $this->matcher->matchRequest($request);
             } else {
@@ -92,11 +112,17 @@ class RouterListener
 
             throw new NotFoundHttpException($message, $e);
         } catch (MethodNotAllowedException $e) {
-            $message = sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(), $request->getPathInfo(), strtoupper(implode(', ', $e->getAllowedMethods())));
+            $message = sprintf('No route found for "%s %s": Method Not Allowed (Allow: %s)', $request->getMethod(),
+                $request->getPathInfo(), strtoupper(implode(', ', $e->getAllowedMethods())));
             throw new MethodNotAllowedException($e->getAllowedMethods(), $message);
         }
     }
 
+    /**
+     * @param array $parameters
+     *
+     * @return string
+     */
     protected function parametersToString(array $parameters)
     {
         $pieces = array();
