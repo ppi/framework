@@ -39,7 +39,8 @@
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.5",
-        "phpunit/phpunit": "~4.0"
+        "phpunit/phpunit": "~4.0",
+        "satooshi/php-coveralls": "dev-master"
     },
     "autoload": {
         "psr-4": {
