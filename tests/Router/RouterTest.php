@@ -34,11 +34,11 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetOptionsWithSupportedOptions()
     {
-        $this->router->setOptions([
+        $this->router->setOptions(array(
             'cache_dir'     => './cache',
             'debug'         => true,
             'resource_type' => 'ResourceType',
-        ]);
+        ));
         $this->assertSame('./cache', $this->router->getOption('cache_dir'));
         $this->assertTrue($this->router->getOption('debug'));
         $this->assertSame('ResourceType', $this->router->getOption('resource_type'));
