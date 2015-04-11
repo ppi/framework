@@ -229,7 +229,7 @@ $finder = DefaultFinder::create()
     ])
     ->in([
         'src',
-        'test',
+        'tests',
     ]);
 
 // CS issues to fix
@@ -268,7 +268,6 @@ $config = Config::create()
             'remove_leading_slash_use',
             'remove_lines_between_uses',
             'return',
-            'short_array_syntax',
             'single_array_no_trailing_comma',
             'single_blank_line_before_namespace',
             'spaces_before_semicolon',
