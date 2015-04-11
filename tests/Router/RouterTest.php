@@ -50,12 +50,12 @@ class RouterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetOptionsWithUnsupportedOptions()
     {
-        $this->router->setOptions([
+        $this->router->setOptions(array(
             'cache_dir'     => './cache',
             'option_foo'    => true,
             'option_bar'    => 'baz',
             'resource_type' => 'ResourceType',
-        ]);
+        ));
     }
 
     public function testSetOptionWithSupportedOption()
