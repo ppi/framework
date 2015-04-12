@@ -170,7 +170,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     public function withHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = [ $value ];
+            $value = array( $value );
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -179,8 +179,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
             );
         }
 
-        $normalized = strtolower($header);
-
+        $normalized                    = strtolower($header);
         $new                           = clone $this;
         $new->headerNames[$normalized] = $header;
         $new->headers->set($header, $value);

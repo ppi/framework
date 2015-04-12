@@ -160,7 +160,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     public function withHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = [ $value ];
+            $value = array( $value );
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -169,8 +169,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
             );
         }
 
-        $normalized = strtolower($header);
-
+        $normalized                    = strtolower($header);
         $new                           = clone $this;
         $new->headerNames[$normalized] = $header;
         $new->headers->set($header, $value);
