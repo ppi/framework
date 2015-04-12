@@ -8,7 +8,7 @@
  * @link       http://www.ppi.io
  */
 
-namespace PPI\FrameworkTest\ServiceManager\TestAsset;
+namespace PPI\FrameworkTest\ServiceManager\Fixtures;
 
 use Zend\ServiceManager\DelegatorFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
