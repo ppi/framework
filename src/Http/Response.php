@@ -160,7 +160,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     public function withHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = array( $value );
+            $value = array($value);
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
@@ -199,7 +199,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     public function withAddedHeader($header, $value)
     {
         if (is_string($value)) {
-            $value = [ $value ];
+            $value = array($value);
         }
 
         if (! is_array($value) || ! $this->arrayContainsOnlyStrings($value)) {
