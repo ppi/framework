@@ -11,7 +11,6 @@
 namespace PPI\Framework\Http;
 
 use InvalidArgumentException;
-use Phly\Http\Uri;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamableInterface;
 use Psr\Http\Message\UriInterface;
