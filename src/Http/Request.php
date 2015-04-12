@@ -568,10 +568,6 @@ class Request extends SymfonyHttpRequest implements RequestInterface
      */
     private static function filterStringValue($carry, $item)
     {
-        if (! is_string($item)) {
-            return false;
-        }
-
-        return $carry;
+        return is_string($item) ? $carry : false;
     }
 }

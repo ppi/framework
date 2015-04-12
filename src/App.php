@@ -13,9 +13,9 @@ namespace PPI\Framework;
 use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -245,11 +245,11 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
-     * @param Request|null $request
+     * @param RequestInterface|null $request
      *
      * @return $this
      */
-    public function run(Request $request = null)
+    public function run(RequestInterface $request = null)
     {
         if (false === $this->booted) {
             $this->boot();
@@ -492,7 +492,7 @@ class App implements AppInterface
     /**
      * Get the request object.
      *
-     * @return object
+     * @return RequestInterface
      */
     public function getRequest()
     {
