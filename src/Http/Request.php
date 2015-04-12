@@ -521,6 +521,8 @@ class Request extends SymfonyHttpRequest implements RequestInterface
      * @param null|string $method
      *
      * @throws InvalidArgumentException on invalid HTTP method.
+     *
+     * @return bool
      */
     private function validateMethod($method)
     {
@@ -543,19 +545,6 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     }
 
     /**
-     * Retrieve the host from the URI instance.
-     *
-     * @return string
-     */
-    private function getHostFromUri()
-    {
-        $host  = $this->uri->getHost();
-        $host .= $this->uri->getPort() ? ':' . $this->uri->getPort() : '';
-
-        return $host;
-    }
-
-    /**
      * Test that an array contains only strings.
      *
      * @param array $array
@@ -564,7 +553,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
      */
     private function arrayContainsOnlyStrings(array $array)
     {
-        return array_reduce($array, [ __CLASS__, 'filterStringValue'], true);
+        return array_reduce($array, array( __CLASS__, 'filterStringValue'), true);
     }
 
     /**
