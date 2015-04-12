@@ -76,3 +76,7 @@ build
 ### PHP-CS-Fixer
 
 .php_cs.cache
+
+### Coveralls
+
+.coveralls.yml
