@@ -506,11 +506,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
      */
     private static function filterStringValue($carry, $item)
     {
-        if (! is_string($item)) {
-            return false;
-        }
-
-        return $carry;
+        return is_string($item) ? $carry : false;
     }
 
     /**
