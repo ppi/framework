@@ -16,8 +16,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Implements multiple interface invokable object mock.
- *
- * @author Vítor Brandão <vitor@ppi.io>
  */
 class CallableWithMutableCreationOptions implements MutableCreationOptionsInterface
 {
