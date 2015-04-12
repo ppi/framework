@@ -22,6 +22,7 @@
     "require": {
         "psr/log": "~1.0",
         "psr/http-message": "^0.9",
+        "symfony/class-loader": "2.6.*@stable",
         "symfony/dependency-injection": "2.6.*@stable",
         "symfony/config": "2.6.*@stable",
         "symfony/console": "2.6.*@stable",
