@@ -10,9 +10,9 @@
 
 namespace PPI\FrameworkTest\Router;
 
-use PPI\Framework\Router\RoutePluginManager;
+use PPI\FrameworkTest\Router\Fixtures\RoutePluginManagerForTest;
 use PPI\Framework\ServiceManager\ServiceManager;
-use PPI\FrameworkTest\ServiceManager\TestAsset\MockSelfReturningDelegatorFactory;
+use PPI\FrameworkTest\ServiceManager\Fixtures\MockSelfReturningDelegatorFactory;
 use ReflectionClass;
 use ReflectionObject;
 use Zend\ServiceManager\Config;
@@ -40,7 +40,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager = new ServiceManager();
         $this->pluginManager  = new RoutePluginManagerForTest(new Config(array(
             'factories' => array(
-                'Foo' => 'PPI\FrameworkTest\ServiceManager\TestAsset\FooFactory',
+                'Foo' => 'PPI\FrameworkTest\ServiceManager\Fixtures\FooFactory',
             ),
             'shared' => array(
                 'Foo' => false,
@@ -51,7 +51,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
     {
         $pluginManager = new RoutePluginManagerForTest(new Config(array(
             'factories' => array(
-                'Foo' => 'PPI\FrameworkTest\ServiceManager\TestAsset\FooFactory',
+                'Foo' => 'PPI\FrameworkTest\ServiceManager\Fixtures\FooFactory',
             ),
             'shared' => array(
                 'Foo' => false,
@@ -64,11 +64,11 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $value['foo']);
         $pluginManager->get('Foo', array('key1' => 'value1'));
         $value = $reflProperty->getValue($pluginManager);
-        $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\TestAsset\FooFactory', $value['foo']);
+        $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\FooFactory', $value['foo']);
         $this->assertEquals(array('key1' => 'value1'), $value['foo']->getCreationOptions());
         $pluginManager->get('Foo', array('key2' => 'value2'));
         $value = $reflProperty->getValue($pluginManager);
-        $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\TestAsset\FooFactory', $value['foo']);
+        $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\FooFactory', $value['foo']);
         $this->assertEquals(array('key2' => 'value2'), $value['foo']->getCreationOptions());
     }
 
@@ -83,7 +83,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
     public function testAbstractFactoryWithMutableCreationOptions()
     {
         $creationOptions = array('key1' => 'value1');
-        $mock            = 'PPI\FrameworkTest\ServiceManager\TestAsset\AbstractFactoryWithMutableCreationOptions';
+        $mock            = 'PPI\FrameworkTest\ServiceManager\Fixtures\AbstractFactoryWithMutableCreationOptions';
         $abstractFactory = $this->getMock($mock, array('setCreationOptions'));
         $abstractFactory->expects($this->once())
             ->method('setCreationOptions')
@@ -95,7 +95,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMutableMethodNeverCalledWithoutCreationOptions()
     {
-        $mock     = 'PPI\FrameworkTest\ServiceManager\TestAsset\CallableWithMutableCreationOptions';
+        $mock     = 'PPI\FrameworkTest\ServiceManager\Fixtures\CallableWithMutableCreationOptions';
         $callable = $this->getMock($mock, array('setCreationOptions'));
         $callable->expects($this->never())
             ->method('setCreationOptions');
@@ -108,7 +108,7 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
     public function testCallableObjectWithMutableCreationOptions()
     {
         $creationOptions = array('key1' => 'value1');
-        $mock            = 'PPI\FrameworkTest\ServiceManager\TestAsset\CallableWithMutableCreationOptions';
+        $mock            = 'PPI\FrameworkTest\ServiceManager\Fixtures\CallableWithMutableCreationOptions';
         $callable        = $this->getMock($mock, array('setCreationOptions'));
         $callable->expects($this->once())
             ->method('setCreationOptions')
@@ -235,16 +235,5 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         } catch (RuntimeException $exception) {
             $this->assertTrue($pluginManager->has(__CLASS__));
         }
-    }
-}
-
-class RoutePluginManagerForTest extends RoutePluginManager
-{
-    /**
-     * {@inheritDoc}
-     */
-    public function validatePlugin($plugin)
-    {
-        return;
     }
 }
