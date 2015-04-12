@@ -10,8 +10,8 @@
 
 namespace PPI\FrameworkTest\Http;
 
-use Phly\Http\Stream;
 use PPI\Framework\Http\Response;
+use PPI\Framework\Http\Stream;
 
 /**
  * Class ResponseTest.

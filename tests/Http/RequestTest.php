@@ -10,8 +10,8 @@
 
 namespace PPI\FrameworkTest\Http;
 
-use Phly\Http\Uri;
 use PPI\Framework\Http\Request;
+use PPI\Framework\Http\Uri;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
