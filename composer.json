@@ -35,7 +35,8 @@
         "zendframework/zend-eventmanager": "2.3.*@dev",
         "zendframework/zend-modulemanager": "2.3.*@dev",
         "zendframework/zend-servicemanager": "2.3.*@dev",
-        "zendframework/zend-loader": "2.3.*@dev"
+        "zendframework/zend-loader": "2.3.*@dev",
+        "aura/router": "2.2.2"
     },
     "require-dev": {
         "fabpot/php-cs-fixer": "~1.5"
