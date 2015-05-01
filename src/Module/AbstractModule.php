@@ -17,6 +17,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
+use Aura\Router\RouterFactory as AuraRouterFactory;
+use Aura\Router\Router as AuraRouter;
 
 /**
  * The base PPI module class.
@@ -103,6 +105,31 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         }
 
         return $this->routes;
+    }
+
+    /**
+     * @param string $path
+     * @return AuraRouter
+     * @throws \Exception when the included routes file doesn't return an AuraRouter back
+     */
+    public function loadAuraRoutes($path)
+    {
+
+        if(!is_readable($path)) {
+            throw new \InvalidArgumentException('Invalid aura routes path found');
+        }
+
+        // The included file must return the aura router
+        $router = include $path;
+
+        if(!($router instanceof AuraRouter)) {
+            throw new \Exception('Invalid return value from '
+                . pathinfo($path, PATHINFO_FILENAME)
+                . ' expected instance of AuraRouter'
+            );
+        }
+
+        return $router;
     }
 
     /**

@@ -10,7 +10,12 @@
 
 namespace PPI\Framework\Module\Listener;
 
+<<<<<<< Updated upstream
 use PPI\Framework\ServiceManager\ServiceManager;
+=======
+use PPI\ServiceManager\ServiceManager;
+use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
+>>>>>>> Stashed changes
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
@@ -20,6 +25,7 @@ use Zend\ModuleManager\Listener\ModuleLoaderListener;
 use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Stdlib\ArrayUtils;
+use Aura\Router\Router as AuraRouter;
 
 $x = 0;
 
@@ -91,7 +97,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         // This process can be expensive and affect perf if enabled. So we have
         // the flexibility to skip it.
         //if ($options->routingEnabled) {
-            $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'routesTrigger'), 3000);
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'routesTrigger'), 3000);
         //}
 
         // @todo - this could be moved to a ZF event, so no need to make this ourselves.
@@ -101,18 +107,38 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
+<<<<<<< Updated upstream
      * Event callback for 'routesTrigger'.
+=======
+     * Callback for 'routesTrigger' event
+>>>>>>> Stashed changes
      *
      * @param ModuleEvent $e
      *
      * @return $this
+     * @throws \Exception if the module returns an invalid route type
      */
     public function routesTrigger(ModuleEvent $e)
     {
         $module = $e->getModule();
 
         if (is_callable(array($module, 'getRoutes'))) {
+<<<<<<< Updated upstream
             $this->routes[$e->getModuleName()] = $module->getRoutes();
+=======
+            $routes = $module->getRoutes();
+            switch(true) {
+                case $routes instanceof SymfonyRouteCollection:
+                    break;
+
+                case $routes instanceof AuraRouter:
+                    break;
+
+                default:
+                    throw new \Exception('Unexpected routes value return from module: ' . $module->getName() . ' - found value: ' . gettype($routes));
+            }
+            $this->routes[$e->getModuleName()] = $routes;
+>>>>>>> Stashed changes
         }
 
         return $this;

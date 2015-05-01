@@ -89,4 +89,5 @@ class Router extends BaseRouter implements RouterInterface
         $this->getMatcher();
         $this->getGenerator();
     }
+
 }
