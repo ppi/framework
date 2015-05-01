@@ -10,12 +10,8 @@
 
 namespace PPI\Framework\Module\Listener;
 
-<<<<<<< Updated upstream
 use PPI\Framework\ServiceManager\ServiceManager;
-=======
-use PPI\ServiceManager\ServiceManager;
 use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
->>>>>>> Stashed changes
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
@@ -107,11 +103,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-<<<<<<< Updated upstream
-     * Event callback for 'routesTrigger'.
-=======
      * Callback for 'routesTrigger' event
->>>>>>> Stashed changes
      *
      * @param ModuleEvent $e
      *
@@ -123,9 +115,6 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         $module = $e->getModule();
 
         if (is_callable(array($module, 'getRoutes'))) {
-<<<<<<< Updated upstream
-            $this->routes[$e->getModuleName()] = $module->getRoutes();
-=======
             $routes = $module->getRoutes();
             switch(true) {
                 case $routes instanceof SymfonyRouteCollection:
@@ -138,7 +127,6 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
                     throw new \Exception('Unexpected routes value return from module: ' . $module->getName() . ' - found value: ' . gettype($routes));
             }
             $this->routes[$e->getModuleName()] = $routes;
->>>>>>> Stashed changes
         }
 
         return $this;
