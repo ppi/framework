@@ -684,44 +684,42 @@ class App implements AppInterface
     protected function handleRouting()
     {
         $router = $this->serviceManager->get('Router');
+        $router->warmUp($this->getCacheDir());
+
         try {
             // Lets load up our router and match the appropriate route
-            $router->warmUp($this->getCacheDir());
             $parameters = $router->matchRequest($this->getRequest());
 
             if (!empty($parameters)) {
 
                 if (null !== $this->logger) {
-                    $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->parametersToString($parameters)));
+                    $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $router->parametersToString($parameters)));
                 }
 
                 $this->getRequest()->attributes->add($parameters);
                 unset($parameters['_route'], $parameters['_controller']);
                 $this->getRequest()->attributes->set('_route_params', $parameters);
             }
-        } catch  (\Exception $e) {
-            if ($this->debug) {
-                $this->log('critical', $e);
-                throw ($e);
-            }
-        }
-
-        // Lets grab the 'Framework 404' route and dispatch it.
-        try {
-            $baseUrl = $router->getContext()->getBaseUrl();
-            $routeUri = $router->generate($this->options['404RouteName']);
-
-            // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-            if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
-                $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
-            }
-
-            // @todo - look into why is this here? the method doesn't exist
-            $this->matchRoute($routeUri);
-
-            // @todo handle a 502 here
         } catch (\Exception $e) {
-            throw new \Exception('Unable to load 404 page. An internal error occurred');
+
+            // Lets grab the 'Framework 404' route and dispatch it.
+            try {
+                $baseUrl = $router->getContext()->getBaseUrl();
+                $routeUri = $router->generate($this->options['404RouteName']);
+
+                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
+                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
+                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
+                }
+
+                // @todo - look into why is this here? the method doesn't exist
+                $this->matchRoute($routeUri);
+
+                // @todo handle a 502 here
+            } catch (\Exception $e) {
+                throw new \Exception('Unable to load 404 page. An internal error occurred');
+            }
+
         }
     }
 
