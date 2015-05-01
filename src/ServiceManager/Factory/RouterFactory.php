@@ -12,7 +12,6 @@ namespace PPI\Framework\ServiceManager\Factory;
 
 use PPI\Framework\Router\Router;
 use PPI\Framework\Router\ChainRouter;
-use Symfony\Component\Routing\RouteCollection;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -39,6 +38,7 @@ class RouterFactory implements FactoryInterface
         $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
         $chainRouter = new ChainRouter($logger);
+        $chainRouter->setContext($requestContext);
 
         $allModuleRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
         foreach ($allModuleRoutes as $moduleRoutes) {
