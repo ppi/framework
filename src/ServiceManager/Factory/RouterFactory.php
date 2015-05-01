@@ -4,12 +4,14 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Router\Router;
+use PPI\Framework\Router\Router;
+use Symfony\Cmf\Component\Routing\ChainRouter;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Zend\ServiceManager\FactoryInterface;
@@ -20,16 +22,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class RouterFactory implements FactoryInterface
 {
     /**
      * Create and return the router.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
-     * @return \PPI\Router\Router
+     * @param ServiceLocatorInterface $serviceLocator
+     *
+     * @return \PPI\Framework\Router\Router
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -39,14 +40,14 @@ class RouterFactory implements FactoryInterface
 
         $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
-        $router = new Router($requestContext, $routeCollection, $routerOptions, $logger);
+        $chainRouter = new ChainRouter($logger);
 
-        $allRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
-        foreach ($allRoutes as $routes) {
-            $routeCollection->addCollection($routes);
+        $allModuleRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
+        foreach ($allModuleRoutes as $moduleRoutes) {
+            // Create a new router for each module
+            $moduleRouter = new Router($requestContext, $routeCollection, $routerOptions, $logger);
+            $chainRouter->add($moduleRouter);
         }
-        $router->setRouteCollection($routeCollection);
-
-        return $router;
+        return $chainRouter;
     }
 }
