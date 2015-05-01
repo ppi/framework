@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module\Listener;
+namespace PPI\Framework\Module\Listener;
 
 use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
 
@@ -17,8 +18,6 @@ use Zend\ModuleManager\Listener\ListenerOptions as BaseListenerOptions;
  * @todo Add inline documentation.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class ListenerOptions extends BaseListenerOptions
 {
@@ -33,8 +32,6 @@ class ListenerOptions extends BaseListenerOptions
      * @todo Add inline documentation.
      *
      * @param type $enabled
-     *
-     * @return void
      */
     public function setRoutingEnabled($enabled)
     {

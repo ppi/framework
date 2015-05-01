@@ -4,16 +4,17 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Stdlib\ArrayUtils;
 
 /**
- * ConfigManager extends ConfigLoader capabilities with lazy-loading and a caching mechanism,
+ * ConfigManager extends ConfigLoader capabilities with lazy-loading and a caching mechanism,.
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
@@ -65,8 +66,9 @@ class ConfigManager extends ConfigLoader
     }
 
     /**
-     * @param  mixed  $resource The resource
-     * @param  string $type     The resource type
+     * @param mixed  $resource The resource
+     * @param string $type     The resource type
+     *
      * @return $this
      */
     public function addConfig($resource, $type)

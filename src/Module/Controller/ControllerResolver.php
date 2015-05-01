@@ -4,10 +4,11 @@
  *
  * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Module\Controller;
+namespace PPI\Framework\Module\Controller;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;
@@ -16,12 +17,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * ControllerResolver.
+ *
  * @see Symfony\Bundle\FrameworkBundle\Controller\ControllerResolver
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class ControllerResolver extends BaseControllerResolver
 {
@@ -45,10 +45,10 @@ class ControllerResolver extends BaseControllerResolver
      *
      * @param string $controller A Controller string
      *
-     * @return mixed A PHP callable
-     *
      * @throws \LogicException           When the name could not be parsed
      * @throws \InvalidArgumentException When the controller class does not exist
+     *
+     * @return mixed A PHP callable
      */
     protected function createController($controller)
     {

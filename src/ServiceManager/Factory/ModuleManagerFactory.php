@@ -4,12 +4,13 @@
  *
  * @copyright   Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
-use PPI\Module\ModuleManager;
+use PPI\Framework\Module\ModuleManager;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -18,8 +19,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * ModuleManager Factory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ModuleManagerFactory implements FactoryInterface
 {
@@ -34,13 +33,14 @@ class ModuleManagerFactory implements FactoryInterface
      * the default listener aggregate is attached. The ModuleEvent is also created
      * and attached to the module manager.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return ModuleManager
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         if (!$serviceLocator->has('ServiceListener')) {
-            $serviceLocator->setFactory('ServiceListener', 'PPI\ServiceManager\Factory\ServiceListenerFactory');
+            $serviceLocator->setFactory('ServiceListener', 'PPI\Framework\ServiceManager\Factory\ServiceListenerFactory');
         }
 
         $config           = $serviceLocator->get('ApplicationConfig');

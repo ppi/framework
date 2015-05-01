@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Helper;
+namespace PPI\Framework\View\Helper;
 
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Templating\Helper\Helper;
@@ -17,8 +18,6 @@ use Symfony\Component\Templating\Helper\Helper;
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Templating
  */
 class SessionHelper extends Helper
 {
@@ -40,7 +39,7 @@ class SessionHelper extends Helper
     }
 
     /**
-     * Returns an attribute
+     * Returns an attribute.
      *
      * @param string $name    The attribute name
      * @param mixed  $default The default value

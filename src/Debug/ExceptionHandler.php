@@ -4,12 +4,13 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Debug;
+namespace PPI\Framework\Debug;
 
-use PPI\Http\Response;
+use PPI\Framework\Http\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Debug\ExceptionHandler as BaseExceptionHandler;
 
@@ -55,6 +56,7 @@ class ExceptionHandler extends BaseExceptionHandler
 
     /**
      * @param $appName
+     *
      * @return $this
      */
     public function setAppName($appName)
@@ -66,6 +68,7 @@ class ExceptionHandler extends BaseExceptionHandler
 
     /**
      * @param $appVersion
+     *
      * @return $this
      */
     public function setAppVersion($appVersion)
@@ -82,9 +85,9 @@ class ExceptionHandler extends BaseExceptionHandler
      *
      * @return ExceptionHandler The registered exception handler
      */
-    public static function register($debug = true)
+    public static function register($debug = true, $charset = null, $fileLinkFormat = null)
     {
-        $handler = new static($debug);
+        $handler = new static($debug, $charset, $fileLinkFormat);
 
         set_exception_handler(array($handler, 'handle'));
 
@@ -112,7 +115,7 @@ class ExceptionHandler extends BaseExceptionHandler
             ob_clean();
         }
 
-        if (class_exists('PPI\Http\Response')) {
+        if (class_exists('PPI\Framework\Http\Response')) {
             $this->createResponse($exception)->send();
         } else {
             $this->sendPhpResponse($exception);

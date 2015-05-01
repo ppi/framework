@@ -4,20 +4,19 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
-use PPI\Module\ModuleManager;
+use PPI\Framework\Module\ModuleManager;
 
 /**
  * AppFileLocator uses ModuleManager to locate resources in modules.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class AppFileLocator extends FileLocator
 {
