@@ -1,0 +1,3 @@
+#!/bin/sh
+
+COVERALLS_RUN_LOCALLY=1 vendor/bin/coveralls -v

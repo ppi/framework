@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View;
+namespace PPI\Framework\View;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface as BaseEngineInterface;
@@ -16,8 +17,6 @@ use Symfony\Component\Templating\EngineInterface as BaseEngineInterface;
  * EngineInterface is the interface each engine must implement.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @package    PPI
- * @subpackage Templating
  */
 interface EngineInterface extends BaseEngineInterface
 {

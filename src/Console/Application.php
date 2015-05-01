@@ -4,13 +4,14 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Console;
+namespace PPI\Framework\Console;
 
-use PPI\AppInterface;
-use PPI\Module\AbstractModule;
+use PPI\Framework\AppInterface;
+use PPI\Framework\Module\AbstractModule;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,13 +22,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @author      Vítor Brandão <vitor@ppi.io>
  * @author      Paul Dragoonis <paul@ppi.io>
- * @package     PPI
- * @subpackage  Console
  */
 class Application extends BaseApplication
 {
     /**
-     * @var PPI\AppInterface
+     * @var PPI\Framework\AppInterface
      */
     protected $app;
 

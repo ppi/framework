@@ -4,10 +4,11 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -17,13 +18,11 @@ use Zend\Stdlib\ArrayUtils;
  * Config Factory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ConfigFactory implements FactoryInterface
 {
     /**
-     * Create the application configuration service
+     * Create the application configuration service.
      *
      * Retrieves the Module Manager from the service locator, and executes
      * {@link Zend\ModuleManager\ModuleManager::loadModules()}.
@@ -31,7 +30,8 @@ class ConfigFactory implements FactoryInterface
      * It then retrieves the config listener from the module manager, and from
      * that the merged configuration.
      *
-     * @param  ServiceLocatorInterface $serviceLocator
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return array|\Traversable
      */
     public function createService(ServiceLocatorInterface $serviceLocator)

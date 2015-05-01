@@ -28,6 +28,7 @@ composer.lock
 *.vi
 *~
 *.sass-cache
+*.php_cs.cache
 
 ### OS or Editor folders
 
@@ -70,7 +71,12 @@ dwsync.xml
 intermediate
 publish
 .idea
+build
 
 ### PHP-CS-Fixer
 
 .php_cs.cache
+
+### Coveralls
+
+.coveralls.yml

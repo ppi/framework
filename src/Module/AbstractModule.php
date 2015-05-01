@@ -4,25 +4,26 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module;
+namespace PPI\Framework\Module;
 
-use PPI\Config\ConfigLoader;
-use PPI\Console\Application;
-use PPI\Router\Loader\YamlFileLoader;
+use PPI\Framework\Config\ConfigLoader;
+use PPI\Framework\Console\Application;
+use PPI\Framework\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
+use Aura\Router\RouterFactory as AuraRouterFactory;
+use Aura\Router\Router as AuraRouter;
 
 /**
  * The base PPI module class.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 abstract class AbstractModule implements ModuleInterface, ConfigProviderInterface
 {
@@ -47,7 +48,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Configuration loader.
      *
-     * @var null|\PPI\Config\ConfigLoader
+     * @var null|\PPI\Framework\Config\ConfigLoader
      */
     protected $configLoader = null;
 
@@ -73,21 +74,21 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     protected $controller = null;
 
     /**
-     * Controller Name
+     * Controller Name.
      *
      * @var null
      */
     protected $controllerName = null;
 
     /**
-     * Action Name
+     * Action Name.
      *
      * @var null
      */
     protected $actionName = null;
 
     /**
-     * Load up our routes
+     * Load up our routes.
      *
      * @param type $path
      *
@@ -107,6 +108,31 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
+     * @param string $path
+     * @return AuraRouter
+     * @throws \Exception when the included routes file doesn't return an AuraRouter back
+     */
+    public function loadAuraRoutes($path)
+    {
+
+        if(!is_readable($path)) {
+            throw new \InvalidArgumentException('Invalid aura routes path found');
+        }
+
+        // The included file must return the aura router
+        $router = include $path;
+
+        if(!($router instanceof AuraRouter)) {
+            throw new \Exception('Invalid return value from '
+                . pathinfo($path, PATHINFO_FILENAME)
+                . ' expected instance of AuraRouter'
+            );
+        }
+
+        return $router;
+    }
+
+    /**
      * Load up our config results from the specific yaml file.
      *
      * @param string $path
@@ -121,7 +147,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set services for our module
+     * Set services for our module.
      *
      * @param string $services
      *
@@ -135,7 +161,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get the services
+     * Get the services.
      *
      * @return array
      */
@@ -145,7 +171,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get a particular service
+     * Get a particular service.
      *
      * @param string $serviceName
      *
@@ -157,7 +183,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get the controller
+     * Get the controller.
      *
      * @return object
      */
@@ -167,7 +193,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set the controller
+     * Set the controller.
      *
      * @param object $controller
      *
@@ -181,7 +207,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Check if a controller has been set
+     * Check if a controller has been set.
      *
      * @return boolean
      */
@@ -219,11 +245,11 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Dispatch process
-     *
-     * @return mixed
+     * Dispatch process.
      *
      * @throws \Exception
+     *
+     * @return mixed
      */
     public function dispatch()
     {
@@ -253,8 +279,9 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Loads a configuration file (PHP, YAML) or PHP array.
      *
-     * @param  string      $resource The resource
-     * @param  null|string $type     The resource type
+     * @param string      $resource The resource
+     * @param null|string $type     The resource type
+     *
      * @return array
      */
     public function loadConfig($resource, $type = null)
@@ -265,7 +292,8 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Loads and merges the configuration.
      *
-     * @param  mixed $resources
+     * @param mixed $resources
+     *
      * @return array
      */
     public function mergeConfig($resources)
@@ -279,7 +307,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Set the module name
+     * Set the module name.
      *
      * @param string $Name
      *
@@ -356,7 +384,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * Override this method if your module commands do not follow the conventions:
      *
      * * Commands are in the 'Command' sub-directory
-     * * Commands extend PPI\Console\Command\AbstractCommand
+     * * Commands extend PPI\Framework\Console\Command\AbstractCommand
      *
      * @param Application $application An Application instance
      */
@@ -376,7 +404,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
                 $ns .= '\\' . strtr($relativePath, '/', '\\');
             }
             $r = new \ReflectionClass($ns . '\\' . $file->getBasename('.php'));
-            if ($r->isSubclassOf('PPI\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
+            if ($r->isSubclassOf('PPI\Framework\\Console\\Command\\AbstractCommand') && !$r->isAbstract()) {
                 $application->add($r->newInstance());
             }
         }
@@ -385,7 +413,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Returns a ConfigLoader instance.
      *
-     * @return \PPI\Config\ConfigLoader
+     * @return \PPI\Framework\Config\ConfigLoader
      */
     protected function getConfigLoader()
     {

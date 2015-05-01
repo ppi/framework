@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config\Loader;
+namespace PPI\Framework\Config\Loader;
 
 use Symfony\Component\Config\Loader\FileLoader;
 
@@ -15,18 +16,18 @@ use Symfony\Component\Config\Loader\FileLoader;
  * PhpFileLoader loads app configuration from a PHP file.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class PhpFileLoader extends FileLoader
 {
     /**
      * Loads a PHP file.
      *
-     * @param  mixed                     $file The resource
-     * @param  string                    $type The resource type
-     * @return array                     Array with configuration
+     * @param mixed  $file The resource
+     * @param string $type The resource type
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return array Array with configuration
      */
     public function load($file, $type = null)
     {

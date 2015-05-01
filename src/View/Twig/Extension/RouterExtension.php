@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Twig\Extension;
+namespace PPI\Framework\View\Twig\Extension;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -15,8 +16,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * Provides integration of the Routing component with Twig.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @package    PPI
- * @subpackage Templating
  */
 class RouterExtension extends \Twig_Extension
 {
@@ -31,8 +30,6 @@ class RouterExtension extends \Twig_Extension
      * @todo Add inline documentation.
      *
      * @param UrlGeneratorInterface $generator
-     *
-     * @return void
      */
     public function __construct(UrlGeneratorInterface $generator)
     {

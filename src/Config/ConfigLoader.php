@@ -4,24 +4,23 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Config;
+namespace PPI\Framework\Config;
 
-use PPI\Config\Loader\ArrayLoader;
-use PPI\Config\Loader\DelegatingLoader;
-use PPI\Config\Loader\IniFileLoader;
-use PPI\Config\Loader\PhpFileLoader;
-use PPI\Config\Loader\YamlFileLoader;
+use PPI\Framework\Config\Loader\ArrayLoader;
+use PPI\Framework\Config\Loader\DelegatingLoader;
+use PPI\Framework\Config\Loader\IniFileLoader;
+use PPI\Framework\Config\Loader\PhpFileLoader;
+use PPI\Framework\Config\Loader\YamlFileLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;
 
 /**
  * FileLocator uses an array of pre-defined paths to find files.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Config
  */
 class ConfigLoader
 {
@@ -48,8 +47,9 @@ class ConfigLoader
     /**
      * Loads a resource.
      *
-     * @param  mixed  $resource The resource
-     * @param  string $type     The resource type
+     * @param mixed  $resource The resource
+     * @param string $type     The resource type
+     *
      * @return array
      */
     public function load($resource, $type = null)

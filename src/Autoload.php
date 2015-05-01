@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI;
+namespace PPI\Framework;
 
 /**
  * The PPI Autoloader.
@@ -19,16 +20,13 @@ namespace PPI;
  *
  *  Example usage:
  *
- *  PPI\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
- *  PPI\Autoload::register();
- *
- * @package    PPI
- * @subpackage Core
+ *  PPI\Framework\Autoload::add('Symfony', PPI_VENDOR_PATH . '/path/to/src/Symfony')
+ *  PPI\Framework\Autoload::register();
  */
 class Autoload
 {
     /**
-     * The ClassLoader object
+     * The ClassLoader object.
      *
      * @var null|object
      *
@@ -55,11 +53,10 @@ class Autoload
     protected static $_registeredNamespaces = array();
 
     /**
-     * Add some items to the class config
+     * Add some items to the class config.
      *
      * @param array $config
      *
-     * @return void
      *
      * @static
      */
@@ -69,12 +66,11 @@ class Autoload
     }
 
     /**
-     * Add a namespace to the autoloader path
+     * Add a namespace to the autoloader path.
      *
      * @param string $key
      * @param string $path
      *
-     * @return void
      *
      * @static
      */
@@ -87,7 +83,6 @@ class Autoload
     /**
      * Register the autoloader namespaces or prefixes thus far.
      *
-     * @return void
      *
      * @static
      */

@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Helper;
+namespace PPI\Framework\View\Helper;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Templating\Helper\Helper;
@@ -16,8 +17,6 @@ use Symfony\Component\Templating\Helper\Helper;
  * RouterHelper manages links between pages in a template context.
  *
  * @author     Fabien Potencier <fabien@symfony.com>
- * @package    PPI
- * @subpackage Templating
  */
 class RouterHelper extends Helper
 {
@@ -32,8 +31,6 @@ class RouterHelper extends Helper
      * Constructor.
      *
      * @param UrlGeneratorInterface $router A Router instance
-     *
-     * @return void
      */
     public function __construct(UrlGeneratorInterface $router)
     {
