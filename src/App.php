@@ -134,10 +134,10 @@ class App implements AppInterface
     public function __construct(array $options = array())
     {
         // Default options
-        $this->environment = isset($options['environment']) && $options['environment'] ? (string) $options['environment'] : 'prod';
-        $this->debug       = isset($options['debug']) && null !== $options['debug'] ? (boolean) $options['debug'] : false;
-        $this->rootDir     = isset($options['rootDir']) && $options['rootDir'] ? (string) $options['rootDir'] : $this->getRootDir();
-        $this->name        = isset($options['name']) && $options['name'] ? (string) $options['name'] : $this->getName();
+        $this->environment = isset($options['environment']) && $options['environment'] ? (string)$options['environment'] : 'prod';
+        $this->debug = isset($options['debug']) && null !== $options['debug'] ? (boolean)$options['debug'] : false;
+        $this->rootDir = isset($options['rootDir']) && $options['rootDir'] ? (string)$options['rootDir'] : $this->getRootDir();
+        $this->name = isset($options['name']) && $options['name'] ? (string)$options['name'] : $this->getName();
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -200,7 +200,7 @@ class App implements AppInterface
             $this->startTime = microtime(true);
         }
 
-        $this->booted         = false;
+        $this->booted = false;
         $this->serviceManager = null;
     }
 
@@ -281,7 +281,7 @@ class App implements AppInterface
 
         // load controller
         $resolver = $this->serviceManager->get('ControllerResolver');
-        $request  = $this->getRequest();
+        $request = $this->getRequest();
         if (false === $controller = $resolver->getController($request)) {
             throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s". Maybe you forgot to add the matching route in your routing configuration?', $request->getPathInfo()));
         }
@@ -295,7 +295,7 @@ class App implements AppInterface
         $routeParams = $this->request->attributes->all();
         $activeRoute = $routeParams['_route'];
 
-        $moduleName     = $routeParams['_module'];
+        $moduleName = $routeParams['_module'];
         $controllerName = $routeParams['_controller'];
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
 
@@ -316,9 +316,9 @@ class App implements AppInterface
             ->setController($controller[0]);
 
         // Dispatch our action, return the content from the action called.
-        $controller           = $module->getController();
+        $controller = $module->getController();
         $this->serviceManager = $controller->getServiceLocator();
-        $result               = $module->dispatch();
+        $result = $module->dispatch();
 
         switch (true) {
             // If the controller is just returning HTML content then that becomes our body response.
@@ -474,8 +474,8 @@ class App implements AppInterface
     /**
      * @see PPI\Framework\Module\ModuleManager::locateResource()
      *
-     * @param string  $name  A resource name to locate
-     * @param string  $dir   A directory where to look for the resource first
+     * @param string $name A resource name to locate
+     * @param string $dir A directory where to look for the resource first
      * @param Boolean $first Whether to return the first path or paths for all matching bundles
      *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
@@ -573,7 +573,7 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath           = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
+            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
             $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
@@ -632,13 +632,13 @@ class App implements AppInterface
     {
         return array_merge(
             array(
-                'app.root_dir'    => $this->rootDir,
+                'app.root_dir' => $this->rootDir,
                 'app.environment' => $this->environment,
-                'app.debug'       => $this->debug,
-                'app.name'        => $this->name,
-                'app.cache_dir'   => $this->getCacheDir(),
-                'app.logs_dir'    => $this->getLogDir(),
-                'app.charset'     => $this->getCharset(),
+                'app.debug' => $this->debug,
+                'app.name' => $this->name,
+                'app.cache_dir' => $this->getCacheDir(),
+                'app.logs_dir' => $this->getLogDir(),
+                'app.charset' => $this->getCharset(),
             ),
             $this->getEnvParameters()
         );
@@ -683,14 +683,23 @@ class App implements AppInterface
      */
     protected function handleRouting()
     {
-        $router   = $this->serviceManager->get('Router');
-        $hasMatch = false;
+        $router = $this->serviceManager->get('Router');
         try {
             // Lets load up our router and match the appropriate route
             $router->warmUp($this->getCacheDir());
-            $router->matchRequest($this->getRequest());
-            $hasMatch = true;
-        } catch (\Exception $e) {
+            $parameters = $router->matchRequest($this->getRequest());
+
+            if (!empty($parameters)) {
+
+                if (null !== $this->logger) {
+                    $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->parametersToString($parameters)));
+                }
+
+                $this->getRequest()->attributes->add($parameters);
+                unset($parameters['_route'], $parameters['_controller']);
+                $this->getRequest()->attributes->set('_route_params', $parameters);
+            }
+        } catch  (\Exception $e) {
             if ($this->debug) {
                 $this->log('critical', $e);
                 throw ($e);
@@ -698,32 +707,30 @@ class App implements AppInterface
         }
 
         // Lets grab the 'Framework 404' route and dispatch it.
-        if ($hasMatch === false) {
-            try {
-                $baseUrl  = $router->getContext()->getBaseUrl();
-                $routeUri = $router->generate($this->options['404RouteName']);
+        try {
+            $baseUrl = $router->getContext()->getBaseUrl();
+            $routeUri = $router->generate($this->options['404RouteName']);
 
-                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
-                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
-                }
-
-                // @todo - look into why is this here? the method doesn't exist
-                $this->matchRoute($routeUri);
-
-                // @todo handle a 502 here
-            } catch (\Exception $e) {
-                throw new \Exception('Unable to load 404 page. An internal error occurred');
+            // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
+            if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
+                $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
             }
+
+            // @todo - look into why is this here? the method doesn't exist
+            $this->matchRoute($routeUri);
+
+            // @todo handle a 502 here
+        } catch (\Exception $e) {
+            throw new \Exception('Unable to load 404 page. An internal error occurred');
         }
     }
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed  $level
+     * @param mixed $level
      * @param string $message
-     * @param array  $context
+     * @param array $context
      */
     protected function log($level, $message, array $context = array())
     {
