@@ -11,8 +11,7 @@
 namespace PPI\Framework\ServiceManager\Factory;
 
 use PPI\Framework\Router\Router;
-use Symfony\Cmf\Component\Routing\ChainRouter;
-use Symfony\Component\Routing\RequestContext;
+use PPI\Framework\Router\ChainRouter;
 use Symfony\Component\Routing\RouteCollection;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -34,7 +33,6 @@ class RouterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $routeCollection = new RouteCollection();
         $requestContext  = $serviceLocator->get('RouterRequestContext');
         $routerOptions   = array();
 
@@ -45,9 +43,7 @@ class RouterFactory implements FactoryInterface
         $allModuleRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
         foreach ($allModuleRoutes as $moduleRoutes) {
             // Create a new router for each module
-            $moduleRouter = new Router($requestContext, $routeCollection, $routerOptions, $logger);
-            $moduleRouter->setRouteCollection($moduleRoutes);
-            
+            $moduleRouter = new Router($requestContext, $moduleRoutes, $routerOptions, $logger);
             $chainRouter->add($moduleRouter);
         }
         return $chainRouter;
