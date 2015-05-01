@@ -13,7 +13,7 @@ namespace PPI\FrameworkTest\Router;
 use PPI\Framework\Router\ChainRouter;
 
 /**
- * Class RouterTest.
+ * Class ChainRouterTest
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */
