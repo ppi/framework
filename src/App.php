@@ -688,7 +688,7 @@ class App implements AppInterface
         try {
             // Lets load up our router and match the appropriate route
             $router->warmUp();
-            $this->serviceManager->get('RouterListener')->match($this->getRequest());
+            $router->matchRequest($this->getRequest());
             $hasMatch = true;
         } catch (\Exception $e) {
             if ($this->debug) {
