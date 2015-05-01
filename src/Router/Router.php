@@ -4,13 +4,13 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
- *
  * @link       http://www.ppi.io
  */
 
 namespace PPI\Framework\Router;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router as BaseRouter;
