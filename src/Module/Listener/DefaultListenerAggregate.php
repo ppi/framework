@@ -4,13 +4,14 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module\Listener;
+namespace PPI\Framework\Module\Listener;
 
-use PPI\ServiceManager\ServiceManager;
-use Symfony\Component\Routing\RouteCollection;
+use PPI\Framework\ServiceManager\ServiceManager;
+use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
@@ -20,45 +21,41 @@ use Zend\ModuleManager\Listener\ModuleLoaderListener;
 use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Stdlib\ArrayUtils;
+use Aura\Router\Router as AuraRouter;
 
 /**
  * DefaultListenerAggregate class.
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- *
- * @package    PPI
- * @subpackage Module
  */
 class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 {
     /**
-     * The routes registered for our
+     * The routes registered for our.
      *
      * @var array
      */
     protected $routes = array();
 
     /**
-     * Services for the ServiceLocator
+     * Services for the ServiceLocator.
      *
      * @var array
      */
     protected $services = array();
 
     /**
-     * The Service Manager
+     * The Service Manager.
      *
      * @var type
      */
     protected $serviceManager;
 
     /**
-     * Set the service manager
+     * Set the service manager.
      *
      * @param ServiceManager $sm
-     *
-     * @return void
      */
     public function setServiceManager(ServiceManager $sm)
     {
@@ -94,7 +91,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
         // This process can be expensive and affect perf if enabled. So we have
         // the flexibility to skip it.
         //if ($options->routingEnabled) {
-            $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'routesTrigger'), 3000);
+        $this->listeners[] = $events->attach(ModuleEvent::EVENT_LOAD_MODULE, array($this, 'routesTrigger'), 3000);
         //}
 
         // @todo - this could be moved to a ZF event, so no need to make this ourselves.
@@ -104,11 +101,12 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Event callback for 'routesTrigger'
+     * Callback for 'routesTrigger' event
      *
      * @param ModuleEvent $e
      *
      * @return $this
+     * @throws \Exception if the module returns an invalid route type
      */
     public function routesTrigger(ModuleEvent $e)
     {
@@ -116,11 +114,15 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 
         if (is_callable(array($module, 'getRoutes'))) {
             $routes = $module->getRoutes();
-            if(!($routes instanceof RouteCollection)) {
-                throw new \Exception('Expected a symfony RouteCollection from module: ' .
-                    $module->getName() . ', but recieved a value of type: ' .
-                    gettype($routes)
-                );
+            switch(true) {
+                case $routes instanceof SymfonyRouteCollection:
+                    break;
+
+                case $routes instanceof AuraRouter:
+                    break;
+
+                default:
+                    throw new \Exception('Unexpected routes value return from module: ' . $module->getName() . ' - found value: ' . gettype($routes));
             }
             $this->routes[$e->getModuleName()] = $routes;
         }
@@ -129,7 +131,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Event callback for 'initServicesTrigger'
+     * Event callback for 'initServicesTrigger'.
      *
      * @param ModuleEvent $e
      *
@@ -150,7 +152,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Get the registered routes
+     * Get the registered routes.
      *
      * @return array
      */
@@ -160,7 +162,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Get the registered services
+     * Get the registered services.
      *
      * @return mixed
      */

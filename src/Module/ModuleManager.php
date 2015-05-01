@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\Module;
+namespace PPI\Framework\Module;
 
 use Zend\ModuleManager\ModuleManager as BaseModuleManager;
 
@@ -16,8 +17,6 @@ use Zend\ModuleManager\ModuleManager as BaseModuleManager;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class ModuleManager extends BaseModuleManager
 {
@@ -40,8 +39,10 @@ class ModuleManager extends BaseModuleManager
 
     /**
      * @param $alias
-     * @return mixed
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return mixed
      */
     public function getModuleByAlias($alias)
     {
@@ -91,11 +92,11 @@ class ModuleManager extends BaseModuleManager
      * @param string  $dir   A directory where to look for the resource first
      * @param Boolean $first Whether to return the first path or paths for all matching modules
      *
-     * @return string|array The absolute path of the resource or an array if $first is false
-     *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe
      * @throws \RuntimeException         if a custom resource is hidden by a resource in a derived module
+     *
+     * @return string|array The absolute path of the resource or an array if $first is false
      *
      * @api
      */

@@ -4,10 +4,11 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager\Factory;
+namespace PPI\Framework\ServiceManager\Factory;
 
 use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ModuleManager\Listener\ServiceListenerInterface;
@@ -18,8 +19,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * ServiceListener Factory.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ServiceListenerFactory implements FactoryInterface
 {
@@ -46,20 +45,20 @@ class ServiceListenerFactory implements FactoryInterface
             'RequestStack'       => 'Symfony\Component\HttpFoundation\RequestStack',
         ),
         'factories'     => array(
-            'Config'                => 'PPI\ServiceManager\Factory\ConfigFactory',
-            'ControllerNameParser'  => 'PPI\ServiceManager\Factory\ControllerNameParserFactory',
-            'ControllerResolver'    => 'PPI\ServiceManager\Factory\ControllerResolverFactory',
-            'DataSource'            => 'PPI\ServiceManager\Factory\DataSourceFactory',
-            'EventManager'          => 'PPI\ServiceManager\Factory\EventManagerFactory',
-            'FileLocator'           => 'PPI\ServiceManager\Factory\FileLocatorFactory',
-            'MicroRouter'           => 'PPI\ServiceManager\Factory\MicroRouterFactory',
-            'Request'               => 'PPI\ServiceManager\Factory\RequestFactory',
-            'Response'              => 'PPI\ServiceManager\Factory\ResponseFactory',
-            'RoutePluginManager'    => 'PPI\ServiceManager\Factory\RoutePluginManagerFactory',
-            'Router'                => 'PPI\ServiceManager\Factory\RouterFactory',
-            'RouterListener'        => 'PPI\ServiceManager\Factory\RouterListenerFactory',
-            'RouterRequestContext'  => 'PPI\ServiceManager\Factory\RouterRequestContextFactory',
-            'RoutingHelper'         => 'PPI\ServiceManager\Factory\RoutingHelperFactory',
+            'Config'                => 'PPI\Framework\ServiceManager\Factory\ConfigFactory',
+            'ControllerNameParser'  => 'PPI\Framework\ServiceManager\Factory\ControllerNameParserFactory',
+            'ControllerResolver'    => 'PPI\Framework\ServiceManager\Factory\ControllerResolverFactory',
+            'DataSource'            => 'PPI\Framework\ServiceManager\Factory\DataSourceFactory',
+            'EventManager'          => 'PPI\Framework\ServiceManager\Factory\EventManagerFactory',
+            'FileLocator'           => 'PPI\Framework\ServiceManager\Factory\FileLocatorFactory',
+            'MicroRouter'           => 'PPI\Framework\ServiceManager\Factory\MicroRouterFactory',
+            'Request'               => 'PPI\Framework\ServiceManager\Factory\RequestFactory',
+            'Response'              => 'PPI\Framework\ServiceManager\Factory\ResponseFactory',
+            'RoutePluginManager'    => 'PPI\Framework\ServiceManager\Factory\RoutePluginManagerFactory',
+            'Router'                => 'PPI\Framework\ServiceManager\Factory\RouterFactory',
+            'RouterListener'        => 'PPI\Framework\ServiceManager\Factory\RouterListenerFactory',
+            'RouterRequestContext'  => 'PPI\Framework\ServiceManager\Factory\RouterRequestContextFactory',
+            'RoutingHelper'         => 'PPI\Framework\ServiceManager\Factory\RoutingHelperFactory',
         ),
         'aliases'       => array(
             'Configuration'                             => 'Config',
@@ -69,7 +68,7 @@ class ServiceListenerFactory implements FactoryInterface
     );
 
     /**
-     * Create the service listener service
+     * Create the service listener service.
      *
      * Tries to get a service named ServiceListenerInterface from the service
      * locator, otherwise creates a Zend\ModuleManager\Listener\ServiceListener
@@ -85,10 +84,12 @@ class ServiceListenerFactory implements FactoryInterface
      *   - interface: the name of the interface that modules can implement as string
      *   - method: the name of the method that modules have to implement as string
      *
-     * @param  ServiceLocatorInterface   $serviceLocator
-     * @return ServiceListener
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @throws \InvalidArgumentException For invalid configurations.
      * @throws \RuntimeException
+     *
+     * @return ServiceListener
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

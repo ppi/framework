@@ -4,19 +4,18 @@
  *
  * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager;
+namespace PPI\Framework\ServiceManager;
 
-use PPI\Log\LoggerProxy;
+use PPI\Framework\Log\LoggerProxy;
 
 /**
  * ServiceManager builder.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ServiceManagerBuilder extends ServiceManager
 {
@@ -34,7 +33,8 @@ class ServiceManagerBuilder extends ServiceManager
     }
 
     /**
-     * @param  array $parameters
+     * @param array $parameters
+     *
      * @return $this
      */
     public function build(array $parameters = array())
@@ -43,7 +43,7 @@ class ServiceManagerBuilder extends ServiceManager
             $this->config['framework'] = array();
         }
 
-        // Core parameters set by PPI\App
+        // Core parameters set by PPI\Framework\App
         $parametersBag = new ParameterBag($parameters);
         $parametersBag->resolve();
         $this->setService('ApplicationParameters', $parametersBag);
