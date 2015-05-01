@@ -11,7 +11,6 @@
 namespace PPI\Framework\Module\Listener;
 
 use PPI\Framework\ServiceManager\ServiceManager;
-use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ModuleManager\Listener\AutoloaderListener;
 use Zend\ModuleManager\Listener\DefaultListenerAggregate as ZendDefaultListenerAggregate;
@@ -114,16 +113,6 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
 
         if (is_callable(array($module, 'getRoutes'))) {
             $routes = $module->getRoutes();
-            switch(true) {
-                case $routes instanceof SymfonyRouteCollection:
-                    break;
-
-                case $routes instanceof AuraRouter:
-                    break;
-
-                default:
-                    throw new \Exception('Unexpected routes value return from module: ' . $module->getName() . ' - found value: ' . gettype($routes));
-            }
             $this->routes[$e->getModuleName()] = $routes;
         }
 
