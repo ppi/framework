@@ -46,6 +46,8 @@ class RouterFactory implements FactoryInterface
         foreach ($allModuleRoutes as $moduleRoutes) {
             // Create a new router for each module
             $moduleRouter = new Router($requestContext, $routeCollection, $routerOptions, $logger);
+            $moduleRouter->setRouteCollection($moduleRoutes);
+            
             $chainRouter->add($moduleRouter);
         }
         return $chainRouter;
