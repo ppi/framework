@@ -10,12 +10,8 @@
 
 namespace PPI\Framework\ServiceManager\Factory;
 
-<<<<<<< Updated upstream
 use PPI\Framework\Router\Router;
-=======
-use PPI\Router\Router;
 use Symfony\Cmf\Component\Routing\ChainRouter;
->>>>>>> Stashed changes
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Zend\ServiceManager\FactoryInterface;
