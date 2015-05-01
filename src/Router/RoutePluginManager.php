@@ -4,16 +4,17 @@
  *
  * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Router;
+namespace PPI\Framework\Router;
 
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\Exception\RuntimeException;
 
 /**
- * Plugin manager implementation for routes
+ * Plugin manager implementation for routes.
  *
  * Enforces that routes retrieved are instances of RouteInterface. It overrides
  * createFromInvokable() to call the route's factory method in order to get an
@@ -36,9 +37,10 @@ class RoutePluginManager extends AbstractPluginManager
      * service name. This ensures that providing the FQCN does not trigger an
      * abstract factory later.
      *
-     * @param  string             $name
-     * @param  string             $invokableClass
-     * @param  null|bool          $shared
+     * @param string    $name
+     * @param string    $invokableClass
+     * @param null|bool $shared
+     *
      * @return RoutePluginManager
      */
     public function setInvokableClass($name, $invokableClass, $shared = null)
@@ -57,8 +59,8 @@ class RoutePluginManager extends AbstractPluginManager
      * Checks that the filter loaded is either a valid callback or an instance
      * of FilterInterface.
      *
-     * @param  mixed            $plugin
-     * @return void
+     * @param mixed $plugin
+     *
      * @throws RuntimeException if invalid
      */
     public function validatePlugin($plugin)
@@ -81,10 +83,12 @@ class RoutePluginManager extends AbstractPluginManager
      * Overrides parent implementation by invoking the route factory,
      * passing $creationOptions as the argument.
      *
-     * @param  string                     $canonicalName
-     * @param  string                     $requestedName
-     * @return null|\stdClass
+     * @param string $canonicalName
+     * @param string $requestedName
+     *
      * @throws Exception\RuntimeException If resolved class does not exist, or does not implement RouteInterface
+     *
+     * @return null|\stdClass
      */
     protected function createFromInvokable($canonicalName, $requestedName)
     {

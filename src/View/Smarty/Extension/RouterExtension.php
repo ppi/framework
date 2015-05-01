@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2012 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Smarty\Extension;
+namespace PPI\Framework\View\Smarty\Extension;
 
 use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension as BaseRoutingExtension;
 
@@ -15,8 +16,6 @@ use NoiseLabs\Bundle\SmartyBundle\Extension\RoutingExtension as BaseRoutingExten
   * Provides integration of the Routing component with Smarty[Bundle].
   *
   * @author     Vítor Brandão <vitor@ppi.io>
-  * @package    PPI
-  * @subpackage Templating
   */
  class RouterExtension extends BaseRoutingExtension
  {

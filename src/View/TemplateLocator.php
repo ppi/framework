@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View;
+namespace PPI\Framework\View;
 
 use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator as BaseTemplateLocator;
 
@@ -15,8 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator as BaseTemp
  * The PPI Template Locator.
  *
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Templating
  */
 class TemplateLocator extends BaseTemplateLocator
 {

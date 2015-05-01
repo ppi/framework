@@ -4,15 +4,16 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View\Smarty;
+namespace PPI\Framework\View\Smarty;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
-use PPI\Log\LoggerInterface;
-use PPI\View\GlobalVariables;
-use PPI\View\TemplateLocator;
+use PPI\Framework\Log\LoggerInterface;
+use PPI\Framework\View\GlobalVariables;
+use PPI\Framework\View\TemplateLocator;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 
@@ -21,13 +22,11 @@ use Symfony\Component\Templating\TemplateNameParserInterface;
  *
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Templating
  */
 class SmartyEngine extends BaseSmartyEngine
 {
     /**
-     * @var \PPI\View\TemplateLocator
+     * @var \PPI\Framework\View\TemplateLocator
      */
     protected $locator;
 
@@ -56,13 +55,13 @@ class SmartyEngine extends BaseSmartyEngine
         // There are no default extensions.
         $this->extensions = array();
 
-        /**
+        /*
          * Register an handler for 'logical' filenames of the type:
          * <code>file:Application:index:index.html.smarty</code>
          */
         $this->smarty->default_template_handler_func = array($this, 'smartyDefaultTemplateHandler');
 
-        /**
+        /*
          * Define a set of template dirs to look for. This will allow the
          * usage of the following syntax:
          * <code>file:[Application]/index/index.html.tpl</code>
@@ -80,7 +79,7 @@ class SmartyEngine extends BaseSmartyEngine
             $this->addGlobal('app', $globals);
         }
 
-        /**
+        /*
          * @note muteExpectedErrors() was activated to workaround the following issue:
          *
          * <code>Warning: filemtime(): stat failed for /path/to/smarty/cache/3ab50a623e65185c49bf17c63c90cc56070ea85c.one.tpl.php

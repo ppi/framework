@@ -1,0 +1,35 @@
+#!/usr/bin/env php
+<?php
+
+$fixer       = realpath(__DIR__ . '/vendor/bin/php-cs-fixer');
+$fixerConfig = realpath(__DIR__ . '/.php_cs');
+
+if (false === file_exists($fixer)) {
+    echo <<<EOT
+The php-cs-fixer script is not available. To install it execute the following
+grunt task:
+
+    $ composer install
+
+
+EOT;
+
+    return -1;
+}
+
+if (false === file_exists($fixerConfig)) {
+    echo <<<EOT
+The .php_cs file containing the fixer configuration is missing. Please rebase
+your branch against and try again.
+
+EOT;
+}
+
+$args = $argc > 1 ? implode(' ', array_slice($argv, 1)) : '';
+$cmd  = sprintf('%s --config-file=%s --verbose %s', $fixer, $fixerConfig, $args);
+
+passthru($cmd, $retcode);
+
+return $retcode;
+
+?>

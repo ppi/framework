@@ -4,10 +4,11 @@
  *
  * @copyright  Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
-namespace PPI\View;
+namespace PPI\Framework\View;
 
 use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
 
@@ -17,8 +18,6 @@ use Symfony\Component\Templating\TemplateReference as BaseTemplateReference;
  * @author     Victor Berchet <victor@suumit.com>
  * @author     Paul Dragoonis <paul@ppi.io>
  * @author     Vítor Brandão
- * @package    PPI
- * @subpackage Templating
  */
 class TemplateReference extends BaseTemplateReference
 {
@@ -55,7 +54,7 @@ class TemplateReference extends BaseTemplateReference
     /**
      * Returns the path to the template
      *  - as a path when the template is not part of a module
-     *  - as a resource when the template is part of a module
+     *  - as a resource when the template is part of a module.
      *
      * @return string A path to the template or a resource
      */

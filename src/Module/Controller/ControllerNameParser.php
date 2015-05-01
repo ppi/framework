@@ -4,10 +4,11 @@
  *
  * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\Module\Controller;
+namespace PPI\Framework\Module\Controller;
 
 use Zend\ModuleManager\ModuleManagerInterface;
 
@@ -18,8 +19,6 @@ use Zend\ModuleManager\ModuleManagerInterface;
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Vítor Brandão <vitor@ppi.io>
- * @package    PPI
- * @subpackage Module
  */
 class ControllerNameParser
 {
@@ -40,10 +39,10 @@ class ControllerNameParser
      *
      * @param string $controller A short notation controller (a:b:c)
      *
-     * @return string A string with class::method
-     *
      * @throws \InvalidArgumentException when the specified module is not enabled
      *                                   or the controller cannot be found
+     *
+     * @return string A string with class::method
      */
     public function parse($controller)
     {

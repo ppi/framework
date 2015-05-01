@@ -2,14 +2,15 @@
 /**
  * This file is part of the PPI Framework.
  *
- * @copyright   Copyright (c) 2011-2013 Paul Dragoonis <paul@ppi.io>
+ * @copyright   Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license     http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link        http://www.ppi.io
  */
 
-namespace PPI\ServiceManager;
+namespace PPI\Framework\ServiceManager;
 
-use PPI\Exception\NotImplementedException;
+use PPI\Framework\Exception\NotImplementedException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ScopeInterface;
 use Zend\ServiceManager\ConfigInterface;
@@ -29,8 +30,6 @@ use Zend\ServiceManager\ServiceManager as BaseServiceManager;
  *
  * @author     Vítor Brandão <vitor@ppi.io>
  * @author     Paul Dragoonis <paul@ppi.io>
- * @package    PPI
- * @subpackage ServiceManager
  */
 class ServiceManager extends BaseServiceManager implements ContainerInterface
 {
@@ -38,7 +37,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     {
         parent::__construct($config);
 
-        /**
+        /*
          * @note Unfortunately we need this to allow 'response' key to be overridden.
          * Hopefully in a later version we can refactor and break Backwards
          * Compatibility and thus disable this feature.
@@ -47,7 +46,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * Retrieve a registered instance
+     * Retrieve a registered instance.
      *
      * This method is an alias to $this->get().
      *
@@ -82,9 +81,9 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * @param string $name The parameter name
      *
-     * @return mixed The parameter value
-     *
      * @throws \InvalidArgumentException if the parameter is not defined
+     *
+     * @return mixed The parameter value
      */
     public function getParameter($name)
     {
@@ -142,7 +141,8 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * @param  string                  $name
+     * @param string $name
+     *
      * @throws NotImplementedException
      */
     public function enterScope($name)
@@ -151,7 +151,8 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * @param  string                  $name
+     * @param string $name
+     *
      * @throws NotImplementedException
      */
     public function leaveScope($name)
@@ -160,7 +161,8 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * @param  ScopeInterface          $scope
+     * @param ScopeInterface $scope
+     *
      * @throws NotImplementedException
      */
     public function addScope(ScopeInterface $scope)
@@ -169,9 +171,11 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * @param  string                  $name
-     * @return bool|void
+     * @param string $name
+     *
      * @throws NotImplementedException
+     *
+     * @return bool|void
      */
     public function hasScope($name)
     {
@@ -179,9 +183,11 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
     }
 
     /**
-     * @param  string                  $name
-     * @return bool|void
+     * @param string $name
+     *
      * @throws NotImplementedException
+     *
+     * @return bool|void
      */
     public function isScopeActive($name)
     {
