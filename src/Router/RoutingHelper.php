@@ -11,7 +11,9 @@
 namespace PPI\Framework\Router;
 
 /**
- * The routing helper for the controller.
+ * A routing helper for the controller
+ *
+ * @author Paul Dragoonis <paul@ppi.io>
  */
 class RoutingHelper
 {
