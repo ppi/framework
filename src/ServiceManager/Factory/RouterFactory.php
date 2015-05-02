@@ -25,11 +25,9 @@ use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 class RouterFactory implements FactoryInterface
 {
     /**
-     * Create and return the router.
-     *
      * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return \PPI\Framework\Router\Router
+     * @return ChainRouter
+     * @throws \Exception
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -55,7 +53,7 @@ class RouterFactory implements FactoryInterface
 //                    break;
 
                 default:
-                    throw new \Exception('Unexpected routes value return from module: ' . $moduleName->getName() . ' - found value: ' . gettype($routes));
+                    throw new \Exception('Unexpected routes value return from module: ' . $moduleName . ' - found value: ' . gettype($routes));
             }
 
             $chainRouter->add($sfRouterWrapper);
