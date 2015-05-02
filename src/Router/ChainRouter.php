@@ -36,4 +36,13 @@ class ChainRouter extends BaseChainRouter
         return implode(', ', $pieces);
     }
 
+    /**
+     * @return bool
+     */
+    public function hasRouters()
+    {
+        $routers = $this->sortRouters();
+        return !empty($routers);
+    }
+
 }

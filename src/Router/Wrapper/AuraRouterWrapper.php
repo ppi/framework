@@ -11,31 +11,33 @@ namespace PPI\Framework\Router\Wrapper;
 
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
+use Aura\Router\Router as AuraRouter;
 
 /**
  *
+ *
  * @author Paul Dragoonis <paul@ppi.io>
  */
-class SymfonyRouterWrapper implements RouterInterface
+class AuraRouterWrapper implements RouterInterface
 {
 
     /**
-     * @var RouterInterface
+     * @var AuraRouter
      */
     protected $router;
 
     /**
-     * @param RouterInterface $router
+     * @param AuraRouter $router
      */
-    public function __construct(RouterInterface $router)
+    public function __construct(AuraRouter $router)
     {
         $this->setRouter($router);
     }
 
     /**
-     * @param RouterInterface $router
+     * @param AuraRouter $router
      */
-    public function setRouter(RouterInterface $router)
+    public function setRouter(AuraRouter $router)
     {
         $this->router = $router;
     }
@@ -45,7 +47,7 @@ class SymfonyRouterWrapper implements RouterInterface
      */
     public function setContext(RequestContext $context)
     {
-        $this->router->setContext($context);
+
     }
 
     /**
@@ -53,7 +55,7 @@ class SymfonyRouterWrapper implements RouterInterface
      */
     public function getContext()
     {
-        return $this->router->getContext();
+
     }
 
     /**
@@ -61,7 +63,7 @@ class SymfonyRouterWrapper implements RouterInterface
      */
     public function getRouteCollection()
     {
-        return $this->router->getRouteCollection();
+
     }
 
     /**
@@ -69,7 +71,7 @@ class SymfonyRouterWrapper implements RouterInterface
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        return $this->router->generate($name, $parameters, $referenceType);
+
     }
 
     /**
@@ -77,8 +79,8 @@ class SymfonyRouterWrapper implements RouterInterface
      */
     public function match($pathinfo)
     {
-        return $this->router->match($pathinfo);
+        $ret = $this->router->match($pathinfo);
+        var_dump(__METHOD__, $ret); exit;
     }
-
 
 }

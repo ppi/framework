@@ -16,6 +16,10 @@ use Zend\ServiceManager\FactoryInterface;
 use PPI\Framework\Router\Wrapper\SymfonyRouterWrapper;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
+
+use Aura\Router\Router as AuraRouter;
+use PPI\Framework\Router\Wrapper\AuraRouterWrapper;
+
 /**
  * Router Factory.
  *
@@ -40,24 +44,26 @@ class RouterFactory implements FactoryInterface
         $chainRouter->setContext($requestContext);
 
         $allModuleRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();
-        foreach ($allModuleRoutes as $moduleName => $moduleRoutes) {
+        foreach ($allModuleRoutes as $moduleName => $moduleRoutingResponse) {
 
             switch(true) {
-                case $moduleRoutes instanceof SymfonyRouteCollection:
+                case $moduleRoutingResponse instanceof SymfonyRouteCollection:
                     // Create a new router for each module
-                    $sfRouter = new Router($requestContext, $moduleRoutes, $routerOptions, $logger);
+                    $sfRouter = new Router($requestContext, $moduleRoutingResponse, $routerOptions, $logger);
                     $sfRouterWrapper = new SymfonyRouterWrapper($sfRouter);
+                    $chainRouter->add($sfRouterWrapper);
                     break;
 
-//                case $moduleRoutes instanceof AuraRouter:
-//                    break;
+                case $moduleRoutingResponse instanceof AuraRouter:
+                    $auraRouterWrapper = new AuraRouterWrapper($moduleRoutingResponse);
+                    $chainRouter->add($auraRouterWrapper);
+                    break;
 
                 default:
                     throw new \Exception('Unexpected routes value return from module: ' . $moduleName . ' - found value: ' . gettype($routes));
             }
-
-            $chainRouter->add($sfRouterWrapper);
         }
+
         return $chainRouter;
     }
 }
