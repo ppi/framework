@@ -116,8 +116,10 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     {
 
         if(!is_readable($path)) {
-            throw new \InvalidArgumentException('Invalid aura routes path found');
+            throw new \InvalidArgumentException('Invalid aura routes path found: ' . $path);
         }
+
+        $router = (new AuraRouterFactory())->newInstance();
 
         // The included file must return the aura router
         $router = include $path;
