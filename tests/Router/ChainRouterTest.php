@@ -39,11 +39,11 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
      */
     public function parametersToStringData()
     {
-        return [
-            [['_controller' => 'index'], '"_controller": "index"'],
-            [['_controller' => 'index'], '"_controller": "index"'],
-            [['_module' => 'Application'], '"_module": "Application"']
-        ];
+        return array(
+            array(array('_controller' => 'index'), '"_controller": "index"'),
+            array(array('_controller' => 'index'), '"_controller": "index"'),
+            array(array('_module' => 'Application'), '"_module": "Application"')
+        );
     }
 }
 

@@ -20,7 +20,6 @@ use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
  */
 class ChainRouter extends BaseChainRouter
 {
-
     /**
      * @param array $parameters
      *
