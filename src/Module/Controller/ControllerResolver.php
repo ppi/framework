@@ -11,6 +11,7 @@
 namespace PPI\Framework\Module\Controller;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -29,13 +30,13 @@ class ControllerResolver extends BaseControllerResolver
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceManager A ServiceLocatorInterface instance
-     * @param ControllerNameParser    $parser         A ControllerNameParser instance
-     * @param LoggerInterface         $logger         A LoggerInterface instance
+     * @param ControllerNameParser $parser A ControllerNameParser instance
+     * @param LoggerInterface $logger A LoggerInterface instance
      */
     public function __construct(ServiceLocatorInterface $serviceManager, ControllerNameParser $parser, LoggerInterface $logger = null)
     {
         $this->serviceManager = $serviceManager;
-        $this->parser         = $parser;
+        $this->parser = $parser;
 
         parent::__construct($logger);
     }
@@ -79,5 +80,18 @@ class ControllerResolver extends BaseControllerResolver
         }
 
         return array($controller, $method);
+    }
+
+    /**
+     * @param Request $request
+     * @return callable|false|mixed|object
+     */
+    public function getController(Request $request)
+    {
+        $controller = parent::getController($request);
+        if ($controller instanceof ServiceLocatorAwareInterface) {
+            $controller->setServiceLocator($this->serviceManager);
+        }
+        return $controller;
     }
 }

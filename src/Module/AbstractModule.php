@@ -131,6 +131,10 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
             );
         }
 
+        foreach($router->getRoutes() as $route) {
+            $route->addValues(array('_module' => $this->getName()));
+        }
+
         return $router;
     }
 
