@@ -17,6 +17,7 @@ use Psr\Http\Message\RequestInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * The PPI App bootstrap class.
@@ -279,24 +280,44 @@ class App implements AppInterface
         // Routing
         $this->handleRouting();
 
-        // load controller
+        // Resolve our Controller
         $resolver = $this->serviceManager->get('ControllerResolver');
         $request = $this->getRequest();
         if (false === $controller = $resolver->getController($request)) {
-            throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s". Maybe you forgot to add the matching route in your routing configuration?', $request->getPathInfo()));
+            throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
         }
 
+        // Symfony ControllerResolver returns us an array of params, controller and action.
+        $actionName = null;
+        if (is_array($controller) && isset($controller[0]) && is_object($controller[0])) {
+            $controller = $controller[0];
+            $actionName = $controller[1];
+        }
+
+        // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
         // Set the options for our controller
-        $controller[0]->setOptions(array(
-            'environment' => $this->getEnvironment(),
-        ));
+        if (method_exists($controller, 'setOptions')) {
+            $controller->setOptions(array(
+                'environment' => $this->getEnvironment(),
+            ));
+        }
 
-        // Lets create the routing helper for the controller, we unset() reserved keys & what's left are route params
+
+
         $routeParams = $this->request->attributes->all();
-        $activeRoute = $routeParams['_route'];
 
+        // Route Data Verification
+        foreach(array('_module', '_controller', '_route') as $routeParamKey) {
+            if(!isset($routeParams[$routeParamKey])) {
+                throw new \Exception('Unable to find the key: ' . $routeParamKey . ' in the matched route');
+            }
+        }
+
+        $activeRoute = $routeParams['_route'];
         $moduleName = $routeParams['_module'];
-        $controllerName = $routeParams['_controller'];
+        $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
+
+        // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
 
         // Pass in the routing params, set the active route key
@@ -306,14 +327,15 @@ class App implements AppInterface
             ->setActiveRouteName($activeRoute);
 
         // Register our routing helper into the controller
-        $controller[0]->setHelper('routing', $routingHelper);
+        $controller->setHelper('routing', $routingHelper);
 
         // Prep our module for dispatch
+        // @todo - find the Module name from the AuraRoute
         $module = $this->getModuleManager()->getModuleByAlias($moduleName);
         $module
             ->setControllerName($controllerName)
-            ->setActionName($controller[1])
-            ->setController($controller[0]);
+            ->setActionName($actionName)
+            ->setController($controller);
 
         // Dispatch our action, return the content from the action called.
         $controller = $module->getController();
@@ -689,7 +711,6 @@ class App implements AppInterface
         try {
             // Lets load up our router and match the appropriate route
             $parameters = $router->matchRequest($this->getRequest());
-
             if (!empty($parameters)) {
 
                 if (null !== $this->logger) {
@@ -699,8 +720,9 @@ class App implements AppInterface
                 $this->getRequest()->attributes->add($parameters);
                 unset($parameters['_route'], $parameters['_controller']);
                 $this->getRequest()->attributes->set('_route_params', $parameters);
+
             }
-        } catch (\Exception $e) {
+        } catch (ResourceNotFoundException $e) {
 
             // Lets grab the 'Framework 404' route and dispatch it.
             try {
@@ -720,6 +742,8 @@ class App implements AppInterface
                 throw new \Exception('Unable to load 404 page. An internal error occurred');
             }
 
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 
