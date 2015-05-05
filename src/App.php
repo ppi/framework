@@ -305,10 +305,11 @@ class App implements AppInterface
 
         // Symfony ControllerResolver returns us an array of params, controller and action.
         if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
-            $controller = $controller[0];
             if($actionName === null) {
                 $actionName = $controller[1];
             }
+            $controller = $controller[0];
+
         }
 
         // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
