@@ -287,23 +287,6 @@ class App implements AppInterface
             throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
         }
 
-        // Symfony ControllerResolver returns us an array of params, controller and action.
-        $actionName = null;
-        if (is_array($controller) && isset($controller[0]) && is_object($controller[0])) {
-            $controller = $controller[0];
-            $actionName = $controller[1];
-        }
-
-        // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
-        // Set the options for our controller
-        if (method_exists($controller, 'setOptions')) {
-            $controller->setOptions(array(
-                'environment' => $this->getEnvironment(),
-            ));
-        }
-
-
-
         $routeParams = $this->request->attributes->all();
 
         // Route Data Verification
@@ -316,6 +299,7 @@ class App implements AppInterface
         $activeRoute = $routeParams['_route'];
         $moduleName = $routeParams['_module'];
         $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
+        $actionName = isset($routeParams['action']) ? $routeParams['action'] : null;
 
         // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
@@ -329,8 +313,28 @@ class App implements AppInterface
         // Register our routing helper into the controller
         $controller->setHelper('routing', $routingHelper);
 
+        // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
+        // Set the options for our controller
+        if (method_exists($controller, 'setOptions')) {
+            $controller->setOptions(array(
+                'environment' => $this->getEnvironment(),
+            ));
+        }
+
+        // Symfony ControllerResolver returns us an array of params, controller and action.
+
+        if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
+            $controller = $controller[0];
+            if($actionName === null) {
+                $actionName = $controller[1];
+            }
+        }
+
+        if($actionName === null) {
+            throw new \Exception('Unable to locate the action from the matched route');
+        }
+
         // Prep our module for dispatch
-        // @todo - find the Module name from the AuraRoute
         $module = $this->getModuleManager()->getModuleByAlias($moduleName);
         $module
             ->setControllerName($controllerName)
