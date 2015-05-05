@@ -136,16 +136,19 @@ class AuraRouterWrapper implements RouterInterface, RequestMatcherInterface
                 throw new \Exception('Unable to determine the controller from route: ' . $matchedRoute->name);
             }
         }
-var_dump(__METHOD__, $routeParams); exit;
-        // If the controller is an Object, and 'action' is undefined - we default to __invoke
-        if(!isset($routeParams['action'])) {
-            $routeParams['action'] == '__invoke';
+
+        $routeParams['_route'] = $matchedRoute->name;
+
+        // If the controller is an Object, and 'action' is defaulted to the route name - we default to __invoke
+        if($routeParams['action'] === $matchedRoute->name) {
+            $routeParams['action'] = '__invoke';
         }
 
         if(!isset($routeParams['controller']) && !isset($routeParams['action'])) {
             throw new \Exception('Matched the route: ' . $matchedRoute->name . ' but unable to locate
             any controller/action params to dispatch');
         }
+
 
         return $routeParams;
     }
