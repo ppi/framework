@@ -126,6 +126,12 @@ class AuraRouterWrapper implements RouterInterface, RequestMatcherInterface
 
         $routeParams = $matchedRoute->params;
 
+        // The 'action' key always exists and defaults to the Route Name, so we check accordingly
+        if(!isset($routeParams['controller']) && $routeParams['action'] === $matchedRoute->name) {
+            throw new \Exception('Matched the route: ' . $matchedRoute->name . ' but unable to locate
+            any controller/action params to dispatch');
+        }
+
         // We need _controller, to that symfony ControllerResolver can pick this up
         if(!isset($routeParams['_controller'])) {
             if(isset($routeParams['controller'])) {
@@ -143,12 +149,6 @@ class AuraRouterWrapper implements RouterInterface, RequestMatcherInterface
         if($routeParams['action'] === $matchedRoute->name) {
             $routeParams['action'] = '__invoke';
         }
-
-        if(!isset($routeParams['controller']) && !isset($routeParams['action'])) {
-            throw new \Exception('Matched the route: ' . $matchedRoute->name . ' but unable to locate
-            any controller/action params to dispatch');
-        }
-
 
         return $routeParams;
     }
