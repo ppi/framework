@@ -300,18 +300,16 @@ class App implements AppInterface
         $moduleName = $routeParams['_module'];
         $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
         $actionName = isset($routeParams['action']) ? $routeParams['action'] : null;
-
         // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
         unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
 
-        // Pass in the routing params, set the active route key
-        $routingHelper = $this->serviceManager->get('RoutingHelper');
-        $routingHelper
-            ->setParams($routeParams)
-            ->setActiveRouteName($activeRoute);
-
-        // Register our routing helper into the controller
-        $controller->setHelper('routing', $routingHelper);
+        // Symfony ControllerResolver returns us an array of params, controller and action.
+        if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
+            $controller = $controller[0];
+            if($actionName === null) {
+                $actionName = $controller[1];
+            }
+        }
 
         // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
         // Set the options for our controller
@@ -321,18 +319,18 @@ class App implements AppInterface
             ));
         }
 
-        // Symfony ControllerResolver returns us an array of params, controller and action.
-
-        if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
-            $controller = $controller[0];
-            if($actionName === null) {
-                $actionName = $controller[1];
-            }
-        }
-
         if($actionName === null) {
             throw new \Exception('Unable to locate the action from the matched route');
         }
+
+        // Pass in the routing params, set the active route key
+        $routingHelper = $this->serviceManager->get('RoutingHelper');
+        $routingHelper
+            ->setParams($routeParams)
+            ->setActiveRouteName($activeRoute);
+
+        // Register our routing helper into the controller
+        $controller->setHelper('routing', $routingHelper);
 
         // Prep our module for dispatch
         $module = $this->getModuleManager()->getModuleByAlias($moduleName);
