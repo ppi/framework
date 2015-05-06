@@ -1,6 +1,6 @@
 {
   "name": "ppi/framework",
-  "description": "PPI Framework - The PHP Meta Framework!",
+  "description": "PPI Framework - The PHP Interoperability Framework!",
   "homepage": "http://www.ppi.io",
   "license": "MIT",
   "keywords": ["framework"],
