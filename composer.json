@@ -51,5 +51,10 @@
       "PPI\\Framework\\": "src/",
       "PPI\\FrameworkTest\\": "tests/"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.1-dev"
+    }
   }
 }
