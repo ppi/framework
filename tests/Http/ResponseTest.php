@@ -18,6 +18,8 @@ use PPI\Framework\Http\Stream;
  */
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
+    private $response;
+
     public function setUp()
     {
         $this->response = new Response();
