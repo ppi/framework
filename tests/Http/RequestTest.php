@@ -99,7 +99,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithUriReturnsNewInstanceWithNewUri()
     {
-        $request = $this->request->withUri(new Uri('https://example.com:10082/foo/bar?baz=bat'));
+        $request = $this->request->withUri(new Uri('https://ppi.io:10082/foo/bar?baz=bat'));
         $this->assertNotSame($this->request, $request);
 
         $request2 = $request->withUri(new Uri('/baz/bat?foo=bar'));
@@ -118,8 +118,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'false'    => array( false ),
             'int'      => array( 1 ),
             'float'    => array( 1.1 ),
-            'array'    => array( ('http://example.com') ),
-            'stdClass' => array( (object) array( 'href'         => 'http://example.com') ),
+            'array'    => array( ('http://ppi.io') ),
+            'stdClass' => array( (object) array( 'href'         => 'http://ppi.io') ),
         );
     }
 
@@ -170,7 +170,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $request
-            ->withUri(new Uri('http://example.com'));
+            ->withUri(new Uri('http://ppi.io'));
         $this->assertEquals('/', $request->getRequestTarget());
     }
 
@@ -183,13 +183,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $request = new Request();
         $request = $request
-            ->withUri(new Uri('https://api.example.com/user'))
+            ->withUri(new Uri('https://api.ppi.io/user'))
             ->withMethod('POST');
         $requests['absolute-uri'] = array($request, '/user');
 
         $request = new Request();
         $request = $request
-            ->withUri(new Uri('https://api.example.com/user?foo=bar'))
+            ->withUri(new Uri('https://api.ppi.io/user?foo=bar'))
             ->withMethod('POST');
         $requests['absolute-uri-with-query'] = array($request, '/user?foo=bar');
 
@@ -224,9 +224,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'asterisk-form'         => array( '*' ),
-            'authority-form'        => array( 'api.example.com' ),
-            'absolute-form'         => array( 'https://api.example.com/users' ),
-            'absolute-form-query'   => array( 'https://api.example.com/users?foo=bar' ),
+            'authority-form'        => array( 'api.ppi.io' ),
+            'absolute-form'         => array( 'https://api.ppi.io/users' ),
+            'absolute-form-query'   => array( 'https://api.ppi.io/users?foo=bar' ),
             'origin-form-path-only' => array( '/users' ),
             'origin-form'           => array( '/users?id=foo' ),
         );
@@ -262,7 +262,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testRequestTargetDoesNotCacheBetweenInstances()
     {
         $request    = new Request();
-        $request    = $request->withUri(new Uri('https://example.com/foo/bar'));
+        $request    = $request->withUri(new Uri('https://ppi.io/foo/bar'));
         $original   = $request->getRequestTarget();
         $newRequest = $request->withUri(new Uri('http://ppi.io/bar/baz'));
         $this->assertNotEquals($original, $newRequest->getRequestTarget());
@@ -274,7 +274,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     public function testSettingNewUriResetsRequestTarget()
     {
         $request    = new Request();
-        $request    = $request->withUri(new Uri('https://example.com/foo/bar'));
+        $request    = $request->withUri(new Uri('https://ppi.io/foo/bar'));
         $original   = $request->getRequestTarget();
         $newRequest = $request->withUri(new Uri('http://ppi.io/bar/baz'));
     }
@@ -284,10 +284,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeadersContainsHostHeaderIfUriWithHostIsPresent()
     {
-        $request = Request::create('http://example.com');
+        $request = Request::create('http://ppi.io');
         $headers = $request->getHeaders();
         $this->assertArrayHasKey('host', $headers);
-        $this->assertContains('example.com', $headers['host']);
+        $this->assertContains('ppi.io', $headers['host']);
     }
 
     /**
@@ -315,13 +315,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHostHeaderReturnsUriHostWhenPresent()
     {
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
-            'HTTP_HOST'   => 'example.com',
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
+            'HTTP_HOST'   => 'ppi.io',
             'HTTPS'       => 'on',
             'SERVER_PORT' => 443,
         ));
         $header = $request->getHeader('host');
-        $this->assertEquals('example.com', $header);
+        $this->assertEquals('ppi.io', $header);
     }
 
     /**
@@ -347,9 +347,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHostHeaderLinesReturnsUriHostWhenPresent()
     {
-        $request = Request::create('http://example.com');
+        $request = Request::create('http://ppi.io');
         $header  = $request->getHeaderLines('host');
-        $this->assertContains('example.com', $header);
+        $this->assertContains('ppi.io', $header);
     }
 
     /**
@@ -370,6 +370,70 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = new Request();
         $header  = $request->getHeaderLines('host');
         $this->assertSame(array(), $header);
+    }
+
+    /**
+     * @group http
+     */
+    public function testGetHostHeaderLineReturnsEmptyStringIfNoUriPresent()
+    {
+        $request = new Request();
+        $this->assertEquals('', $request->getHeaderLine('host'));
+    }
+    /**
+     * @group http
+     */
+    public function testGetHostHeaderLineReturnsEmptyStringIfUriDoesNotContainHost()
+    {
+        $request = new Request();
+        $this->assertEquals('', $request->getHeaderLine('host'));
+    }
+
+    /**
+     * @group http
+     */
+    public function testPassingPreserveHostFlagWhenUpdatingUriDoesNotUpdateHostHeader()
+    {
+        $this->markTestSkipped('Not yet implemented');
+
+        $request = new Request();
+        $request->withAddedHeader('Host', 'ppi.io');
+        $uri = new Uri();
+        $uri
+            ->withHost('www.ppi.io');
+        $new = $request->withUri($uri, true);
+        $this->assertEquals('ppi.io', $new->getHeaderLine('Host'));
+    }
+
+    /**
+     * @group http
+     */
+    public function testNotPassingPreserveHostFlagWhenUpdatingUriWithoutHostDoesNotUpdateHostHeader()
+    {
+        $this->markTestSkipped('Not yet implemented');
+
+        $request = new Request();
+        $request->withAddedHeader('Host', 'ppi.io');
+        $uri = new Uri();
+        $new = $request->withUri($uri);
+        $this->assertEquals('ppi.io', $new->getHeaderLine('Host'));
+    }
+
+    /**
+     * @group http
+     */
+    public function testHostHeaderUpdatesToUriHostAndPortWhenPreserveHostDisabledAndNonStandardPort()
+    {
+        $this->markTestSkipped('Not yet implemented');
+
+        $request = new Request();
+        $request->withAddedHeader('Host', 'ppi.io');
+        $uri = new Uri();
+        $uri
+            ->withHost('www.ppi.io')
+            ->withPort(10081);
+        $new = $request->withUri($uri);
+        $this->assertEquals('www.ppi.io:10081', $new->getHeaderLine('Host'));
     }
 
     /**
@@ -518,7 +582,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->isSecure());
 
         $json    = '{"jsonrpc":"2.0","method":"echo","id":7,"params":["Hello World"]}';
-        $request = Request::create('http://example.com/jsonrpc', 'POST', array(), array(), array(), array(), $json);
+        $request = Request::create('http://ppi.io/jsonrpc', 'POST', array(), array(), array(), array(), $json);
         $this->assertEquals($json, $request->getContent());
         $this->assertFalse($request->isSecure());
 
@@ -593,7 +657,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         // server is used by default
         $request = Request::create('/', 'DELETE', array(), array(), array(), array(
-            'HTTP_HOST'     => 'example.com',
+            'HTTP_HOST'     => 'ppi.io',
             'HTTPS'         => 'on',
             'SERVER_PORT'   => 443,
             'PHP_AUTH_USER' => 'vitor',
@@ -601,7 +665,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'QUERY_STRING'  => 'foo=bar',
             'CONTENT_TYPE'  => 'application/json',
         ));
-        $this->assertEquals('example.com', $request->getHost());
+        $this->assertEquals('ppi.io', $request->getHost());
         $this->assertEquals(443, $request->getPort());
         $this->assertTrue($request->isSecure());
         $this->assertEquals('vitor', $request->getUser());
@@ -611,7 +675,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         // URI has precedence over server
         $request = Request::create('http://luke:skywalker@example.net:8080/?foo=bar', 'GET', array(), array(), array(), array(
-            'HTTP_HOST'   => 'example.com',
+            'HTTP_HOST'   => 'ppi.io',
             'HTTPS'       => 'on',
             'SERVER_PORT' => 443,
         ));
@@ -1059,18 +1123,18 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request->initialize(array('foo' => 'bar'));
         $this->assertEquals('', $request->getHost(), '->getHost() return empty string if not initialized');
 
-        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.example.com'));
-        $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from Host Header');
+        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.ppi.io'));
+        $this->assertEquals('www.ppi.io', $request->getHost(), '->getHost() from Host Header');
 
         // Host header with port number
-        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.example.com:8080'));
-        $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from Host Header with port number');
+        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_HOST' => 'www.ppi.io:8080'));
+        $this->assertEquals('www.ppi.io', $request->getHost(), '->getHost() from Host Header with port number');
 
         // Server values
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com'));
-        $this->assertEquals('www.example.com', $request->getHost(), '->getHost() from server name');
+        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.ppi.io'));
+        $this->assertEquals('www.ppi.io', $request->getHost(), '->getHost() from server name');
 
-        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.example.com', 'HTTP_HOST' => 'www.host.com'));
+        $request->initialize(array(), array(), array(), array(), array(), array('SERVER_NAME' => 'www.ppi.io', 'HTTP_HOST' => 'www.host.com'));
         $this->assertEquals('www.host.com', $request->getHost(), '->getHost() value from Host header has priority over SERVER_NAME ');
     }
 
@@ -1079,7 +1143,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPort()
     {
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'https',
             'HTTP_X_FORWARDED_PORT'  => '443',
         ));
@@ -1088,7 +1152,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(80, $port, 'Without trusted proxies FORWARDED_PROTO and FORWARDED_PORT are ignored.');
 
         Request::setTrustedProxies(array('1.1.1.1'));
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'https',
             'HTTP_X_FORWARDED_PORT'  => '8443',
         ));
@@ -1096,35 +1160,35 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request->server->set('REMOTE_ADDR', '1.1.1.1');
         $this->assertEquals(8443, $request->getPort(), 'With PROTO and PORT set PORT takes precedence.');
 
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'https',
         ));
         $this->assertEquals(80, $request->getPort(), 'With only PROTO set getPort() ignores trusted headers on untrusted connection.');
         $request->server->set('REMOTE_ADDR', '1.1.1.1');
         $this->assertEquals(443, $request->getPort(), 'With only PROTO set getPort() defaults to 443.');
 
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'http',
         ));
         $this->assertEquals(80, $request->getPort(), 'If X_FORWARDED_PROTO is set to HTTP getPort() ignores trusted headers on untrusted connection.');
         $request->server->set('REMOTE_ADDR', '1.1.1.1');
         $this->assertEquals(80, $request->getPort(), 'If X_FORWARDED_PROTO is set to HTTP getPort() returns port of the original request.');
 
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'On',
         ));
         $this->assertEquals(80, $request->getPort(), 'With only PROTO set and value is On, getPort() ignores trusted headers on untrusted connection.');
         $request->server->set('REMOTE_ADDR', '1.1.1.1');
         $this->assertEquals(443, $request->getPort(), 'With only PROTO set and value is On, getPort() defaults to 443.');
 
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => '1',
         ));
         $this->assertEquals(80, $request->getPort(), 'With only PROTO set and value is 1, getPort() ignores trusted headers on untrusted connection.');
         $request->server->set('REMOTE_ADDR', '1.1.1.1');
         $this->assertEquals(443, $request->getPort(), 'With only PROTO set and value is 1, getPort() defaults to 443.');
 
-        $request = Request::create('http://example.com', 'GET', array(), array(), array(), array(
+        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
             'HTTP_X_FORWARDED_PROTO' => 'something-else',
         ));
         $port = $request->getPort();
@@ -1878,41 +1942,41 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testTrustedProxies()
     {
-        $request = Request::create('http://example.com/');
+        $request = Request::create('http://ppi.io/');
         $request->server->set('REMOTE_ADDR', '3.3.3.3');
         $request->headers->set('X_FORWARDED_FOR', '1.1.1.1, 2.2.2.2');
-        $request->headers->set('X_FORWARDED_HOST', 'foo.example.com, real.example.com:8080');
+        $request->headers->set('X_FORWARDED_HOST', 'foo.ppi.io, real.ppi.io:8080');
         $request->headers->set('X_FORWARDED_PROTO', 'https');
         $request->headers->set('X_FORWARDED_PORT', 443);
         $request->headers->set('X_MY_FOR', '3.3.3.3, 4.4.4.4');
-        $request->headers->set('X_MY_HOST', 'my.example.com');
+        $request->headers->set('X_MY_HOST', 'my.ppi.io');
         $request->headers->set('X_MY_PROTO', 'http');
         $request->headers->set('X_MY_PORT', 81);
 
         // no trusted proxies
         $this->assertEquals('3.3.3.3', $request->getClientIp());
-        $this->assertEquals('example.com', $request->getHost());
+        $this->assertEquals('ppi.io', $request->getHost());
         $this->assertEquals(80, $request->getPort());
         $this->assertFalse($request->isSecure());
 
         // disabling proxy trusting
         Request::setTrustedProxies(array());
         $this->assertEquals('3.3.3.3', $request->getClientIp());
-        $this->assertEquals('example.com', $request->getHost());
+        $this->assertEquals('ppi.io', $request->getHost());
         $this->assertEquals(80, $request->getPort());
         $this->assertFalse($request->isSecure());
 
         // trusted proxy via setTrustedProxies()
         Request::setTrustedProxies(array('3.3.3.3', '2.2.2.2'));
         $this->assertEquals('1.1.1.1', $request->getClientIp());
-        $this->assertEquals('real.example.com', $request->getHost());
+        $this->assertEquals('real.ppi.io', $request->getHost());
         $this->assertEquals(443, $request->getPort());
         $this->assertTrue($request->isSecure());
 
         // trusted proxy via setTrustedProxies()
         Request::setTrustedProxies(array('3.3.3.4', '2.2.2.2'));
         $this->assertEquals('3.3.3.3', $request->getClientIp());
-        $this->assertEquals('example.com', $request->getHost());
+        $this->assertEquals('ppi.io', $request->getHost());
         $this->assertEquals(80, $request->getPort());
         $this->assertFalse($request->isSecure());
 
@@ -1930,7 +1994,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         Request::setTrustedHeaderName(Request::HEADER_CLIENT_PORT, 'X_MY_PORT');
         Request::setTrustedHeaderName(Request::HEADER_CLIENT_PROTO, 'X_MY_PROTO');
         $this->assertEquals('4.4.4.4', $request->getClientIp());
-        $this->assertEquals('my.example.com', $request->getHost());
+        $this->assertEquals('my.ppi.io', $request->getHost());
         $this->assertEquals(81, $request->getPort());
         $this->assertFalse($request->isSecure());
 
@@ -1940,7 +2004,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         Request::setTrustedHeaderName(Request::HEADER_CLIENT_PORT, null);
         Request::setTrustedHeaderName(Request::HEADER_CLIENT_PROTO, null);
         $this->assertEquals('3.3.3.3', $request->getClientIp());
-        $this->assertEquals('example.com', $request->getHost());
+        $this->assertEquals('ppi.io', $request->getHost());
         $this->assertEquals(80, $request->getPort());
         $this->assertFalse($request->isSecure());
 
@@ -1958,7 +2022,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTrustedProxiesInvalidHeaderName()
     {
-        Request::create('http://example.com/');
+        Request::create('http://ppi.io/');
         Request::setTrustedHeaderName('bogus name', 'X_MY_FOR');
     }
 
@@ -1968,7 +2032,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTrustedProxiesInvalidHeaderName()
     {
-        Request::create('http://example.com/');
+        Request::create('http://ppi.io/');
         Request::getTrustedHeaderName('bogus name');
     }
 

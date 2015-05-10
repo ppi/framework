@@ -11,7 +11,7 @@
 namespace PPI\Framework\Http;
 
 use InvalidArgumentException;
-use Psr\Http\Message\StreamableInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  * Implementation of PSR HTTP streams.
@@ -22,7 +22,7 @@ use Psr\Http\Message\StreamableInterface;
  *
  * @author Vítor Brandão <vitor@ppi.io>
  */
-class Stream implements StreamableInterface
+class Stream implements StreamInterface
 {
     /**
      * @var resource

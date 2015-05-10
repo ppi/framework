@@ -12,7 +12,7 @@ namespace PPI\Framework\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamableInterface;
+use Psr\Http\Message\StreamInterface;
 use Symfony\Component\HttpFoundation\Response as SymfonyHttpResponse;
 
 /**
@@ -40,7 +40,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     protected $protocolVersion = '1.1';
 
     /**
-     * @var StreamableInterface
+     * @var StreamInterface
      */
     protected $stream;
 
@@ -257,15 +257,15 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
      */
     public function setBody($body = 'php://memory')
     {
-        if (! is_string($body) && ! is_resource($body) && ! $body instanceof StreamableInterface) {
+        if (! is_string($body) && ! is_resource($body) && ! $body instanceof StreamInterface) {
             throw new InvalidArgumentException(
                 'Stream must be a string stream resource identifier, '
                 . 'an actual stream resource, '
-                . 'or a Psr\Http\Message\StreamableInterface implementation'
+                . 'or a Psr\Http\Message\StreamInterface implementation'
             );
         }
 
-        $this->stream = ($body instanceof StreamableInterface) ? $body : new Stream($body, 'wb+');
+        $this->stream = ($body instanceof StreamInterface) ? $body : new Stream($body, 'wb+');
 
         return $this;
     }
@@ -273,7 +273,7 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     /**
      * Gets the body of the message.
      *
-     * @return StreamableInterface Returns the body as a stream.
+     * @return StreamInterface Returns the body as a stream.
      */
     public function getBody()
     {
@@ -283,19 +283,19 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
     /**
      * Create a new instance, with the specified message body.
      *
-     * The body MUST be a StreamableInterface object.
+     * The body MUST be a StreamInterface object.
      *
      * This method MUST be implemented in such a way as to retain the
      * immutability of the message, and MUST return a new instance that has the
      * new body stream.
      *
-     * @param StreamableInterface $body Body.
+     * @param StreamInterface $body Body.
      *
      * @throws InvalidArgumentException When the body is not valid.
      *
      * @return self
      */
-    public function withBody(StreamableInterface $body)
+    public function withBody(StreamInterface $body)
     {
         $new         = clone $this;
         $new->stream = $body;
@@ -380,6 +380,29 @@ class Response extends SymfonyHttpResponse implements ResponseInterface
 
         return $this->headers->has($header) ?
             array($this->headers->get($header)) : array();
+    }
+    /**
+     * Retrieves a comma-separated string of the values for a single header.
+     *
+     * This method returns all of the header values of the given
+     * case-insensitive header name as a string concatenated together using
+     * a comma.
+     *
+     * NOTE: Not all header values may be appropriately represented using
+     * comma concatenation. For such headers, use getHeader() instead
+     * and supply your own delimiter when concatenating.
+     *
+     * If the header does not appear in the message, this method MUST return
+     * an empty string.
+     *
+     * @param string $name Case-insensitive header field name.
+     * @return string A string of values as provided for the given header
+     *    concatenated together using a comma. If the header does not appear in
+     *    the message, this method MUST return an empty string.
+     */
+    public function getHeaderLine($name)
+    {
+        return implode(',', $this->getHeaderLines($name));
     }
 
     /**

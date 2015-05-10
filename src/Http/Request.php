@@ -12,7 +12,7 @@ namespace PPI\Framework\Http;
 
 use InvalidArgumentException;
 use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamableInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 use Symfony\Component\HttpFoundation\Request as SymfonyHttpRequest;
 use UnexpectedValueException;
@@ -50,7 +50,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     protected $requestTarget;
 
     /**
-     * @var StreamableInterface
+     * @var StreamInterface
      */
     protected $stream;
 
@@ -263,7 +263,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     /**
      * Gets the body of the message.
      *
-     * @return StreamableInterface Returns the body as a stream.
+     * @return StreamInterface Returns the body as a stream.
      */
     public function getBody()
     {
@@ -273,19 +273,19 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     /**
      * Create a new instance, with the specified message body.
      *
-     * The body MUST be a StreamableInterface object.
+     * The body MUST be a StreamInterface object.
      *
      * This method MUST be implemented in such a way as to retain the
      * immutability of the message, and MUST return a new instance that has the
      * new body stream.
      *
-     * @param StreamableInterface $body Body.
+     * @param StreamInterface $body Body.
      *
      * @throws InvalidArgumentException When the body is not valid.
      *
      * @return self
      */
-    public function withBody(StreamableInterface $body)
+    public function withBody(StreamInterface $body)
     {
         $new         = clone $this;
         $new->stream = $body;
@@ -370,6 +370,36 @@ class Request extends SymfonyHttpRequest implements RequestInterface
 
         return $this->headers->has($header) ?
             array($this->headers->get($header)) : array();
+    }
+
+    /**
+     * Retrieves a comma-separated string of the values for a single header.
+     *
+     * This method returns all of the header values of the given
+     * case-insensitive header name as a string concatenated together using
+     * a comma.
+     *
+     * NOTE: Not all header values may be appropriately represented using
+     * comma concatenation. For such headers, use getHeader() instead
+     * and supply your own delimiter when concatenating.
+     *
+     * If the header does not appear in the message, this method MUST return
+     * an empty string.
+     *
+     * @param string $name Case-insensitive header field name.
+     *
+     * @return string A string of values as provided for the given header
+     *                concatenated together using a comma. If the header does not appear in
+     *                the message, this method MUST return an empty string.
+     */
+    public function getHeaderLine($name)
+    {
+        $headerLines = $this->getHeaderLines($name);
+        if (!$headerLines) {
+            return '';
+        }
+
+        return implode(',', $this->getHeaderLines($name));
     }
 
     /**
@@ -498,20 +528,60 @@ class Request extends SymfonyHttpRequest implements RequestInterface
     }
 
     /**
-     * Create a new instance with the provided URI.
+     * Returns an instance with the provided URI.
+     *
+     * This method MUST update the Host header of the returned request by
+     * default if the URI contains a host component. If the URI does not
+     * contain a host component, any pre-existing Host header MUST be carried
+     * over to the returned request.
+     *
+     * You can opt-in to preserving the original state of the Host header by
+     * setting `$preserveHost` to `true`. When `$preserveHost` is set to
+     * `true`, this method interacts with the Host header in the following ways:
+     *
+     * - If the the Host header is missing or empty, and the new URI contains
+     *   a host component, this method MUST update the Host header in the returned
+     *   request.
+     * - If the Host header is missing or empty, and the new URI does not contain a
+     *   host component, this method MUST NOT update the Host header in the returned
+     *   request.
+     * - If a Host header is present and non-empty, this method MUST NOT update
+     *   the Host header in the returned request.
      *
      * This method MUST be implemented in such a way as to retain the
-     * immutability of the message, and MUST return a new instance that has the
+     * immutability of the message, and MUST return an instance that has the
      * new UriInterface instance.
      *
      * @link http://tools.ietf.org/html/rfc3986#section-4.3
      *
-     * @param UriInterface $uri New request URI to use.
+     * @param UriInterface $uri          New request URI to use.
+     * @param bool         $preserveHost Preserve the original state of the Host header.
      *
      * @return self
      */
-    public function withUri(UriInterface $uri)
+    public function withUri(UriInterface $uri, $preserveHost = false)
     {
+        $request = self::create((string) $uri);
+        $request->server->set('HTTP_HOST', $uri->getHost());
+
+        return $request;
+    }
+
+    /**
+     * Create a Request instance from a URI string or UriInterface object.
+     *
+     * @param UriInterface|string $uri
+     *
+     * @throws \InvalidArgumentException if the argument is not of type string or Psr\Http\Message\UriInterface.
+     *
+     * @return Request
+     */
+    public static function fromUri($uri)
+    {
+        if (!is_string($uri) || !($uri instanceof RequestInterface)) {
+            throw new \InvalidArgumentException('The $uri argument must be either a string or a Psr\Http\Message\UriInterface instance');
+        }
+
         return self::create((string) $uri);
     }
 
