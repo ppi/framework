@@ -34,7 +34,7 @@ PPI bootstraps framework components for you from the top frameworks such as Zend
 ## Installation
 
 There is no actual "installation" of PPI, you can download it from
-http://www.ppi.io/downloads and drop it in your document root.
+http://www.ppi.io/downloads/ and drop it in your document root.
 
 ## Contributing
 
