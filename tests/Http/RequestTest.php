@@ -1371,18 +1371,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group http
-     * @expectedException \LogicException
-     * @dataProvider getContentCantBeCalledTwiceWithResourcesProvider
-     */
-    public function testGetContentCantBeCalledTwiceWithResources($first, $second)
-    {
-        $req = new Request();
-        $req->getContent($first);
-        $req->getContent($second);
-    }
-
-    /**
      * @return array
      */
     public function getContentCantBeCalledTwiceWithResourcesProvider()
