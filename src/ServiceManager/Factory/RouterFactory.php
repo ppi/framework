@@ -34,6 +34,7 @@ use PPI\Framework\Router\Wrapper\AuraRouterWrapper;
 class RouterFactory implements FactoryInterface
 {
     /**
+     * @todo - move this to a separate method() - consider how to inject custom-defined arbitrary chain router entries
      * @param ServiceLocatorInterface $serviceLocator
      * @return ChainRouter
      * @throws \Exception
@@ -55,17 +56,20 @@ class RouterFactory implements FactoryInterface
         foreach ($allModuleRoutes as $moduleName => $moduleRoutingResponse) {
 
             switch(true) {
+                // @todo - move this to a separate method()
                 case $moduleRoutingResponse instanceof SymfonyRouteCollection:
                     $sfRouter = new SymfonyRouter($requestContext, $moduleRoutingResponse, $routerOptions, $logger);
                     $sfRouterWrapper = new SymfonyRouterWrapper($sfRouter);
                     $chainRouter->add($sfRouterWrapper);
                     break;
 
+                // @todo - move this to a separate method()
                 case $moduleRoutingResponse instanceof AuraRouter:
                     $auraRouterWrapper = new AuraRouterWrapper($moduleRoutingResponse);
                     $chainRouter->add($auraRouterWrapper);
                     break;
 
+                // @todo - move this to a separate method()
                 case $moduleRoutingResponse instanceof LaravelRouter:
                     $laravelUrlGenerator = new LaravelUrlGenerator($moduleRoutingResponse->getRoutes(), $request);
                     $laravelRouterWrapper = new LaravelRouterWrapper(
