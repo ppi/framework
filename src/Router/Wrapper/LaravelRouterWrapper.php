@@ -13,12 +13,14 @@ use Symfony\Component\Routing\RequestContext as SymfonyRequestContext;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Illuminate\Routing\Router as LaravelRouter;
 use Illuminate\Routing\UrlGenerator;
+use Symfony\Component\HttpFoundation\UrlMatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface; as SymfonyUrlGeneratorInterface
 
 /**
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */
-class LaravelRouterWrapper implements RouterInterface
+class LaravelRouterWrapper implements SymfonyUrlGeneratorInterface, UrlMatcherInterface
 {
 
     /**
@@ -46,6 +48,9 @@ class LaravelRouterWrapper implements RouterInterface
         $this->setUrlGenerator($urlGenerator);
     }
 
+    /**
+     * @param Request $request
+     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
@@ -84,7 +89,7 @@ class LaravelRouterWrapper implements RouterInterface
     }
 
     /**
-     * @return
+     * @return RequestContext
      */
     public function getContext()
     {
@@ -94,7 +99,7 @@ class LaravelRouterWrapper implements RouterInterface
     /**
      * @done - run this to ensure the SF route collection comes back out
      *
-     * @return mixed
+     * @return \Symfony\Component\Routing\RouteCollection
      */
     public function getRouteCollection()
     {
@@ -102,8 +107,11 @@ class LaravelRouterWrapper implements RouterInterface
     }
 
     /**
-     * @done - run this to ensure it generates the correct routes
-     * {@inheritdoc}
+     * @todo - run this to ensure it generates the correct routes
+     * @param $name
+     * @param array $parameters
+     * @param $referenceType
+     * @return string
      */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
@@ -112,13 +120,18 @@ class LaravelRouterWrapper implements RouterInterface
     }
 
     /**
-     * {@inheritdoc}
+     *
      * @todo - find out how to get the matching route from the router
      * findRoute() is protected and we must find out how to publicly get
+     *
+     * @param string $pathinfo
      */
     public function match($pathinfo)
     {
+        $method = $this->request->getMethod(); // @todo - verify
 
+        // @todo - what is "action" ?
+        $this->router->match($method, $pathinfo, )
     }
 
 
