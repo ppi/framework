@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use Illuminate\Routing\Router as LaravelRouter;
 use Illuminate\Routing\UrlGenerator;
 use Symfony\Component\HttpFoundation\UrlMatcherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface; as SymfonyUrlGeneratorInterface
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface as SymfonyUrlGeneratorInterface;
 
 /**
  *
@@ -130,8 +130,10 @@ class LaravelRouterWrapper implements SymfonyUrlGeneratorInterface, UrlMatcherIn
     {
         $method = $this->request->getMethod(); // @todo - verify
 
+        $action = '';
+        throw new \RuntimeException('Feature incomplete');
         // @todo - what is "action" ?
-        $this->router->match($method, $pathinfo, )
+        $this->router->match($method, $pathinfo, $action);
     }
 
 

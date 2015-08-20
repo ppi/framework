@@ -17,8 +17,10 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
-use Aura\Router\RouterFactory as AuraRouterFactory;
-use Aura\Router\Router as AuraRouter;
+
+use Illuminate\Routing\Router as LaravelRouter;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Routing\RouteCollection as LaravelRouteCollection;
 
 /**
  * The base PPI module class.
@@ -105,6 +107,20 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         }
 
         return $this->routes;
+    }
+
+    /**
+     * @param string $path
+     * @return AuraRouter
+     * @throws \Exception when the included routes file doesn't return an AuraRouter back
+     */
+    public function loadLaravelRoutes($path)
+    {
+
+        $router = $this->laravelRoutesLoader->load($path);
+        // @todo - assert the value of $routes
+
+        return $router;
     }
 
     /**
