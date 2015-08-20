@@ -47,6 +47,10 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
             ),
         )));
     }
+
+    /**
+     * @group router
+     */
     public function testSetMultipleCreationOptions()
     {
         $pluginManager = new RoutePluginManagerForTest(new Config(array(
@@ -72,6 +76,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('key2' => 'value2'), $value['foo']->getCreationOptions());
     }
 
+    /**
+     * @group router
+     */
     public function testGetFaultyRegisteredInvokableThrowsException()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\RuntimeException');
@@ -80,6 +87,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $pluginManager->get('helloWorld');
     }
 
+    /**
+     * @group router
+     */
     public function testAbstractFactoryWithMutableCreationOptions()
     {
         $creationOptions = array('key1' => 'value1');
@@ -93,6 +103,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($instance));
     }
 
+    /**
+     * @group router
+     */
     public function testMutableMethodNeverCalledWithoutCreationOptions()
     {
         $mock     = 'PPI\FrameworkTest\ServiceManager\Fixtures\CallableWithMutableCreationOptions';
@@ -105,6 +118,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $method->invoke($this->pluginManager, $callable, 'foo', 'bar');
     }
 
+    /**
+     * @group router
+     */
     public function testCallableObjectWithMutableCreationOptions()
     {
         $creationOptions = array('key1' => 'value1');
@@ -122,6 +138,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $method->invoke($this->pluginManager, $callable, 'foo', 'bar');
     }
 
+    /**
+     * @group router
+     */
     public function testValidatePluginIsCalledWithDelegatorFactoryIfItsAService()
     {
         $pluginManager    = $this->getMockForAbstractClass('Zend\ServiceManager\AbstractPluginManager');
@@ -134,6 +153,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $pluginManager->create('foo-service');
     }
 
+    /**
+     * @group router
+     */
     public function testSingleDelegatorUsage()
     {
         $delegatorFactory = $this->getMock('Zend\\ServiceManager\\DelegatorFactoryInterface');
@@ -167,6 +189,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($delegator, $pluginManager->get('foo-service'));
     }
 
+    /**
+     * @group router
+     */
     public function testMultipleDelegatorsUsage()
     {
         /* @var $pluginManager \Zend\ServiceManager\AbstractPluginManager|\PHPUnit_Framework_MockObject_MockObject */
@@ -186,6 +211,9 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($fooDelegator, array_shift($barDelegator->instances));
     }
 
+    /**
+     * @group router
+     */
     public function testCanCheckInvalidServiceManagerIsUsed()
     {
         $sm = new ServiceManager();
@@ -198,19 +226,28 @@ class RoutePluginManagerTest extends \PHPUnit_Framework_TestCase
         $this->fail('A Zend\ServiceManager\Exception\ServiceNotFoundException is expected');
     }
 
+    /**
+     * @group router
+     */
     public function testWillRethrowOnNonValidatedPlugin()
     {
         $sm = new ServiceManager();
+
         $sm->setInvokableClass('stdClass', 'stdClass');
+
         /** @var \Zend\ServiceManager\AbstractPluginManager|\PHPUnit_Framework_MockObject_MockObject $pluginManager */
         $pluginManager = $this->getMockForAbstractClass('Zend\ServiceManager\AbstractPluginManager');
+
         $pluginManager
             ->expects($this->once())
             ->method('validatePlugin')
             ->with($this->isInstanceOf('stdClass'))
             ->will($this->throwException(new RuntimeException()));
+
         $pluginManager->setServiceLocator($sm);
-        $this->setExpectedException('Zend\ServiceManager\Exception\RuntimeException');
+
+        $this->setExpectedException('Zend\ServiceManager\Exception\ServiceLocatorUsageException');
+
         $pluginManager->get('stdClass');
     }
 }
