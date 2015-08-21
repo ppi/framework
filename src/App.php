@@ -287,85 +287,103 @@ class App implements AppInterface
             throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
         }
 
-        $routeParams = $this->request->attributes->all();
+        if(is_callable($controller)) {
 
-        // Route Data Verification
-        foreach(array('_module', '_controller', '_route') as $routeParamKey) {
-            if(!isset($routeParams[$routeParamKey])) {
-                throw new \Exception('Unable to find the key: ' . $routeParamKey . ' in the matched route');
+            $result = $controller();
+
+            if(is_string($result)) {
+                // @todo - craft a response object
+                $response = $this->serviceManager->get('Response');
+                $response->setContent($result);
             }
-        }
 
-        $activeRoute = $routeParams['_route'];
-        $moduleName = $routeParams['_module'];
-        $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
-        $actionName = isset($routeParams['action']) ? $routeParams['action'] : null;
-        // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
-        unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
+        } else {
 
-        // Symfony ControllerResolver returns us an array of params, controller and action.
-        if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
-            if($actionName === null) {
-                $actionName = $controller[1];
+            $routeParams = $this->request->attributes->all();
+
+            // Route Data Verification
+            foreach (array('_module', '_controller', '_route') as $routeParamKey) {
+                if (!isset($routeParams[$routeParamKey])) {
+                    throw new \Exception('Unable to find the key: ' . $routeParamKey . ' in the matched route');
+                }
             }
-            $controller = $controller[0];
 
-        }
+            var_dump(__METHOD__, $controller);
+            exit;
 
-        // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
-        // Set the options for our controller
-        if (method_exists($controller, 'setOptions')) {
-            $controller->setOptions(array(
-                'environment' => $this->getEnvironment(),
-            ));
-        }
+            $activeRoute = $routeParams['_route'];
+            $moduleName = $routeParams['_module'];
+            $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
+            $actionName = isset($routeParams['action']) ? $routeParams['action'] : null;
+            // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
+            unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
 
-        if($actionName === null) {
-            throw new \Exception('Unable to locate the action from the matched route');
-        }
+            // Symfony ControllerResolver returns us an array of params, controller and action.
+            if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
+                if ($actionName === null) {
+                    $actionName = $controller[1];
+                }
+                $controller = $controller[0];
 
-        // Pass in the routing params, set the active route key
-        $routingHelper = $this->serviceManager->get('RoutingHelper');
-        $routingHelper
-            ->setParams($routeParams)
-            ->setActiveRouteName($activeRoute);
+            }
 
-        // Register our routing helper into the controller
-        $controller->setHelper('routing', $routingHelper);
+            // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
+            // Set the options for our controller
+            if (method_exists($controller, 'setOptions')) {
+                $controller->setOptions(array(
+                    'environment' => $this->getEnvironment(),
+                ));
+            }
 
-        // Prep our module for dispatch
-        $module = $this->getModuleManager()->getModuleByAlias($moduleName);
-        $module
-            ->setControllerName($controllerName)
-            ->setActionName($actionName)
-            ->setController($controller);
+            if ($actionName === null) {
+                throw new \Exception('Unable to locate the action from the matched route');
+            }
 
-        // Dispatch our action, return the content from the action called.
-        $controller = $module->getController();
-        $this->serviceManager = $controller->getServiceLocator();
-        $result = $module->dispatch();
+            // Pass in the routing params, set the active route key
+            $routingHelper = $this->serviceManager->get('RoutingHelper');
+            $routingHelper
+                ->setParams($routeParams)
+                ->setActiveRouteName($activeRoute);
 
-        switch (true) {
-            // If the controller is just returning HTML content then that becomes our body response.
-            case is_string($result):
-                $response = $controller->getServiceLocator()->get('Response');
-                break;
+            // Register our routing helper into the controller
+            $controller->setHelper('routing', $routingHelper);
 
-            // The controller action didn't bother returning a value, just grab the response object from SM
-            case is_null($result):
-                $response = $controller->getServiceLocator()->get('Response');
-                break;
+            // Prep our module for dispatch
+            $module = $this->getModuleManager()->getModuleByAlias($moduleName);
+            $module
+                ->setControllerName($controllerName)
+                ->setActionName($actionName)
+                ->setController($controller);
 
-            // Anything else is unpredictable so we safely rely on the SM
-            default:
-                $response = $result;
-                break;
+            // Dispatch our action, return the content from the action called.
+            $controller = $module->getController();
+            $this->serviceManager = $controller->getServiceLocator();
+            $result = $module->dispatch();
+
+            switch (true) {
+
+                // If the controller is just returning HTML content then that becomes our body response.
+                case is_string($result):
+                    $response = $controller->getServiceLocator()->get('Response');
+                    break;
+
+                // The controller action didn't bother returning a value, just grab the response object from SM
+                case is_null($result):
+                    $response = $controller->getServiceLocator()->get('Response');
+                    break;
+
+                // Anything else is unpredictable so we safely rely on the SM
+                default:
+                    $response = $result;
+                    break;
+            }
+
+            $response->setContent($result);
         }
 
         $this->response = $response;
-        $this->response->setContent($result);
 
-        return $this->response;
+        return $response;
     }
 
     /**
@@ -708,16 +726,16 @@ class App implements AppInterface
      */
     protected function handleRouting()
     {
-        $router = $this->serviceManager->get('Router');
-        $router->warmUp($this->getCacheDir());
+        $this->router = $this->serviceManager->get('Router');
+        $this->router->warmUp($this->getCacheDir());
 
         try {
             // Lets load up our router and match the appropriate route
-            $parameters = $router->matchRequest($this->getRequest());
+            $parameters = $this->router->matchRequest($this->getRequest());
             if (!empty($parameters)) {
 
                 if (null !== $this->logger) {
-                    $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $router->parametersToString($parameters)));
+                    $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->router->parametersToString($parameters)));
                 }
 
                 $this->getRequest()->attributes->add($parameters);
@@ -729,8 +747,8 @@ class App implements AppInterface
 
             // Lets grab the 'Framework 404' route and dispatch it.
             try {
-                $baseUrl = $router->getContext()->getBaseUrl();
-                $routeUri = $router->generate($this->options['404RouteName']);
+                $baseUrl = $this->router->getContext()->getBaseUrl();
+                $routeUri = $this->router->generate($this->options['404RouteName']);
 
                 // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
                 if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {

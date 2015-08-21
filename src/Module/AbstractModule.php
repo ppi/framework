@@ -12,13 +12,14 @@ namespace PPI\Framework\Module;
 
 use PPI\Framework\Config\ConfigLoader;
 use PPI\Framework\Console\Application;
+use PPI\Framework\Router\Loader\LaravelRoutesLoader;
 use PPI\Framework\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 
-use Illuminate\Routing\Router as LaravelRouter;
+use PPI\Framework\Router\LaravelRouter;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\RouteCollection as LaravelRouteCollection;
 
@@ -116,10 +117,18 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function loadLaravelRoutes($path)
     {
+        $router = (new LaravelRoutesLoader(
+            new LaravelRouter(new Dispatcher)
+        ))->load($path);
 
-        $router = $this->laravelRoutesLoader->load($path);
-        // @todo - assert the value of $routes
-
+//        $routes = $router->getRoutes();
+//        foreach($routes as $key => $route) {
+//            $route->setParameter('_module', $this->getName());
+//            $routes[$key] = $route;
+//        }
+//        $router->setRoutes($routes);
+//        var_dump(__METHOD__, get_class($router)); exit;
+        $router->setModuleName($this->getName());
         return $router;
     }
 

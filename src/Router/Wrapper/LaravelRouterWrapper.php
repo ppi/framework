@@ -9,18 +9,21 @@
 
 namespace PPI\Framework\Router\Wrapper;
 
+use Illuminate\Routing\Route;
 use Symfony\Component\Routing\RequestContext as SymfonyRequestContext;
-use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-use Illuminate\Routing\Router as LaravelRouter;
+use Illuminate\Http\Request as LaravelRequest;
+use PPI\Framework\Router\LaravelRouter;
 use Illuminate\Routing\UrlGenerator;
-use Symfony\Component\HttpFoundation\UrlMatcherInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface as SymfonyUrlGeneratorInterface;
+use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Symfony\Component\Routing\CompiledRoute;
 
 /**
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */
-class LaravelRouterWrapper implements SymfonyUrlGeneratorInterface, UrlMatcherInterface
+class LaravelRouterWrapper implements UrlGeneratorInterface, RequestMatcherInterface
 {
 
     /**
@@ -39,29 +42,18 @@ class LaravelRouterWrapper implements SymfonyUrlGeneratorInterface, UrlMatcherIn
     protected $request;
 
     /**
-     * @param RouterInterface $router
+     * @var string
      */
-    public function __construct(LaravelRouter $router, Request $request, UrlGenerator $urlGenerator)
-    {
-        $this->setRouter($router);
-        $this->setRequest($request);
-        $this->setUrlGenerator($urlGenerator);
-    }
+    protected $moduleName;
 
     /**
-     * @param Request $request
+     * @param LaravelRouter $router
      */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @param RouterInterface $router
-     */
-    public function setRouter(RouterInterface $router)
+    public function __construct(LaravelRouter $router, LaravelRequest $request, UrlGenerator $urlGenerator)
     {
         $this->router = $router;
+        $this->request = $request;
+        $this->setUrlGenerator($urlGenerator);
     }
 
     /**
@@ -126,15 +118,51 @@ class LaravelRouterWrapper implements SymfonyUrlGeneratorInterface, UrlMatcherIn
      *
      * @param string $pathinfo
      */
-    public function match($pathinfo)
+    public function matchRequest(SymfonyRequest $request)
     {
-        $method = $this->request->getMethod(); // @todo - verify
-
-        $action = '';
-        throw new \RuntimeException('Feature incomplete');
-        // @todo - what is "action" ?
-        $this->router->match($method, $pathinfo, $action);
+        /**
+         * @var Route
+         */
+        $route = $this->router->matchRequest($request);
+        return $this->parseParameters($route);
     }
 
+    /**
+     * @param string $moduleName
+     */
+    public function setModuleName($moduleName)
+    {
+        $this->moduleName = $moduleName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleName()
+    {
+        return $this->moduleName;
+    }
+
+    public function parseParameters(Route $route)
+    {
+        $parameters = $route->parameters();
+        $parameters['_route'] = $this->request->getPathInfo();
+
+        $action = $route->getAction();
+
+        if (is_array($action) && isset($action['uses'])) {
+            if (is_callable($action['uses'])) {
+                $parameters['_controller'] = $action['uses'];
+                $parameters['action'] = $action['uses'];
+            }
+            return $parameters;
+        } else if (is_string($action) && strpos($action, '@')) {
+            list($parameters['_controller'], $parameters['action']) = explode('@', $action);
+            return $parameters;
+        }
+
+
+        throw new \RuntimeException('Unable to parse laravel route parameters');
+    }
 
 }

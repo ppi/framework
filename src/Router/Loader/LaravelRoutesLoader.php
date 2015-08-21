@@ -26,6 +26,9 @@ use Illuminate\Routing\Router as LaravelRouter;
 class LaravelRoutesLoader
 {
 
+    /**
+     * @var LaravelRouter
+     */
     protected $router;
 
     public function __construct(LaravelRouter $router)
@@ -33,8 +36,14 @@ class LaravelRoutesLoader
         $this->router = $router;
     }
 
+    /**
+     * @param string $path
+     * @return LaravelRouter
+     * @throws \Exception
+     */
     public function load($path)
     {
+
         if(!is_readable($path)) {
             throw new \InvalidArgumentException('Invalid laravel routes path found: ' . $path);
         }
@@ -43,7 +52,7 @@ class LaravelRoutesLoader
         $router = $this->router;
 
         // The included file must return the laravel router
-        $router = include $path;
+        include $path;
 
         if(!($router instanceof LaravelRouter)) {
             throw new \Exception('Invalid return value from '
@@ -52,13 +61,7 @@ class LaravelRoutesLoader
             );
         }
 
-        /**
-         * @var LaravelRouteCollection
-         */
-        $routes = $router->getRoutes();
-        foreach($routes as $route) {
-            $route->addValues(array('_module' => $this->getName()));
-        }
+        return $router;
     }
 
 }
