@@ -10,7 +10,7 @@
 
 namespace PPI\Framework\ServiceManager;
 
-use PPI\Framework\Log\LoggerProxy;
+use Psr\Log\NullLogger;
 
 /**
  * ServiceManager builder.
@@ -24,6 +24,9 @@ class ServiceManagerBuilder extends ServiceManager
      */
     protected $config;
 
+    /**
+     * @param array $config
+     */
     public function __construct(array $config = array())
     {
         $this->config = $config;
@@ -51,12 +54,9 @@ class ServiceManagerBuilder extends ServiceManager
         // Settings provided by the application itself on App boot, config provided by modules is not included
         $this->setService('ApplicationConfig', $parametersBag->resolveArray($this->config));
 
-        $loggerProxy = new LoggerProxy();
-        if ($this->has('Logger')) {
-            $loggerProxy->setLogger($this->get('Logger'));
+        if (false === $this->has('Logger')) {
+            $this->setService('Logger', new NullLogger());
         }
-
-        $this->setService('Logger', $loggerProxy);
 
         foreach (array(
             new Config\SessionConfig(),
