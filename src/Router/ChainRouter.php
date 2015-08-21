@@ -12,6 +12,7 @@
 namespace PPI\Framework\Router;
 
 use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class ChainRouter
@@ -20,6 +21,12 @@ use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
  */
 class ChainRouter extends BaseChainRouter
 {
+
+    /**
+     * @var Request
+     */
+    protected $matchedRouteRequest;
+
     /**
      * @param array $parameters
      *
@@ -43,5 +50,31 @@ class ChainRouter extends BaseChainRouter
         $routers = $this->sortRouters();
         return !empty($routers);
     }
+
+    /**
+     * @todo - might not need this afterall
+     * @return Request
+     */
+    public function getMatchedRouteRequest()
+    {
+        return $this->matchedRouteRequest;
+    }
+
+    /**
+     * @param Request $request
+     * @throws \Exception
+     */
+    public function matchRequest(Request $request)
+    {
+        try {
+            $parameters = parent::matchRequest($request);
+            $this->matchedRouteRequest = $request;
+            return $parameters;
+        } catch(\Exception $e) {
+            throw $e;
+        }
+    }
+
+
 
 }

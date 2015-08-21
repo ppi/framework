@@ -10,6 +10,7 @@
 
 namespace PPI\Framework\ServiceManager\Factory;
 
+
 use PPI\Framework\Router\ChainRouter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -18,6 +19,7 @@ use PPI\Framework\Router\Router as SymfonyRouter;
 use PPI\Framework\Router\Wrapper\SymfonyRouterWrapper;
 use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 
+use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Routing\Router as LaravelRouter;
 use PPI\Framework\Router\Wrapper\LaravelRouterWrapper;
 use Illuminate\Routing\UrlGenerator as LaravelUrlGenerator;
@@ -71,16 +73,19 @@ class RouterFactory implements FactoryInterface
 
                 // @todo - move this to a separate method()
                 case $moduleRoutingResponse instanceof LaravelRouter:
-                    $laravelUrlGenerator = new LaravelUrlGenerator($moduleRoutingResponse->getRoutes(), $request);
+                    $laravelRequest = new LaravelRequest();
+                    $laravelUrlGenerator = new LaravelUrlGenerator($moduleRoutingResponse->getRoutes(), $laravelRequest);
                     $laravelRouterWrapper = new LaravelRouterWrapper(
-                        $moduleRoutingResponse, $request, $laravelUrlGenerator
+                        $moduleRoutingResponse, $laravelRequest, $laravelUrlGenerator
                     );
+                    // @todo - solve this problem
+//                    $laravelRouterWrapper->setModuleName($this->getName());
                     $chainRouter->add($laravelRouterWrapper);
                     break;
 
                 default:
                     throw new \Exception('Unexpected routes value return from module: ' . $moduleName .
-                        '. found value: ' . gettype($routes));
+                        '. found value of type: ' . gettype($moduleRoutingResponse));
             }
         }
 

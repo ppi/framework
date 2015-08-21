@@ -12,7 +12,8 @@
 namespace PPI\Framework\Router;
 
 use Illuminate\Routing\Router as BaseRouter;
-use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+use Illuminate\Http\Request as LaravelRequest;
 
 /**
  * Class LaravelRouter
@@ -23,14 +24,39 @@ class LaravelRouter extends BaseRouter
 {
 
     /**
+     * @var string
+     */
+    protected $moduleName;
+
+    /**
      * Given a request object, find the matching route
      *
      * @param Request $request
      * @return \Illuminate\Routing\Route
      */
-    public function matchFromUrl(Request $request)
+    public function matchRequest(SymfonyRequest $request)
     {
-        return $this->findRoute($request);
+        $laravelRequest = LaravelRequest::createFromBase($request);
+        $route = $this->findRoute($laravelRequest);
+        $route->setParameter('_module', $this->moduleName);
+        return $route;
+    }
+
+    public function generate(SymfonyRequest $path)
+    {
+
+        $route = $this->findRoute($request);
+
+//        $parameters = $this->getUrlMatcher($request)->match($path);
+//        $route = $this->routes->get($parameters['_route']);
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setModuleName($name)
+    {
+        $this->moduleName = $name;
     }
 
 }
