@@ -150,14 +150,14 @@ class LaravelRouterWrapper implements UrlGeneratorInterface, RequestMatcherInter
 
         $action = $route->getAction();
 
-        if (is_array($action) && isset($action['uses'])) {
+        if (is_array($action) && isset($action['uses']) && !empty($action['uses'])) {
             if (is_callable($action['uses'])) {
                 $parameters['_controller'] = $action['uses'];
                 $parameters['action'] = $action['uses'];
             }
             return $parameters;
-        } else if (is_string($action) && strpos($action, '@')) {
-            list($parameters['_controller'], $parameters['action']) = explode('@', $action);
+        } else if (isset($action[0]) && is_string($action[0]) && strpos($action[0], '@')) {
+            list($parameters['_controller'], $parameters['action']) = explode('@', $action[0]);
             return $parameters;
         }
 
