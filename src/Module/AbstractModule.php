@@ -12,21 +12,25 @@ namespace PPI\Framework\Module;
 
 use PPI\Framework\Config\ConfigLoader;
 use PPI\Framework\Console\Application;
-use PPI\Framework\Router\Loader\LaravelRoutesLoader;
+
+use PPI\LaravelRouting\Loader\LaravelRoutesLoader;
+use PPI\LaravelRouting\LaravelRouter;
+
 use PPI\Framework\Router\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
+
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 
-use PPI\Framework\Router\LaravelRouter;
+
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\RouteCollection as LaravelRouteCollection;
 
 /**
  * The base PPI module class.
  *
- * @author     Paul Dragoonis <paul@ppi.io>
+ * @author Paul Dragoonis <paul@ppi.io>
  */
 abstract class AbstractModule implements ModuleInterface, ConfigProviderInterface
 {
