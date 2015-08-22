@@ -238,7 +238,6 @@ $config = Config::create()
     ->fixers(
         [
             'align_double_arrow',
-            'align_equals',
             'concat_with_spaces',
             'double_arrow_multiline_whitespaces',
             'duplicate_semicolon',
