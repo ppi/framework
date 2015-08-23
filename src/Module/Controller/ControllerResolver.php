@@ -23,9 +23,13 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
  */
 class ControllerResolver extends BaseControllerResolver
 {
+
+    protected $request;
+
     /**
      * Constructor.
      *
@@ -53,22 +57,33 @@ class ControllerResolver extends BaseControllerResolver
      */
     protected function createController($controller)
     {
-        if (false === strpos($controller, '::')) {
-            $count = substr_count($controller, ':');
-            if (2 == $count) {
-                // controller in the a:b:c notation then
-                $controller = $this->parser->parse($controller);
-            } elseif (1 == $count) {
-                // controller in the service:method notation
-                list($service, $method) = explode(':', $controller, 2);
 
-                return array($this->serviceManager->get($service), $method);
-            } else {
-                throw new \LogicException(sprintf('Unable to parse the controller name "%s".', $controller));
+        // At this point, we assume that the controller resolution has already happened and
+        // we have a defined 'action' aka 'method' then we skip this step. However, if there's
+        // no action then we must begin to parse the controller and disect the action from it
+
+        if(!$this->request->attributes->has('action')) {
+
+            if (false === strpos($controller, '::')) {
+                $count = substr_count($controller, ':');
+                if (2 == $count) {
+                    // controller in the a:b:c notation then
+                    $controller = $this->parser->parse($controller);
+                } elseif (1 == $count) {
+                    // controller in the service:method notation
+                    list($service, $method) = explode(':', $controller, 2);
+
+                    return array($this->serviceManager->get($service), $method);
+                } else {
+                    throw new \LogicException(sprintf('Unable to parse the controller name "%s".', $controller));
+                }
             }
-        }
+            list($class, $method) = explode('::', $controller, 2);
 
-        list($class, $method) = explode('::', $controller, 2);
+        } else {
+            $class = $this->request->attributes->get('_controller');
+            $method = $this->request->attributes->get('action');
+        }
 
         if (!class_exists($class)) {
             throw new \InvalidArgumentException(sprintf('Class "%s" does not exist.', $class));
@@ -88,6 +103,9 @@ class ControllerResolver extends BaseControllerResolver
      */
     public function getController(Request $request)
     {
+
+        $this->request = $request;
+
         $controller = parent::getController($request);
         if ($controller instanceof ServiceLocatorAwareInterface) {
             $controller->setServiceLocator($this->serviceManager);

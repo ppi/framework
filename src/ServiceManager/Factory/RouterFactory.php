@@ -21,8 +21,8 @@ use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
 
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Routing\Router as LaravelRouter;
-use PPI\Framework\Router\Wrapper\LaravelRouterWrapper;
 use Illuminate\Routing\UrlGenerator as LaravelUrlGenerator;
+use PPI\LaravelRouting\Wrapper\LaravelRouterWrapper;
 
 use Aura\Router\Router as AuraRouter;
 use PPI\Framework\Router\Wrapper\AuraRouterWrapper;

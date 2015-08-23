@@ -50,49 +50,49 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      *
      * @var null
      */
-    protected $config = null;
+    protected $config;
 
     /**
      * Configuration loader.
      *
      * @var null|\PPI\Framework\Config\ConfigLoader
      */
-    protected $configLoader = null;
+    protected $configLoader;
 
     /**
      * @todo Add inline documentation.
      *
      * @var null
      */
-    protected $routes = null;
+    protected $routes;
 
     /**
      * @todo Add inline documentation.
      *
      * @var null
      */
-    protected $services = null;
+    protected $services;
 
     /**
      * @todo Add inline documentation.
      *
      * @var null
      */
-    protected $controller = null;
+    protected $controller;
 
     /**
      * Controller Name.
      *
      * @var null
      */
-    protected $controllerName = null;
+    protected $controllerName;
 
     /**
      * Action Name.
      *
      * @var null
      */
-    protected $actionName = null;
+    protected $actionName;
 
     /**
      * Load up our routes.
@@ -124,14 +124,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         $router = (new LaravelRoutesLoader(
             new LaravelRouter(new Dispatcher)
         ))->load($path);
-
-//        $routes = $router->getRoutes();
-//        foreach($routes as $key => $route) {
-//            $route->setParameter('_module', $this->getName());
-//            $routes[$key] = $route;
-//        }
-//        $router->setRoutes($routes);
-//        var_dump(__METHOD__, get_class($router)); exit;
         $router->setModuleName($this->getName());
         return $router;
     }
@@ -302,7 +294,9 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
             $this->controller->preDispatch();
         }
 
-        $content = $this->controller->{$this->actionName}();
+        $content = $this->controller->{$this->actionName}(
+            $this->controller->getServiceLocator()->get('Request')
+        );
 
         if (method_exists($this->controller, 'postDispatch')) {
             $this->controller->postDispatch();
