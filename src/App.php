@@ -278,28 +278,35 @@ class App implements AppInterface
         }
 
         // Routing
-        $this->handleRouting();
+        $routeParams = $this->handleRouting();
 
-        // Resolve our Controller
-        $resolver = $this->serviceManager->get('ControllerResolver');
-        $request = $this->getRequest();
-        if (false === $controller = $resolver->getController($request)) {
-            throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
+        if (!isset($routeParams['_controller'])) {
+            throw new \Exception('No controller definition found for matching route');
         }
 
-        if(is_callable($controller)) {
+        if (isset($routeParams['_controller'])
+            && !is_string($routeParams['_controller'])
+            && is_callable($routeParams['_controller'])) {
 
-            $result = $controller();
+            $result = call_user_func_array($routeParams['_controller'],
+                [$this->serviceManager->get('Request')]
+            );
 
             if(is_string($result)) {
-                // @todo - craft a response object
                 $response = $this->serviceManager->get('Response');
                 $response->setContent($result);
+            } else {
+                $response = $result;
             }
 
         } else {
 
-            $routeParams = $this->request->attributes->all();
+            // Resolve our Controller
+            $resolver = $this->serviceManager->get('ControllerResolver');
+            $request = $this->getRequest();
+            if (false === $controller = $resolver->getController($request)) {
+                throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
+            }
 
             // Route Data Verification
             foreach (array('_module', '_controller', '_route') as $routeParamKey) {
@@ -307,9 +314,6 @@ class App implements AppInterface
                     throw new \Exception('Unable to find the key: ' . $routeParamKey . ' in the matched route');
                 }
             }
-
-            var_dump(__METHOD__, $controller);
-            exit;
 
             $activeRoute = $routeParams['_route'];
             $moduleName = $routeParams['_module'];
@@ -324,7 +328,10 @@ class App implements AppInterface
                     $actionName = $controller[1];
                 }
                 $controller = $controller[0];
+            }
 
+            if ($actionName === null) {
+                throw new \Exception('Unable to locate the action from the matched route');
             }
 
             // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
@@ -333,10 +340,6 @@ class App implements AppInterface
                 $controller->setOptions(array(
                     'environment' => $this->getEnvironment(),
                 ));
-            }
-
-            if ($actionName === null) {
-                throw new \Exception('Unable to locate the action from the matched route');
             }
 
             // Pass in the routing params, set the active route key
@@ -722,6 +725,11 @@ class App implements AppInterface
     }
 
     /**
+     * Perform the matching of a route and return a set of routing parameters if a valid one is found.
+     * Otherwise exceptions get thrown
+     *
+     * @return array
+     *
      * @throws \Exception
      */
     protected function handleRouting()
@@ -738,30 +746,30 @@ class App implements AppInterface
                     $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->router->parametersToString($parameters)));
                 }
 
+                $parameters['_route_params'] = $parameters;
+
                 $this->getRequest()->attributes->add($parameters);
-                unset($parameters['_route'], $parameters['_controller']);
-                $this->getRequest()->attributes->set('_route_params', $parameters);
+
+                return $parameters;
 
             }
         } catch (ResourceNotFoundException $e) {
 
             // Lets grab the 'Framework 404' route and dispatch it.
-            try {
-                $baseUrl = $this->router->getContext()->getBaseUrl();
-                $routeUri = $this->router->generate($this->options['404RouteName']);
-
-                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
-                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
-                }
-
-                // @todo - look into why is this here? the method doesn't exist
-                $this->matchRoute($routeUri);
-
-                // @todo handle a 502 here
-            } catch (\Exception $e) {
+//            try {
+//                $baseUrl = $this->router->getContext()->getBaseUrl();
+//                $routeUri = $this->router->generate($this->options['404RouteName']);
+//
+//                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
+//                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
+//                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
+//                }
+//
+//                // @todo handle a 502 here
+//
+//            } catch (\Exception $e) {
                 throw new \Exception('Unable to load 404 page. An internal error occurred');
-            }
+//            }
 
         } catch (\Exception $e) {
             throw $e;
