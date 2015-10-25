@@ -741,39 +741,23 @@ class App implements AppInterface
             // Lets load up our router and match the appropriate route
             $parameters = $this->router->matchRequest($this->getRequest());
             if (!empty($parameters)) {
-
                 if (null !== $this->logger) {
                     $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->router->parametersToString($parameters)));
                 }
-
-                $parameters['_route_params'] = $parameters;
-
-                $this->getRequest()->attributes->add($parameters);
-
-                return $parameters;
-
             }
         } catch (ResourceNotFoundException $e) {
 
-            // Lets grab the 'Framework 404' route and dispatch it.
-//            try {
-//                $baseUrl = $this->router->getContext()->getBaseUrl();
-//                $routeUri = $this->router->generate($this->options['404RouteName']);
-//
-//                // We need to strip /myapp/public/404 down to /404, so our matchRoute() to work.
-//                if (!empty($baseUrl) && ($pos = strpos($routeUri, $baseUrl)) !== false) {
-//                    $routeUri = substr_replace($routeUri, '', $pos, strlen($baseUrl));
-//                }
-//
-//                // @todo handle a 502 here
-//
-//            } catch (\Exception $e) {
-                throw new \Exception('Unable to load 404 page. An internal error occurred');
-//            }
+            $routeUri = $this->router->generate('Framework_404');
+            $request = $this->getRequest();
+            $parameters = $this->router->matchRequest($request::create($routeUri));
 
         } catch (\Exception $e) {
             throw $e;
         }
+
+        $parameters['_route_params'] = $parameters;
+        $this->getRequest()->attributes->add($parameters);
+        return $parameters;
     }
 
     /**
