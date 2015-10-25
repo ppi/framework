@@ -13,6 +13,9 @@ namespace PPI\Framework\Module;
 use PPI\Framework\Config\ConfigLoader;
 use PPI\Framework\Console\Application;
 
+use Aura\Router\RouterFactory as AuraRouterFactory;
+use Aura\Router\Router as AuraRouter;
+
 use PPI\LaravelRouting\Loader\LaravelRoutesLoader;
 use PPI\LaravelRouting\LaravelRouter;
 
