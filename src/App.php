@@ -288,8 +288,9 @@ class App implements AppInterface
             && !is_string($routeParams['_controller'])
             && is_callable($routeParams['_controller'])) {
 
-            $result = call_user_func_array($routeParams['_controller'],
-                [$this->serviceManager->get('Request')]
+            $result = call_user_func_array(
+                $routeParams['_controller'],
+                array($this->serviceManager->get('Request'))
             );
 
             if(is_string($result)) {
