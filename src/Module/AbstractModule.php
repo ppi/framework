@@ -297,8 +297,9 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
             $this->controller->preDispatch();
         }
 
-        $content = $this->controller->{$this->actionName}(
-            $this->controller->getServiceLocator()->get('Request')
+        $content = call_user_func_array(
+            [$this->controller, $this->actionName],
+            [$this->controller->getServiceLocator()->get('Request')]
         );
 
         if (method_exists($this->controller, 'postDispatch')) {
