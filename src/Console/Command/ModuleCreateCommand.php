@@ -51,13 +51,13 @@ class ModuleCreateCommand extends AbstractCommand
 
         $this->copyRecursively($this->skeletonModuleDir, $dir);
         file_put_contents($dir . '/Module.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Module.php')));
-        file_put_contents($dir . '/Controller/Index.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Index.php')));
-        file_put_contents($dir . '/Controller/Shared.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/Controller/Shared.php')));
+        file_put_contents($dir . '/src/Controller/Index.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/src/Controller/Index.php')));
+        file_put_contents($dir . '/src/Controller/Shared.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/src/Controller/Shared.php')));
         file_put_contents($dir . '/resources/views/index/index.html.php', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/resources/views/index/index.html.php')));
-        file_put_contents($dir . '/resources/config/routes.yml', str_replace('[MODULE_NAME]', strtolower($name), file_get_contents($dir . '/resources/config/routes.yml')));
+        file_put_contents($dir . '/resources/config/routes.yml', str_replace('[MODULE_NAME]', $name, file_get_contents($dir . '/resources/config/routes.yml')));
 
         $output->writeln("<info>Created module: {$name}</info>");
-        $output->writeln("<comment>To activate it, add <info>'{$name}'</info> to your <info>'activeModules'</info> setting in <info>modules.config.php</info></comment>");
+        $output->writeln("<comment>To activate it, add <info>'{$name}'</info> to your <info>'active_modules'</info> setting in <info>your app config file.</info></comment>");
     }
 
     protected function interact(InputInterface $input, OutputInterface $output)
