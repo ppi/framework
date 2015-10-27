@@ -100,7 +100,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * Load up our routes.
      *
-     * @param type $path
+     * @param string $path
      *
      * @return \Symfony\Component\Routing\RouteCollection
      */
@@ -121,7 +121,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * Load up our routes.
      *
      * @deprecated Please use loadSymfonyRoutes instead
-     * @param type $path
+     * @param string $path
      * @return \Symfony\Component\Routing\RouteCollection
      */
     public function loadYamlRoutes($path)
