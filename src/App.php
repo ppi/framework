@@ -14,6 +14,7 @@ use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -290,7 +291,10 @@ class App implements AppInterface
 
             $result = call_user_func_array(
                 $routeParams['_controller'],
-                array($this->serviceManager->get('Request'))
+                [
+                    $this->serviceManager->get('Request'),
+                    $this->serviceManager->get('Response'),
+                ]
             );
 
             if(is_string($result)) {
@@ -374,6 +378,12 @@ class App implements AppInterface
                 // The controller action didn't bother returning a value, just grab the response object from SM
                 case is_null($result):
                     $response = $controller->getServiceLocator()->get('Response');
+                    break;
+
+                // We have a PSR-7 Response object
+                case $result instanceof ResponseInterface:
+                    $response = $result;
+                    $result = $response->getBody()->__toString();
                     break;
 
                 // Anything else is unpredictable so we safely rely on the SM
