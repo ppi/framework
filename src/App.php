@@ -19,6 +19,7 @@ use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Zend\Diactoros\Response\SapiEmitter;
 
 /**
  * The PPI App bootstrap class.
@@ -262,7 +263,9 @@ class App implements AppInterface
         }
 
         $response = $this->dispatch();
-        $response->send();
+
+        $emitter = new SapiEmitter();
+        $emitter->emit($response);
 
         return $this;
     }
@@ -373,6 +376,7 @@ class App implements AppInterface
                 // If the controller is just returning HTML content then that becomes our body response.
                 case is_string($result):
                     $response = $controller->getServiceLocator()->get('Response');
+                    $response->getBody()->write($result);
                     break;
 
                 // The controller action didn't bother returning a value, just grab the response object from SM
@@ -380,19 +384,11 @@ class App implements AppInterface
                     $response = $controller->getServiceLocator()->get('Response');
                     break;
 
-                // We have a PSR-7 Response object
-                case $result instanceof ResponseInterface:
-                    $response = $result;
-                    $result = $response->getBody()->__toString();
-                    break;
-
                 // Anything else is unpredictable so we safely rely on the SM
                 default:
                     $response = $result;
                     break;
             }
-
-            $response->setContent($result);
         }
 
         $this->response = $response;

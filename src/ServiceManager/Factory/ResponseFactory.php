@@ -11,6 +11,8 @@
 namespace PPI\Framework\ServiceManager\Factory;
 
 use PPI\Framework\Http\Response;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,10 +28,12 @@ class ResponseFactory implements FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return \PPI\Framework\Http\Response\Response
+     * @return ResponseInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Response();
+        $psr7factory = new DiactorosFactory();
+
+        return $psr7factory->createResponse(new Response());
     }
 }
