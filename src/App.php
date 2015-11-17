@@ -353,7 +353,7 @@ class App implements AppInterface
             $controller->setHelper('routing', $routingHelper);
 
             // Prep our module for dispatch
-            $module = $this->getModuleManager()->getModuleByAlias($moduleName);
+            $module = $this->getModuleManager()->getModule($moduleName);
             $module
                 ->setControllerName($controllerName)
                 ->setActionName($actionName)

@@ -60,7 +60,7 @@ class ModuleManagerFactory implements FactoryInterface
             'getRouteConfig'
         );
 
-        $modules = isset($config['modules']['active_modules']) ? $config['modules']['active_modules'] : array();
+        $modules = isset($config['modules']) ? $config['modules'] : array();
 
         $events = $serviceLocator->get('EventManager');
         $events->attach($defaultListeners);

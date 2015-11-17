@@ -52,7 +52,7 @@ class ControllerNameParser
 
         list($moduleAlias, $controller, $action) = $parts;
         $controller                              = str_replace('/', '\\', $controller);
-        $module                                  = $this->moduleManager->getModuleByAlias($moduleAlias);
+        $module                                  = $this->moduleManager->getModule($moduleAlias);
 
         if (null === $module) {
             // this throws an exception if there is no such module

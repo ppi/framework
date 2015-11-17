@@ -20,40 +20,6 @@ use Zend\ModuleManager\ModuleManager as BaseModuleManager;
  */
 class ModuleManager extends BaseModuleManager
 {
-    protected $aliases;
-
-    /**
-     * @return array
-     */
-    public function getModulesAliases()
-    {
-        if (null == $this->aliases) {
-            $this->aliases = array();
-            foreach ($this->getLoadedModules() as $k => $module) {
-                $this->aliases[$module->getName()] = $k;
-            }
-        }
-
-        return $this->aliases;
-    }
-
-    /**
-     * @param $alias
-     *
-     * @throws \InvalidArgumentException
-     *
-     * @return mixed
-     */
-    public function getModuleByAlias($alias)
-    {
-        $aliases = $this->getModulesAliases();
-        if (!isset($aliases[$alias])) {
-            throw new \InvalidArgumentException(sprintf('Module "%s" does not exist or it is not enabled. Maybe you forgot to add it your configuration file under the "modules" key?', $alias));
-        }
-
-        return $this->getModule($aliases[$alias]);
-    }
-
     /**
      * Returns an array of paths to modules.
      *
@@ -118,7 +84,7 @@ class ModuleManager extends BaseModuleManager
         $isResource     = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath   = substr($path, 9);
         $resourceModule = null;
-        $modules        = array($this->getModuleByAlias($moduleName));
+        $modules        = array($this->getModule($moduleName));
         $files          = array();
 
         foreach ($modules as $module) {
