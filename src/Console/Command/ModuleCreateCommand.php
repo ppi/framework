@@ -70,8 +70,11 @@ class ModuleCreateCommand extends AbstractCommand
         'twig' => [
             'resources/views/index/base.html.twig',
             'resources/views/index/index.html.twig'
+        ],
+        'smarty' => [
+            'resources/views/index/base.html.smarty',
+            'resources/views/index/index.html.smarty'
         ]
-        // @todo - add Smarty
     ];
 
     protected $routingEngineFilesMap = [
@@ -168,6 +171,7 @@ class ModuleCreateCommand extends AbstractCommand
         switch($this->tplEngine) {
             case self::TPL_ENGINE_PHP:
             case self::TPL_ENGINE_TWIG:
+            case self::TPL_ENGINE_SMARTY:
                 // Copy templating files over
                 $tplFiles = $this->tplEngineFilesMap[$this->tplEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $tplFiles);
@@ -284,16 +288,20 @@ class ModuleCreateCommand extends AbstractCommand
     protected function askQuestions(InputInterface $input, OutputInterface $output)
     {
         // Module DIR
-        if ($input->getOption('dir') == false) {
-            $dialog = $this->getHelper('dialog');
-            $this->modulesDir = $dialog->ask($output, "Where's the modules dir? [" . $this->modulesDir . "]: ", $this->modulesDir);
+        if ($input->getOption('dir') == null) {
+            $questionHelper = $this->getHelper('question');
+            $modulesDirQuestion = new ChoiceQuestion('Where is the modules dir?', [1 => $this->modulesDir], $this->modulesDir);
+            $modulesDirQuestion->setErrorMessage('Modules dir: %s is invalid.');
+            $this->modulesDir = $questionHelper->ask($input, $output, $modulesDirQuestion);
         }
+
         // Templating
         if ($input->getOption('tpl') == null) {
             $questionHelper = $this->getHelper('question');
             $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]', [
                 1 => 'php',
-                2 => 'twig'
+                2 => 'twig',
+                3 => 'smarty'
             ], 'php');
             $tplQuestion->setErrorMessage('Templating engine %s is invalid.');
             $this->tplEngine = $questionHelper->ask($input, $output, $tplQuestion);
