@@ -27,9 +27,11 @@ class ModuleCreateCommand extends AbstractCommand
 
     const TPL_ENGINE_PHP = 'php';
     const TPL_ENGINE_TWIG = 'twig';
+    const TPL_ENGINE_SMARTY = 'smarty';
 
     const ROUTING_ENGINE_SYMFONY = 'symfony';
     const ROUTING_ENGINE_AURA = 'aura';
+    const ROUTING_ENGINE_LARAVEL = 'laravel';
 
     protected $skeletonModuleDir;
     protected $modulesDir;
@@ -82,6 +84,11 @@ class ModuleCreateCommand extends AbstractCommand
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
             'resources/routes/aura.php'
+        ],
+        'laravel' => [
+            'src/Controller/Index.php',
+            'src/Controller/Shared.php',
+            'resources/routes/laravel.php'
         ]
     ];
 
@@ -95,6 +102,11 @@ class ModuleCreateCommand extends AbstractCommand
             '[ROUTING_LOAD_METHOD]' => 'loadAuraRoutes',
             '[ROUTING_DEF_FILE]' => 'aura.php',
             '[ROUTING_GETROUTES_RETVAL]' => '\Aura\Router\Router'
+        ],
+        'laravel' => [
+            '[ROUTING_LOAD_METHOD]' => 'loadLaravelRoutes',
+            '[ROUTING_DEF_FILE]' => 'laravel.php',
+            '[ROUTING_GETROUTES_RETVAL]' => '\Illuminate\Routing\Router'
         ]
     ];
 
@@ -171,6 +183,7 @@ class ModuleCreateCommand extends AbstractCommand
         switch($this->routingEngine) {
             case self::ROUTING_ENGINE_SYMFONY:
             case self::ROUTING_ENGINE_AURA:
+            case self::ROUTING_ENGINE_LARAVEL:
                 // Copy routing files over
                 $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
@@ -290,7 +303,8 @@ class ModuleCreateCommand extends AbstractCommand
             $questionHelper = $this->getHelper('question');
             $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]', [
                 1 => 'symfony',
-                2 => 'aura'
+                2 => 'aura',
+                3 => 'laravel'
             ], 'symfony');
             $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
             $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
