@@ -40,6 +40,7 @@
     "zendframework/zend-modulemanager": "~2.3",
     "zendframework/zend-servicemanager": "~2.3",
     "zendframework/zend-loader": "~2.3",
+    "zendframework/zend-view": "~2.3"
     "symfony-cmf/routing": "1.3.0"
   },
   "require-dev": {
