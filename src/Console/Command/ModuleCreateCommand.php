@@ -54,8 +54,6 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected $coreFiles = [
         'Module.php',
-        'src/Controller/Index.php',
-        'src/Controller/Shared.php',
         'resources/config/config.php'
     ];
 
@@ -75,14 +73,17 @@ class ModuleCreateCommand extends AbstractCommand
 
     protected $routingEngineFilesMap = [
         'symfony' => [
+            'src/Controller/Index.php',
+            'src/Controller/Shared.php',
             'resources/routes/symfony.yml'
         ]
+        // @todo - add aura
     ];
 
     protected $routingEngineTokenMap = [
         'symfony' => [
-            'ROUTING_LOAD_METHOD' => 'loadSymfonyRoutes',
-            'ROUTING_DEF_FILE' => 'symfony.yml'
+            '[ROUTING_LOAD_METHOD]' => 'loadSymfonyRoutes',
+            '[ROUTING_DEF_FILE]' => 'symfony.yml'
         ]
         // @todo - add Aura
     ];
@@ -112,7 +113,7 @@ class ModuleCreateCommand extends AbstractCommand
             ->setDescription('Create a module')
             ->addArgument('name', InputArgument::REQUIRED, 'What is your module name?')
             ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'Specify the modules directory')
-            ->addOption('tpl', null, InputOption::VALUE_OPTIONAL, 'Specify the templating engine');
+            ->addOption('tpl', null, InputOption::VALUE_OPTIONAL, 'Specify the templating engine')
             ->addOption('routing', null, InputOption::VALUE_OPTIONAL, 'Specify the routing engine');
     }
 
@@ -135,29 +136,47 @@ class ModuleCreateCommand extends AbstractCommand
         // Copy the core files
         $this->copyFiles($this->skeletonModuleDir, $moduleDir, $this->coreFiles);
 
+        $tokenizedFiles = [];
+        $tokens = [];
+        foreach($this->coreFiles as $coreFile) {
+            $tokenizedFiles[] = $coreFile;
+        }
+
         // Copy files relative to the selected templating engine
         switch($this->tplEngine) {
             case self::TPL_ENGINE_PHP:
             case self::TPL_ENGINE_TWIG:
+                // Copy templating files over
                 $tplFiles = $this->tplEngineFilesMap[$this->tplEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $tplFiles);
-                foreach([$this->coreFiles, $tplFiles] as $tokenizedFiles) {
-                    $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, [
-                        '[MODULE_NAME]'    => $moduleName,
-                        '[TPL_ENGINE_EXT]' => $this->tplEngine
-                    ]);
+                // Setting up templating tokens
+                foreach($tplFiles as $tplFile) {
+                    $tokenizedFiles[] = $tplFile;
                 }
+                $tokens['[MODULE_NAME]'] = $moduleName;
+                $tokens['[TPL_ENGINE_EXT]'] = $this->tplEngine;
                 break;
         }
         // Routing
         switch($this->routingEngine) {
             case self::ROUTING_ENGINE_SYMFONY:
+                // Copy routing files over
                 $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
+
+                // Setting up routing tokens
+                foreach($routingFiles as $routingFile) {
+                    $tokenizedFiles[] = $routingFile;
+                }
                 $routingTokensMap = $this->routingEngineTokenMap[$this->routingEngine];
-                $this->replaceTokensInFiles($moduleDir, $routingFiles, $routingTokensMap);
+                foreach($routingTokensMap as $routingTokenKey => $routingTokenVal) {
+                    $tokens[$routingTokenKey] = $routingTokenVal;
+                }
                 break;
         }
+
+        // Replace tokens in all files
+        $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, $tokens);
 
         $output->writeln("<info>Created module: {$moduleName}</info>");
         $output->writeln("<comment>To activate it, add <info>'{$moduleName}'</info> to your <info>'active_modules'</info> setting in <info>your app config file.</info></comment>");
