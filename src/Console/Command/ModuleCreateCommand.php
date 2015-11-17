@@ -28,9 +28,12 @@ class ModuleCreateCommand extends AbstractCommand
     const TPL_ENGINE_PHP = 'php';
     const TPL_ENGINE_TWIG = 'twig';
 
+    const ROUTING_ENGINE_SYMFONY = 'symfony';
+
     protected $skeletonModuleDir;
     protected $modulesDir;
     protected $tplEngine;
+    protected $routingEngine;
 
     /**
      * @var array
@@ -53,8 +56,7 @@ class ModuleCreateCommand extends AbstractCommand
         'Module.php',
         'src/Controller/Index.php',
         'src/Controller/Shared.php',
-        'resources/config/config.php',
-        'resources/routes/symfony.yml'
+        'resources/config/config.php'
     ];
 
     /**
@@ -69,6 +71,20 @@ class ModuleCreateCommand extends AbstractCommand
             'resources/views/index/index.html.twig'
         ]
         // @todo - add Smarty
+    ];
+
+    protected $routingEngineFilesMap = [
+        'symfony' => [
+            'resources/routes/symfony.yml'
+        ]
+    ];
+
+    protected $routingEngineTokenMap = [
+        'symfony' => [
+            'ROUTING_LOAD_METHOD' => 'loadSymfonyRoutes',
+            'ROUTING_DEF_FILE' => 'symfony.yml'
+        ]
+        // @todo - add Aura
     ];
 
     /**
@@ -97,6 +113,7 @@ class ModuleCreateCommand extends AbstractCommand
             ->addArgument('name', InputArgument::REQUIRED, 'What is your module name?')
             ->addOption('dir', null, InputOption::VALUE_OPTIONAL, 'Specify the modules directory')
             ->addOption('tpl', null, InputOption::VALUE_OPTIONAL, 'Specify the templating engine');
+            ->addOption('routing', null, InputOption::VALUE_OPTIONAL, 'Specify the routing engine');
     }
 
     /**
@@ -130,6 +147,15 @@ class ModuleCreateCommand extends AbstractCommand
                         '[TPL_ENGINE_EXT]' => $this->tplEngine
                     ]);
                 }
+                break;
+        }
+        // Routing
+        switch($this->routingEngine) {
+            case self::ROUTING_ENGINE_SYMFONY:
+                $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
+                $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
+                $routingTokensMap = $this->routingEngineTokenMap[$this->routingEngine];
+                $this->replaceTokensInFiles($moduleDir, $routingFiles, $routingTokensMap);
                 break;
         }
 
@@ -214,11 +240,12 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected function askQuestions(InputInterface $input, OutputInterface $output)
     {
+        // Module DIR
         if ($input->getOption('dir') == false) {
             $dialog = $this->getHelper('dialog');
             $this->modulesDir = $dialog->ask($output, "Where's the modules dir? [" . $this->modulesDir . "]: ", $this->modulesDir);
         }
-
+        // Templating
         if ($input->getOption('tpl') == null) {
             $questionHelper = $this->getHelper('question');
             $tplQuestion = new ChoiceQuestion('Choose your templating engine', [
@@ -228,39 +255,14 @@ class ModuleCreateCommand extends AbstractCommand
             $tplQuestion->setErrorMessage('Templating engine %s is invalid.');
             $this->tplEngine = $questionHelper->ask($input, $output, $tplQuestion);
         }
-    }
-
-    /**
-     * @param $src
-     * @param $dst
-     * @throws \Exception
-     */
-    protected function copyRecursively($src, $dst)
-    {
-        if (empty($src)) {
-            throw new \Exception('Unable to locate source path: ' . $src);
+        // Routing
+        if ($input->getOption('routing') == null) {
+            $questionHelper = $this->getHelper('question');
+            $routingQuestion = new ChoiceQuestion('Choose your routing engine', [
+                1 => 'symfony',
+            ], 'symfony');
+            $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
+            $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
         }
-
-        if (empty($dst)) {
-            throw new \Exception('Unable to locate dst path: ' . $dst);
-        }
-
-        $moduleDir = opendir($src);
-        @mkdir($dst);
-
-        if ($moduleDir === false) {
-            throw new \Exception('Unable to open dir: ' . $src);
-        }
-
-        while (false !== ($file = readdir($moduleDir))) {
-            if (($file != '.') && ($file != '..')) {
-                if (is_dir($src . '/' . $file)) {
-                    $this->copyRecursively($src . '/' . $file, $dst . '/' . $file);
-                } else {
-                    copy($src . '/' . $file, $dst . '/' . $file);
-                }
-            }
-        }
-        closedir($moduleDir);
     }
 }
