@@ -85,26 +85,30 @@ EOT
         $output->writeln(sprintf("Installing assets using the <comment>%s</comment> option", $input->getOption('symlink') ? 'symlink' : 'hard copy'));
 
         foreach ($this->getServiceManager()->get('modulemanager')->getLoadedModules() as $module) {
-            if (is_dir($originDir = $module->getPath() . '/resources/public')) {
-                $modulesDir = $targetArg . '/modules/';
-                $targetDir  = $modulesDir . str_replace('module', '', strtolower($module->getName()));
+            if (!method_exists($module, 'getPath')) {
+                continue;
+            }
+            if (!is_dir($originDir = $module->getPath() . '/resources/public')) {
+                continue;
+            }
+            $modulesDir = $targetArg . '/modules/';
+            $targetDir = $modulesDir . str_replace('module', '', strtolower($module->getName()));
 
-                $output->writeln(sprintf('Installing assets for <comment>%s</comment> into <comment>%s</comment>', $module->getNamespace(), $targetDir));
+            $output->writeln(sprintf('Installing assets for <comment>%s</comment> into <comment>%s</comment>', $module->getNamespace(), $targetDir));
 
-                $filesystem->remove($targetDir);
+            $filesystem->remove($targetDir);
 
-                if ($input->getOption('symlink')) {
-                    if ($input->getOption('relative')) {
-                        $relativeOriginDir = $filesystem->makePathRelative($originDir, realpath($modulesDir));
-                    } else {
-                        $relativeOriginDir = $originDir;
-                    }
-                    $filesystem->symlink($relativeOriginDir, $targetDir);
+            if ($input->getOption('symlink')) {
+                if ($input->getOption('relative')) {
+                    $relativeOriginDir = $filesystem->makePathRelative($originDir, realpath($modulesDir));
                 } else {
-                    $filesystem->mkdir($targetDir, 0777);
-                    // We use a custom iterator to ignore VCS files
-                    $filesystem->mirror($originDir, $targetDir, Finder::create()->in($originDir));
+                    $relativeOriginDir = $originDir;
                 }
+                $filesystem->symlink($relativeOriginDir, $targetDir);
+            } else {
+                $filesystem->mkdir($targetDir, 0777);
+                // We use a custom iterator to ignore VCS files
+                $filesystem->mirror($originDir, $targetDir, Finder::create()->in($originDir));
             }
         }
     }
