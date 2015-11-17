@@ -29,6 +29,7 @@ class ModuleCreateCommand extends AbstractCommand
     const TPL_ENGINE_TWIG = 'twig';
 
     const ROUTING_ENGINE_SYMFONY = 'symfony';
+    const ROUTING_ENGINE_AURA = 'aura';
 
     protected $skeletonModuleDir;
     protected $modulesDir;
@@ -76,16 +77,25 @@ class ModuleCreateCommand extends AbstractCommand
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
             'resources/routes/symfony.yml'
+        ],
+        'aura' => [
+            'src/Controller/Index.php',
+            'src/Controller/Shared.php',
+            'resources/routes/aura.php'
         ]
-        // @todo - add aura
     ];
 
     protected $routingEngineTokenMap = [
         'symfony' => [
             '[ROUTING_LOAD_METHOD]' => 'loadSymfonyRoutes',
-            '[ROUTING_DEF_FILE]' => 'symfony.yml'
+            '[ROUTING_DEF_FILE]' => 'symfony.yml',
+            '[ROUTING_GETROUTES_RETVAL]' => '\Symfony\Component\Routing\RouteCollection'
+        ],
+        'aura' => [
+            '[ROUTING_LOAD_METHOD]' => 'loadAuraRoutes',
+            '[ROUTING_DEF_FILE]' => 'aura.php',
+            '[ROUTING_GETROUTES_RETVAL]' => '\Aura\Router\Router'
         ]
-        // @todo - add Aura
     ];
 
     /**
@@ -160,6 +170,7 @@ class ModuleCreateCommand extends AbstractCommand
         // Routing
         switch($this->routingEngine) {
             case self::ROUTING_ENGINE_SYMFONY:
+            case self::ROUTING_ENGINE_AURA:
                 // Copy routing files over
                 $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
@@ -267,7 +278,7 @@ class ModuleCreateCommand extends AbstractCommand
         // Templating
         if ($input->getOption('tpl') == null) {
             $questionHelper = $this->getHelper('question');
-            $tplQuestion = new ChoiceQuestion('Choose your templating engine', [
+            $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]', [
                 1 => 'php',
                 2 => 'twig'
             ], 'php');
@@ -277,8 +288,9 @@ class ModuleCreateCommand extends AbstractCommand
         // Routing
         if ($input->getOption('routing') == null) {
             $questionHelper = $this->getHelper('question');
-            $routingQuestion = new ChoiceQuestion('Choose your routing engine', [
+            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]', [
                 1 => 'symfony',
+                2 => 'aura'
             ], 'symfony');
             $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
             $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
