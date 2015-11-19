@@ -173,12 +173,12 @@ class ModuleCreateCommand extends AbstractCommand
 
         $tokenizedFiles = [];
         $tokens = [];
-        foreach($this->coreFiles as $coreFile) {
+        foreach ($this->coreFiles as $coreFile) {
             $tokenizedFiles[] = $coreFile;
         }
 
         // Copy files relative to the selected templating engine
-        switch($this->tplEngine) {
+        switch ($this->tplEngine) {
             case self::TPL_ENGINE_PHP:
             case self::TPL_ENGINE_TWIG:
             case self::TPL_ENGINE_SMARTY:
@@ -186,7 +186,7 @@ class ModuleCreateCommand extends AbstractCommand
                 $tplFiles = $this->tplEngineFilesMap[$this->tplEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $tplFiles);
                 // Setting up templating tokens
-                foreach($tplFiles as $tplFile) {
+                foreach ($tplFiles as $tplFile) {
                     $tokenizedFiles[] = $tplFile;
                 }
                 $tokens['[MODULE_NAME]'] = $moduleName;
@@ -194,7 +194,7 @@ class ModuleCreateCommand extends AbstractCommand
                 break;
         }
         // Routing
-        switch($this->routingEngine) {
+        switch ($this->routingEngine) {
             case self::ROUTING_ENGINE_SYMFONY:
             case self::ROUTING_ENGINE_AURA:
             case self::ROUTING_ENGINE_LARAVEL:
@@ -203,11 +203,11 @@ class ModuleCreateCommand extends AbstractCommand
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
 
                 // Setting up routing tokens
-                foreach($routingFiles as $routingFile) {
+                foreach ($routingFiles as $routingFile) {
                     $tokenizedFiles[] = $routingFile;
                 }
                 $routingTokensMap = $this->routingEngineTokenMap[$this->routingEngine];
-                foreach($routingTokensMap as $routingTokenKey => $routingTokenVal) {
+                foreach ($routingTokensMap as $routingTokenKey => $routingTokenVal) {
                     $tokens[$routingTokenKey] = $routingTokenVal;
                 }
                 break;
@@ -227,23 +227,9 @@ class ModuleCreateCommand extends AbstractCommand
 
         $output->writeln("<comment>This module is not enabled. Enable it in <info>config[modules]</info> key</comment>");
 
-        if($this->tplEngine == self::TPL_ENGINE_TWIG) {
-            if(!in_array($this->tplEngine, $this->configEnabledTemplatingEngines)) {
-                $output->writeln(sprintf(
-                    "<comment>This templating engine is not enabled. Add <info>%s</info> it in config[framework][templating][engines] key</comment>",
-                    $this->tplEngine
-                ));
-            }
-            if(!class_exists('\Twig_Environment')) {
-                $output->writeln("Twig doesn't appear to be loaded. Run: <info>composer require ppi/twig-module</info>");
-            }
-        }
+        $this->checkTemplatingEngines($input, $output);
+        $this->checkRouters($input, $output);
 
-        if($this->tplEngine == self::TPL_ENGINE_SMARTY) {
-            if(!class_exists('\Smarty')) {
-                $output->writeln("Smarty doesn't appear to be loaded. Run: <info>composer require ppi/smarty-module</info>");
-            }
-        }
 
     }
 
@@ -256,19 +242,12 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected function replaceTokensInFiles($moduleDir, $files, $tokens)
     {
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $file = $moduleDir . DIRECTORY_SEPARATOR . $file;
-            if(!is_writeable($file)) {
+            if (!is_writeable($file)) {
                 throw new \InvalidArgumentException(sprintf('File %s is not writeable', $file));
             }
-            file_put_contents(
-                $file,
-                str_replace(
-                    array_keys($tokens),
-                    array_values($tokens),
-                    file_get_contents($file)
-                )
-            );
+            file_put_contents($file, str_replace(array_keys($tokens), array_values($tokens), file_get_contents($file)));
         }
     }
 
@@ -281,13 +260,13 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected function copyFiles($skeletonDir, $moduleDir, $files)
     {
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $srcFile = $skeletonDir . DIRECTORY_SEPARATOR . $file;
             $dstFile = $moduleDir . DIRECTORY_SEPARATOR . $file;
-            if(!file_exists($srcFile)) {
+            if (!file_exists($srcFile)) {
                 throw new \InvalidArgumentException(sprintf('File does not exist: %s', $srcFile));
             }
-            if(file_exists($dstFile)) {
+            if (file_exists($dstFile)) {
                 throw new \InvalidArgumentException(sprintf('File already exists: %s', $dstFile));
             }
             copy($srcFile, $dstFile);
@@ -302,17 +281,14 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected function createModuleStructure($moduleDir, $moduleName)
     {
-        if(is_dir($moduleDir)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Unable to create module: %s it already exists at %s%s',
-                $moduleName, $moduleDir, $moduleName
-            ));
+        if (is_dir($moduleDir)) {
+            throw new \InvalidArgumentException(sprintf('Unable to create module: %s it already exists at %s%s', $moduleName, $moduleDir, $moduleName));
         }
 
         @mkdir($moduleDir);
 
         // Create base structure
-        foreach($this->coreDirs as $coreDir) {
+        foreach ($this->coreDirs as $coreDir) {
             $tmpDir = $moduleDir . DIRECTORY_SEPARATOR . $coreDir;
             @mkdir($tmpDir);
         }
@@ -335,24 +311,70 @@ class ModuleCreateCommand extends AbstractCommand
         // Templating
         if ($input->getOption('tpl') == null) {
             $questionHelper = $this->getHelper('question');
-            $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]', [
-                1 => 'php',
-                2 => 'twig',
-                3 => 'smarty'
-            ], 'php');
+            $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]', [1 => 'php', 2 => 'twig', 3 => 'smarty'], 'php');
             $tplQuestion->setErrorMessage('Templating engine %s is invalid.');
             $this->tplEngine = $questionHelper->ask($input, $output, $tplQuestion);
         }
         // Routing
         if ($input->getOption('routing') == null) {
             $questionHelper = $this->getHelper('question');
-            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]', [
-                1 => 'symfony',
-                2 => 'aura',
-                3 => 'laravel'
-            ], 'symfony');
+            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]', [1 => 'symfony', 2 => 'aura', 3 => 'laravel'], 'symfony');
             $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
             $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
         }
     }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    private function checkRouters(InputInterface $input, OutputInterface $output)
+    {
+        // Aura Check
+        if($this->routingEngine == self::ROUTING_ENGINE_AURA && !class_exists('\Aura\Router\Router')) {
+            $output->writeln("<comment>Aura Router doesn't appear to be loaded. Run: <info>composer require ppi/aura-router</info></comment>");
+        }
+
+        // Laravel check
+        if($this->routingEngine == self::ROUTING_ENGINE_LARAVEL && !class_exists('\PPI\LaravelRouting\LaravelRouter')) {
+            $output->writeln("<comment>Laravel Router doesn't appear to be loaded. Run: <info>composer require ppi/laravel-router</info></comment>");
+        }
+
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    private function checkTemplatingEngines(InputInterface $input, OutputInterface $output)
+    {
+        // PHP Templating Engine checks
+        if ($this->tplEngine == self::TPL_ENGINE_PHP) {
+            if (!in_array($this->tplEngine, $this->configEnabledTemplatingEngines)) {
+                $output->writeln(sprintf("<comment>PHP is not an enabled templating engine. Add <info>%s</info> it in <info>config[framework][templating][engines]</info> key</comment>", $this->tplEngine));
+            }
+        }
+
+        // Twig Checks
+        if ($this->tplEngine == self::TPL_ENGINE_TWIG) {
+            if (!in_array($this->tplEngine, $this->configEnabledTemplatingEngines)) {
+                $output->writeln(sprintf("<comment>Twig is not an enabled templating engine. Add <info>%s</info> it in <info>config[framework][templating][engines]</info> key</comment>", $this->tplEngine));
+            }
+            if (!class_exists('\Twig_Environment')) {
+                $output->writeln("<comment>Twig doesn't appear to be loaded. Run: <info>composer require ppi/twig-module</info></comment>");
+            }
+        }
+
+        // Smarty Checks
+        if ($this->tplEngine == self::TPL_ENGINE_SMARTY) {
+            if (!in_array($this->tplEngine, $this->configEnabledTemplatingEngines)) {
+                $output->writeln(sprintf("<comment>Smarty is not an enabled templating engine. Add <info>%s</info> it in <info>config[framework][templating][engines]</info> key</comment>", $this->tplEngine));
+            }
+            if (!class_exists('\Smarty')) {
+                $output->writeln("<comment>Smarty doesn't appear to be loaded. Run: <info>composer require ppi/smarty-module</info></comment>");
+            }
+        }
+
+    }
+
 }
