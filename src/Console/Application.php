@@ -103,14 +103,20 @@ class Application extends BaseApplication
             new Command\RouterMatchCommand(),
             new Command\ServiceManagerDebugCommand(),
         );
-
         if (isset(
-            $config['modules']['module_listener_options']['module_paths'][0],
+            $config['module_listener_options']['module_paths'][0],
             $config['framework']['skeleton_module']['path']
         )) {
             $moduleCreateCommand = new Command\ModuleCreateCommand();
-            $moduleCreateCommand->setTargetModuleDir($config['modules']['module_listener_options']['module_paths'][0]);
             $moduleCreateCommand->setSkeletonModuleDir($config['framework']['skeleton_module']['path']);
+            $moduleCreateCommand->setTargetModuleDir($config['module_listener_options']['module_paths'][0]);
+
+            // Enabled templating engines
+            if(isset($config['framework']['templating']['engines'])) {
+                $moduleCreateCommand->setEnabledTemplatingEngines($config['framework']['templating']['engines']);
+            }
+
+
             $commands[] = $moduleCreateCommand;
         }
 

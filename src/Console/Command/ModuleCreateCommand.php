@@ -37,6 +37,7 @@ class ModuleCreateCommand extends AbstractCommand
     protected $modulesDir;
     protected $tplEngine;
     protected $routingEngine;
+    protected $configEnabledTemplatingEngines = [];
 
     /**
      * @var array
@@ -130,6 +131,15 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
+     * @param array $tplEngines
+     */
+    public function setEnabledTemplatingEngines(array $tplEngines)
+    {
+        $this->configEnabledTemplatingEngines = $tplEngines;
+    }
+
+
+    /**
      * @return void
      */
     protected function configure()
@@ -206,8 +216,35 @@ class ModuleCreateCommand extends AbstractCommand
         // Replace tokens in all files
         $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, $tokens);
 
-        $output->writeln("<info>Created module: {$moduleName}</info>");
-        $output->writeln("<comment>To activate it, add <info>'{$moduleName}'</info> to your <info>'active_modules'</info> setting in <info>your app config file.</info></comment>");
+        // @todo - maybe test some stuff, to verify?
+
+        // Success
+        $output->writeln("<info>Created module successfully</info>");
+        $output->writeln("Name: <info>{$moduleName}</info>");
+        $output->writeln(sprintf("Routing: <info>%s</info>", $this->routingEngine));
+        $output->writeln(sprintf("Templating: <info>%s</info>", $this->tplEngine));
+        $output->writeln(sprintf("Path: <info>%s</info>", $moduleDir));
+
+        $output->writeln("<comment>This module is not enabled. Enable it in <info>config[modules]</info> key</comment>");
+
+        if($this->tplEngine == self::TPL_ENGINE_TWIG) {
+            if(!in_array($this->tplEngine, $this->configEnabledTemplatingEngines)) {
+                $output->writeln(sprintf(
+                    "<comment>This templating engine is not enabled. Add <info>%s</info> it in config[framework][templating][engines] key</comment>",
+                    $this->tplEngine
+                ));
+            }
+            if(!class_exists('\Twig_Environment')) {
+                $output->writeln("Twig doesn't appear to be loaded. Run: <info>composer require ppi/twig-module</info>");
+            }
+        }
+
+        if($this->tplEngine == self::TPL_ENGINE_SMARTY) {
+            if(!class_exists('\Smarty')) {
+                $output->writeln("Smarty doesn't appear to be loaded. Run: <info>composer require ppi/smarty-module</info>");
+            }
+        }
+
     }
 
     /**
