@@ -46,18 +46,18 @@ class ControllerNameParser
      */
     public function parse($controller)
     {
-        list($module, $controller, $action) = $this->getPartsFromControllerName($controller);
+        list($module, $moduleName, $controller, $action) = $this->getPartsFromControllerName($controller);
 
         if (null === $module) {
             // this throws an exception if there is no such module
-            $msg = sprintf('Unable to find controller "%s:%s" - module alias "%s" does not exist.', $moduleAlias, $controller, $moduleAlias);
+            $msg = sprintf('Unable to find controller "%s:%s" - module alias "%s" does not exist.', $moduleName, $controller, $moduleAlias);
         } else {
             $class = $module->getNamespace() . '\\Controller\\' . $controller;
             if (class_exists($class)) {
                 return $class . '::' . $action . 'Action';
             }
 
-            $msg = sprintf('Unable to find controller "%s:%s" - class "%s" does not exist.', $moduleAlias, $controller, $class);
+            $msg = sprintf('Unable to find controller "%s:%s" - class "%s" does not exist.', $moduleName, $controller, $class);
         }
 
         throw new \InvalidArgumentException($msg);
@@ -65,7 +65,7 @@ class ControllerNameParser
 
     public function build($controller)
     {
-        list($moduleName, $controllerName, $actionName) = $this->getPartsFromControllerName($controller);
+        list($module, $moduleName, $controllerName, $actionName) = $this->getPartsFromControllerName($controller);
         return sprintf('%s:%s:%s', $moduleName, $controllerName, $actionName);
     }
 
@@ -85,7 +85,7 @@ class ControllerNameParser
         $module     = $this->moduleManager->getModule($moduleName);
         $moduleName = $module->getName();
 
-        return [$moduleName, $controller, $action];
+        return [$module, $moduleName, $controller, $action];
     }
 
 }
