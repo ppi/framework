@@ -46,13 +46,7 @@ class ControllerNameParser
      */
     public function parse($controller)
     {
-        if (3 != count($parts = explode(':', $controller))) {
-            throw new \InvalidArgumentException(sprintf('The "%s" controller is not a valid a:b:c controller string.', $controller));
-        }
-
-        list($moduleAlias, $controller, $action) = $parts;
-        $controller                              = str_replace('/', '\\', $controller);
-        $module                                  = $this->moduleManager->getModule($moduleAlias);
+        list($module, $controller, $action) = $this->getPartsFromControllerName($controller);
 
         if (null === $module) {
             // this throws an exception if there is no such module
@@ -68,4 +62,30 @@ class ControllerNameParser
 
         throw new \InvalidArgumentException($msg);
     }
+
+    public function build($controller)
+    {
+        list($moduleName, $controllerName, $actionName) = $this->getPartsFromControllerName($controller);
+        return sprintf('%s:%s:%s', $moduleName, $controllerName, $actionName);
+    }
+
+    /**
+     * @param string $controller
+     * @return array
+     */
+    private function getPartsFromControllerName($controller)
+    {
+
+        if (3 != count($parts = explode(':', $controller))) {
+            throw new \InvalidArgumentException(sprintf('The "%s" controller is not a valid a:b:c controller string.', $controller));
+        }
+
+        list($moduleName, $controller, $action) = $parts;
+        $controller = str_replace('/', '\\', $controller);
+        $module     = $this->moduleManager->getModule($moduleName);
+        $moduleName = $module->getName();
+
+        return [$moduleName, $controller, $action];
+    }
+
 }

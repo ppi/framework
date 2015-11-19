@@ -26,7 +26,7 @@ class ModuleDebugCommand extends AbstractCommand
     protected function configure()
     {
         $this
-            ->setName('module:debug')
+            ->setName('module:list')
             ->setDescription('Displays information about the currently loaded modules')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command dumps information about the currently loaded modules.
