@@ -12,7 +12,7 @@ namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
-use PPI\Framework\Http\Request;
+use PPI\Framework\Http\Response;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Psr\Http\Message\RequestInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
@@ -211,7 +211,7 @@ class App implements AppInterface
     public function boot()
     {
         if (true === $this->booted) {
-            return;
+            return $this;
         }
 
         $this->serviceManager = $this->buildServiceManager();
@@ -242,8 +242,8 @@ class App implements AppInterface
      * Run the application and send the response.
      *
      * @param RequestInterface|null $request
-     *
-     * @return $response
+     * @return Response
+     * @throws \Exception
      */
     public function run(RequestInterface $request = null)
     {
@@ -264,7 +264,7 @@ class App implements AppInterface
      * Decide on a route to use and dispatch our module's controller action.
      *
      * @param HttpRequest $request
-     * @return array|mixed|object
+     * @return Response
      * @throws \Exception
      */
     public function dispatch(HttpRequest $request)
