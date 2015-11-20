@@ -94,13 +94,6 @@ class App implements AppInterface
     protected $matchedRoute;
 
     /**
-     * The response object.
-     *
-     * @var null
-     */
-    protected $response;
-
-    /**
      * @var \PPI\Framework\Module\Controller\ControllerResolver
      */
     protected $resolver;
@@ -508,20 +501,6 @@ class App implements AppInterface
     public function locateResource($name, $dir = null, $first = true)
     {
         return $this->getModuleManager()->locateResource($name, $dir, $first);
-    }
-
-    /**
-     * Get the response object.
-     *
-     * @return object
-     */
-    public function getResponse()
-    {
-        if (null === $this->response) {
-            $this->response = $this->serviceManager->get('Response');
-        }
-
-        return $this->response;
     }
 
     /**
