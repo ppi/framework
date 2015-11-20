@@ -18,6 +18,7 @@ use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use PPI\Framework\Http\Request as HttpRequest;
 
 /**
  * The PPI App bootstrap class.
@@ -544,7 +545,7 @@ class App implements AppInterface
     public function getRequest()
     {
         if (null === $this->request) {
-            $this->request = $this->serviceManager->get('Request');
+            $this->request = HttpRequest::createFromGlobals();
         }
 
         return $this->request;
