@@ -12,6 +12,7 @@ namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
+use PPI\Framework\Http\Request;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Psr\Http\Message\RequestInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
@@ -89,13 +90,6 @@ class App implements AppInterface
      * @var null|array
      */
     protected $matchedRoute;
-
-    /**
-     * The request object.
-     *
-     * @var null
-     */
-    protected $request;
 
     /**
      * The response object.
@@ -249,7 +243,7 @@ class App implements AppInterface
      *
      * @param RequestInterface|null $request
      *
-     * @return $this
+     * @return $response
      */
     public function run(RequestInterface $request = null)
     {
@@ -257,29 +251,31 @@ class App implements AppInterface
             $this->boot();
         }
 
-        if (null !== $request) {
-            $this->request = $request;
-        }
+        $request = $request ?: HttpRequest::createFromGlobals();
 
-        $response = $this->dispatch();
+        $response = $this->dispatch($request);
         $response->send();
 
-        return $this;
+        return $response;
     }
 
     /**
+     *
      * Decide on a route to use and dispatch our module's controller action.
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @param HttpRequest $request
+     * @return array|mixed|object
+     * @throws \Exception
      */
-    public function dispatch()
+    public function dispatch(HttpRequest $request)
     {
         if (false === $this->booted) {
             $this->boot();
         }
 
         // Routing
-        $routeParams = $this->handleRouting();
+        $routeParams = $this->handleRouting($request);
+        $request->attributes->add($routeParams);
 
         if (!isset($routeParams['_controller'])) {
             throw new \Exception('No controller definition found for matching route');
@@ -291,7 +287,7 @@ class App implements AppInterface
 
             $result = call_user_func_array(
                 $routeParams['_controller'],
-                array($this->getRequest())
+                array($request)
             );
 
             if(is_string($result)) {
@@ -305,7 +301,6 @@ class App implements AppInterface
 
             // Resolve our Controller
             $resolver = $this->serviceManager->get('ControllerResolver');
-            $request = $this->getRequest();
             if (false === $controller = $resolver->getController($request)) {
                 throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
             }
@@ -538,20 +533,6 @@ class App implements AppInterface
     }
 
     /**
-     * Get the request object.
-     *
-     * @return RequestInterface
-     */
-    public function getRequest()
-    {
-        if (null === $this->request) {
-            $this->request = HttpRequest::createFromGlobals();
-        }
-
-        return $this->request;
-    }
-
-    /**
      * Get the response object.
      *
      * @return object
@@ -727,21 +708,23 @@ class App implements AppInterface
     }
 
     /**
+     *
      * Perform the matching of a route and return a set of routing parameters if a valid one is found.
      * Otherwise exceptions get thrown
      *
+     * @param HttpRequest $request
      * @return array
      *
      * @throws \Exception
      */
-    protected function handleRouting()
+    protected function handleRouting(HttpRequest $request)
     {
         $this->router = $this->serviceManager->get('Router');
         $this->router->warmUp($this->getCacheDir());
 
         try {
             // Lets load up our router and match the appropriate route
-            $parameters = $this->router->matchRequest($this->getRequest());
+            $parameters = $this->router->matchRequest($request);
             if (!empty($parameters)) {
                 if (null !== $this->logger) {
                     $this->logger->info(sprintf('Matched route "%s" (parameters: %s)', $parameters['_route'], $this->router->parametersToString($parameters)));
@@ -750,7 +733,6 @@ class App implements AppInterface
         } catch (ResourceNotFoundException $e) {
 
             $routeUri = $this->router->generate('Framework_404');
-            $request = $this->getRequest();
             $parameters = $this->router->matchRequest($request::create($routeUri));
 
         } catch (\Exception $e) {
@@ -758,7 +740,6 @@ class App implements AppInterface
         }
 
         $parameters['_route_params'] = $parameters;
-        $this->getRequest()->attributes->add($parameters);
         return $parameters;
     }
 
