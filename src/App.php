@@ -291,7 +291,7 @@ class App implements AppInterface
 
             $result = call_user_func_array(
                 $routeParams['_controller'],
-                array($this->serviceManager->get('Request'))
+                array($this->getRequest())
             );
 
             if(is_string($result)) {
