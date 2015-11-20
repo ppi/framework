@@ -15,11 +15,13 @@ use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\Http\Response;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use PPI\Framework\Http\Request as HttpRequest;
+use PPI\Framework\Http\Response as HttpResponse;
 
 /**
  * The PPI App bootstrap class.
@@ -242,18 +244,20 @@ class App implements AppInterface
      * Run the application and send the response.
      *
      * @param RequestInterface|null $request
+     * @param ResponseInterface|null $response
      * @return Response
      * @throws \Exception
      */
-    public function run(RequestInterface $request = null)
+    public function run(RequestInterface $request = null, ResponseInterface $response = null)
     {
         if (false === $this->booted) {
             $this->boot();
         }
 
         $request = $request ?: HttpRequest::createFromGlobals();
+        $response = $response ?: new Response();
 
-        $response = $this->dispatch($request);
+        $response = $this->dispatch($request, $response);
         $response->send();
 
         return $response;
@@ -263,11 +267,12 @@ class App implements AppInterface
      *
      * Decide on a route to use and dispatch our module's controller action.
      *
-     * @param HttpRequest $request
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
      * @return Response
      * @throws \Exception
      */
-    public function dispatch(HttpRequest $request)
+    public function dispatch(RequestInterface $request, ResponseInterface $response)
     {
         if (false === $this->booted) {
             $this->boot();
@@ -287,15 +292,8 @@ class App implements AppInterface
 
             $result = call_user_func_array(
                 $routeParams['_controller'],
-                array($request)
+                array($request, $response)
             );
-
-            if(is_string($result)) {
-                $response = $this->serviceManager->get('Response');
-                $response->setContent($result);
-            } else {
-                $response = $result;
-            }
 
         } else {
 
@@ -334,51 +332,31 @@ class App implements AppInterface
             // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
             // Set the options for our controller
             if (method_exists($controller, 'setOptions')) {
-                $controller->setOptions(array(
-                    'environment' => $this->getEnvironment(),
-                ));
+                $controller->setOptions(array('environment' => $this->getEnvironment(),));
             }
 
             // Pass in the routing params, set the active route key
             $routingHelper = $this->serviceManager->get('RoutingHelper');
-            $routingHelper
-                ->setParams($routeParams)
-                ->setActiveRouteName($activeRoute);
+            $routingHelper->setParams($routeParams)->setActiveRouteName($activeRoute);
 
             // Register our routing helper into the controller
             $controller->setHelper('routing', $routingHelper);
 
             // Prep our module for dispatch
             $module = $this->getModuleManager()->getModule($moduleName);
-            $module
-                ->setControllerName($controllerName)
-                ->setActionName($actionName)
-                ->setController($controller);
+            $module->setControllerName($controllerName)->setActionName($actionName)->setController($controller);
 
-            // Dispatch our action, return the content from the action called.
-            $controller = $module->getController();
             $this->serviceManager = $controller->getServiceLocator();
-            $result = $module->dispatch();
+            // Dispatch our action, return the content from the action called.
+            $result = $module->dispatch($request, $response);
+        }
 
-            switch (true) {
-
-                // If the controller is just returning HTML content then that becomes our body response.
-                case is_string($result):
-                    $response = $controller->getServiceLocator()->get('Response');
-                    break;
-
-                // The controller action didn't bother returning a value, just grab the response object from SM
-                case is_null($result):
-                    $response = $controller->getServiceLocator()->get('Response');
-                    break;
-
-                // Anything else is unpredictable so we safely rely on the SM
-                default:
-                    $response = $result;
-                    break;
-            }
-
+        if(is_string($result)) {
             $response->setContent($result);
+        } else if ($result instanceof ResponseInterface) {
+            $response = $result;
+        } else {
+            throw new \Exception('Invalid response type returned from controller');
         }
 
         $this->response = $response;
@@ -712,12 +690,12 @@ class App implements AppInterface
      * Perform the matching of a route and return a set of routing parameters if a valid one is found.
      * Otherwise exceptions get thrown
      *
-     * @param HttpRequest $request
+     * @param RequestInterface $request
      * @return array
      *
      * @throws \Exception
      */
-    protected function handleRouting(HttpRequest $request)
+    protected function handleRouting(RequestInterface $request)
     {
         $this->router = $this->serviceManager->get('Router');
         $this->router->warmUp($this->getCacheDir());

@@ -26,6 +26,8 @@ use Symfony\Component\Finder\Finder;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\RouteCollection as LaravelRouteCollection;
@@ -301,7 +303,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      *
      * @return mixed
      */
-    public function dispatch()
+    public function dispatch(RequestInterface $request, ResponseInterface $response)
     {
         if (!method_exists($this->controller, $this->actionName)) {
             throw new \Exception(sprintf(
@@ -319,7 +321,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
         $content = call_user_func_array(
             [$this->controller, $this->actionName],
-            [$this->controller->getServiceLocator()->get('Request')]
+            [$request]
         );
 
         if (method_exists($this->controller, 'postDispatch')) {
