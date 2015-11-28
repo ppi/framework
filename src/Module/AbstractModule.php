@@ -36,8 +36,7 @@ use Illuminate\Events\Dispatcher;
 abstract class AbstractModule implements ModuleInterface, ConfigProviderInterface
 {
     /**
-     * @var string
-     *             The Module name.
+     * @var string The Module name.
      */
     protected $name;
 
@@ -73,32 +72,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * @var null
      */
     protected $services;
-
-    /**
-     * @todo Add inline documentation.
-     *
-     * @var null
-     */
-    protected $controller;
-
-    /**
-     * Controller Name.
-     *
-     * @var null
-     */
-    protected $controllerName;
-
-    /**
-     * Action Name.
-     *
-     * @var null
-     */
-    protected $actionName;
-
-    /**
-     * @var array
-     */
-    protected $controllerArguments = [];
 
     /**
      * Load up our routes.
@@ -278,68 +251,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Get the controller.
-     *
-     * @return object
-     */
-    public function getController()
-    {
-        return $this->controller;
-    }
-
-    /**
-     * Set the controller.
-     *
-     * @param object $controller
-     *
-     * @return Module
-     */
-    public function setController($controller)
-    {
-        $this->controller = $controller;
-
-        return $this;
-    }
-
-    /**
-     * Check if a controller has been set.
-     *
-     * @return boolean
-     */
-    public function hasController()
-    {
-        return $this->controller !== null;
-    }
-
-    /**
-     * @todo Add inline documentation.
-     *
-     * @param type $controllerName
-     *
-     * @return $this
-     */
-    public function setControllerName($controllerName)
-    {
-        $this->controllerName = $controllerName;
-
-        return $this;
-    }
-
-    /**
-     * @todo Add inline documentation.
-     *
-     * @param type $actionName
-     *
-     * @return $this
-     */
-    public function setActionName($actionName)
-    {
-        $this->actionName = $actionName;
-
-        return $this;
-    }
-
-    /**
      * Loads a configuration file (PHP, YAML) or PHP array.
      *
      * @param string      $resource The resource
@@ -486,23 +397,5 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
         return $this->configLoader;
     }
-
-    /**
-     * @return array
-     */
-    public function getControllerArguments()
-    {
-        return $this->controllerArguments;
-    }
-
-    /**
-     * @param array $controllerArguments
-     */
-    public function setControllerArguments($controllerArguments)
-    {
-        $this->controllerArguments = $controllerArguments;
-    }
-
-
 
 }
