@@ -11,6 +11,7 @@
 namespace PPI\Framework\ServiceManager\Factory;
 
 
+use PPI\FastRoute\Wrapper\FastRouteWrapper;
 use PPI\Framework\Router\ChainRouter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -81,6 +82,10 @@ class RouterFactory implements FactoryInterface
                     // @todo - solve this problem
 //                    $laravelRouterWrapper->setModuleName($this->getName());
                     $chainRouter->add($laravelRouterWrapper);
+                    break;
+
+                case $moduleRoutingResponse instanceof FastRouteWrapper:
+                    $chainRouter->add($moduleRoutingResponse);
                     break;
 
                 default:

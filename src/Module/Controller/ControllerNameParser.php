@@ -19,6 +19,7 @@ use Zend\ModuleManager\ModuleManagerInterface;
  *
  * @author     Fabien Potencier <fabien@symfony.com>
  * @author     Vítor Brandão <vitor@ppi.io>
+ * @author     Paul Dragoonis <paul@ppi.io>
  */
 class ControllerNameParser
 {

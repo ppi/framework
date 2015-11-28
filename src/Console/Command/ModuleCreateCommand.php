@@ -32,6 +32,7 @@ class ModuleCreateCommand extends AbstractCommand
     const ROUTING_ENGINE_SYMFONY = 'symfony';
     const ROUTING_ENGINE_AURA = 'aura';
     const ROUTING_ENGINE_LARAVEL = 'laravel';
+    const ROUTING_ENGINE_FASTROUTE = 'fastroute';
 
     protected $skeletonModuleDir;
     protected $modulesDir;
@@ -65,52 +66,62 @@ class ModuleCreateCommand extends AbstractCommand
      * @var array
      */
     protected $tplEngineFilesMap = [
-        'php' => [
+        self::TPL_ENGINE_PHP => [
             'resources/views/index/index.html.php'
         ],
-        'twig' => [
+        self::TPL_ENGINE_TWIG => [
             'resources/views/index/base.html.twig',
             'resources/views/index/index.html.twig'
         ],
-        'smarty' => [
+        self::TPL_ENGINE_SMARTY => [
             'resources/views/index/base.html.smarty',
             'resources/views/index/index.html.smarty'
         ]
     ];
 
     protected $routingEngineFilesMap = [
-        'symfony' => [
+        self::ROUTING_ENGINE_SYMFONY => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
             'resources/routes/symfony.yml'
         ],
-        'aura' => [
+        self::ROUTING_ENGINE_AURA => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
             'resources/routes/aura.php'
         ],
-        'laravel' => [
+        self::ROUTING_ENGINE_LARAVEL => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
             'resources/routes/laravel.php'
-        ]
+        ],
+        self::ROUTING_ENGINE_FASTROUTE => [
+            'src/Controller/Index.php',
+            'src/Controller/Shared.php',
+            'resources/routes/fastroute.php'
+        ],
     ];
 
     protected $routingEngineTokenMap = [
-        'symfony' => [
+        self::ROUTING_ENGINE_SYMFONY => [
             '[ROUTING_LOAD_METHOD]' => 'loadSymfonyRoutes',
             '[ROUTING_DEF_FILE]' => 'symfony.yml',
             '[ROUTING_GETROUTES_RETVAL]' => '\Symfony\Component\Routing\RouteCollection'
         ],
-        'aura' => [
+        self::ROUTING_ENGINE_AURA => [
             '[ROUTING_LOAD_METHOD]' => 'loadAuraRoutes',
             '[ROUTING_DEF_FILE]' => 'aura.php',
             '[ROUTING_GETROUTES_RETVAL]' => '\Aura\Router\Router'
         ],
-        'laravel' => [
+        self::ROUTING_ENGINE_LARAVEL => [
             '[ROUTING_LOAD_METHOD]' => 'loadLaravelRoutes',
             '[ROUTING_DEF_FILE]' => 'laravel.php',
             '[ROUTING_GETROUTES_RETVAL]' => '\Illuminate\Routing\Router'
+        ],
+        self::ROUTING_ENGINE_FASTROUTE => [
+            '[ROUTING_LOAD_METHOD]' => 'loadFastRouteRoutes',
+            '[ROUTING_DEF_FILE]' => 'fastroute.php',
+            '[ROUTING_GETROUTES_RETVAL]' => '\PPI\FastRoute\FastRouteWrapper'
         ]
     ];
 
@@ -198,6 +209,7 @@ class ModuleCreateCommand extends AbstractCommand
             case self::ROUTING_ENGINE_SYMFONY:
             case self::ROUTING_ENGINE_AURA:
             case self::ROUTING_ENGINE_LARAVEL:
+            case self::ROUTING_ENGINE_FASTROUTE:
                 // Copy routing files over
                 $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
                 $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
@@ -318,7 +330,15 @@ class ModuleCreateCommand extends AbstractCommand
         // Routing
         if ($input->getOption('routing') == null) {
             $questionHelper = $this->getHelper('question');
-            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]', [1 => 'symfony', 2 => 'aura', 3 => 'laravel'], 'symfony');
+            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]',
+                [
+                    1 => self::ROUTING_ENGINE_SYMFONY,
+                    2 => self::ROUTING_ENGINE_AURA,
+                    3 => self::ROUTING_ENGINE_LARAVEL,
+                    4 => self::ROUTING_ENGINE_FASTROUTE
+                ],
+                'symfony'
+            );
             $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
             $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
         }
@@ -338,6 +358,10 @@ class ModuleCreateCommand extends AbstractCommand
         // Laravel check
         if($this->routingEngine == self::ROUTING_ENGINE_LARAVEL && !class_exists('\PPI\LaravelRouting\LaravelRouter')) {
             $output->writeln("<comment>Laravel Router doesn't appear to be loaded. Run: <info>composer require ppi/laravel-router</info></comment>");
+        }
+
+        if($this->routingEngine == self::ROUTING_ENGINE_FASTROUTE && !class_exists('\PPI\FastRoute\FastRouteWrapper')) {
+            $output->writeln("<comment>FastRoute Router doesn't appear to be loaded. Run: <info>composer require ppi/fast-route</info></comment>");
         }
 
     }
