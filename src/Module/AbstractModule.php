@@ -158,8 +158,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
         $dispatcher = new \FastRoute\Dispatcher\GroupCountBased($routeCollector->getData());
         $router = new \PPI\FastRoute\Wrapper\FastRouteWrapper(
-            $routeCollector,
-            $dataGenerator,
             $dispatcher
         );
         $router->setModuleName($this->getName());
