@@ -361,7 +361,7 @@ class ModuleCreateCommand extends AbstractCommand
         }
 
         if($this->routingEngine == self::ROUTING_ENGINE_FASTROUTE && !class_exists('\PPI\FastRoute\FastRouteWrapper')) {
-            $output->writeln("<comment>Laravel Router doesn't appear to be loaded. Run: <info>composer require ppi/fast-route</info></comment>");
+            $output->writeln("<comment>FastRoute Router doesn't appear to be loaded. Run: <info>composer require ppi/fast-route</info></comment>");
         }
 
     }
