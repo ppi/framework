@@ -12,25 +12,21 @@ namespace PPI\Framework\Module;
 
 use PPI\Framework\Config\ConfigLoader;
 use PPI\Framework\Console\Application;
-
-use Aura\Router\RouterFactory as AuraRouterFactory;
-use Aura\Router\Router as AuraRouter;
-
 use PPI\LaravelRouting\Loader\LaravelRoutesLoader;
 use PPI\LaravelRouting\LaravelRouter;
-
+use PPI\FastRoute\Wrapper\FastRouteWrapper;
 use PPI\Framework\Router\Loader\YamlFileLoader;
+
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Finder\Finder;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Aura\Router\Router as AuraRouter;
+use Aura\Router\RouterFactory as AuraRouterFactory;
 
 use Illuminate\Events\Dispatcher;
-use Illuminate\Routing\RouteCollection as LaravelRouteCollection;
 
 /**
  * The base PPI module class.
@@ -100,13 +96,18 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     protected $actionName;
 
     /**
+     * @var array
+     */
+    protected $controllerArguments = [];
+
+    /**
      * Load up our routes.
      *
      * @param string $path
      *
      * @return \Symfony\Component\Routing\RouteCollection
      */
-    public function loadSymfonyRoutes($path)
+    protected function loadSymfonyRoutes($path)
     {
         if ($this->routes === null) {
             $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
@@ -126,7 +127,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * @param string $path
      * @return \Symfony\Component\Routing\RouteCollection
      */
-    public function loadYamlRoutes($path)
+    protected function loadYamlRoutes($path)
     {
         if ($this->routes === null) {
             $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
@@ -144,7 +145,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * @return AuraRouter
      * @throws \Exception when the included routes file doesn't return an AuraRouter back
      */
-    public function loadLaravelRoutes($path)
+    protected function loadLaravelRoutes($path)
     {
         $router = (new LaravelRoutesLoader(
             new LaravelRouter(new Dispatcher)
@@ -154,11 +155,53 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
+     * @param $path
+     * @return FastRouteWrapper
+     */
+    protected function loadFastRouteRoutes($path)
+    {
+        $routeParser = new \FastRoute\RouteParser\Std();
+        $dataGenerator = new \FastRoute\DataGenerator\GroupCountBased();
+        $routeCollector = new \FastRoute\RouteCollector($routeParser, $dataGenerator);
+
+        if(!is_readable($path)) {
+            throw new \InvalidArgumentException('Invalid fast route routes path found: ' . $path);
+        }
+
+        // The included file must return the laravel router
+        $getRouteCollector = function() use ($routeCollector, $path) {
+            $r = $routeCollector;
+            include $path;
+            return $r;
+        };
+
+        $routeCollector = $getRouteCollector();
+        if(!($routeCollector instanceof \FastRoute\RouteCollector)) {
+            throw new \Exception('Invalid return value from '
+                . pathinfo($path, PATHINFO_FILENAME)
+                . ' expected instance of RouteCollector'
+            );
+        }
+
+        $dispatcher = new \FastRoute\Dispatcher\GroupCountBased($routeCollector->getData());
+        $router = new \PPI\FastRoute\Wrapper\FastRouteWrapper(
+            $routeCollector,
+            $dataGenerator,
+            $dispatcher
+        );
+        $router->setModuleName($this->getName());
+
+        return $router;
+    }
+
+    /**
+     * @todo - move part of this into AuraRouterWrapper->load()
+     * @todo - consider adding a setModuleName() to the AuraRouterWrapper instead of _module to each route.
      * @param string $path
      * @return AuraRouter
      * @throws \Exception when the included routes file doesn't return an AuraRouter back
      */
-    public function loadAuraRoutes($path)
+    protected function loadAuraRoutes($path)
     {
 
         if(!is_readable($path)) {
@@ -193,7 +236,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      *
      * @deprecated since version 2.1, to be removed in 2.2. Use "loadConfig()" instead.
      */
-    public function loadYamlConfig($path)
+    protected function loadYamlConfig($path)
     {
         return $this->loadConfig($path);
     }
@@ -294,41 +337,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         $this->actionName = $actionName;
 
         return $this;
-    }
-
-    /**
-     * Dispatch process.
-     *
-     * @throws \Exception
-     *
-     * @return mixed
-     */
-    public function dispatch(RequestInterface $request, ResponseInterface $response)
-    {
-        if (!method_exists($this->controller, $this->actionName)) {
-            throw new \Exception(sprintf(
-                'Unable to dispatch action: "%s" does not exist in controller ' .
-                '"%s" within module "%s"',
-                $this->actionName,
-                $this->controllerName,
-                $this->name
-            ));
-        }
-
-        if (method_exists($this->controller, 'preDispatch')) {
-            $this->controller->preDispatch();
-        }
-
-        $content = call_user_func_array(
-            [$this->controller, $this->actionName],
-            [$request]
-        );
-
-        if (method_exists($this->controller, 'postDispatch')) {
-            $this->controller->postDispatch();
-        }
-
-        return $content;
     }
 
     /**
@@ -478,4 +486,23 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
         return $this->configLoader;
     }
+
+    /**
+     * @return array
+     */
+    public function getControllerArguments()
+    {
+        return $this->controllerArguments;
+    }
+
+    /**
+     * @param array $controllerArguments
+     */
+    public function setControllerArguments($controllerArguments)
+    {
+        $this->controllerArguments = $controllerArguments;
+    }
+
+
+
 }

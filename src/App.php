@@ -275,74 +275,19 @@ class App implements AppInterface
         $routeParams = $this->handleRouting($request);
         $request->attributes->add($routeParams);
 
-        if (!isset($routeParams['_controller'])) {
-            throw new \Exception('No controller definition found for matching route');
+        // Resolve our Controller
+        $resolver = $this->serviceManager->get('ControllerResolver');
+        if (false === $controller = $resolver->getController($request)) {
+            throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
         }
 
-        if (isset($routeParams['_controller'])
-            && !is_string($routeParams['_controller'])
-            && is_callable($routeParams['_controller'])) {
+        $controllerArguments = $resolver->getArguments($request, $controller);
 
-            $result = call_user_func_array(
-                $routeParams['_controller'],
-                array($request, $response)
-            );
+        $result = call_user_func_array(
+            $controller,
+            $controllerArguments
+        );
 
-        } else {
-
-            // Resolve our Controller
-            $resolver = $this->serviceManager->get('ControllerResolver');
-            if (false === $controller = $resolver->getController($request)) {
-                throw new NotFoundHttpException(sprintf('Unable to find the controller for path "%s".', $request->getPathInfo()));
-            }
-
-            // Route Data Verification
-            foreach (array('_module', '_controller', '_route') as $routeParamKey) {
-                if (!isset($routeParams[$routeParamKey])) {
-                    throw new \Exception('Unable to find the key: ' . $routeParamKey . ' in the matched route');
-                }
-            }
-
-            $activeRoute = $routeParams['_route'];
-            $moduleName = $routeParams['_module'];
-            $controllerName = is_string($routeParams['_controller']) ? $routeParams['_controller'] : get_class($routeParams['_controller']);
-            $actionName = isset($routeParams['action']) ? $routeParams['action'] : null;
-            // We don't want this internal info leaking into the RoutingHelper, so we get rid of it
-            unset($routeParams['_module'], $routeParams['_controller'], $routeParams['_route']);
-
-            // Symfony ControllerResolver returns us an array of params, controller and action.
-            if (is_array($controller) && isset($controller[0], $controller[1]) && is_object($controller[0])) {
-                if ($actionName === null) {
-                    $actionName = $controller[1];
-                }
-                $controller = $controller[0];
-            }
-
-            if ($actionName === null) {
-                throw new \Exception('Unable to locate the action from the matched route');
-            }
-
-            // @todo - this should be cleaned out so the Environment can be pulled into controllers cleaner
-            // Set the options for our controller
-            if (method_exists($controller, 'setOptions')) {
-                $controller->setOptions(array('environment' => $this->getEnvironment(),));
-            }
-
-            // Pass in the routing params, set the active route key
-            $routingHelper = $this->serviceManager->get('RoutingHelper');
-            $routingHelper->setParams($routeParams)->setActiveRouteName($activeRoute);
-
-            // Register our routing helper into the controller
-            $controller->setHelper('routing', $routingHelper);
-
-            // Prep our module for dispatch
-            $module = $this->getModuleManager()->getModule($moduleName);
-            $module->setControllerName($controllerName)->setActionName($actionName)->setController($controller);
-
-            $this->serviceManager = $controller->getServiceLocator();
-            // Dispatch our action, return the content from the action called.
-            $result = $module->dispatch($request, $response);
-        }
 
         if(is_string($result)) {
             $response->setContent($result);
