@@ -36,8 +36,8 @@ class ModuleDefaultListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('ApplicationConfig');
-        $config = isset($config['modules']['module_listener_options']) ?
-            $config['modules']['module_listener_options'] : array();
+        $config = isset($config['module_listener_options']) ?
+            $config['module_listener_options'] : array();
 
         /*
          * "module_listener_options":
@@ -47,6 +47,7 @@ class ModuleDefaultListenerFactory implements FactoryInterface
          * namespace, the value of that key the specific path to that module's
          * Module class.
          */
+        var_dump($config); exit;
         if (!isset($config['module_paths'])) {
             $paths = array();
             $cwd   = getcwd() . '/';
