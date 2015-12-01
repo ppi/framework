@@ -130,7 +130,7 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     {
         $module = $e->getModule();
 
-        if (is_callable(array($module, 'getServiceConfig'))) {
+        if (method_exists($module, 'getServiceConfig') && is_callable(array($module, 'getServiceConfig'))) {
             $services = $module->getServiceConfig();
             if (is_array($services) && isset($services['factories'])) {
                 $this->services[$e->getModuleName()] = $services['factories'];

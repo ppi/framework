@@ -36,8 +36,8 @@ class ModuleDefaultListenerFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('ApplicationConfig');
-        $config = isset($config['modules']['module_listener_options']) ?
-            $config['modules']['module_listener_options'] : array();
+        $config = isset($config['module_listener_options']) ?
+            $config['module_listener_options'] : array();
 
         /*
          * "module_listener_options":
