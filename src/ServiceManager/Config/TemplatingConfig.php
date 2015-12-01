@@ -61,7 +61,7 @@ class TemplatingConfig extends AbstractConfig
         $config = $this->processConfiguration($config);
 
         // these are the templating engines currently supported
-        $knownEngineIds = array('php', 'smarty', 'twig', 'mustache');
+        $knownEngineIds = array('php', 'smarty', 'twig', 'mustache', 'plate');
 
         // these are the engines selected by the user
         $engineIds = isset($config['engines']) ? $config['engines'] : array('php');

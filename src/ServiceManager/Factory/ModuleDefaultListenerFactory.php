@@ -47,7 +47,6 @@ class ModuleDefaultListenerFactory implements FactoryInterface
          * namespace, the value of that key the specific path to that module's
          * Module class.
          */
-        var_dump($config); exit;
         if (!isset($config['module_paths'])) {
             $paths = array();
             $cwd   = getcwd() . '/';
