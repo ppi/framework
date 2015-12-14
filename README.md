@@ -7,6 +7,9 @@
 [@h5bp]:          http://html5boilerplate.com/                    "HTML5 Boilerplate"
 [@twbootstrap]:   http://twitter.github.com/bootstrap/            "Twitter Bootstrap"
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
+[@twitter]:       https://twitter.com/ppi_framework               "PPI Framework at Twitter"
+
+[![Join the chat at https://gitter.im/ppi/framework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ppi/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 * [Official website][@website]
 * [Download][@download]
@@ -29,7 +32,25 @@ http://www.ppi.io/downloads and drop it in your document root.
 
 ## Contributing
 
-PPI is an open source, community-driven project. If you'd like to contribute, check out our issues list.
-You can find us on IRC, Google Plus or Twitter (@ppi_framework)
+PPI is an open source, community-driven project. If you'd like to contribute, check out our issues list. You can find us
+on IRC, Google Plus or Twitter ([@ppi_framework][@twitter]).
+
 If you're submitting a pull request, please do so on your own branch on [GitHub][@gitweb].
+ 
+Start by forking the PPI Framework repository and cloning your fork locally:
+
+    $ git clone git@github.com:YOUR_USERNAME/framework.git
+    $ git remote add upstream git://github.com/ppi/framework.git
+    $ git checkout -b feature/BRANCH_NAME master
+
+After your work is finished rebase the feature branch and push it:
+
+    $ git checkout master
+    $ git fetch upstream
+    $ git merge upstream/master
+    $ git checkout feature/BRANCH_NAME
+    $ git rebase master
+    $ git push --force origin feature/BRANCH_NAME
+
+Go to GitHub again and make a pull request on the ppi/framework repository. Thank you for making PPI better!
 
