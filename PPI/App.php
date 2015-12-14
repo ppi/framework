@@ -6,14 +6,11 @@
  * @license    http://opensource.org/licenses/mit-license.php MIT
  * @link       http://www.ppi.io
  */
+
 namespace PPI;
 
 use
-
-    // Exceptions
     PPI\Exception\Handler as ExceptionHandler,
-
-    // Services
     PPI\ServiceManager\ServiceManager,
     PPI\ServiceManager\Config\HttpConfig,
     PPI\ServiceManager\Config\SessionConfig,
@@ -21,10 +18,6 @@ use
     PPI\ServiceManager\Config\RouterConfig,
     PPI\ServiceManager\Config\TemplatingConfig,
     PPI\ServiceManager\Options\AppOptions,
-
-    // HTTP Stuff and routing
-    PPI\Module\Routing\RoutingHelper,
-
     Symfony\Component\HttpFoundation\Response;
 
 
@@ -46,7 +39,7 @@ class App
      *
      * @var string
      */
-    const VERSION = '2.0.0-DEV';
+    const VERSION = '2.0.1';
 
     /**
      * Application Options.
@@ -110,11 +103,9 @@ class App
      protected $serviceManager;
 
     /**
-     * The constructor.
+     * App constructor.
      *
      * @param array $options
-     *
-     * @return void
      */
     public function __construct(array $options = array())
     {

@@ -1,4 +1,4 @@
-# Contributing
+# CONTRIBUTING
 
 [@gitter]:        https://gitter.im/ppi/framework                           "Gitter"
 [@gitweb]:        https://github.com/ppi/framework                          "ppi/framework"
