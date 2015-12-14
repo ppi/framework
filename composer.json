@@ -37,16 +37,15 @@
         "symfony/routing": "2.1.*@stable",
         "symfony/console": "2.1.*@stable",
         "twig/twig": ">=1.8,<2.0-dev",
-        "zendframework/zend-stdlib": "2.1.6",
-        "zendframework/zend-loader": "2.1.6",
-        "zendframework/zend-servicemanager": "2.1.6",
-        "zendframework/zend-eventmanager": "2.1.6",
-        "zendframework/zend-modulemanager": "2.1.6"
+        "zendframework/zend-stdlib": "~2.1.6",
+        "zendframework/zend-loader": "~2.1.6",
+        "zendframework/zend-servicemanager": "~2.1.6",
+        "zendframework/zend-eventmanager": "~2.1.6",
+        "zendframework/zend-modulemanager": "~2.1.6"
     },
     "extra": {
         "branch-alias": {
             "dev-master": "2.0-dev"
         }
-    },
-    "minimum-stability": "dev"
+    }
 }
