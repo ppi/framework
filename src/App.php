@@ -288,8 +288,9 @@ class App implements AppInterface
             $controllerArguments
         );
 
-
-        if(is_string($result)) {
+        if($result === null) {
+            throw new \Exception('Your action returned null. It must always return something');
+        } else if(is_string($result)) {
             $response->setContent($result);
         } else if ($result instanceof ResponseInterface) {
             $response = $result;

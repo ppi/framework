@@ -399,21 +399,27 @@ class Controller implements ServiceLocatorAwareInterface
      *
      * @param string  $url
      * @param integer $statusCode
+     * @return RedirectResponse
      */
     protected function redirect($url, $statusCode = 302)
     {
-        $this->getServiceLocator()->set('Response', new RedirectResponse($url, $statusCode));
+        $response = new RedirectResponse($url, $statusCode);
+        $this->getServiceLocator()->set('Response', $response);
+        return $response;
     }
 
     /**
      * Shortcut function for redirecting to a route without manually calling $this->generateUrl()
      * You just specify a route name and it goes there.
      *
-     * @param string $route
+     * @param $route
+     * @param array $parameters
+     * @param bool|false $absolute
+     * @return RedirectResponse
      */
     protected function redirectToRoute($route, $parameters = array(), $absolute = false)
     {
-        $this->redirect($this->getService('Router')->generate($route, $parameters, $absolute));
+        return $this->redirect($this->getService('Router')->generate($route, $parameters, $absolute));
     }
 
     /**
