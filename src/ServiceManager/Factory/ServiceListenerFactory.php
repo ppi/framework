@@ -48,7 +48,6 @@ class ServiceListenerFactory implements FactoryInterface
             'Config'                => 'PPI\Framework\ServiceManager\Factory\ConfigFactory',
             'ControllerNameParser'  => 'PPI\Framework\ServiceManager\Factory\ControllerNameParserFactory',
             'ControllerResolver'    => 'PPI\Framework\ServiceManager\Factory\ControllerResolverFactory',
-            'DataSource'            => 'PPI\Framework\ServiceManager\Factory\DataSourceFactory',
             'EventManager'          => 'PPI\Framework\ServiceManager\Factory\EventManagerFactory',
             'FileLocator'           => 'PPI\Framework\ServiceManager\Factory\FileLocatorFactory',
             'MicroRouter'           => 'PPI\Framework\ServiceManager\Factory\MicroRouterFactory',
