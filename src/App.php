@@ -22,6 +22,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use PPI\Framework\Http\Request as HttpRequest;
 use PPI\Framework\Http\Response as HttpResponse;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
  * The PPI App bootstrap class.
@@ -292,7 +293,7 @@ class App implements AppInterface
             throw new \Exception('Your action returned null. It must always return something');
         } else if(is_string($result)) {
             $response->setContent($result);
-        } else if ($result instanceof ResponseInterface) {
+        } else if ($result instanceof ResponseInterface || $result instanceof SymfonyResponse) {
             $response = $result;
         } else {
             throw new \Exception('Invalid response type returned from controller');
