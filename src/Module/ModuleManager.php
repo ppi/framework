@@ -122,7 +122,7 @@ class ModuleManager extends BaseModuleManager
 
     protected function getResourcesPath($module)
     {
-        if(is_callable([$module, 'getResourcesPath'])) {
+        if(is_callable(array($module, 'getResourcesPath'))) {
             $resourcesPath  = $module->getResourcesPath();
         } else {
             $resourcesPath = $module->getPath();
