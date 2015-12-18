@@ -81,6 +81,7 @@ class ModuleManager extends BaseModuleManager
             list($moduleName, $path) = explode('/', $moduleName, 2);
         }
 
+
         $isResource     = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath   = substr($path, 9);
         $resourceModule = null;
@@ -103,7 +104,7 @@ class ModuleManager extends BaseModuleManager
                 $files[] = $file;
             }
 
-            if (file_exists($file = $module->getPath() . '/' . $path)) {
+            if (file_exists($file = $this->getResourcesPath($module) . '/' . $path)) {
                 if ($first && !$isResource) {
                     return $file;
                 }
@@ -117,5 +118,15 @@ class ModuleManager extends BaseModuleManager
         }
 
         throw new \InvalidArgumentException(sprintf('Unable to find file "%s".', $name));
+    }
+
+    protected function getResourcesPath($module)
+    {
+        if(is_callable([$module, 'getResourcesPath'])) {
+            $resourcesPath  = $module->getResourcesPath();
+        } else {
+            $resourcesPath = $module->getPath();
+        }
+        return $resourcesPath;
     }
 }
