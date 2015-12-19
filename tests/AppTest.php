@@ -114,7 +114,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $mockControllerResolver->expects($this->once())->method('getController')
             ->willReturnCallback(function() {
-                return function() { return new Response('Working Request'); };
+                return function() { return new Response('Working Response'); };
             }
         );
         $mockControllerResolver->expects($this->once())->method('getArguments')->willReturn(array());
@@ -127,6 +127,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
         $response = $app->run();
         $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals($response->getContent(), 'Working Response');
     }
 
 }
