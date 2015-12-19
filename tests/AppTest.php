@@ -10,7 +10,12 @@
 
 namespace PPI\FrameworkTest;
 
+use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\FrameworkTest\Fixtures\AppForTest;
+use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
+use PPI\Framework\Router\ChainRouter;
+use PPI\Framework\Module\Controller\ControllerResolver;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AppTest.
@@ -89,4 +94,39 @@ class AppTest extends \PHPUnit_Framework_TestCase
         ));
         $this->assertEquals('testName', $app->getName());
     }
+
+    public function testRun()
+    {
+        $app = new AppForDispatchTest(array(
+            'environment'   => 'test',
+            'debug'         => true,
+            'rootDir'       => __DIR__,
+        ));
+
+
+        $mockRouter = $this->getMockBuilder(ChainRouter::class)
+            ->disableOriginalConstructor()->getMock();
+        $mockRouter->expects($this->once())->method('warmUp');
+        $mockRouter->expects($this->once())->method('matchRequest')
+            ->willReturn(array('_controller' => 'TestController'));
+
+        $mockControllerResolver = $this->getMockBuilder(ControllerResolver::class)
+            ->disableOriginalConstructor()->getMock();
+        $mockControllerResolver->expects($this->once())->method('getController')
+            ->willReturnCallback(function() {
+                return function() { return new Response('Working Request'); };
+            }
+        );
+        $mockControllerResolver->expects($this->once())->method('getArguments')->willReturn(array());
+
+        $sm = new ServiceManager();
+        $sm->setAllowOverride(true);
+        $sm->set('Router', $mockRouter);
+        $sm->set('ControllerResolver', $mockControllerResolver);
+        $app->setServiceManager($sm);
+
+        $response = $app->run();
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
 }
