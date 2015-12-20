@@ -104,13 +104,13 @@ class AppTest extends \PHPUnit_Framework_TestCase
         ));
 
 
-        $mockRouter = $this->getMockBuilder(ChainRouter::class)
+        $mockRouter = $this->getMockBuilder('\PPI\Framework\Router\ChainRouter')
             ->disableOriginalConstructor()->getMock();
         $mockRouter->expects($this->once())->method('warmUp');
         $mockRouter->expects($this->once())->method('matchRequest')
             ->willReturn(array('_controller' => 'TestController'));
 
-        $mockControllerResolver = $this->getMockBuilder(ControllerResolver::class)
+        $mockControllerResolver = $this->getMockBuilder('\PPI\Framework\Module\Controller\ControllerResolver')
             ->disableOriginalConstructor()->getMock();
         $mockControllerResolver->expects($this->once())->method('getController')
             ->willReturnCallback(function() {
@@ -126,7 +126,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $app->setServiceManager($sm);
 
         $response = $app->run();
-        $this->assertInstanceOf(Response::class, $response);
+        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals($response->getContent(), 'Working Response');
     }
 
