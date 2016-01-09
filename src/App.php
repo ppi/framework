@@ -14,7 +14,6 @@ use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\Http\Response;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
