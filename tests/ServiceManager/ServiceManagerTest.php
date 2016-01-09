@@ -1045,5 +1045,4 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
         $this->serviceManager->isShared('foobarbazbat');
     }
-
 }

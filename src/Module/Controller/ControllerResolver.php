@@ -26,15 +26,14 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class ControllerResolver extends BaseControllerResolver
 {
-
     protected $request;
 
     /**
      * Constructor.
      *
      * @param ServiceLocatorInterface $serviceManager A ServiceLocatorInterface instance
-     * @param ControllerNameParser $parser A ControllerNameParser instance
-     * @param LoggerInterface $logger A LoggerInterface instance
+     * @param ControllerNameParser    $parser         A ControllerNameParser instance
+     * @param LoggerInterface         $logger         A LoggerInterface instance
      */
     public function __construct(ServiceLocatorInterface $serviceManager, ControllerNameParser $parser, LoggerInterface $logger = null)
     {
@@ -55,7 +54,6 @@ class ControllerResolver extends BaseControllerResolver
      */
     protected function createController($controller)
     {
-
         if (false === strpos($controller, '::')) {
             $count = substr_count($controller, ':');
             if (2 == $count) {
@@ -64,8 +62,8 @@ class ControllerResolver extends BaseControllerResolver
             } elseif (1 == $count) {
                 // controller in the service:method notation
                 list($service, $method) = explode(':', $controller, 2);
-                return array($this->serviceManager->get($service), $method);
 
+                return array($this->serviceManager->get($service), $method);
             } elseif ($this->serviceManager->has($controller) && method_exists($service = $this->serviceManager->get($controller), '__invoke')) {
                 return $service;
             } else {
@@ -78,6 +76,7 @@ class ControllerResolver extends BaseControllerResolver
 
     /**
      * @param string $class
+     *
      * @return object
      */
     protected function instantiateController($class)
@@ -87,7 +86,7 @@ class ControllerResolver extends BaseControllerResolver
         if ($controller instanceof ServiceLocatorAwareInterface) {
             $controller->setServiceLocator($this->serviceManager);
         }
+
         return $controller;
     }
-
 }

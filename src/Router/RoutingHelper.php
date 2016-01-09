@@ -11,7 +11,7 @@
 namespace PPI\Framework\Router;
 
 /**
- * A routing helper for the controller
+ * A routing helper for the controller.
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */

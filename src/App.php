@@ -12,15 +12,14 @@ namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
+use PPI\Framework\Http\Request as HttpRequest;
 use PPI\Framework\Http\Response;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use PPI\Framework\Http\Request as HttpRequest;
-use PPI\Framework\Http\Response as HttpResponse;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
  * The PPI App bootstrap class.
@@ -40,12 +39,12 @@ class App implements AppInterface
     const VERSION = '2.1.0-DEV';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $booted = false;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $debug;
 
@@ -83,7 +82,7 @@ class App implements AppInterface
     protected $moduleManager;
 
     /**
-     * @param integer $errorReportingLevel The level of error reporting you want
+     * @param int $errorReportingLevel The level of error reporting you want
      */
     protected $errorReportingLevel;
 
@@ -124,10 +123,10 @@ class App implements AppInterface
     public function __construct(array $options = array())
     {
         // Default options
-        $this->environment = isset($options['environment']) && $options['environment'] ? (string)$options['environment'] : 'prod';
-        $this->debug = isset($options['debug']) && null !== $options['debug'] ? (boolean)$options['debug'] : false;
-        $this->rootDir = isset($options['rootDir']) && $options['rootDir'] ? (string)$options['rootDir'] : $this->getRootDir();
-        $this->name = isset($options['name']) && $options['name'] ? (string)$options['name'] : $this->getName();
+        $this->environment = isset($options['environment']) && $options['environment'] ? (string) $options['environment'] : 'prod';
+        $this->debug = isset($options['debug']) && null !== $options['debug'] ? (boolean) $options['debug'] : false;
+        $this->rootDir = isset($options['rootDir']) && $options['rootDir'] ? (string) $options['rootDir'] : $this->getRootDir();
+        $this->name = isset($options['name']) && $options['name'] ? (string) $options['name'] : $this->getName();
 
         if ($this->debug) {
             $this->startTime = microtime(true);
@@ -235,10 +234,18 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
+<<<<<<< HEAD
      * @param HttpRequest|null $request
      * @param HttpRequest|null $response
      * @return Response
+=======
+     * @param RequestInterface|null  $request
+     * @param ResponseInterface|null $response
+     *
+>>>>>>> Apply latest PHP-CS-Fixer rules
      * @throws \Exception
+     *
+     * @return Response
      */
     public function run(HttpRequest $request = null, HttpResponse $response = null)
     {
@@ -256,13 +263,20 @@ class App implements AppInterface
     }
 
     /**
-     *
      * Decide on a route to use and dispatch our module's controller action.
      *
+<<<<<<< HEAD
      * @param HttpRequest $request
      * @param HttpResponse $response
      * @return Response
+=======
+     * @param RequestInterface  $request
+     * @param ResponseInterface $response
+     *
+>>>>>>> Apply latest PHP-CS-Fixer rules
      * @throws \Exception
+     *
+     * @return Response
      */
     public function dispatch(HttpRequest $request, HttpResponse $response)
     {
@@ -287,11 +301,15 @@ class App implements AppInterface
             $controllerArguments
         );
 
-        if($result === null) {
+        if ($result === null) {
             throw new \Exception('Your action returned null. It must always return something');
-        } else if(is_string($result)) {
+        } elseif (is_string($result)) {
             $response->setContent($result);
+<<<<<<< HEAD
         } else if ($result instanceof SymfonyResponse || $response instanceof HttpResponse) {
+=======
+        } elseif ($result instanceof ResponseInterface || $result instanceof SymfonyResponse) {
+>>>>>>> Apply latest PHP-CS-Fixer rules
             $response = $result;
         } else {
             throw new \Exception('Invalid response type returned from controller');
@@ -361,7 +379,7 @@ class App implements AppInterface
     /**
      * Checks if debug mode is enabled.
      *
-     * @return boolean true if debug mode is enabled, false otherwise
+     * @return bool true if debug mode is enabled, false otherwise
      *
      * @api
      */
@@ -433,9 +451,9 @@ class App implements AppInterface
     /**
      * @see PPI\Framework\Module\ModuleManager::locateResource()
      *
-     * @param string $name A resource name to locate
-     * @param string $dir A directory where to look for the resource first
-     * @param Boolean $first Whether to return the first path or paths for all matching bundles
+     * @param string $name  A resource name to locate
+     * @param string $dir   A directory where to look for the resource first
+     * @param bool   $first Whether to return the first path or paths for all matching bundles
      *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe
@@ -451,7 +469,7 @@ class App implements AppInterface
     /**
      * Gets the request start time (not available if debug is disabled).
      *
-     * @return integer The request start timestamp
+     * @return int The request start timestamp
      *
      * @api
      */
@@ -610,14 +628,19 @@ class App implements AppInterface
     }
 
     /**
-     *
      * Perform the matching of a route and return a set of routing parameters if a valid one is found.
-     * Otherwise exceptions get thrown
+     * Otherwise exceptions get thrown.
      *
+<<<<<<< HEAD
      * @param HttpRequest $request
      * @return array
+=======
+     * @param RequestInterface $request
+>>>>>>> Apply latest PHP-CS-Fixer rules
      *
      * @throws \Exception
+     *
+     * @return array
      */
     protected function handleRouting(HttpRequest $request)
     {
@@ -633,24 +656,23 @@ class App implements AppInterface
                 }
             }
         } catch (ResourceNotFoundException $e) {
-
             $routeUri = $this->router->generate('Framework_404');
             $parameters = $this->router->matchRequest($request::create($routeUri));
-
         } catch (\Exception $e) {
             throw $e;
         }
 
         $parameters['_route_params'] = $parameters;
+
         return $parameters;
     }
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
+     * @param mixed  $level
      * @param string $message
-     * @param array $context
+     * @param array  $context
      */
     protected function log($level, $message, array $context = array())
     {

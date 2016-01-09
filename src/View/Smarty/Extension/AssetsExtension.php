@@ -122,7 +122,7 @@ class AssetsExtension extends BaseAssetsExtension
      * @param array                     $parameters
      * @param \Smarty_Internal_Template $template
      *
-     * @return integer
+     * @return int
      */
     public function getAssetsVersion(array $parameters = array(), \Smarty_Internal_Template $template)
     {

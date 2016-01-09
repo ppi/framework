@@ -72,7 +72,7 @@ class Application extends BaseApplication
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -112,10 +112,9 @@ class Application extends BaseApplication
             $moduleCreateCommand->setTargetModuleDir($config['module_listener_options']['module_paths'][0]);
 
             // Enabled templating engines
-            if(isset($config['framework']['templating']['engines'])) {
+            if (isset($config['framework']['templating']['engines'])) {
                 $moduleCreateCommand->setEnabledTemplatingEngines($config['framework']['templating']['engines']);
             }
-
 
             $commands[] = $moduleCreateCommand;
         }

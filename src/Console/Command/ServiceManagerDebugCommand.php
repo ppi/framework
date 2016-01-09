@@ -124,7 +124,7 @@ EOF
             $output->write(sprintf('<info>%s</info> ', str_pad($id, $pad['id'])));
             $output->write(sprintf('%s ', str_pad($line['type'], $pad['type'])));
             if ('Alias' == $line['type']) {
-                $output->write(sprintf('<comment>alias for</comment> <info>%s </info>', str_pad($line['class'], $pad['class']-10)));
+                $output->write(sprintf('<comment>alias for</comment> <info>%s </info>', str_pad($line['class'], $pad['class'] - 10)));
             } else {
                 $output->write(sprintf('%s ', str_pad($line['class'], $pad['class'])));
             }

@@ -13,7 +13,7 @@ namespace PPI\FrameworkTest\Router;
 use PPI\Framework\Router\ChainRouter;
 
 /**
- * Class ChainRouterTest
+ * Class ChainRouterTest.
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */
@@ -42,9 +42,7 @@ class ChainRouterTest extends \PHPUnit_Framework_TestCase
         return array(
             array(array('_controller' => 'index'), '"_controller": "index"'),
             array(array('_controller' => 'index'), '"_controller": "index"'),
-            array(array('_module' => 'Application'), '"_module": "Application"')
+            array(array('_module' => 'Application'), '"_module": "Application"'),
         );
     }
 }
-
-

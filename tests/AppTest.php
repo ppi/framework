@@ -10,9 +10,10 @@
 
 namespace PPI\FrameworkTest;
 
+use PPI\Framework\Module\Controller\ControllerResolver;
 use PPI\Framework\ServiceManager\ServiceManager;
-use PPI\FrameworkTest\Fixtures\AppForTest;
 use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
+use PPI\FrameworkTest\Fixtures\AppForTest;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -101,7 +102,6 @@ class AppTest extends \PHPUnit_Framework_TestCase
             'rootDir'       => __DIR__,
         ));
 
-
         $mockRouter = $this->getMockBuilder('\PPI\Framework\Router\ChainRouter')
             ->disableOriginalConstructor()->getMock();
         $mockRouter->expects($this->once())->method('warmUp');
@@ -111,8 +111,8 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $mockControllerResolver = $this->getMockBuilder('\PPI\Framework\Module\Controller\ControllerResolver')
             ->disableOriginalConstructor()->getMock();
         $mockControllerResolver->expects($this->once())->method('getController')
-            ->willReturnCallback(function() {
-                return function() { return new Response('Working Response'); };
+            ->willReturnCallback(function () {
+                return function () { return new Response('Working Response'); };
             }
         );
         $mockControllerResolver->expects($this->once())->method('getArguments')->willReturn(array());
@@ -127,5 +127,4 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals($response->getContent(), 'Working Response');
     }
-
 }

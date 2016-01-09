@@ -20,5 +20,4 @@ use Symfony\Component\HttpFoundation\Request as SymfonyHttpRequest;
  */
 class Request extends SymfonyHttpRequest
 {
-
 }

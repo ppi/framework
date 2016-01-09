@@ -52,7 +52,7 @@ interface AppInterface extends \Serializable
     /**
      * Checks if debug mode is enabled.
      *
-     * @return Boolean true if debug mode is enabled, false otherwise
+     * @return bool true if debug mode is enabled, false otherwise
      *
      * @api
      */
