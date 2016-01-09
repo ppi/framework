@@ -27,15 +27,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     */
-    public function testImplementsPsr7RequestInterface()
-    {
-        $r = new \ReflectionObject($this->request);
-        $this->assertTrue($r->implementsInterface('Psr\Http\Message\RequestInterface'));
-    }
-
-    /**
-     * @group http
      * @covers PPI\Http\Request::__construct
      */
     public function testConstructor()
@@ -95,20 +86,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group http
-     */
-    public function testWithUriReturnsNewInstanceWithNewUri()
-    {
-        $request = $this->request->withUri(new Uri('https://ppi.io:10082/foo/bar?baz=bat'));
-        $this->assertNotSame($this->request, $request);
-
-        $request2 = $request->withUri(new Uri('/baz/bat?foo=bar'));
-        $this->assertNotSame($this->request, $request2);
-        $this->assertNotSame($request, $request2);
-        $this->assertEquals('/baz/bat?foo=bar', (string) $request2->getUri(true));
-    }
-
-    /**
      * @return array
      */
     public function invalidRequestUri()
@@ -164,17 +141,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group http
-     */
-    public function testRequestTargetIsSlashWhenUriHasNoPathOrQuery()
-    {
-        $request = new Request();
-        $request
-            ->withUri(new Uri('http://ppi.io'));
-        $this->assertEquals('/', $request->getRequestTarget());
-    }
-
-    /**
      * @return array
      */
     public function requestsWithUri()
@@ -209,15 +175,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group http
-     * @dataProvider requestsWithUri
-     */
-    public function testReturnsRequestTargetWhenUriIsPresent($request, $expected)
-    {
-        $this->assertEquals($expected, $request->getRequestTarget());
-    }
-
-    /**
      * @return array
      */
     public function validRequestTargets()
@@ -230,277 +187,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             'origin-form-path-only' => array( '/users' ),
             'origin-form'           => array( '/users?id=foo' ),
         );
-    }
-
-    /**
-     * @group http
-     * @dataProvider validRequestTargets
-     *
-     * @param string $requestTarget
-     */
-    public function testCanProvideARequestTarget($requestTarget)
-    {
-        $request = new Request();
-        $request = $request->withRequestTarget($requestTarget);
-
-        $this->assertEquals($requestTarget, $request->getRequestTarget());
-    }
-
-    /**
-     * @group http
-     */
-    public function testRequestTargetCannotContainWhitespace()
-    {
-        $request = new Request();
-        $this->setExpectedException('InvalidArgumentException', 'Invalid request target');
-        $request->withRequestTarget('foo bar baz');
-    }
-
-    /**
-     * @group http
-     */
-    public function testRequestTargetDoesNotCacheBetweenInstances()
-    {
-        $request    = new Request();
-        $request    = $request->withUri(new Uri('https://ppi.io/foo/bar'));
-        $original   = $request->getRequestTarget();
-        $newRequest = $request->withUri(new Uri('http://ppi.io/bar/baz'));
-        $this->assertNotEquals($original, $newRequest->getRequestTarget());
-    }
-
-    /**
-     * @group http
-     */
-    public function testSettingNewUriResetsRequestTarget()
-    {
-        $request    = new Request();
-        $request    = $request->withUri(new Uri('https://ppi.io/foo/bar'));
-        $original   = $request->getRequestTarget();
-        $newRequest = $request->withUri(new Uri('http://ppi.io/bar/baz'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHeadersContainsHostHeaderIfUriWithHostIsPresent()
-    {
-        $request = Request::create('http://ppi.io');
-        $headers = $request->getHeaders();
-        $this->assertArrayHasKey('host', $headers);
-        $this->assertContains('ppi.io', $headers['host']);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHeadersContainsNoHostHeaderIfNoUriPresent()
-    {
-        $request = new Request();
-        $headers = $request->getHeaders();
-        $this->assertArrayNotHasKey('Host', $headers);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHeadersContainsNoHostHeaderIfUriDoesNotContainHost()
-    {
-        $request = new Request();
-        $headers = $request->getHeaders();
-        $this->assertArrayNotHasKey('Host', $headers);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderReturnsUriHostWhenPresent()
-    {
-        $request = Request::create('http://ppi.io', 'GET', array(), array(), array(), array(
-            'HTTP_HOST'   => 'ppi.io',
-            'HTTPS'       => 'on',
-            'SERVER_PORT' => 443,
-        ));
-        $header = $request->getHeader('host');
-        $this->assertEquals('ppi.io', $header);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderReturnsNullIfNoUriPresent()
-    {
-        $request = new Request();
-        $this->assertNull($request->getHeader('host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderReturnsNullIfUriDoesNotContainHost()
-    {
-        $request = new Request();
-        $this->assertNull($request->getHeader('host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderLinesReturnsUriHostWhenPresent()
-    {
-        $request = Request::create('http://ppi.io');
-        $header  = $request->getHeaderLines('host');
-        $this->assertContains('ppi.io', $header);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderLinesReturnsEmptyArrayIfNoUriPresent()
-    {
-        $request = new Request();
-        $header  = $request->getHeaderLines('host');
-        $this->assertSame(array(), $header);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderLinesReturnsEmptyArrayIfUriDoesNotContainHost()
-    {
-        $request = new Request();
-        $header  = $request->getHeaderLines('host');
-        $this->assertSame(array(), $header);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderLineReturnsEmptyStringIfNoUriPresent()
-    {
-        $request = new Request();
-        $this->assertEquals('', $request->getHeaderLine('host'));
-    }
-    /**
-     * @group http
-     */
-    public function testGetHostHeaderLineReturnsEmptyStringIfUriDoesNotContainHost()
-    {
-        $request = new Request();
-        $this->assertEquals('', $request->getHeaderLine('host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testPassingPreserveHostFlagWhenUpdatingUriDoesNotUpdateHostHeader()
-    {
-        $this->markTestSkipped('Not yet implemented');
-
-        $request = new Request();
-        $request->withAddedHeader('Host', 'ppi.io');
-        $uri = new Uri();
-        $uri
-            ->withHost('www.ppi.io');
-        $new = $request->withUri($uri, true);
-        $this->assertEquals('ppi.io', $new->getHeaderLine('Host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testNotPassingPreserveHostFlagWhenUpdatingUriWithoutHostDoesNotUpdateHostHeader()
-    {
-        $this->markTestSkipped('Not yet implemented');
-
-        $request = new Request();
-        $request->withAddedHeader('Host', 'ppi.io');
-        $uri = new Uri();
-        $new = $request->withUri($uri);
-        $this->assertEquals('ppi.io', $new->getHeaderLine('Host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testHostHeaderUpdatesToUriHostAndPortWhenPreserveHostDisabledAndNonStandardPort()
-    {
-        $this->markTestSkipped('Not yet implemented');
-
-        $request = new Request();
-        $request->withAddedHeader('Host', 'ppi.io');
-        $uri = new Uri();
-        $uri
-            ->withHost('www.ppi.io')
-            ->withPort(10081);
-        $new = $request->withUri($uri);
-        $this->assertEquals('www.ppi.io:10081', $new->getHeaderLine('Host'));
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetLocale()
-    {
-        $request = new Request();
-        $request->setLocale('pt');
-        $locale = $request->getLocale();
-        $this->assertEquals('pt', $locale);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetUser()
-    {
-        $request = Request::create('http://user_test:password_test@test.com/');
-        $user    = $request->getUser();
-
-        $this->assertEquals('user_test', $user);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetPassword()
-    {
-        $request  = Request::create('http://user_test:password_test@test.com/');
-        $password = $request->getPassword();
-
-        $this->assertEquals('password_test', $password);
-    }
-
-    /**
-     * @group http
-     */
-    public function testIsNoCache()
-    {
-        $request   = new Request();
-        $isNoCache = $request->isNoCache();
-
-        $this->assertFalse($isNoCache);
-    }
-
-    /**
-     * @group http
-     */
-    public function testGetContentType()
-    {
-        $request     = new Request();
-        $contentType = $request->getContentType();
-
-        $this->assertNull($contentType);
-    }
-
-    /**
-     * @group http
-     */
-    public function testSetDefaultLocale()
-    {
-        $request = new Request();
-        $request->setDefaultLocale('pl');
-        $locale = $request->getLocale();
-
-        $this->assertEquals('pl', $locale);
     }
 
     /**
