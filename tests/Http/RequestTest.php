@@ -20,6 +20,11 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
     public function setUp()
     {
         $this->request = new Request();
@@ -36,7 +41,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Http\Request::__construct
      */
     public function testConstructor()
     {
@@ -45,7 +49,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Http\Request::initialize
      */
     public function testInitialize()
     {
@@ -505,7 +508,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::create
      */
     public function testCreate()
     {
@@ -650,9 +652,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->isSecure());
     }
 
-    /**
-     * @covers PPI\Framework\Http\Request::create
-     */
     public function testCreateCheckPrecedence()
     {
         // server is used by default
@@ -722,8 +721,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getFormat
-     * @covers PPI\Framework\Http\Request::setFormat
      * @dataProvider getFormatToMimeTypeMapProvider
      */
     public function testGetFormatFromMimeType($format, $mimeTypes)
@@ -740,7 +737,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getFormat
      */
     public function testGetFormatFromMimeTypeWithParameters()
     {
@@ -750,7 +746,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getMimeType
+     *
      * @dataProvider getFormatToMimeTypeMapProvider
      */
     public function testGetMimeTypeFromFormat($format, $mimeTypes)
@@ -780,7 +776,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getUri
      */
     public function testGetUri()
     {
@@ -899,7 +894,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getUriForPath
      */
     public function testGetUriForPath()
     {
@@ -1010,7 +1004,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getUserInfo
      */
     public function testGetUserInfo()
     {
@@ -1031,7 +1024,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getSchemeAndHttpHost
      */
     public function testGetSchemeAndHttpHost()
     {
@@ -1058,8 +1050,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::getQueryString
-     * @covers PPI\Framework\Http\Request::normalizeQueryString
+     *
      * @dataProvider getQueryStringNormalizationData
      */
     public function testGetQueryString($query, $expectedQuery, $msg)
@@ -1210,8 +1201,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     * @covers PPI\Framework\Http\Request::setMethod
-     * @covers PPI\Framework\Http\Request::getMethod
      */
     public function testGetSetMethod()
     {

@@ -11,6 +11,8 @@ matrix:
   fast_finish: true
   include:
     - php: 5.4
+      env:
+        - EXECUTE_CS_CHECK=true
     - php: 5.5
       env:
         - EXECUTE_CS_CHECK=true
