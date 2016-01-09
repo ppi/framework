@@ -10,7 +10,6 @@
 
 namespace PPI\FrameworkTest;
 
-use PPI\Framework\Module\Controller\ControllerResolver;
 use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
 use PPI\FrameworkTest\Fixtures\AppForTest;

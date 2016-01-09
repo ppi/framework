@@ -20,4 +20,8 @@ use Symfony\Component\HttpFoundation\Request as SymfonyHttpRequest;
  */
 class Request extends SymfonyHttpRequest
 {
+<<<<<<< HEAD
+=======
+
+>>>>>>> Removing psr-7 code and tests. Removing symfony request tests
 }

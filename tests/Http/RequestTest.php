@@ -11,7 +11,6 @@
 namespace PPI\FrameworkTest\Http;
 
 use PPI\Framework\Http\Request;
-use PPI\Framework\Http\Uri;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
@@ -20,11 +19,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  */
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
     public function setUp()
     {
         $this->request = new Request();
@@ -32,168 +26,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     */
-    public function testConstructor()
-    {
-        $this->testInitialize();
-    }
-
-    /**
-     * @group http
-     */
-    public function testInitialize()
-    {
-        $request = new Request();
-        $request->initialize(array('foo' => 'bar'));
-        $this->assertEquals('bar', $request->query->get('foo'), '->initialize() takes an array of query parameters as its first argument');
-        $request->initialize(array(), array('foo' => 'bar'));
-        $this->assertEquals('bar', $request->request->get('foo'), '->initialize() takes an array of request parameters as its second argument');
-        $request->initialize(array(), array(), array('foo' => 'bar'));
-        $this->assertEquals('bar', $request->attributes->get('foo'), '->initialize() takes an array of attributes as its third argument');
-        $request->initialize(array(), array(), array(), array(), array(), array('HTTP_FOO' => 'bar'));
-        $this->assertEquals('bar', $request->headers->get('FOO'), '->initialize() takes an array of HTTP headers as its sixth argument');
-    }
-
-    /**
-     * @group http
-     */
-    public function testMethodIsGetByDefault()
-    {
-        $this->assertEquals(Request::METHOD_GET, $this->request->getMethod());
-    }
-
-    /**
-     * @group http
-     */
-    public function testMethodMutatorReturnsCloneWithChangedMethod()
-    {
-        $request = $this->request->withMethod('GET');
-        $this->assertNotSame($this->request, $request);
-        $this->assertEquals('GET', $request->getMethod());
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidUrls()
-    {
-        return array(
-            'null'   => array(null),
-            'true'   => array(true),
-            'false'  => array(false),
-            'int'    => array(1),
-            'float'  => array(1.1),
-            'array'  => array(array('foo')),
-            'object' => array((object) array('foo')),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidRequestUri()
-    {
-        return array(
-            'true'     => array(true),
-            'false'    => array(false),
-            'int'      => array(1),
-            'float'    => array(1.1),
-            'array'    => array(('http://ppi.io')),
-            'stdClass' => array((object) array('href'         => 'http://ppi.io')),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidRequestMethod()
-    {
-        return array(
-            'true'       => array(true),
-            'false'      => array(false),
-            'int'        => array(1),
-            'float'      => array(1.1),
-            'bad-string' => array('BOGUS-METHOD'),
-            'array'      => array(array('POST')),
-            'stdClass'   => array((object) array('method' => 'POST')),
-        );
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidRequestBody()
-    {
-        return array(
-            'true'       => array(true),
-            'false'      => array(false),
-            'int'        => array(1),
-            'float'      => array(1.1),
-            'array'      => array(array('BODY')),
-            'stdClass'   => array((object) array('body' => 'BODY')),
-        );
-    }
-
-    /**
-     * @group http
-     */
-    public function testRequestTargetIsSlashWhenNoUriPresent()
-    {
-        $request = new Request();
-        $this->assertEquals('/', $request->getRequestTarget());
-    }
-
-    /**
-     * @return array
-     */
-    public function requestsWithUri()
-    {
-        $requests = array();
-
-        $request = new Request();
-        $request = $request
-            ->withUri(new Uri('https://api.ppi.io/user'))
-            ->withMethod('POST');
-        $requests['absolute-uri'] = array($request, '/user');
-
-        $request = new Request();
-        $request = $request
-            ->withUri(new Uri('https://api.ppi.io/user?foo=bar'))
-            ->withMethod('POST');
-        $requests['absolute-uri-with-query'] = array($request, '/user?foo=bar');
-
-        $request = new Request();
-        $request = $request
-            ->withUri(new Uri('/user'))
-            ->withMethod('GET');
-        $requests['relative-uri'] = array($request,  '/user');
-
-        $request = new Request();
-        $request = $request
-            ->withUri(new Uri('/user?foo=bar'))
-            ->withMethod('GET');
-        $requests['relative-uri-with-query'] = array($request, '/user?foo=bar');
-
-        return $requests;
-    }
-
-    /**
-     * @return array
-     */
-    public function validRequestTargets()
-    {
-        return array(
-            'asterisk-form'         => array('*'),
-            'authority-form'        => array('api.ppi.io'),
-            'absolute-form'         => array('https://api.ppi.io/users'),
-            'absolute-form-query'   => array('https://api.ppi.io/users?foo=bar'),
-            'origin-form-path-only' => array('/users'),
-            'origin-form'           => array('/users?id=foo'),
-        );
-    }
-
-    /**
-     * @group http
+     * @covers PPI\Framework\Http\Request::create
      */
     public function testCreate()
     {
@@ -338,6 +171,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($request->isSecure());
     }
 
+    /**
+     * @covers PPI\Framework\Http\Request::create
+     */
     public function testCreateCheckPrecedence()
     {
         // server is used by default
@@ -423,6 +259,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::getFormat
      */
     public function testGetFormatFromMimeTypeWithParameters()
     {
@@ -432,7 +269,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     *
+     * @covers PPI\Framework\Http\Request::getMimeType
      * @dataProvider getFormatToMimeTypeMapProvider
      */
     public function testGetMimeTypeFromFormat($format, $mimeTypes)
@@ -456,12 +293,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             array('json', array('application/json', 'application/x-json')),
             array('xml', array('text/xml', 'application/xml', 'application/x-xml')),
             array('rdf', array('application/rdf+xml')),
-            array('atom', array('application/atom+xml')),
+            array('atom',array('application/atom+xml')),
         );
     }
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::getUri
      */
     public function testGetUri()
     {
@@ -580,6 +418,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::getUriForPath
      */
     public function testGetUriForPath()
     {
@@ -690,6 +529,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::getUserInfo
      */
     public function testGetUserInfo()
     {
@@ -710,6 +550,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::getSchemeAndHttpHost
      */
     public function testGetSchemeAndHttpHost()
     {
@@ -736,7 +577,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
-     *
+     * @covers PPI\Framework\Http\Request::getQueryString
+     * @covers PPI\Framework\Http\Request::normalizeQueryString
      * @dataProvider getQueryStringNormalizationData
      */
     public function testGetQueryString($query, $expectedQuery, $msg)
@@ -887,6 +729,8 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @group http
+     * @covers PPI\Framework\Http\Request::setMethod
+     * @covers PPI\Framework\Http\Request::getMethod
      */
     public function testGetSetMethod()
     {

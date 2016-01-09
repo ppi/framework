@@ -39,7 +39,7 @@ class App implements AppInterface
     const VERSION = '2.1.0-DEV';
 
     /**
-     * @var bool
+     * @var boolean
      */
     protected $booted = false;
 
@@ -234,15 +234,8 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
-<<<<<<< HEAD
      * @param HttpRequest|null $request
-     * @param HttpRequest|null $response
-     * @return Response
-=======
-     * @param RequestInterface|null  $request
-     * @param ResponseInterface|null $response
-     *
->>>>>>> Apply latest PHP-CS-Fixer rules
+     * @param HttpRequest|null $request
      * @throws \Exception
      *
      * @return Response
@@ -265,18 +258,10 @@ class App implements AppInterface
     /**
      * Decide on a route to use and dispatch our module's controller action.
      *
-<<<<<<< HEAD
      * @param HttpRequest $request
      * @param HttpResponse $response
      * @return Response
-=======
-     * @param RequestInterface  $request
-     * @param ResponseInterface $response
-     *
->>>>>>> Apply latest PHP-CS-Fixer rules
      * @throws \Exception
-     *
-     * @return Response
      */
     public function dispatch(HttpRequest $request, HttpResponse $response)
     {
@@ -305,11 +290,7 @@ class App implements AppInterface
             throw new \Exception('Your action returned null. It must always return something');
         } elseif (is_string($result)) {
             $response->setContent($result);
-<<<<<<< HEAD
         } else if ($result instanceof SymfonyResponse || $response instanceof HttpResponse) {
-=======
-        } elseif ($result instanceof ResponseInterface || $result instanceof SymfonyResponse) {
->>>>>>> Apply latest PHP-CS-Fixer rules
             $response = $result;
         } else {
             throw new \Exception('Invalid response type returned from controller');
@@ -629,18 +610,12 @@ class App implements AppInterface
 
     /**
      * Perform the matching of a route and return a set of routing parameters if a valid one is found.
-     * Otherwise exceptions get thrown.
+     * Otherwise exceptions get thrown
      *
-<<<<<<< HEAD
      * @param HttpRequest $request
      * @return array
-=======
-     * @param RequestInterface $request
->>>>>>> Apply latest PHP-CS-Fixer rules
      *
      * @throws \Exception
-     *
-     * @return array
      */
     protected function handleRouting(HttpRequest $request)
     {
