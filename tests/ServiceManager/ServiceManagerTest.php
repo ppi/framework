@@ -31,9 +31,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager = new ServiceManager();
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::__construct
-     */
     public function testConstructorConfig()
     {
         $config         = new Config(array('services' => array('foo' => 'bar')));
@@ -41,10 +38,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAllowOverride
-     * @covers PPI\Framework\ServiceManager::getAllowOverride
-     */
     public function testAllowOverride()
     {
         $this->assertTrue($this->serviceManager->getAllowOverride());
@@ -52,11 +45,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $ret);
         $this->assertTrue($this->serviceManager->getAllowOverride());
     }
-
-    /**
-     * @covers PPI\Framework\ServiceManager::setThrowExceptionInCreate
-     * @covers PPI\Framework\ServiceManager::getThrowExceptionInCreate
-     */
 
     public function testThrowExceptionInCreate()
     {
@@ -66,27 +54,18 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->serviceManager->getThrowExceptionInCreate());
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setInvokableClass
-     */
     public function testSetInvokableClass()
     {
         $ret = $this->serviceManager->setInvokableClass('foo', 'bar');
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setFactory
-     */
     public function testSetFactory()
     {
         $ret = $this->serviceManager->setFactory('foo', 'bar');
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::addAbstractFactory
-     */
     public function testAddAbstractFactory()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooAbstractFactory');
@@ -94,9 +73,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::addAbstractFactory
-     */
     public function testAddAbstractFactoryThrowsExceptionOnInvalidFactory()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\InvalidArgumentException');
@@ -114,36 +90,24 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $initializer->sm);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::addInitializer
-     */
     public function testAddInitializer()
     {
         $ret = $this->serviceManager->addInitializer(new Fixtures\FooInitializer());
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::addInitializer
-     */
     public function testAddInitializerThrowsExceptionOnInvalidInitializer()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\InvalidArgumentException');
         $this->serviceManager->addInitializer(5);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setService
-     */
     public function testSetService()
     {
         $ret = $this->serviceManager->setService('foo', 'bar');
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setShared
-     */
     public function testSetShared()
     {
         $this->serviceManager->setInvokableClass('foo', 'bar');
@@ -151,9 +115,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setShared
-     */
     public function testSetSharedAbstractFactory()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooAbstractFactory');
@@ -161,45 +122,30 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setShared
-     */
     public function testSetSharedThrowsExceptionOnUnregisteredService()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
         $this->serviceManager->setShared('foo', true);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGet()
     {
         $this->serviceManager->setService('foo', 'bar');
         $this->assertEquals('bar', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetDoesNotThrowExceptionOnEmptyArray()
     {
         $this->serviceManager->setService('foo', array());
         $this->serviceManager->get('foo');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetThrowsExceptionOnUnknownService()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
         $this->assertEquals('bar', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetUsesIndivualSharedSettingWhenSetAndDeviatesFromShareByDefaultSetting()
     {
         $this->serviceManager->setAllowOverride(true);
@@ -213,9 +159,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotSame($this->serviceManager->get('foo'), $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetWithAlias()
     {
         $this->serviceManager->setService('foo', 'bar');
@@ -223,9 +166,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $this->serviceManager->get('baz'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetAbstractFactoryWithAlias()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooAbstractFactory');
@@ -233,9 +173,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetWithScopedContainer()
     {
         $this->serviceManager->setService('foo', 'bar');
@@ -276,45 +213,30 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $child->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateWithInvokableClass()
     {
         $this->serviceManager->setInvokableClass('foo', 'PPI\FrameworkTest\ServiceManager\Fixtures\Foo');
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateWithFactoryInstance()
     {
         $this->serviceManager->setFactory('foo', 'PPI\FrameworkTest\ServiceManager\Fixtures\FooFactory');
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateWithCallableFactory()
     {
         $this->serviceManager->setFactory('foo', function () { return new Fixtures\Foo(); });
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateWithAbstractFactory()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooAbstractFactory');
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateWithMultipleAbstractFactories()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\BarAbstractFactory');
@@ -322,9 +244,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Bar', $this->serviceManager->get('bar'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateTheSameServiceWithMultipleAbstractFactories()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooFakeAbstractFactory');
@@ -332,9 +251,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Foo', $this->serviceManager->get('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testCreateTheSameServiceWithMultipleAbstractFactoriesReversePriority()
     {
         $this->serviceManager->addAbstractFactory('PPI\FrameworkTest\ServiceManager\Fixtures\FooAbstractFactory');
@@ -364,9 +280,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->serviceManager->has(array('foobar', 'foo_bar')));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::has
-     */
     public function testHas()
     {
         $this->assertFalse($this->serviceManager->has('foo'));
@@ -374,9 +287,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->serviceManager->has('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAlias
-     */
     public function testSetAlias()
     {
         $this->serviceManager->setInvokableClass('foo', 'bar');
@@ -384,35 +294,23 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->serviceManager, $ret);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAlias
-     */
     public function testSetAliasThrowsExceptionOnInvalidAliasName()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\InvalidServiceNameException');
         $this->serviceManager->setAlias(5, 10);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAlias
-     */
     public function testSetAliasThrowsExceptionOnEmptyAliasName()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\InvalidServiceNameException');
         $this->serviceManager->setAlias('', 'foo');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAlias
-     */
     public function testSetAliasDoesNotThrowExceptionOnServiceNotFound()
     {
         $this->serviceManager->setAlias('foo', 'bar');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testGetServiceThrowsExceptionOnAliasWithNoSetService()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
@@ -420,9 +318,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager->get('foo');
     }
 
-    /**
-     * @cover PPI\Framework\ServiceManager::get
-     */
     public function testGetServiceThrowsExceptionOnMultipleAliasesWithNoSetService()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
@@ -430,9 +325,7 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager->setAlias('baz', 'foo');
         $this->serviceManager->get('foo');
     }
-    /**
-     * @covers PPI\Framework\ServiceManager::hasAlias
-     */
+
     public function testHasAlias()
     {
         $this->assertFalse($this->serviceManager->hasAlias('foo'));
@@ -441,9 +334,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->serviceManager->hasAlias('foo'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::createScopedServiceManager
-     */
     public function testCreateScopedServiceManager()
     {
         $this->serviceManager->setService('foo', 'bar');
@@ -469,7 +359,7 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Zend\ServiceManager\Exception\ServiceNotFoundException
+     * @expectedException \Zend\ServiceManager\Exception\ServiceNotFoundException
      */
     public function testCannotUseUnknownServiceNameForAbstractFactory()
     {
@@ -484,7 +374,7 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Zend\ServiceManager\Exception\InvalidServiceNameException
+     * @expectedException \Zend\ServiceManager\Exception\InvalidServiceNameException
      */
     public function testAssignAliasWithExistingServiceName()
     {
@@ -497,10 +387,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager->setAlias('foo', 'bar');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::createFromAbstractFactory
-     * @covers PPI\Framework\ServiceManager::has
-     */
     public function testWillNotCreateCircularReferences()
     {
         $abstractFactory = new Fixtures\CircularDependencyAbstractFactory();
@@ -660,9 +546,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->{$assertion}($expected, $this->serviceManager->get('response'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::canonicalizeName
-     */
     public function testCanonicalizeName()
     {
         $this->serviceManager->setService('foo_bar', new \stdClass());
@@ -673,9 +556,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->serviceManager->has('foo bar'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::canCreateFromAbstractFactory
-     */
     public function testWanCreateFromAbstractFactoryWillNotInstantiateAbstractFactoryOnce()
     {
         $count = FooCounterAbstractFactory::$instantiationCount;
@@ -685,10 +565,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($count + 1, FooCounterAbstractFactory::$instantiationCount);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::canCreateFromAbstractFactory
-     * @covers PPI\Framework\ServiceManager::create
-     */
     public function testAbstractFactoryNotUsedIfNotAbleToCreate()
     {
         $service = new \stdClass();
@@ -703,11 +579,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($service, $this->serviceManager->create('test'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setAlias
-     * @covers PPI\Framework\ServiceManager::get
-     * @covers PPI\Framework\ServiceManager::retrieveFromPeeringManager
-     */
     public function testCanGetAliasedServicesFromPeeringServiceManagers()
     {
         $service   = new \stdClass();
@@ -718,9 +589,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($service, $this->serviceManager->get('alias-name'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::get
-     */
     public function testDuplicateNewInstanceMultipleAbstractFactories()
     {
         $this->serviceManager->setAllowOverride(true);
@@ -731,13 +599,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('PPI\FrameworkTest\ServiceManager\Fixtures\Bar', $this->serviceManager->get('bar'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::setService
-     * @covers PPI\Framework\ServiceManager::get
-     * @covers PPI\Framework\ServiceManager::retrieveFromPeeringManagerFirst
-     * @covers PPI\Framework\ServiceManager::setRetrieveFromPeeringManagerFirst
-     * @covers PPI\Framework\ServiceManager::addPeeringServiceManager
-     */
     public function testRetrieveServiceFromPeeringServiceManagerIfretrieveFromPeeringManagerFirstSetToTrueAndServiceNamesAreSame()
     {
         $foo1 = "foo1";
@@ -757,12 +618,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->serviceManager->get($foo1), $boo2);
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     * @covers PPI\Framework\ServiceManager::createDelegatorFromFactory
-     * @covers PPI\Framework\ServiceManager::createDelegatorCallback
-     * @covers PPI\Framework\ServiceManager::addDelegator
-     */
     public function testUsesDelegatorWhenAvailable()
     {
         $delegator = $this->getMock('Zend\\ServiceManager\\DelegatorFactoryInterface');
@@ -789,12 +644,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($delegator, $this->serviceManager->create('foo-service'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     * @covers PPI\Framework\ServiceManager::createDelegatorFromFactory
-     * @covers PPI\Framework\ServiceManager::createDelegatorCallback
-     * @covers PPI\Framework\ServiceManager::addDelegator
-     */
     public function testUsesMultipleDelegates()
     {
         $fooDelegator = new MockSelfReturningDelegatorFactory();
@@ -811,9 +660,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($fooDelegator, array_shift($barDelegator->instances));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::resolveAlias
-     */
     public function testSetCircularAliasReferenceThrowsException()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\CircularReferenceException');
@@ -827,9 +673,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager->setAlias('foo-alias', 'bar-alias');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::checkForCircularAliasReference
-     */
     public function testResolveCircularAliasReferenceThrowsException()
     {
         $this->setExpectedException('Zend\ServiceManager\Exception\CircularReferenceException');
@@ -848,9 +691,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->serviceManager->get('baz-alias');
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::createDelegatorFromFactory
-     */
     public function testDelegatorFactoryWhenNotRegisteredAsService()
     {
         $delegator = $this->getMock('Zend\\ServiceManager\\DelegatorFactoryInterface');
@@ -876,12 +716,6 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($delegator, $this->serviceManager->create('foo-service'));
     }
 
-    /**
-     * @covers PPI\Framework\ServiceManager::create
-     * @covers PPI\Framework\ServiceManager::createDelegatorFromFactory
-     * @covers PPI\Framework\ServiceManager::createDelegatorCallback
-     * @covers PPI\Framework\ServiceManager::addDelegator
-     */
     public function testMultipleDelegatorFactoriesWhenNotRegisteredAsServices()
     {
         $fooDelegator = new MockSelfReturningDelegatorFactory();
@@ -1045,5 +879,4 @@ class ServiceManagerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('Zend\ServiceManager\Exception\ServiceNotFoundException');
         $this->serviceManager->isShared('foobarbazbat');
     }
-
 }

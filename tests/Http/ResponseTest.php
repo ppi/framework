@@ -105,7 +105,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $body    = new Stream('php://memory');
         $status  = 302;
         $headers = array(
-            'location' => array( 'http://example.com/' ),
+            'location' => array('http://example.com/'),
         );
 
         $response = new Response($content, $status, $headers);
@@ -122,14 +122,14 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function invalidStatus()
     {
         return array(
-            'true'       => array( true ),
-            'false'      => array( false ),
-            'float'      => array( 100.1 ),
-            'bad-string' => array( 'Two hundred' ),
-            'array'      => array( array( 200 ) ),
-            'object'     => array( (object) array( 'statusCode' => 200 ) ),
-            'too-small'  => array( 1 ),
-            'too-big'    => array( 600 ),
+            'true'       => array(true),
+            'false'      => array(false),
+            'float'      => array(100.1),
+            'bad-string' => array('Two hundred'),
+            'array'      => array(array(200)),
+            'object'     => array((object) array('statusCode' => 200)),
+            'too-small'  => array(1),
+            'too-big'    => array(600),
         );
     }
 
@@ -149,7 +149,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function testConstructorIgnoresInvalidHeaders()
     {
         $invalidHeaders = array(
-            array( 'INVALID' ),
+            array('INVALID'),
             'x-invalid-null'   => null,
             'x-invalid-true'   => true,
             'x-invalid-false'  => false,
@@ -157,8 +157,8 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
             'x-invalid-object' => (object) array('INVALID'),
         );
         $validHeaders = array(
-            'x-valid-string' => array( 'VALID' ),
-            'x-valid-array'  => array( 'VALID' ),
+            'x-valid-string' => array('VALID'),
+            'x-valid-array'  => array('VALID'),
         );
         $response        = new Response('', 200, array_merge($invalidHeaders, $validHeaders));
         $responseHeaders = $response->getHeaders();

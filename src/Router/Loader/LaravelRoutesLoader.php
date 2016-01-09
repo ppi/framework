@@ -4,18 +4,13 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
 namespace PPI\Framework\Router\Loader;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
-use Symfony\Component\HttpFoundation\Response;
-
 use Illuminate\Routing\Router as LaravelRouter;
 
 /**
@@ -25,7 +20,6 @@ use Illuminate\Routing\Router as LaravelRouter;
  */
 class LaravelRoutesLoader
 {
-
     /**
      * @var LaravelRouter
      */
@@ -38,13 +32,14 @@ class LaravelRoutesLoader
 
     /**
      * @param string $path
-     * @return LaravelRouter
+     *
      * @throws \Exception
+     *
+     * @return LaravelRouter
      */
     public function load($path)
     {
-
-        if(!is_readable($path)) {
+        if (!is_readable($path)) {
             throw new \InvalidArgumentException('Invalid laravel routes path found: ' . $path);
         }
 
@@ -54,7 +49,7 @@ class LaravelRoutesLoader
         // The included file must return the laravel router
         include $path;
 
-        if(!($router instanceof LaravelRouter)) {
+        if (!($router instanceof LaravelRouter)) {
             throw new \Exception('Invalid return value from '
                 . pathinfo($path, PATHINFO_FILENAME)
                 . ' expected instance of LaravelRouter'
@@ -63,5 +58,4 @@ class LaravelRoutesLoader
 
         return $router;
     }
-
 }

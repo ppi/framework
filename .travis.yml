@@ -1,34 +1,52 @@
+sudo: false
+
 language: php
 
-php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7
-  - hhvm
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - vendor
 
 matrix:
   fast_finish: true
+  include:
+    - php: 5.4
+      env:
+        - EXECUTE_CS_CHECK=true
+    - php: 5.5
+      env:
+        - EXECUTE_CS_CHECK=true
+    - php: 5.6
+      env:
+        - EXECUTE_TEST_COVERALLS=true
+    - php: 7
+    - php: hhvm
   allow_failures:
     - php: 7
     - php: hhvm
 
 before_install:
+  - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then phpenv config-rm xdebug.ini || return 0 ; fi
   - composer self-update
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then composer require --dev --no-update satooshi/php-coveralls ; fi
 
 install:
-  - if [[ $TRAVIS_PHP_VERSION != '5.6' && $TRAVIS_PHP_VERSION != 'hhvm' && $TRAVIS_PHP_VERSION != 'hhvm-nightly' && $TRAVIS_PHP_VERSION != '7' ]]; then phpenv config-rm xdebug.ini; fi
-  # Set the COMPOSER_ROOT_VERSION to the right version according to the branch being built
-  - if [ "$TRAVIS_BRANCH" = "master" ]; then export COMPOSER_ROOT_VERSION=dev-master; else export COMPOSER_ROOT_VERSION="$TRAVIS_BRANCH".x-dev; fi;
-  - composer --prefer-source --no-interaction install
+  - travis_retry composer install --no-interaction --ignore-platform-reqs
+  - composer info -i
 
 script:
-  - mkdir -p build/logs
-  - php vendor/bin/phpunit -c phpunit.xml.dist
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/phpunit --coverage-clover clover.xml ; fi
+  - if [[ $EXECUTE_TEST_COVERALLS != 'true' ]]; then ./vendor/bin/phpunit ; fi
+  - if [[ $EXECUTE_CS_CHECK == 'true' ]]; then ./vendor/bin/php-cs-fixer fix -v --diff --dry-run ; fi
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - if [[ $EXECUTE_TEST_COVERALLS == 'true' ]]; then ./vendor/bin/coveralls ; fi
 
 notifications:
   irc: "irc.freenode.org#ppi"
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/fc85ea3e366a33e217d5
+    on_success: change
+    on_failure: always
+    on_start: false

@@ -26,7 +26,7 @@ class ConfigManager extends ConfigLoader
     protected $cachePath;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $cacheEnabled;
 
@@ -49,7 +49,7 @@ class ConfigManager extends ConfigLoader
      * Constructor.
      *
      * @param string       $cachePath
-     * @param boolean      $cacheEnabled
+     * @param bool         $cacheEnabled
      * @param string|array $paths        A path or an array of paths where to look for resources
      */
     public function __construct($cachePath, $cacheEnabled, $paths = array())

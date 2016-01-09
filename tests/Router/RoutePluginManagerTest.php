@@ -10,8 +10,8 @@
 
 namespace PPI\FrameworkTest\Router;
 
-use PPI\FrameworkTest\Router\Fixtures\RoutePluginManagerForTest;
 use PPI\Framework\ServiceManager\ServiceManager;
+use PPI\FrameworkTest\Router\Fixtures\RoutePluginManagerForTest;
 use PPI\FrameworkTest\ServiceManager\Fixtures\MockSelfReturningDelegatorFactory;
 use ReflectionClass;
 use ReflectionObject;

@@ -19,7 +19,7 @@ Version **2.1.0-DEV**
 [![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-develop/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-develop)
 [![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
 
-[PPI][@website] is the the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
+[PPI][@website] is the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
 
 PPI bootstraps framework components for you from the top frameworks such as ZendFramework2, Symfony2, Laravel4 and FuelPHP.
 

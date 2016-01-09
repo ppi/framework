@@ -74,7 +74,7 @@ class GlobalVariables implements \ArrayAccess
     /**
      * Returns the current app debug mode.
      *
-     * @return boolean The current debug mode
+     * @return bool The current debug mode
      */
     public function getDebug()
     {

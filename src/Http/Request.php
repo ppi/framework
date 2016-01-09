@@ -623,7 +623,7 @@ class Request extends SymfonyHttpRequest implements RequestInterface
      */
     private function arrayContainsOnlyStrings(array $array)
     {
-        return array_reduce($array, array( __CLASS__, 'filterStringValue'), true);
+        return array_reduce($array, array(__CLASS__, 'filterStringValue'), true);
     }
 
     /**

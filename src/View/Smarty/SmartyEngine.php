@@ -11,9 +11,9 @@
 namespace PPI\Framework\View\Smarty;
 
 use NoiseLabs\Bundle\SmartyBundle\SmartyEngine as BaseSmartyEngine;
-use Psr\Log\LoggerInterface;
 use PPI\Framework\View\GlobalVariables;
 use PPI\Framework\View\TemplateLocator;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Templating\Loader\LoaderInterface;
 use Symfony\Component\Templating\TemplateNameParserInterface;
 

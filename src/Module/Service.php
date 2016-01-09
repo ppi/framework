@@ -55,7 +55,7 @@ class Service
     /**
      * Check if we have a class name for this service.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasClassName()
     {
@@ -85,7 +85,7 @@ class Service
     /**
      * Check if we have a factory method name.
      *
-     * @return boolean
+     * @return bool
      */
     public function hasFactoryMethod()
     {

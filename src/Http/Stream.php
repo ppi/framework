@@ -220,7 +220,7 @@ class Stream implements StreamInterface
 
         $result = fseek($this->resource, $offset, $whence);
 
-        return (0 === $result);
+        return 0 === $result;
     }
 
     /**
@@ -236,7 +236,7 @@ class Stream implements StreamInterface
 
         $result = fseek($this->resource, 0);
 
-        return (0 === $result);
+        return 0 === $result;
     }
 
     /**
@@ -286,7 +286,7 @@ class Stream implements StreamInterface
         $meta = stream_get_meta_data($this->resource);
         $mode = $meta['mode'];
 
-        return (strstr($mode, 'r') || strstr($mode, '+'));
+        return strstr($mode, 'r') || strstr($mode, '+');
     }
 
     /**

@@ -4,16 +4,17 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
 namespace PPI\Framework\Router;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Router as BaseRouter;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * The PPI Router.
@@ -54,7 +55,7 @@ class Router extends BaseRouter implements RouterInterface
     /**
      * Has the cache matcher class been generated.
      *
-     * @return boolean
+     * @return bool
      */
     public function isMatcherCached()
     {
@@ -69,7 +70,7 @@ class Router extends BaseRouter implements RouterInterface
     /**
      * Has the cache url generator class been generated.
      *
-     * @return boolean
+     * @return bool
      */
     public function isGeneratorCached()
     {
@@ -89,5 +90,4 @@ class Router extends BaseRouter implements RouterInterface
         $this->getMatcher();
         $this->getGenerator();
     }
-
 }

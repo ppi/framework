@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -18,7 +19,6 @@ use PPI\Framework\App;
  */
 class AppForDispatchTest extends App
 {
-
     public function __construct(array $options = array())
     {
         parent::__construct($options);
@@ -29,5 +29,4 @@ class AppForDispatchTest extends App
     {
         $this->serviceManager = $sm;
     }
-
 }

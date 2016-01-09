@@ -101,9 +101,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key     The key
+     * @param mixed  $default The default value if the parameter key does not exist
+     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -115,9 +115,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a post parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key     The key
+     * @param mixed  $default The default value if the parameter key does not exist
+     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -129,9 +129,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a files parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key     The key
+     * @param mixed  $default The default value if the parameter key does not exist
+     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -143,9 +143,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a query string parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key     The key
+     * @param mixed  $default The default value if the parameter key does not exist
+     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -157,9 +157,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Returns a server parameter by name.
      *
-     * @param string  $key     The key
-     * @param mixed   $default The default value if the parameter key does not exist
-     * @param boolean $deep    If true, a path like foo[bar] will find deeper items
+     * @param string $key     The key
+     * @param mixed  $default The default value if the parameter key does not exist
+     * @param bool   $deep    If true, a path like foo[bar] will find deeper items
      *
      * @return string
      */
@@ -248,7 +248,7 @@ class Controller implements ServiceLocatorAwareInterface
      *
      * @throws InvalidArgumentException
      *
-     * @return boolean
+     * @return bool
      */
     protected function is($key)
     {
@@ -397,14 +397,16 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Create a RedirectResponse object with your $url and $statusCode.
      *
-     * @param string  $url
-     * @param integer $statusCode
+     * @param string $url
+     * @param int    $statusCode
+     *
      * @return RedirectResponse
      */
     protected function redirect($url, $statusCode = 302)
     {
         $response = new RedirectResponse($url, $statusCode);
         $this->getServiceLocator()->set('Response', $response);
+
         return $response;
     }
 
@@ -413,8 +415,9 @@ class Controller implements ServiceLocatorAwareInterface
      * You just specify a route name and it goes there.
      *
      * @param $route
-     * @param array $parameters
+     * @param array      $parameters
      * @param bool|false $absolute
+     *
      * @return RedirectResponse
      */
     protected function redirectToRoute($route, $parameters = array(), $absolute = false)
@@ -425,9 +428,9 @@ class Controller implements ServiceLocatorAwareInterface
     /**
      * Generate a URL from the specified route name.
      *
-     * @param string  $route
-     * @param array   $parameters
-     * @param boolean $absolute
+     * @param string $route
+     * @param array  $parameters
+     * @param bool   $absolute
      *
      * @return string
      */

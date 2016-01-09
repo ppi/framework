@@ -10,23 +10,19 @@
 
 namespace PPI\Framework\Module;
 
-use PPI\Framework\Config\ConfigLoader;
-use PPI\Framework\Console\Application;
-use PPI\LaravelRouting\Loader\LaravelRoutesLoader;
-use PPI\LaravelRouting\LaravelRouter;
-use PPI\FastRoute\Wrapper\FastRouteWrapper;
-use PPI\Framework\Router\Loader\YamlFileLoader;
-
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Finder\Finder;
-
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Stdlib\ArrayUtils;
-
 use Aura\Router\Router as AuraRouter;
 use Aura\Router\RouterFactory as AuraRouterFactory;
-
 use Illuminate\Events\Dispatcher;
+use PPI\FastRoute\Wrapper\FastRouteWrapper;
+use PPI\Framework\Config\ConfigLoader;
+use PPI\Framework\Console\Application;
+use PPI\Framework\Router\Loader\YamlFileLoader;
+use PPI\LaravelRouting\LaravelRouter;
+use PPI\LaravelRouting\Loader\LaravelRoutesLoader;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Finder\Finder;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * The base PPI module class.
@@ -97,7 +93,9 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      * Load up our routes.
      *
      * @deprecated Please use loadSymfonyRoutes instead
+     *
      * @param string $path
+     *
      * @return \Symfony\Component\Routing\RouteCollection
      */
     protected function loadYamlRoutes($path)
@@ -115,20 +113,24 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
     /**
      * @param string $path
-     * @return AuraRouter
+     *
      * @throws \Exception when the included routes file doesn't return an AuraRouter back
+     *
+     * @return AuraRouter
      */
     protected function loadLaravelRoutes($path)
     {
         $router = (new LaravelRoutesLoader(
-            new LaravelRouter(new Dispatcher)
+            new LaravelRouter(new Dispatcher())
         ))->load($path);
         $router->setModuleName($this->getName());
+
         return $router;
     }
 
     /**
      * @param $path
+     *
      * @return FastRouteWrapper
      */
     protected function loadFastRouteRoutes($path)
@@ -137,19 +139,20 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         $dataGenerator = new \FastRoute\DataGenerator\GroupCountBased();
         $routeCollector = new \FastRoute\RouteCollector($routeParser, $dataGenerator);
 
-        if(!is_readable($path)) {
+        if (!is_readable($path)) {
             throw new \InvalidArgumentException('Invalid fast route routes path found: ' . $path);
         }
 
         // The included file must return the laravel router
-        $getRouteCollector = function() use ($routeCollector, $path) {
+        $getRouteCollector = function () use ($routeCollector, $path) {
             $r = $routeCollector;
             include $path;
+
             return $r;
         };
 
         $routeCollector = $getRouteCollector();
-        if(!($routeCollector instanceof \FastRoute\RouteCollector)) {
+        if (!($routeCollector instanceof \FastRoute\RouteCollector)) {
             throw new \Exception('Invalid return value from '
                 . pathinfo($path, PATHINFO_FILENAME)
                 . ' expected instance of RouteCollector'
@@ -168,14 +171,16 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     /**
      * @todo - move part of this into AuraRouterWrapper->load()
      * @todo - consider adding a setModuleName() to the AuraRouterWrapper instead of _module to each route.
+     *
      * @param string $path
-     * @return AuraRouter
+     *
      * @throws \Exception when the included routes file doesn't return an AuraRouter back
+     *
+     * @return AuraRouter
      */
     protected function loadAuraRoutes($path)
     {
-
-        if(!is_readable($path)) {
+        if (!is_readable($path)) {
             throw new \InvalidArgumentException('Invalid aura routes path found: ' . $path);
         }
 
@@ -184,14 +189,14 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         // The included file must return the aura router
         $router = include $path;
 
-        if(!($router instanceof AuraRouter)) {
+        if (!($router instanceof AuraRouter)) {
             throw new \Exception('Invalid return value from '
                 . pathinfo($path, PATHINFO_FILENAME)
                 . ' expected instance of AuraRouter'
             );
         }
 
-        foreach($router->getRoutes() as $route) {
+        foreach ($router->getRoutes() as $route) {
             $route->addValues(array('_module' => $this->getName()));
         }
 
@@ -395,5 +400,4 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
 
         return $this->configLoader;
     }
-
 }

@@ -109,8 +109,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function validPorts()
     {
         return array(
-            'int'       => array( 3000 ),
-            'string'    => array( "3000" ),
+            'int'       => array(3000),
+            'string'    => array("3000"),
         );
     }
 
@@ -136,15 +136,15 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidPorts()
     {
         return array(
-            'null'      => array( null ),
-            'true'      => array( true ),
-            'false'     => array( false ),
-            'string'    => array( 'string' ),
-            'array'     => array( array( 3000 ) ),
-            'object'    => array( (object) array( 3000 ) ),
-            'zero'      => array( 0 ),
-            'too-small' => array( -1 ),
-            'too-big'   => array( 65536 ),
+            'null'      => array(null),
+            'true'      => array(true),
+            'false'     => array(false),
+            'string'    => array('string'),
+            'array'     => array(array(3000)),
+            'object'    => array((object) array(3000)),
+            'zero'      => array(0),
+            'too-small' => array(-1),
+            'too-big'   => array(65536),
         );
     }
 
@@ -177,13 +177,13 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidPaths()
     {
         return array(
-            'null'      => array( null ),
-            'true'      => array( true ),
-            'false'     => array( false ),
-            'array'     => array( array( '/bar/baz' ) ),
-            'object'    => array( (object) array( '/bar/baz' ) ),
-            'query'     => array( '/bar/baz?bat=quz' ),
-            'fragment'  => array( '/bar/baz#bat' ),
+            'null'      => array(null),
+            'true'      => array(true),
+            'false'     => array(false),
+            'array'     => array(array('/bar/baz')),
+            'object'    => array((object) array('/bar/baz')),
+            'query'     => array('/bar/baz?bat=quz'),
+            'fragment'  => array('/bar/baz#bat'),
         );
     }
 
@@ -215,12 +215,12 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidQueryStrings()
     {
         return array(
-            'null'      => array( null ),
-            'true'      => array( true ),
-            'false'     => array( false ),
-            'array'     => array( array( 'baz=bat' ) ),
-            'object'    => array( (object) array( 'baz=bat' ) ),
-            'fragment'  => array( 'baz=bat#quz' ),
+            'null'      => array(null),
+            'true'      => array(true),
+            'false'     => array(false),
+            'array'     => array(array('baz=bat')),
+            'object'    => array((object) array('baz=bat')),
+            'fragment'  => array('baz=bat#quz'),
         );
     }
 
@@ -253,10 +253,10 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function authorityInfo()
     {
         return array(
-            'host-only'      => array( 'http://foo.com/bar',         'foo.com' ),
-            'host-port'      => array( 'http://foo.com:3000/bar',    'foo.com:3000' ),
-            'user-host'      => array( 'http://me@foo.com/bar',      'me@foo.com' ),
-            'user-host-port' => array( 'http://me@foo.com:3000/bar', 'me@foo.com:3000' ),
+            'host-only'      => array('http://foo.com/bar',         'foo.com'),
+            'host-port'      => array('http://foo.com:3000/bar',    'foo.com:3000'),
+            'user-host'      => array('http://me@foo.com/bar',      'me@foo.com'),
+            'user-host-port' => array('http://me@foo.com:3000/bar', 'me@foo.com:3000'),
         );
     }
 
@@ -320,13 +320,13 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidConstructorUris()
     {
         return array(
-            'null'   => array( null ),
-            'true'   => array( true ),
-            'false'  => array( false ),
-            'int'    => array( 1 ),
-            'float'  => array( 1.1 ),
-            'array'  => array( array( 'http://example.com/' ) ),
-            'object' => array( (object) array( 'uri' => 'http://example.com/' ) ),
+            'null'   => array(null),
+            'true'   => array(true),
+            'false'  => array(false),
+            'int'    => array(1),
+            'float'  => array(1.1),
+            'array'  => array(array('http://example.com/')),
+            'object' => array((object) array('uri' => 'http://example.com/')),
         );
     }
 
@@ -356,11 +356,11 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function invalidSchemes()
     {
         return array(
-            'mailto' => array( 'mailto' ),
-            'ftp'    => array( 'ftp' ),
-            'telnet' => array( 'telnet' ),
-            'ssh'    => array( 'ssh' ),
-            'git'    => array( 'git' ),
+            'mailto' => array('mailto'),
+            'ftp'    => array('ftp'),
+            'telnet' => array('telnet'),
+            'ssh'    => array('ssh'),
+            'git'    => array('git'),
         );
     }
 
@@ -420,8 +420,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
     public function standardSchemePortCombinations()
     {
         return array(
-            'http'  => array( 'http', 80 ),
-            'https' => array( 'https', 443 ),
+            'http'  => array('http', 80),
+            'https' => array('https', 443),
         );
     }
 

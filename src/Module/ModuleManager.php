@@ -54,9 +54,9 @@ class ModuleManager extends BaseModuleManager
      *
      * before looking in the module resource folder.
      *
-     * @param string  $name  A resource name to locate
-     * @param string  $dir   A directory where to look for the resource first
-     * @param Boolean $first Whether to return the first path or paths for all matching modules
+     * @param string $name  A resource name to locate
+     * @param string $dir   A directory where to look for the resource first
+     * @param bool   $first Whether to return the first path or paths for all matching modules
      *
      * @throws \InvalidArgumentException if the file cannot be found or the name is not valid
      * @throws \RuntimeException         if the name contains invalid/unsafe
@@ -80,7 +80,6 @@ class ModuleManager extends BaseModuleManager
         if (false !== strpos($moduleName, '/')) {
             list($moduleName, $path) = explode('/', $moduleName, 2);
         }
-
 
         $isResource     = 0 === strpos($path, 'Resources') && null !== $dir;
         $overridePath   = substr($path, 9);
@@ -122,11 +121,12 @@ class ModuleManager extends BaseModuleManager
 
     protected function getResourcesPath($module)
     {
-        if(is_callable(array($module, 'getResourcesPath'))) {
+        if (is_callable(array($module, 'getResourcesPath'))) {
             $resourcesPath  = $module->getResourcesPath();
         } else {
             $resourcesPath = $module->getPath();
         }
+
         return $resourcesPath;
     }
 }

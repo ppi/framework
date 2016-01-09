@@ -97,7 +97,7 @@ class Autoload
      *
      * @param string $key
      *
-     * @return boolean
+     * @return bool
      *
      * @static
      */

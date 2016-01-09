@@ -10,23 +10,19 @@
 
 namespace PPI\Framework\ServiceManager\Factory;
 
-
-use PPI\FastRoute\Wrapper\FastRouteWrapper;
-use PPI\Framework\Router\ChainRouter;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use PPI\Framework\Router\Router as SymfonyRouter;
-use PPI\Framework\Router\Wrapper\SymfonyRouterWrapper;
-use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
-
+use Aura\Router\Router as AuraRouter;
 use Illuminate\Http\Request as LaravelRequest;
 use Illuminate\Routing\Router as LaravelRouter;
 use Illuminate\Routing\UrlGenerator as LaravelUrlGenerator;
-use PPI\LaravelRouting\Wrapper\LaravelRouterWrapper;
-
-use Aura\Router\Router as AuraRouter;
+use PPI\FastRoute\Wrapper\FastRouteWrapper;
+use PPI\Framework\Router\ChainRouter;
+use PPI\Framework\Router\Router as SymfonyRouter;
 use PPI\Framework\Router\Wrapper\AuraRouterWrapper;
+use PPI\Framework\Router\Wrapper\SymfonyRouterWrapper;
+use PPI\LaravelRouting\Wrapper\LaravelRouterWrapper;
+use Symfony\Component\Routing\RouteCollection as SymfonyRouteCollection;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Router Factory.
@@ -38,9 +34,12 @@ class RouterFactory implements FactoryInterface
 {
     /**
      * @todo - move this to a separate method() - consider how to inject custom-defined arbitrary chain router entries
+     *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return ChainRouter
+     *
      * @throws \Exception
+     *
+     * @return ChainRouter
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -57,8 +56,7 @@ class RouterFactory implements FactoryInterface
 
         // For each module, add a matching instance type to the chain router
         foreach ($allModuleRoutes as $moduleName => $moduleRoutingResponse) {
-
-            switch(true) {
+            switch (true) {
                 // @todo - move this to a separate method()
                 case $moduleRoutingResponse instanceof SymfonyRouteCollection:
                     $sfRouter = new SymfonyRouter($requestContext, $moduleRoutingResponse, $routerOptions, $logger);
