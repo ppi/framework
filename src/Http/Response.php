@@ -13,7 +13,6 @@ namespace PPI\Framework\Http;
 use Symfony\Component\HttpFoundation\Response as SymfonyHttpResponse;
 
 /**
- *
  * @author Paul Dragoonis <vitor@ppi.io>
  * @author Vítor Brandão <vitor@ppi.io>
  */

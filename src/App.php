@@ -236,6 +236,7 @@ class App implements AppInterface
      *
      * @param HttpRequest|null $request
      * @param HttpRequest|null $request
+     *
      * @throws \Exception
      *
      * @return Response
@@ -258,8 +259,9 @@ class App implements AppInterface
     /**
      * Decide on a route to use and dispatch our module's controller action.
      *
-     * @param HttpRequest $request
+     * @param HttpRequest  $request
      * @param HttpResponse $response
+     *
      * @throws \Exception
      *
      * @return Response
@@ -291,7 +293,7 @@ class App implements AppInterface
             throw new \Exception('Your action returned null. It must always return something');
         } elseif (is_string($result)) {
             $response->setContent($result);
-        } else if ($result instanceof SymfonyResponse || $response instanceof HttpResponse) {
+        } elseif ($result instanceof SymfonyResponse || $response instanceof HttpResponse) {
             $response = $result;
         } else {
             throw new \Exception('Invalid response type returned from controller');
