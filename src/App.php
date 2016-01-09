@@ -21,6 +21,17 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+// @todo - these need moved to a new class for module->router processing
+use PPI\Framework\Router\Router as SymfonyRouter;
+use PPI\Framework\Router\Wrapper\AuraRouterWrapper;
+use PPI\Framework\Router\Wrapper\SymfonyRouterWrapper;
+use Aura\Router\Router as AuraRouter;
+use Illuminate\Http\Request as LaravelRequest;
+use Illuminate\Routing\Router as LaravelRouter;
+use Illuminate\Routing\UrlGenerator as LaravelUrlGenerator;
+use PPI\FastRoute\Wrapper\FastRouteWrapper;
+use PPI\LaravelRouting\Wrapper\LaravelRouterWrapper;
+
 /**
  * The PPI App bootstrap class.
  *
@@ -688,4 +699,53 @@ class App implements AppInterface
             DebugClassLoader::enable();
         }
     }
+
+    protected function setupRouters()
+    {
+
+        $requestContext  = $this->getServiceManager()->get('RouterRequestContext');
+        $chainRouter->setContext($requestContext);
+
+        $allModuleRoutes = $this->getServiceManager()->get('ModuleDefaultListener')->getRoutes();
+
+        // For each module, add a matching instance type to the chain router
+        foreach ($allModuleRoutes as $moduleName => $moduleRoutingResponse) {
+            switch (true) {
+                // @todo - move this to a separate method()
+                case $moduleRoutingResponse instanceof SymfonyRouteCollection:
+                    $sfRouter = new SymfonyRouter($requestContext, $moduleRoutingResponse, $routerOptions, $logger);
+                    $sfRouterWrapper = new SymfonyRouterWrapper($sfRouter);
+                    $chainRouter->add($sfRouterWrapper);
+                    break;
+
+                // @todo - move this to a separate method()
+                case $moduleRoutingResponse instanceof AuraRouter:
+                    $auraRouterWrapper = new AuraRouterWrapper($moduleRoutingResponse);
+                    $chainRouter->add($auraRouterWrapper);
+                    break;
+
+                // @todo - move this to a separate method()
+                case $moduleRoutingResponse instanceof LaravelRouter:
+                    $laravelRequest = new LaravelRequest();
+                    $laravelUrlGenerator = new LaravelUrlGenerator($moduleRoutingResponse->getRoutes(), $laravelRequest);
+                    $laravelRouterWrapper = new LaravelRouterWrapper(
+                        $moduleRoutingResponse, $laravelRequest, $laravelUrlGenerator
+                    );
+                    // @todo - solve this problem
+//                    $laravelRouterWrapper->setModuleName($this->getName());
+                    $chainRouter->add($laravelRouterWrapper);
+                    break;
+
+                case $moduleRoutingResponse instanceof FastRouteWrapper:
+                    $chainRouter->add($moduleRoutingResponse);
+                    break;
+
+                default:
+                    throw new \Exception('Unexpected routes value return from module: ' . $moduleName .
+                        '. found value of type: ' . gettype($moduleRoutingResponse));
+            }
+        }
+    }
+
+
 }
