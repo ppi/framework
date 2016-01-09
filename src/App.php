@@ -14,7 +14,6 @@ use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\Http\Response;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
@@ -237,19 +236,19 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
-     * @param RequestInterface|null $request
-     * @param ResponseInterface|null $response
+     * @param HttpRequest|null $request
+     * @param HttpRequest|null $response
      * @return Response
      * @throws \Exception
      */
-    public function run(RequestInterface $request = null, ResponseInterface $response = null)
+    public function run(HttpRequest $request = null, HttpResponse $response = null)
     {
         if (false === $this->booted) {
             $this->boot();
         }
 
         $request = $request ?: HttpRequest::createFromGlobals();
-        $response = $response ?: new Response();
+        $response = $response ?: new HttpResponse();
 
         $response = $this->dispatch($request, $response);
         $response->send();
@@ -261,12 +260,12 @@ class App implements AppInterface
      *
      * Decide on a route to use and dispatch our module's controller action.
      *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
+     * @param HttpRequest $request
+     * @param HttpResponse $response
      * @return Response
      * @throws \Exception
      */
-    public function dispatch(RequestInterface $request, ResponseInterface $response)
+    public function dispatch(HttpRequest $request, HttpResponse $response)
     {
         if (false === $this->booted) {
             $this->boot();
@@ -293,7 +292,7 @@ class App implements AppInterface
             throw new \Exception('Your action returned null. It must always return something');
         } else if(is_string($result)) {
             $response->setContent($result);
-        } else if ($result instanceof ResponseInterface || $result instanceof SymfonyResponse) {
+        } else if ($result instanceof SymfonyResponse || $response instanceof HttpResponse) {
             $response = $result;
         } else {
             throw new \Exception('Invalid response type returned from controller');
@@ -616,12 +615,12 @@ class App implements AppInterface
      * Perform the matching of a route and return a set of routing parameters if a valid one is found.
      * Otherwise exceptions get thrown
      *
-     * @param RequestInterface $request
+     * @param HttpRequest $request
      * @return array
      *
      * @throws \Exception
      */
-    protected function handleRouting(RequestInterface $request)
+    protected function handleRouting(HttpRequest $request)
     {
         $this->router = $this->serviceManager->get('Router');
         $this->router->warmUp($this->getCacheDir());

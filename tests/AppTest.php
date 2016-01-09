@@ -13,8 +13,6 @@ namespace PPI\FrameworkTest;
 use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\FrameworkTest\Fixtures\AppForTest;
 use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
-use PPI\Framework\Router\ChainRouter;
-use PPI\Framework\Module\Controller\ControllerResolver;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
