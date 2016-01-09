@@ -63,7 +63,7 @@ class ServiceListenerFactory implements FactoryInterface
             'Configuration'                             => 'Config',
             'config.parameter_bag'                      => 'ApplicationParameters',
             'templating.loader'                         => 'templating.loader.filesystem',
-            'controller_name_converter'                 => 'ControllerNameParser'
+            'controller_name_converter'                 => 'ControllerNameParser',
         ),
     );
 

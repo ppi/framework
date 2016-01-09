@@ -10,8 +10,8 @@
 
 namespace PPI\FrameworkTest\Http;
 
-use ReflectionProperty;
 use PPI\Framework\Http\Stream;
+use ReflectionProperty;
 
 /**
  * Class StreamTest.
@@ -388,14 +388,14 @@ class StreamTest extends \PHPUnit_Framework_TestCase
         $this->tmpnam = tempnam(sys_get_temp_dir(), 'PHLY');
 
         return array(
-            'null'                => array( null ),
-            'false'               => array( false ),
-            'true'                => array( true ),
-            'int'                 => array( 1 ),
-            'float'               => array( 1.1 ),
-            'string-non-resource' => array( 'foo-bar-baz' ),
-            'array'               => array( array( fopen($this->tmpnam, 'r+') ) ),
-            'object'              => array( (object) array( 'resource' => fopen($this->tmpnam, 'r+') ) ),
+            'null'                => array(null),
+            'false'               => array(false),
+            'true'                => array(true),
+            'int'                 => array(1),
+            'float'               => array(1.1),
+            'string-non-resource' => array('foo-bar-baz'),
+            'array'               => array(array(fopen($this->tmpnam, 'r+'))),
+            'object'              => array((object) array('resource' => fopen($this->tmpnam, 'r+'))),
         );
     }
 

@@ -11,7 +11,6 @@
 namespace PPI\Framework\ServiceManager\Factory;
 
 use PPI\Framework\Router\RouterListener;
-use Symfony\Component\Routing\RequestContext;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

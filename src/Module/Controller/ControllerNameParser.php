@@ -67,16 +67,17 @@ class ControllerNameParser
     public function build($controller)
     {
         list($module, $moduleName, $controllerName, $actionName) = $this->getPartsFromControllerName($controller);
+
         return sprintf('%s:%s:%s', $moduleName, $controllerName, $actionName);
     }
 
     /**
      * @param string $controller
+     *
      * @return array
      */
     private function getPartsFromControllerName($controller)
     {
-
         if (3 != count($parts = explode(':', $controller))) {
             throw new \InvalidArgumentException(sprintf('The "%s" controller is not a valid a:b:c controller string.', $controller));
         }
@@ -88,5 +89,4 @@ class ControllerNameParser
 
         return [$module, $moduleName, $controller, $action];
     }
-
 }

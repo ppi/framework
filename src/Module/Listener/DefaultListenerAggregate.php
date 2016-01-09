@@ -20,7 +20,6 @@ use Zend\ModuleManager\Listener\ModuleLoaderListener;
 use Zend\ModuleManager\Listener\ModuleResolverListener;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\Stdlib\ArrayUtils;
-use Aura\Router\Router as AuraRouter;
 
 /**
  * DefaultListenerAggregate class.
@@ -100,12 +99,13 @@ class DefaultListenerAggregate extends ZendDefaultListenerAggregate
     }
 
     /**
-     * Callback for 'routesTrigger' event
+     * Callback for 'routesTrigger' event.
      *
      * @param ModuleEvent $e
      *
-     * @return $this
      * @throws \Exception if the module returns an invalid route type
+     *
+     * @return $this
      */
     public function routesTrigger(ModuleEvent $e)
     {

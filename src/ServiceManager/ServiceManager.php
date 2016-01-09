@@ -50,8 +50,8 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * This method is an alias to $this->get().
      *
-     * @param string  $name
-     * @param boolean $usePeeringServiceManagers
+     * @param string $name
+     * @param bool   $usePeeringServiceManagers
      *
      * @return object|array
      */
@@ -65,9 +65,9 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * This method is an alias to $this->setService().
      *
-     * @param string  $name
-     * @param mixed   $service
-     * @param boolean $shared
+     * @param string $name
+     * @param mixed  $service
+     * @param bool   $shared
      *
      * @return ServiceManager
      */
@@ -100,7 +100,7 @@ class ServiceManager extends BaseServiceManager implements ContainerInterface
      *
      * @param string $name The parameter name
      *
-     * @return Boolean The presence of parameter in container
+     * @return bool The presence of parameter in container
      *
      * @api
      */

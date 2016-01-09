@@ -4,6 +4,7 @@
  *
  * @copyright  Copyright (c) 2011-2015 Paul Dragoonis <paul@ppi.io>
  * @license    http://opensource.org/licenses/mit-license.php MIT
+ *
  * @link       http://www.ppi.io
  */
 
@@ -13,12 +14,10 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
- *
  * @author Paul Dragoonis <paul@ppi.io>
  */
 class SymfonyRouterWrapper implements RouterInterface
 {
-
     /**
      * @var RouterInterface
      */
@@ -79,6 +78,4 @@ class SymfonyRouterWrapper implements RouterInterface
     {
         return $this->router->match($pathinfo);
     }
-
-
 }

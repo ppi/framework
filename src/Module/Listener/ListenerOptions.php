@@ -41,7 +41,7 @@ class ListenerOptions extends BaseListenerOptions
     /**
      * @todo Add inline documentation.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRoutingEnabled()
     {

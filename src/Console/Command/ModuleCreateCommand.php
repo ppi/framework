@@ -24,7 +24,6 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
  */
 class ModuleCreateCommand extends AbstractCommand
 {
-
     const TPL_ENGINE_LATTE = 'latte';
     const TPL_ENGINE_PLATES = 'plates';
     const TPL_ENGINE_PHP = 'php';
@@ -53,7 +52,7 @@ class ModuleCreateCommand extends AbstractCommand
         'resources/routes',
         'resources/config',
         'resources/views',
-        'resources/views/index'
+        'resources/views/index',
     ];
 
     /**
@@ -61,7 +60,7 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected $coreFiles = [
         'Module.php',
-        'resources/config/config.php'
+        'resources/config/config.php',
     ];
 
     /**
@@ -69,44 +68,44 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected $tplEngineFilesMap = [
         self::TPL_ENGINE_LATTE => [
-            'resources/views/index/index.html.latte'
+            'resources/views/index/index.html.latte',
         ],
         self::TPL_ENGINE_PLATES => [
-            'resources/views/index/index.html.plates'
+            'resources/views/index/index.html.plates',
         ],
         self::TPL_ENGINE_PHP => [
-            'resources/views/index/index.html.php'
+            'resources/views/index/index.html.php',
         ],
         self::TPL_ENGINE_TWIG => [
             'resources/views/index/base.html.twig',
-            'resources/views/index/index.html.twig'
+            'resources/views/index/index.html.twig',
         ],
         self::TPL_ENGINE_SMARTY => [
             'resources/views/index/base.html.smarty',
-            'resources/views/index/index.html.smarty'
-        ]
+            'resources/views/index/index.html.smarty',
+        ],
     ];
 
     protected $routingEngineFilesMap = [
         self::ROUTING_ENGINE_SYMFONY => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
-            'resources/routes/symfony.yml'
+            'resources/routes/symfony.yml',
         ],
         self::ROUTING_ENGINE_AURA => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
-            'resources/routes/aura.php'
+            'resources/routes/aura.php',
         ],
         self::ROUTING_ENGINE_LARAVEL => [
             'src/Controller/Index.php',
             'src/Controller/Shared.php',
-            'resources/routes/laravel.php'
+            'resources/routes/laravel.php',
         ],
         self::ROUTING_ENGINE_FASTROUTE => [
-            'src/Controller/IndexInvoke.php', 
+            'src/Controller/IndexInvoke.php',
             'src/Controller/Shared.php',
-            'resources/routes/fastroute.php'
+            'resources/routes/fastroute.php',
         ],
     ];
 
@@ -114,23 +113,23 @@ class ModuleCreateCommand extends AbstractCommand
         self::ROUTING_ENGINE_SYMFONY => [
             '[ROUTING_LOAD_METHOD]' => 'loadSymfonyRoutes',
             '[ROUTING_DEF_FILE]' => 'symfony.yml',
-            '[ROUTING_GETROUTES_RETVAL]' => '\Symfony\Component\Routing\RouteCollection'
+            '[ROUTING_GETROUTES_RETVAL]' => '\Symfony\Component\Routing\RouteCollection',
         ],
         self::ROUTING_ENGINE_AURA => [
             '[ROUTING_LOAD_METHOD]' => 'loadAuraRoutes',
             '[ROUTING_DEF_FILE]' => 'aura.php',
-            '[ROUTING_GETROUTES_RETVAL]' => '\Aura\Router\Router'
+            '[ROUTING_GETROUTES_RETVAL]' => '\Aura\Router\Router',
         ],
         self::ROUTING_ENGINE_LARAVEL => [
             '[ROUTING_LOAD_METHOD]' => 'loadLaravelRoutes',
             '[ROUTING_DEF_FILE]' => 'laravel.php',
-            '[ROUTING_GETROUTES_RETVAL]' => '\Illuminate\Routing\Router'
+            '[ROUTING_GETROUTES_RETVAL]' => '\Illuminate\Routing\Router',
         ],
         self::ROUTING_ENGINE_FASTROUTE => [
             '[ROUTING_LOAD_METHOD]' => 'loadFastRouteRoutes',
             '[ROUTING_DEF_FILE]' => 'fastroute.php',
-            '[ROUTING_GETROUTES_RETVAL]' => '\PPI\FastRoute\Wrapper\FastRouteWrapper'
-        ]
+            '[ROUTING_GETROUTES_RETVAL]' => '\PPI\FastRoute\Wrapper\FastRouteWrapper',
+        ],
     ];
 
     /**
@@ -157,9 +156,7 @@ class ModuleCreateCommand extends AbstractCommand
         $this->configEnabledTemplatingEngines = $tplEngines;
     }
 
-
     /**
-     * @return void
      */
     protected function configure()
     {
@@ -172,15 +169,13 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
-     * @throws \Exception
      *
-     * @return void
+     * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $moduleName = $input->getArgument('name');
         $moduleDir = $this->modulesDir . DIRECTORY_SEPARATOR . $moduleName;
 
@@ -196,7 +191,7 @@ class ModuleCreateCommand extends AbstractCommand
             $tokenizedFiles[] = $coreFile;
         }
 
-        if(!$this->isValidTemplatingEngine($this->tplEngine)) {
+        if (!$this->isValidTemplatingEngine($this->tplEngine)) {
             throw new \Exception('Invalid templating engine: ' . $this->tplEngine);
         }
 
@@ -215,7 +210,7 @@ class ModuleCreateCommand extends AbstractCommand
         $tokens['[TPL_ENGINE_EXT]'] = $this->tplEngine;
 
         // ROUTING
-        if(!$this->isValidRoutingEngine($this->routingEngine)) {
+        if (!$this->isValidRoutingEngine($this->routingEngine)) {
             throw new \Exception('Invalid routing engine: ' . $this->routingEngine);
         }
 
@@ -235,8 +230,7 @@ class ModuleCreateCommand extends AbstractCommand
         // Replace tokens in all files
         $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, $tokens);
 
-
-        if($this->routingEngine === self::ROUTING_ENGINE_FASTROUTE) {
+        if ($this->routingEngine === self::ROUTING_ENGINE_FASTROUTE) {
             rename(
                 $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0],
                 str_replace('IndexInvoke', 'Index', $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0]
@@ -254,8 +248,6 @@ class ModuleCreateCommand extends AbstractCommand
 
         $this->checkTemplatingEngines($input, $output);
         $this->checkRouters($input, $output);
-
-
     }
 
     protected function isValidTemplatingEngine($tplEngine)
@@ -265,7 +257,7 @@ class ModuleCreateCommand extends AbstractCommand
             self::TPL_ENGINE_PLATES,
             self::TPL_ENGINE_PHP,
             self::TPL_ENGINE_SMARTY,
-            self::TPL_ENGINE_TWIG
+            self::TPL_ENGINE_TWIG,
         ]);
     }
 
@@ -275,16 +267,14 @@ class ModuleCreateCommand extends AbstractCommand
             self::ROUTING_ENGINE_SYMFONY,
             self::ROUTING_ENGINE_AURA,
             self::ROUTING_ENGINE_LARAVEL,
-            self::ROUTING_ENGINE_FASTROUTE
+            self::ROUTING_ENGINE_FASTROUTE,
         ]);
     }
 
     /**
      * @param string $moduleDir
-     * @param array $files
-     * @param array $tokens
-     *
-     * @return void
+     * @param array  $files
+     * @param array  $tokens
      */
     protected function replaceTokensInFiles($moduleDir, $files, $tokens)
     {
@@ -300,7 +290,7 @@ class ModuleCreateCommand extends AbstractCommand
     /**
      * @param string $skeletonDir
      * @param string $moduleDir
-     * @param array $files
+     * @param array  $files
      *
      * @throws \InvalidArgumentException When a file path being created already exists
      */
@@ -341,7 +331,7 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function askQuestions(InputInterface $input, OutputInterface $output)
@@ -369,7 +359,7 @@ class ModuleCreateCommand extends AbstractCommand
                     1 => self::ROUTING_ENGINE_SYMFONY,
                     2 => self::ROUTING_ENGINE_AURA,
                     3 => self::ROUTING_ENGINE_LARAVEL,
-                    4 => self::ROUTING_ENGINE_FASTROUTE
+                    4 => self::ROUTING_ENGINE_FASTROUTE,
                 ],
                 'symfony'
             );
@@ -379,29 +369,28 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     private function checkRouters(InputInterface $input, OutputInterface $output)
     {
         // Aura Check
-        if($this->routingEngine == self::ROUTING_ENGINE_AURA && !class_exists('\Aura\Router\Router')) {
+        if ($this->routingEngine == self::ROUTING_ENGINE_AURA && !class_exists('\Aura\Router\Router')) {
             $output->writeln("<comment>Aura Router doesn't appear to be loaded. Run: <info>composer require ppi/aura-router</info></comment>");
         }
 
         // Laravel check
-        if($this->routingEngine == self::ROUTING_ENGINE_LARAVEL && !class_exists('\PPI\LaravelRouting\LaravelRouter')) {
+        if ($this->routingEngine == self::ROUTING_ENGINE_LARAVEL && !class_exists('\PPI\LaravelRouting\LaravelRouter')) {
             $output->writeln("<comment>Laravel Router doesn't appear to be loaded. Run: <info>composer require ppi/laravel-router</info></comment>");
         }
 
-        if($this->routingEngine == self::ROUTING_ENGINE_FASTROUTE && !class_exists('\PPI\FastRoute\Wrapper\FastRouteWrapper')) {
+        if ($this->routingEngine == self::ROUTING_ENGINE_FASTROUTE && !class_exists('\PPI\FastRoute\Wrapper\FastRouteWrapper')) {
             $output->writeln("<comment>FastRoute Router doesn't appear to be loaded. Run: <info>composer require ppi/fast-route</info></comment>");
         }
-
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     private function checkTemplatingEngines(InputInterface $input, OutputInterface $output)
@@ -452,6 +441,5 @@ class ModuleCreateCommand extends AbstractCommand
                 $output->writeln("<comment>Latte doesn't appear to be loaded. Run: <info>composer require ppi/latte-module</info></comment>");
             }
         }
-
     }
 }

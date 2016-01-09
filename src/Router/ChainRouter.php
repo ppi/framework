@@ -15,13 +15,12 @@ use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class ChainRouter
+ * Class ChainRouter.
  *
  * @author Paul Dragoonis <paul@ppi.io>
  */
 class ChainRouter extends BaseChainRouter
 {
-
     /**
      * @var Request
      */
@@ -48,11 +47,13 @@ class ChainRouter extends BaseChainRouter
     public function hasRouters()
     {
         $routers = $this->sortRouters();
+
         return !empty($routers);
     }
 
     /**
      * @todo - might not need this afterall
+     *
      * @return Request
      */
     public function getMatchedRouteRequest()
@@ -62,6 +63,7 @@ class ChainRouter extends BaseChainRouter
 
     /**
      * @param Request $request
+     *
      * @throws \Exception
      */
     public function matchRequest(Request $request)
@@ -69,12 +71,10 @@ class ChainRouter extends BaseChainRouter
         try {
             $parameters = parent::matchRequest($request);
             $this->matchedRouteRequest = $request;
+
             return $parameters;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }
-
-
-
 }
