@@ -15,8 +15,9 @@ Version **2.1.0-DEV**
 
 [![Latest Stable Version](https://poser.pugx.org/ppi/framework/v/stable.png)](https://packagist.org/packages/ppi/framework)
 [![Latest Unstable Version](https://poser.pugx.org/ppi/framework/v/unstable.png)](https://packagist.org/packages/ppi/framework)
-[![Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=develop)](http://travis-ci.org/ppi/framework)
-[![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-develop/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-develop)
+[![Travis-CI Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=master)](http://travis-ci.org/ppi/framework)
+[![AppVeyor-CI Build status](https://ci.appveyor.com/api/projects/status/dbdkjdb8bdl24dpb/branch/master?svg=true)](https://ci.appveyor.com/project/noisebleed/framework/branch/master)
+[![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-master/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-master)
 [![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
 
 [PPI][@website] is the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
@@ -48,6 +49,10 @@ Start by forking the PPI Framework repository and cloning your fork locally:
     $ git clone git@github.com:YOUR_USERNAME/framework.git
     $ git remote add upstream git://github.com/ppi/framework.git
     $ git checkout -b feature/BRANCH_NAME master
+    
+Apply PPI Coding Standards using the PHP-CS-Fixer tool (uses PPI custom fixers):
+
+    $ ./vendor/bin/php-cs-fixer fix -v
 
 After your work is finished rebase the feature branch and push it:
 
