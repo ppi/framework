@@ -13,7 +13,7 @@ namespace PPI\Framework;
 use PPI\Framework\Config\ConfigManager;
 use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\Http\Request as HttpRequest;
-use PPI\Framework\Http\Response;
+use PPI\Framework\Http\Response as HttpResponse;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
 use Symfony\Component\ClassLoader\DebugClassLoader;
 use Symfony\Component\Debug\ErrorHandler;
