@@ -1,8 +1,6 @@
 <!-- vim: set tw=79 sw=4 ts=4 et ft=markdown : -->
 # PPI Framework
 
-[![Join the chat at https://gitter.im/ppi/framework](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ppi/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [@website]:       http://www.ppi.io/                              "PPI Framework"
 [@documentation]: http://www.ppi.io/docs/2.1/getting_started.html "PPI Framework Documentation"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
@@ -10,14 +8,11 @@
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
 [@twitter]:       https://twitter.com/ppi_framework               "PPI Framework at Twitter"
 
-
-Version **2.1.0-DEV**
-
+[![Gitter](https://badges.gitter.im/ppi/framework.svg)](https://gitter.im/ppi/framework?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Latest Stable Version](https://poser.pugx.org/ppi/framework/v/stable.png)](https://packagist.org/packages/ppi/framework)
 [![Latest Unstable Version](https://poser.pugx.org/ppi/framework/v/unstable.png)](https://packagist.org/packages/ppi/framework)
 [![Travis-CI Build Status](https://secure.travis-ci.org/ppi/framework.png?branch=master)](http://travis-ci.org/ppi/framework)
-[![AppVeyor-CI Build status](https://ci.appveyor.com/api/projects/status/dbdkjdb8bdl24dpb/branch/master?svg=true)](https://ci.appveyor.com/project/noisebleed/framework/branch/master)
-[![Dependency Status](https://www.versioneye.com/php/ppi:framework/dev-master/badge.png)](https://www.versioneye.com/php/ppi:framework/dev-master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/ppi/framework/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/ppi/framework/?branch=master)
 [![License](https://poser.pugx.org/ppi/framework/license.png)](https://packagist.org/packages/ppi/framework)
 
 [PPI][@website] is the PHP Interoperability Framework. It provides an equal and open platform to empower PHP developers to pick the best tools from the best PHP frameworks
@@ -30,7 +25,7 @@ PPI bootstraps framework components for you from the top frameworks such as Zend
 
 ## Requirements
 
-* [PHP][@php] 5.3.23 or above
+* [PHP][@php] 5.4.0 or above
 
 ## Installation
 

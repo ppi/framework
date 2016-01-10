@@ -16,6 +16,10 @@ Start by forking the PPI Framework repository and cloning your fork locally:
     $ git remote add upstream git://github.com/ppi/framework.git
     $ git checkout -b feature/BRANCH_NAME master
 
+Apply PPI Coding Standards using the PHP-CS-Fixer tool (uses PPI custom fixers):
+
+    $ ./vendor/bin/php-cs-fixer fix -v
+
 After your work is finished rebase the feature branch and push it:
 
     $ git checkout master
