@@ -10,11 +10,12 @@
 
 namespace PPI\FrameworkTest;
 
-use PPI\Framework\Module\Controller\ControllerResolver;
 use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
 use PPI\FrameworkTest\Fixtures\AppForTest;
 use Symfony\Component\HttpFoundation\Response;
+use PPI\Framework\Http\Request as HttpRequest;
+use PPI\Framework\Http\Response as HttpResponse;
 
 /**
  * Class AppTest.
@@ -94,7 +95,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testName', $app->getName());
     }
 
-    public function testRun()
+    public function testDispatch()
     {
         $app = new AppForDispatchTest(array(
             'environment'   => 'test',
@@ -123,7 +124,10 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $sm->set('ControllerResolver', $mockControllerResolver);
         $app->setServiceManager($sm);
 
-        $response = $app->run();
+        $request = HttpRequest::createFromGlobals();
+        $response = new HttpResponse();
+
+        $response = $app->dispatch($request, $response);
         $this->assertInstanceOf('\Symfony\Component\HttpFoundation\Response', $response);
         $this->assertEquals($response->getContent(), 'Working Response');
     }
