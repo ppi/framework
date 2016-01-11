@@ -10,12 +10,13 @@
 
 namespace PPI\FrameworkTest;
 
+use PPI\Framework\Http\Request as HttpRequest;
+use PPI\Framework\Http\Response as HttpResponse;
 use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\FrameworkTest\Fixtures\AppForDispatchTest;
 use PPI\FrameworkTest\Fixtures\AppForTest;
+use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Response;
-use PPI\Framework\Http\Request as HttpRequest;
-use PPI\Framework\Http\Response as HttpResponse;
 
 /**
  * Class AppTest.
@@ -24,6 +25,12 @@ use PPI\Framework\Http\Response as HttpResponse;
  */
 class AppTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        restore_error_handler();
+        restore_exception_handler();
+    }
+
     public function testConstructor()
     {
         $env     = 'test_env';
@@ -103,20 +110,34 @@ class AppTest extends \PHPUnit_Framework_TestCase
             'rootDir'       => __DIR__,
         ));
 
-        $mockRouter = $this->getMockBuilder('\PPI\Framework\Router\ChainRouter')
-            ->disableOriginalConstructor()->getMock();
-        $mockRouter->expects($this->once())->method('warmUp');
-        $mockRouter->expects($this->once())->method('matchRequest')
+        $mockRouter = $this
+            ->getMockBuilder('PPI\Framework\Router\ChainRouter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockRouter
+            ->expects($this->once())
+            ->method('warmUp');
+        $mockRouter
+            ->expects($this->once())->method('matchRequest')
             ->willReturn(array('_controller' => 'TestController'));
 
-        $mockControllerResolver = $this->getMockBuilder('\PPI\Framework\Module\Controller\ControllerResolver')
-            ->disableOriginalConstructor()->getMock();
-        $mockControllerResolver->expects($this->once())->method('getController')
+        $mockControllerResolver = $this
+            ->getMockBuilder('PPI\Framework\Module\Controller\ControllerResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockControllerResolver
+            ->expects($this->once())
+            ->method('getController')
             ->willReturnCallback(function () {
-                return function () { return new Response('Working Response'); };
+                return function () {
+                    return new Response('Working Response'); };
             }
         );
-        $mockControllerResolver->expects($this->once())->method('getArguments')->willReturn(array());
+
+        $mockControllerResolver
+            ->expects($this->once())
+            ->method('getArguments')
+            ->willReturn(array());
 
         $sm = new ServiceManager();
         $sm->setAllowOverride(true);
