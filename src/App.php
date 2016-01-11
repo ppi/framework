@@ -247,9 +247,6 @@ class App implements AppInterface
             $this->boot();
         }
 
-        $request = $request ?: HttpRequest::createFromGlobals();
-        $response = $response ?: new HttpResponse();
-
         $response = $this->dispatch($request, $response);
         $response->send();
 
