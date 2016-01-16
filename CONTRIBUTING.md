@@ -8,6 +8,16 @@
 PPI is an open source, community-driven project. If you'd like to contribute, check out our issues list. You can find us
 on [Gitter][@gitter], IRC, [Google Plus][@gplus] or Twitter ([@ppi_framework][@twitter]).
 
+Code of Conduct
+---------------
+
+Please note that this project is released with a
+[Contributor Code of Conduct](http://contributor-covenant.org/version/1/2/0/).
+By participating in this project you agree to abide by its terms.
+
+Contributing policy
+-------------------
+
 If you're submitting a pull request, please do so on your own branch on [GitHub][@gitweb].
  
 Start by forking the PPI Framework repository and cloning your fork locally:
