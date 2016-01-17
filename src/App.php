@@ -7,15 +7,16 @@
  *
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
-use PPI\Framework\Debug\ExceptionHandler;
 use PPI\Framework\Http\Request as HttpRequest;
 use PPI\Framework\Http\Response as HttpResponse;
+use PPI\Framework\Router\ChainRouter;
+use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
-use Symfony\Component\ClassLoader\DebugClassLoader;
-use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -115,6 +116,11 @@ class App implements AppInterface
     protected $serviceManager;
 
     /**
+     * @var ChainRouter
+     */
+    private $router;
+
+    /**
      * App constructor.
      *
      * @param array $options
@@ -129,7 +135,7 @@ class App implements AppInterface
 
         if ($this->debug) {
             $this->startTime = microtime(true);
-            $this->enableDebug();
+            Debug::enable();
         } else {
             ini_set('display_errors', 0);
         }
@@ -233,21 +239,18 @@ class App implements AppInterface
     /**
      * Run the application and send the response.
      *
-     * @param HttpRequest|null $request
-     * @param HttpRequest|null $request
+     * @param HttpRequest|null  $request
+     * @param HttpResponse|null $request
      *
      * @throws \Exception
      *
-     * @return Response
+     * @return HttpResponse
      */
     public function run(HttpRequest $request = null, HttpResponse $response = null)
     {
         if (false === $this->booted) {
             $this->boot();
         }
-
-        $request = $request ?: HttpRequest::createFromGlobals();
-        $response = $response ?: new HttpResponse();
 
         $response = $this->dispatch($request, $response);
         $response->send();
@@ -263,7 +266,7 @@ class App implements AppInterface
      *
      * @throws \Exception
      *
-     * @return Response
+     * @return HttpResponse
      */
     public function dispatch(HttpRequest $request, HttpResponse $response)
     {
@@ -381,7 +384,7 @@ class App implements AppInterface
     public function getRootDir()
     {
         if (null === $this->rootDir) {
-            $this->rootDir = realpath(getcwd().'/app');
+            $this->rootDir = realpath(getcwd() . '/app');
         }
 
         return $this->rootDir;
@@ -390,7 +393,7 @@ class App implements AppInterface
     /**
      * Get the service manager.
      *
-     * @return ServiceManager\ServiceManager
+     * @return ServiceManager
      */
     public function getServiceManager()
     {
@@ -400,7 +403,7 @@ class App implements AppInterface
     /**
      * @note Added for compatibility with Symfony's HttpKernel\Kernel.
      *
-     * @return null|ServiceManager\ServiceManager
+     * @return null|ServiceManager
      */
     public function getContainer()
     {
@@ -470,7 +473,7 @@ class App implements AppInterface
      */
     public function getCacheDir()
     {
-        return $this->rootDir.'/cache/'.$this->environment;
+        return $this->rootDir . '/cache/' . $this->environment;
     }
 
     /**
@@ -482,7 +485,7 @@ class App implements AppInterface
      */
     public function getLogDir()
     {
-        return $this->rootDir.'/logs';
+        return $this->rootDir . '/logs';
     }
 
     /**
@@ -505,8 +508,8 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
-            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir.'/config');
+            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
+            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
         return $this->configManager;
@@ -660,31 +663,6 @@ class App implements AppInterface
 
         if ($this->logger) {
             $this->logger->log($level, $message, $context);
-        }
-    }
-
-    /**
-     * Enables the debug tools.
-     *
-     * This method registers an error handler and an exception handler.
-     *
-     * If the Symfony ClassLoader component is available, a special
-     * class loader is also registered.
-     */
-    protected function enableDebug()
-    {
-        error_reporting(-1);
-
-        ErrorHandler::register($this->errorReportingLevel);
-        if ('cli' !== php_sapi_name()) {
-            $handler = ExceptionHandler::register();
-            $handler->setAppVersion($this->getVersion());
-        } elseif (!ini_get('log_errors') || ini_get('error_log')) {
-            ini_set('display_errors', 1);
-        }
-
-        if (class_exists('Symfony\Component\ClassLoader\DebugClassLoader')) {
-            DebugClassLoader::enable();
         }
     }
 }
