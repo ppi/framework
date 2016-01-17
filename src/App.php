@@ -7,7 +7,6 @@
  *
  * @link       http://www.ppi.io
  */
-
 namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
@@ -240,7 +239,7 @@ class App implements AppInterface
      * Run the application and send the response.
      *
      * @param HttpRequest|null  $request
-     * @param HttpResponse|null $request
+     * @param HttpResponse|null $response
      *
      * @throws \Exception
      *
@@ -250,6 +249,14 @@ class App implements AppInterface
     {
         if (false === $this->booted) {
             $this->boot();
+        }
+
+        if (null === $request) {
+            $request = HttpRequest::createFromGlobals();
+        }
+
+        if (null === $response) {
+            $response = new HttpResponse();
         }
 
         $response = $this->dispatch($request, $response);
@@ -384,7 +391,7 @@ class App implements AppInterface
     public function getRootDir()
     {
         if (null === $this->rootDir) {
-            $this->rootDir = realpath(getcwd() . '/app');
+            $this->rootDir = realpath(getcwd().'/app');
         }
 
         return $this->rootDir;
@@ -473,7 +480,7 @@ class App implements AppInterface
      */
     public function getCacheDir()
     {
-        return $this->rootDir . '/cache/' . $this->environment;
+        return $this->rootDir.'/cache/'.$this->environment;
     }
 
     /**
@@ -485,7 +492,7 @@ class App implements AppInterface
      */
     public function getLogDir()
     {
-        return $this->rootDir . '/logs';
+        return $this->rootDir.'/logs';
     }
 
     /**
@@ -508,8 +515,8 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
-            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
+            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
+            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir.'/config');
         }
 
         return $this->configManager;
