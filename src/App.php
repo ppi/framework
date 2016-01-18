@@ -308,8 +308,6 @@ class App implements AppInterface
             throw new \Exception('Invalid response type returned from controller');
         }
 
-        $this->response = $response;
-
         return $response;
     }
 
