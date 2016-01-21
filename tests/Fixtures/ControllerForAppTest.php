@@ -21,4 +21,9 @@ class ControllerForAppTest extends BaseController
     {
         return 'Working Response From Controller Index Action';
     }
+
+    public function __invoke()
+    {
+        return 'Working Response From Controller Invoke Action';
+    }
 }

@@ -88,7 +88,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testName', $app->getName());
     }
 
-    public function testRun()
+    public function testRunWithControllerIndexAction()
     {
         $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
 
@@ -101,6 +101,21 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $output = $this->runApp($app, $request, $response);
 
         $this->assertEquals($output, 'Working Response From Controller Index Action');
+    }
+
+    public function testRunWithControllerInvokeAction()
+    {
+        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+
+        $this->controllerUnderTest = new ControllerForAppTest();
+
+        $app = $this->setupAppMocks($app, $this->setupMockRouter(), $this->setupMockControllerResolver());
+
+        $request = HttpRequest::createFromGlobals();
+        $response = new HttpResponse();
+        $output = $this->runApp($app, $request, $response);
+
+        $this->assertEquals($output, 'Working Response From Controller Invoke Action');
     }
 
     public function testDispatch()
