@@ -35,7 +35,7 @@ class App implements AppInterface
      *
      * @var string
      */
-    const VERSION = '2.2.0-DEV';
+    const VERSION = '2.1.1-DEV';
 
     /**
      * @var bool
