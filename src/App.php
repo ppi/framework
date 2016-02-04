@@ -7,6 +7,7 @@
  *
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
@@ -389,7 +390,7 @@ class App implements AppInterface
     public function getRootDir()
     {
         if (null === $this->rootDir) {
-            $this->rootDir = realpath(getcwd().'/app');
+            $this->rootDir = realpath(getcwd() . '/app');
         }
 
         return $this->rootDir;
@@ -478,7 +479,7 @@ class App implements AppInterface
      */
     public function getCacheDir()
     {
-        return $this->rootDir.'/cache/'.$this->environment;
+        return $this->rootDir . '/cache/' . $this->environment;
     }
 
     /**
@@ -490,7 +491,7 @@ class App implements AppInterface
      */
     public function getLogDir()
     {
-        return $this->rootDir.'/logs';
+        return $this->rootDir . '/logs';
     }
 
     /**
@@ -513,8 +514,8 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
-            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir.'/config');
+            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
+            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
         return $this->configManager;

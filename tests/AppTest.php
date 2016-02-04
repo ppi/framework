@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AppTest extends \PHPUnit_Framework_TestCase
 {
-
     private $contollerUnderTest;
 
     public function setUp()
@@ -41,7 +40,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $debug = true;
         $rootDir = __DIR__;
         $name = 'testName';
-        $app = new AppForTest(array('environment' => $env, 'debug' => $debug, 'rootDir' => $rootDir, 'name' => $name,));
+        $app = new AppForTest(array('environment' => $env, 'debug' => $debug, 'rootDir' => $rootDir, 'name' => $name));
 
         $this->assertEquals($env, $app->getEnvironment());
         $this->assertEquals($debug, $app->isDebug());
@@ -70,7 +69,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRootDir()
     {
-        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__));
 
         $this->assertEquals(__DIR__, realpath($app->getRootDir()));
 
@@ -81,16 +80,16 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testGetName()
     {
-        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__));
         $this->assertEquals(basename(__DIR__), $app->getName());
 
-        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__, 'name' => 'testName',));
+        $app = new AppForTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__, 'name' => 'testName'));
         $this->assertEquals('testName', $app->getName());
     }
 
     public function testRunWithControllerIndexAction()
     {
-        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__));
 
         $this->controllerUnderTest = [new ControllerForAppTest(), 'indexAction'];
 
@@ -105,7 +104,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testRunWithControllerInvokeAction()
     {
-        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__));
 
         $this->controllerUnderTest = new ControllerForAppTest();
 
@@ -120,7 +119,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatch()
     {
-        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__,));
+        $app = new AppForDispatchTest(array('environment' => 'test', 'debug' => true, 'rootDir' => __DIR__));
 
         $this->controllerUnderTest = [new ControllerForAppTest(), 'indexAction'];
 
@@ -145,7 +144,6 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function setupMockControllerResolver()
     {
-
         $mockControllerResolver = $this->getMockBuilder('PPI\Framework\Module\Controller\ControllerResolver')->disableOriginalConstructor()->getMock();
 
         $mockControllerResolver->expects($this->once())->method('getController')->willReturn(
@@ -178,5 +176,4 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
         return $output;
     }
-
 }
