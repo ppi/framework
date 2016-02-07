@@ -86,7 +86,7 @@ class ControllerNameParser
         $controller = str_replace('/', '\\', $controller);
         $module     = $this->moduleManager->getModule($moduleName);
 
-        if(!is_object($module)) {
+        if (!is_object($module)) {
             throw new \RuntimeException(sprintf(
                 'Unable to locate module: %s, when parsing controller: %s',
                 $moduleName, $controller
