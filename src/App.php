@@ -7,6 +7,7 @@
  *
  * @link       http://www.ppi.io
  */
+
 namespace PPI\Framework;
 
 use PPI\Framework\Config\ConfigManager;
@@ -138,53 +139,6 @@ class App implements AppInterface
         } else {
             ini_set('display_errors', 0);
         }
-    }
-
-    /**
-     * Set an App option.
-     *
-     * @param $option
-     * @param $value
-     *
-     * @throws \RuntimeException
-     *
-     * @return $this
-     */
-    public function setOption($option, $value)
-    {
-        if (true === $this->booted) {
-            throw new \RuntimeException('Setting App options after boot() is now allowed');
-        }
-
-        // "root_dir" to "rootDir"
-        $property = preg_replace('/_(.?)/e', "strtoupper('$1')", $option);
-        if (!property_exists($this, $property)) {
-            throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
-        }
-
-        $this->$property = $value;
-
-        return $this;
-    }
-
-    /**
-     * Get an App option.
-     *
-     * @param $option
-     *
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
-    public function getOption($option)
-    {
-        // "root_dir" to "rootDir"
-        $property = preg_replace('/_(.?)/e', "strtoupper('$1')", $option);
-        if (!property_exists($this, $property)) {
-            throw new \RuntimeException(sprintf('App property "%s" (option "%s") does not exist', $property, $option));
-        }
-
-        return $property;
     }
 
     public function __clone()
@@ -389,7 +343,7 @@ class App implements AppInterface
     public function getRootDir()
     {
         if (null === $this->rootDir) {
-            $this->rootDir = realpath(getcwd().'/app');
+            $this->rootDir = realpath(getcwd() . '/app');
         }
 
         return $this->rootDir;
@@ -478,7 +432,7 @@ class App implements AppInterface
      */
     public function getCacheDir()
     {
-        return $this->rootDir.'/cache/'.$this->environment;
+        return $this->rootDir . '/cache/' . $this->environment;
     }
 
     /**
@@ -490,7 +444,7 @@ class App implements AppInterface
      */
     public function getLogDir()
     {
-        return $this->rootDir.'/logs';
+        return $this->rootDir . '/logs';
     }
 
     /**
@@ -513,8 +467,8 @@ class App implements AppInterface
     public function getConfigManager()
     {
         if (null === $this->configManager) {
-            $cachePath = $this->getCacheDir().'/application-config-cache.'.$this->getName().'.php';
-            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir.'/config');
+            $cachePath = $this->getCacheDir() . '/application-config-cache.' . $this->getName() . '.php';
+            $this->configManager = new ConfigManager($cachePath, !$this->debug, $this->rootDir . '/config');
         }
 
         return $this->configManager;
