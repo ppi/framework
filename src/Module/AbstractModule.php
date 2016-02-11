@@ -100,15 +100,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     protected function loadYamlRoutes($path)
     {
-        if ($this->routes === null) {
-            $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
-            $loader->setDefaults(array('_module' => $this->getName()));
-
-            $routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
-            $this->routes     = $routesCollection;
-        }
-
-        return $this->routes;
+        return $this->loadSymfonyRoutes($path);
     }
 
     /**
