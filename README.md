@@ -2,7 +2,7 @@
 # PPI Framework
 
 [@website]:       http://www.ppi.io/                              "PPI Framework"
-[@documentation]: http://www.ppi.io/docs/2.1/getting_started.html "PPI Framework Documentation"
+[@documentation]: http://docs.ppi.io                              "PPI Framework Documentation"
 [@download]:      http://www.ppi.io/files/ppi-skeletonapp-without-vendors.tar.gz
 [@gitweb]:        https://github.com/ppi/framework                "ppi/framework"
 [@php]:           http://php.net/                                 "PHP: Hypertext Preprocessor"
