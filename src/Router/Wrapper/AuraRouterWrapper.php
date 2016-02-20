@@ -158,6 +158,13 @@ class AuraRouterWrapper implements RouterInterface, RequestMatcherInterface
             $routeParams['action'] = '__invoke';
         }
 
+        if (false === strpos($routeParams['_controller'], '::') && isset($routeParams['action'])) {
+            $routeParams['_controller'] = sprintf('%s::%s',
+                $routeParams['_controller'],
+                $routeParams['action']
+            );
+        }
+
         return $routeParams;
     }
 }

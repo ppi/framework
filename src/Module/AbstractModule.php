@@ -100,15 +100,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     protected function loadYamlRoutes($path)
     {
-        if ($this->routes === null) {
-            $loader = new YamlFileLoader(new FileLocator(array(dirname($path))));
-            $loader->setDefaults(array('_module' => $this->getName()));
-
-            $routesCollection = $loader->load(pathinfo($path, PATHINFO_FILENAME) . '.' . pathinfo($path, PATHINFO_EXTENSION));
-            $this->routes     = $routesCollection;
-        }
-
-        return $this->routes;
+        return $this->loadSymfonyRoutes($path);
     }
 
     /**
@@ -356,6 +348,18 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
+     * Returns the default location of where Command classes are registered.
+     * Override this in your child module if it differs from this default convention.
+     *
+     * @return string
+     */
+    public function getCommandsPath()
+    {
+        return sprintf("%s/src/Command", $this->getPath());
+    }
+
+
+    /**
      * Finds and registers Commands.
      *
      * Override this method if your module commands do not follow the conventions:
@@ -367,7 +371,8 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function registerCommands(Application $application)
     {
-        if (!is_dir($dir = $this->getPath() . '/Command')) {
+
+        if (!is_dir($dir = $this->getCommandsPath())) {
             return;
         }
 
