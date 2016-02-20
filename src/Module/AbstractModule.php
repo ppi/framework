@@ -358,7 +358,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
         return sprintf("%s/src/Command", $this->getPath());
     }
 
-
     /**
      * Finds and registers Commands.
      *
@@ -371,7 +370,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function registerCommands(Application $application)
     {
-
         if (!is_dir($dir = $this->getCommandsPath())) {
             return;
         }

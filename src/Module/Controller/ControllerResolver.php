@@ -62,7 +62,7 @@ class ControllerResolver extends BaseControllerResolver
             } elseif (1 == $count) {
                 // controller in the service:method notation
                 list($service, $method) = explode(':', $controller, 2);
-                
+
                 return array($this->serviceManager->get($service), $method);
             } else {
                 if ($this->serviceManager->has($controller) && method_exists($service = $this->serviceManager->get($controller), '__invoke')) {
