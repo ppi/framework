@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Module Command.
@@ -37,6 +38,8 @@ class ModuleCreateCommand extends AbstractCommand
 
     protected $skeletonModuleDir;
     protected $modulesDir;
+    protected $moduleDir;
+    protected $moduleName;
     protected $tplEngine;
     protected $routingEngine;
     protected $configEnabledTemplatingEngines = [];
@@ -49,10 +52,7 @@ class ModuleCreateCommand extends AbstractCommand
         'src/Controller',
         'tests',
         'resources',
-        'resources/routes',
-        'resources/config',
-        'resources/views',
-        'resources/views/index',
+        'resources/config'
     ];
 
     /**
@@ -61,6 +61,11 @@ class ModuleCreateCommand extends AbstractCommand
     protected $coreFiles = [
         'Module.php',
         'resources/config/config.php',
+    ];
+
+    protected $tplEngineCoreFiles = [
+        'resources/views',
+        'resources/views/index'
     ];
 
     /**
@@ -84,6 +89,10 @@ class ModuleCreateCommand extends AbstractCommand
             'resources/views/index/base.html.smarty',
             'resources/views/index/index.html.smarty',
         ],
+    ];
+
+    protected $routingEngineCoreFiles = [
+            'resources/routes'
     ];
 
     protected $routingEngineFilesMap = [
@@ -169,21 +178,25 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
-     *
      * @throws \Exception
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleName = $input->getArgument('name');
-        $moduleDir = $this->modulesDir . DIRECTORY_SEPARATOR . $moduleName;
+        $this->moduleName = $input->getArgument('name');
+        $this->moduleDir = $this->modulesDir . DIRECTORY_SEPARATOR . $this->moduleName;
 
         // Acquire Module Information
         $this->askQuestions($input, $output);
-        $this->createModuleStructure($moduleDir, $moduleName);
+        $this->createModuleStructure($this->moduleDir, $this->moduleName);
+        $output->writeln("<info>Created module successfully</info>");
+        $output->writeln("Name: <info>{$this->moduleName}</info>");
+        $output->writeln(sprintf("Path: <info>%s</info>", $this->moduleDir));
+
         // Copy the core files
-        $this->copyFiles($this->skeletonModuleDir, $moduleDir, $this->coreFiles);
+        $this->copyFiles($this->skeletonModuleDir, $this->moduleDir, $this->coreFiles);
 
         $tokenizedFiles = [];
         $tokens = [];
@@ -191,63 +204,19 @@ class ModuleCreateCommand extends AbstractCommand
             $tokenizedFiles[] = $coreFile;
         }
 
-        if (!$this->isValidTemplatingEngine($this->tplEngine)) {
-            throw new \Exception('Invalid templating engine: ' . $this->tplEngine);
+        if(null !== $this->tplEngine && $this->isValidTemplatingEngine($this->tplEngine)) {
+            $this->copyTemplatingFiles($this->moduleDir, $this->moduleName, $tokens, $tokenizedFiles);
+            $output->writeln(sprintf("Templating: <info>%s</info>", $this->tplEngine));
         }
 
-        // TEMPLATING
-
-        // Copy templating files over
-        $tplFiles = $this->tplEngineFilesMap[$this->tplEngine];
-        $this->copyFiles($this->skeletonModuleDir, $moduleDir, $tplFiles);
-
-        // Setting up templating tokens
-        foreach ($tplFiles as $tplFile) {
-            $tokenizedFiles[] = $tplFile;
+        if(null !== $this->routingEngine && $this->isValidRoutingEngine($this->routingEngine)) {
+            $this->copyRoutingFiles($this->moduleDir, $this->moduleName, $tokens, $tokenizedFiles);
+            $output->writeln(sprintf("Routing: <info>%s</info>", $this->routingEngine));
         }
-
-        $tokens['[MODULE_NAME]'] = $moduleName;
-        $tokens['[TPL_ENGINE_EXT]'] = $this->tplEngine;
-
-        // ROUTING
-        if (!$this->isValidRoutingEngine($this->routingEngine)) {
-            throw new \Exception('Invalid routing engine: ' . $this->routingEngine);
-        }
-
-        // Copy routing files over
-        $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
-        $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
-
-        // Setting up routing tokens
-        foreach ($routingFiles as $routingFile) {
-            $tokenizedFiles[] = $routingFile;
-        }
-        $routingTokensMap = $this->routingEngineTokenMap[$this->routingEngine];
-        foreach ($routingTokensMap as $routingTokenKey => $routingTokenVal) {
-            $tokens[$routingTokenKey] = $routingTokenVal;
-        }
-
-        // Replace tokens in all files
-        $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, $tokens);
-
-        if ($this->routingEngine === self::ROUTING_ENGINE_FASTROUTE) {
-            rename(
-                $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0],
-                str_replace('IndexInvoke', 'Index', $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0]
-           ));
-        }
-
-        // Success
-        $output->writeln("<info>Created module successfully</info>");
-        $output->writeln("Name: <info>{$moduleName}</info>");
-        $output->writeln(sprintf("Routing: <info>%s</info>", $this->routingEngine));
-        $output->writeln(sprintf("Templating: <info>%s</info>", $this->tplEngine));
-        $output->writeln(sprintf("Path: <info>%s</info>", $moduleDir));
-
         $output->writeln("<comment>This module is not enabled. Enable it in <info>config[modules]</info> key</comment>");
 
-        $this->checkTemplatingEngines($input, $output);
-        $this->checkRouters($input, $output);
+        $this->checkEnabledTemplatingEngines($input, $output);
+        $this->checkEnabledRouters($input, $output);
     }
 
     protected function isValidTemplatingEngine($tplEngine)
@@ -336,35 +305,21 @@ class ModuleCreateCommand extends AbstractCommand
      */
     protected function askQuestions(InputInterface $input, OutputInterface $output)
     {
+        $questionHelper = $this->getHelper('question');
+
         // Module DIR
         if ($input->getOption('dir') == null) {
-            $questionHelper = $this->getHelper('question');
             $modulesDirQuestion = new ChoiceQuestion('Where is the modules dir?', [1 => $this->modulesDir], $this->modulesDir);
             $modulesDirQuestion->setErrorMessage('Modules dir: %s is invalid.');
             $this->modulesDir = $questionHelper->ask($input, $output, $modulesDirQuestion);
         }
 
-        // Templating
-        if ($input->getOption('tpl') == null) {
-            $questionHelper = $this->getHelper('question');
-            $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]', [1 => 'php', 2 => 'twig', 3 => 'smarty', 4 => 'plates', 5 => 'latte'], 'php');
-            $tplQuestion->setErrorMessage('Templating engine %s is invalid.');
-            $this->tplEngine = $questionHelper->ask($input, $output, $tplQuestion);
+        if($this->askForTemplating($input, $output)) {
+            $this->chooseTemplatingEngine($input, $output);
         }
-        // Routing
-        if ($input->getOption('routing') == null) {
-            $questionHelper = $this->getHelper('question');
-            $routingQuestion = new ChoiceQuestion('Choose your routing engine [symfony]',
-                [
-                    1 => self::ROUTING_ENGINE_SYMFONY,
-                    2 => self::ROUTING_ENGINE_AURA,
-                    3 => self::ROUTING_ENGINE_LARAVEL,
-                    4 => self::ROUTING_ENGINE_FASTROUTE,
-                ],
-                'symfony'
-            );
-            $tplQuestion->setErrorMessage('Routing engine %s is invalid.');
-            $this->routingEngine = $questionHelper->ask($input, $output, $routingQuestion);
+
+        if($this->askForRouting($input, $output)) {
+            $this->chooseRouter($input, $output);
         }
     }
 
@@ -372,7 +327,7 @@ class ModuleCreateCommand extends AbstractCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    private function checkRouters(InputInterface $input, OutputInterface $output)
+    private function checkEnabledRouters(InputInterface $input, OutputInterface $output)
     {
         // Aura Check
         if ($this->routingEngine == self::ROUTING_ENGINE_AURA && !class_exists('\Aura\Router\Router')) {
@@ -393,7 +348,7 @@ class ModuleCreateCommand extends AbstractCommand
      * @param InputInterface  $input
      * @param OutputInterface $output
      */
-    private function checkTemplatingEngines(InputInterface $input, OutputInterface $output)
+    private function checkEnabledTemplatingEngines(InputInterface $input, OutputInterface $output)
     {
         // PHP Templating Engine checks
         if ($this->tplEngine == self::TPL_ENGINE_PHP) {
@@ -442,4 +397,118 @@ class ModuleCreateCommand extends AbstractCommand
             }
         }
     }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return boolean
+     */
+    private function askForTemplating(InputInterface $input, OutputInterface $output)
+    {
+        $questionHelper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Do you need templates? (yes/no):\n", false);
+
+        return $questionHelper->ask($input, $output, $question);
+    }
+
+    private function askForRouting(InputInterface $input, OutputInterface $output)
+    {
+        $questionHelper = $this->getHelper('question');
+        $question = new ConfirmationQuestion("Do you need routing? (yes/no):\n", false);
+
+        return $questionHelper->ask($input, $output, $question);
+    }
+
+    private function chooseTemplatingEngine($input, $output)
+    {
+        $tplQuestion = new ChoiceQuestion('Choose your templating engine [php]',
+            [
+                1 => 'php',
+                2 => 'twig',
+                3 => 'smarty',
+                4 => 'plates',
+                5 => 'latte',
+                99 => 'skip'
+            ]
+        );
+        $tplQuestion->setErrorMessage('Templating engine %s is invalid.');
+        if(99 !== ($tplEngine = $this->getHelper('question')->ask($input, $output, $tplQuestion))) {
+            $this->tplEngine = $tplEngine;
+        }
+    }
+
+    private function chooseRouter(InputInterface $input, OutputInterface $output)
+    {
+        $routingQuestion = new ChoiceQuestion('Choose your routing engine:',
+            [
+                1 => self::ROUTING_ENGINE_SYMFONY,
+                2 => self::ROUTING_ENGINE_AURA,
+                3 => self::ROUTING_ENGINE_LARAVEL,
+                4 => self::ROUTING_ENGINE_FASTROUTE,
+                99 => 'skip'
+            ]
+        );
+
+        // @todo - test question when you don't choose any option, or an invalid one (like -1)
+        $routingQuestion->setErrorMessage('Routing engine %s is invalid.');
+        if(99 !== ($routingEngine = $this->getHelper('question')->ask($input, $output, $routingQuestion))) {
+            $this->routingEngine = $routingEngine;
+        }
+    }
+
+    private function copyTemplatingFiles($moduleDir, $moduleName, $tokens, $tokenizedFiles)
+    {
+        $tplFiles = $this->tplEngineFilesMap[$this->tplEngine];
+
+        // Copy core templating files over
+        foreach($this->tplEngineCoreFiles as $coreFile) {
+            $tplFiles[] = $coreFile;
+        }
+
+        // Copy templating files over relevant to the specified engine
+        $this->copyFiles($this->skeletonModuleDir, $moduleDir, $tplFiles);
+
+        // Setting up templating tokens
+        foreach ($tplFiles as $tplFile) {
+            $tokenizedFiles[] = $tplFile;
+        }
+
+        $tokens['[MODULE_NAME]'] = $moduleName;
+        $tokens['[TPL_ENGINE_EXT]'] = $this->tplEngine;
+    }
+
+    private function copyRoutingFiles($moduleDir, $moduleDir, $tokens, $tokenizedFiles)
+    {
+        // Copy routing files over
+        $routingFiles = $this->routingEngineFilesMap[$this->routingEngine];
+
+        // Copy core templating files over
+        foreach($this->routingEngineCoreFiles as $coreFile) {
+            $routingFiles[] = $coreFile;
+        }
+
+        $this->copyFiles($this->skeletonModuleDir, $moduleDir, $routingFiles);
+
+        // Setting up routing tokens
+        foreach ($routingFiles as $routingFile) {
+            $tokenizedFiles[] = $routingFile;
+        }
+
+        $routingTokensMap = $this->routingEngineTokenMap[$this->routingEngine];
+        foreach ($routingTokensMap as $routingTokenKey => $routingTokenVal) {
+            $tokens[$routingTokenKey] = $routingTokenVal;
+        }
+
+        // Replace tokens in all files
+        $this->replaceTokensInFiles($moduleDir, $tokenizedFiles, $tokens);
+
+        // Prepare the fastroute route file
+        if ($this->routingEngine === self::ROUTING_ENGINE_FASTROUTE) {
+            rename(
+                $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0],
+                str_replace('IndexInvoke', 'Index', $moduleDir . DIRECTORY_SEPARATOR . $routingFiles[0]
+                ));
+        }
+    }
+
 }
