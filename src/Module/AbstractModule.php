@@ -348,18 +348,6 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
     }
 
     /**
-     * Returns the default location of where Command classes are registered.
-     * Override this in your child module if it differs from this default convention.
-     *
-     * @return string
-     */
-    public function getCommandsPath()
-    {
-        return sprintf("%s/src/Command", $this->getPath());
-    }
-
-
-    /**
      * Finds and registers Commands.
      *
      * Override this method if your module commands do not follow the conventions:
@@ -371,8 +359,7 @@ abstract class AbstractModule implements ModuleInterface, ConfigProviderInterfac
      */
     public function registerCommands(Application $application)
     {
-
-        if (!is_dir($dir = $this->getCommandsPath())) {
+        if (!is_dir($dir = $this->getPath() . '/Command')) {
             return;
         }
 
