@@ -208,7 +208,7 @@ class ModuleCreateCommand extends AbstractCommand
             $this->processRoutingFiles($tokenizedFiles, $tokens);
             $output->writeln(sprintf("Router: <info>%s</info>", $this->routingEngine));
         } else {
-            $tokens['ROUTING_TRAIT'] = '';
+            $tokens['[ROUTING_TRAIT]'] = '';
         }
 
         // replace tokens from specified tokenizable files
