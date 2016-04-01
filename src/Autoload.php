@@ -41,7 +41,7 @@ class Autoload
      *
      * @static
      */
-    protected static $_options = array();
+    public static $_options = array();
 
     /**
      * @todo Add inline documentation.
@@ -77,7 +77,7 @@ class Autoload
     public static function add($key, $path)
     {
         self::$_registeredNamespaces[$key] = true;
-        self::$_options['loader']->add($key, $path);
+        self::$_options['loader']->addPsr4($key, $path);
     }
 
     /**
