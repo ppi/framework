@@ -25,6 +25,11 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class AuraRouterWrapper implements RouterInterface, RequestMatcherInterface
 {
+    public function getRouter()
+    {
+        return self::class;
+    }
+
     /**
      * @var AuraRouter
      */

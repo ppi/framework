@@ -235,8 +235,18 @@ class App implements AppInterface
             $this->boot();
         }
 
-        // Routing
-        $routeParams = $this->handleRouting($request);
+
+        // cache liie a mother fucker
+        if(!$this->hasRouteInCache($request)) {
+            $routeParams = $this->handleRouting($request);
+            $this->setRouteInCache($request, $routeParams);
+            // @todo - move these 2 lines to setRouteInCache()
+            $routingCache = $this->serviceManager->get('RoutingCache');
+            $routingCache->set($request->getPathInfo(), $routeParams);
+        } else {
+            $routeParams = $this->getRouteFromCache($request);
+        }
+
         $request->attributes->add($routeParams);
 
         // Resolve our Controller
