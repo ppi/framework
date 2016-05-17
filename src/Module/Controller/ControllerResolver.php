@@ -11,6 +11,7 @@
 namespace PPI\Framework\Module\Controller;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver as BaseControllerResolver;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -87,6 +88,10 @@ class ControllerResolver extends BaseControllerResolver
 
         if ($controller instanceof ServiceLocatorAwareInterface) {
             $controller->setServiceLocator($this->serviceManager);
+        }
+
+        if($controller instanceof ContainerAwareInterface) {
+            $controller->setContainer($this->serviceManager->get('SymfonyContainer'));
         }
 
         return $controller;

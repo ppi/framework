@@ -50,6 +50,10 @@ class RouterFactory implements FactoryInterface
         $logger = $serviceLocator->has('Logger') ? $serviceLocator->get('Logger') : null;
 
         $chainRouter = new ChainRouter($logger);
+        if($serviceLocator->has('RoutingCache')) {
+            $chainRouter->setCache($serviceLocator->get('RoutingCache'));
+        }
+
         $chainRouter->setContext($requestContext);
 
         $allModuleRoutes = $serviceLocator->get('ModuleDefaultListener')->getRoutes();

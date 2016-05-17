@@ -26,6 +26,8 @@ class ChainRouter extends BaseChainRouter
      */
     protected $matchedRouteRequest;
 
+    private $routingCache;
+
     /**
      * @param array $parameters
      *
@@ -71,10 +73,12 @@ class ChainRouter extends BaseChainRouter
         try {
             $parameters = parent::matchRequest($request);
             $this->matchedRouteRequest = $request;
-
             return $parameters;
         } catch (\Exception $e) {
             throw $e;
         }
+
+
     }
+
 }

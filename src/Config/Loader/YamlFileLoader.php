@@ -13,6 +13,7 @@ namespace PPI\Framework\Config\Loader;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Zend\Stdlib\ArrayUtils;
+use \InvalidArgumentException;
 
 /**
  * YamlFileLoader loads app configuration from a YAML file.

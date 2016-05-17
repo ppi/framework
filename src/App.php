@@ -16,9 +16,11 @@ use PPI\Framework\Http\Response as HttpResponse;
 use PPI\Framework\Router\ChainRouter;
 use PPI\Framework\ServiceManager\ServiceManager;
 use PPI\Framework\ServiceManager\ServiceManagerBuilder;
+use PPI\Framework\Debug\ExceptionHandler;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
@@ -121,6 +123,11 @@ class App implements AppInterface
     private $router;
 
     /**
+     * @var KernelInterface
+     */
+    private $symfonyKernel;
+
+    /**
      * App constructor.
      *
      * @param array $options
@@ -163,6 +170,10 @@ class App implements AppInterface
     {
         if (true === $this->booted) {
             return $this;
+        }
+
+        if($this->isDebug()) {
+            ExceptionHandler::register(true, 'UTF-8', 'PPI Framework', self::VERSION, true);
         }
 
         $this->serviceManager = $this->buildServiceManager();
@@ -213,7 +224,19 @@ class App implements AppInterface
             $response = new HttpResponse();
         }
 
-        $response = $this->dispatch($request, $response);
+        // Create a copy of request, as it's by-ref passed into $this->dispatch() and gets modified.
+        $cleanRequest = clone $request;
+        try {
+            $response = $this->dispatch($request, $response);
+        } catch (ResourceNotFoundException $e) {
+
+            if($this->symfonyKernel === null) {
+                throw $e;
+            }
+            $response = $this->symfonyKernel->handle($cleanRequest);
+        }
+
+
         $response->send();
 
         return $response;
@@ -235,8 +258,18 @@ class App implements AppInterface
             $this->boot();
         }
 
-        // Routing
-        $routeParams = $this->handleRouting($request);
+
+        // cache like a mother fucker
+//        if(!$this->hasRouteInCache($request)) {
+            $routeParams = $this->handleRouting($request);
+//            $this->setRouteInCache($request, $routeParams);
+            // @todo - move these 2 lines to setRouteInCache()
+//            $routingCache = $this->serviceManager->get('RoutingCache');
+//            $routingCache->set($request->getPathInfo(), $routeParams);
+//        } else {
+//            $routeParams = $this->getRouteFromCache($request);
+//        }
+
         $request->attributes->add($routeParams);
 
         // Resolve our Controller
@@ -505,9 +538,20 @@ class App implements AppInterface
         return $this->serviceManager->get('Config');
     }
 
+    /**
+     * @return string
+     */
     public function serialize()
     {
         return serialize(array($this->environment, $this->debug));
+    }
+
+    /**
+     * @param KernelInterface $kernel
+     */
+    public function setSymfonyKernel(KernelInterface $kernel)
+    {
+        $this->symfonyKernel = $kernel;
     }
 
     public function unserialize($data)

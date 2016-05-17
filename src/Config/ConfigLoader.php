@@ -15,6 +15,7 @@ use PPI\Framework\Config\Loader\DelegatingLoader;
 use PPI\Framework\Config\Loader\IniFileLoader;
 use PPI\Framework\Config\Loader\PhpFileLoader;
 use PPI\Framework\Config\Loader\YamlFileLoader;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 
 /**
@@ -62,7 +63,7 @@ class ConfigLoader
      *
      * @return DelegatingLoader The loader
      */
-    protected function getLoader()
+    public function getLoader()
     {
         if (null === $this->loader) {
             $locator  = new FileLocator($this->paths);
