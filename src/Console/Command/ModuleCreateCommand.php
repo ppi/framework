@@ -147,6 +147,8 @@ class ModuleCreateCommand extends AbstractCommand
 
     /**
      * @param string $moduleDir
+     *
+     * @return void
      */
     public function setTargetModuleDir($moduleDir)
     {
@@ -155,6 +157,8 @@ class ModuleCreateCommand extends AbstractCommand
 
     /**
      * @param array $tplEngines
+     *
+     * @return void
      */
     public function setEnabledTemplatingEngines(array $tplEngines)
     {
@@ -162,6 +166,7 @@ class ModuleCreateCommand extends AbstractCommand
     }
 
     /**
+     * @return void
      */
     protected function configure()
     {
@@ -208,7 +213,7 @@ class ModuleCreateCommand extends AbstractCommand
             $this->processRoutingFiles($tokenizedFiles, $tokens);
             $output->writeln(sprintf("Router: <info>%s</info>", $this->routingEngine));
         } else {
-            $tokens['ROUTING_TRAIT'] = '';
+            $tokens['[ROUTING_TRAIT]'] = '';
         }
 
         // replace tokens from specified tokenizable files
@@ -320,8 +325,10 @@ class ModuleCreateCommand extends AbstractCommand
             $this->chooseTemplatingEngine($input, $output);
         }
 
-        if($this->askForRouting($input, $output)) {
-            $this->chooseRouter($input, $output);
+        if($this->askForContoller($input, $output)) {
+            if($this->askForRouting($input, $output)) {
+                return $this->chooseRouter($input, $output);
+            }
         }
     }
 
@@ -416,7 +423,7 @@ class ModuleCreateCommand extends AbstractCommand
     private function askForRouting(InputInterface $input, OutputInterface $output)
     {
         $questionHelper = $this->getHelper('question');
-        $question = new ConfirmationQuestion("Do you need routing? (yes/no):\n", false);
+        $question = new ConfirmationQuestion("Which router do you want? (yes/no):\n", false);
 
         return $questionHelper->ask($input, $output, $question);
     }
@@ -439,6 +446,12 @@ class ModuleCreateCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
     private function chooseRouter(InputInterface $input, OutputInterface $output)
     {
         $routingQuestion = new ChoiceQuestion('Choose your routing engine:',
@@ -460,6 +473,11 @@ class ModuleCreateCommand extends AbstractCommand
         $this->routingEngine = $chosenRouter;
     }
 
+    /**
+     * @param $tplEngine
+     *
+     * @return void
+     */
     private function getTemplatingFilesFromEngine($tplEngine)
     {
         if(!isset($this->tplEngineFilesMap[$tplEngine])) {
@@ -467,6 +485,9 @@ class ModuleCreateCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @return void
+     */
     private function processTemplatingFiles()
     {
         $tplFiles = $this->getTemplatingFilesFromEngine($this->tplEngine);
@@ -495,6 +516,8 @@ class ModuleCreateCommand extends AbstractCommand
 
     /**
      * @throws \Exception
+     *
+     * @return void
      */
     private function processRoutingFiles($tokenizedFiles, $tokens)
     {
@@ -543,6 +566,9 @@ class ModuleCreateCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getTokenizedCoreFiles()
     {
         $files = [];
@@ -552,6 +578,11 @@ class ModuleCreateCommand extends AbstractCommand
         return $files;
     }
 
+    /**
+     * @param $routingEngine
+     * @return array
+     * @throws \Exception
+     */
     private function getRoutingTokenMap($routingEngine) {
 
 //        if(!isset($this->routingEngineTokenMap[$routingEngine])) {
