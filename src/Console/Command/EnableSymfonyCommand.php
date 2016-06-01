@@ -40,7 +40,7 @@ class EnableSymfonyCommand extends AbstractCommand
         $rootDir = dirname($this->getServiceManager()->get('app')->getRootDir());
         $skeletonDir = $rootDir . '/' . 'utils/skeleton_symfony/app/';
         $appDir = $rootDir . '/app/';
-        $appConfigDir = $appDir . 'config/base/';
+        $appConfigDir = $appDir . 'config/base/symfony/';
 
         $copyMap = [
             $skeletonDir . 'sfconsole' => $appDir . 'sfconsole',
@@ -52,7 +52,8 @@ class EnableSymfonyCommand extends AbstractCommand
 
         // Make Symfony Dir
         $filesystem = $this->getServiceManager()->get('filesystem');
-        $filesystem->mkdir($appConfigDir . 'symfony', 0777);
+        $filesystem->mkdir($appConfigDir, 0777);
+        $output->writeln('Created ' . $appConfigDir);
 
         foreach($copyMap as $fileSrc => $fileDst) {
             if(realpath($fileSrc) === false) {
@@ -66,6 +67,9 @@ class EnableSymfonyCommand extends AbstractCommand
             $res = copy($fileSrc, $fileDst);
             $output->writeln('Copied: ' . $fileDst); // @todo - check $res
         }
+
+        $filesystem->mkdir($rootDir . '/bundles', 0777);
+        $output->writeln('Created ' . $rootDir . '/bundles/');
 
         $output->writeln('Files copied. Now include app/sfkernel.php into your public/index.php file, as per the docs');
 
