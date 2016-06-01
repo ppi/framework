@@ -102,6 +102,7 @@ class Application extends BaseApplication
             new Command\RouterDebugCommand(),
             new Command\RouterMatchCommand(),
             new Command\ServiceManagerDebugCommand(),
+            new Command\EnableSymfonyCommand(),
         );
         if (isset(
             $config['module_listener_options']['module_paths'][0],
